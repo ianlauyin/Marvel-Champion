@@ -1,0 +1,15 @@
+[package]
+name = "marvel_champions"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "marvel_champions_game"
+crate-type = ["staticlib", "cdylib"]
+
+[dependencies]
+bevy = "0.15.0-rc.3"
+
+
+[target.aarch64-apple-ios-sim.dependencies]
+bevy = { version = "0.15.0-rc.3", features = ["ios_simulator"] }
