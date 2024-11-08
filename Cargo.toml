@@ -4,8 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [lib]
-name = "marvel_champions_game"
-crate-type = ["staticlib", "cdylib"]
+crate-type = ["staticlib", "cdylib","rlib"]
 
 [dependencies]
 bevy = "0.15.0-rc.3"
