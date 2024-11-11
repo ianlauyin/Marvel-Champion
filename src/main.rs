@@ -1,14 +1,18 @@
 use bevy::prelude::*;
 
+mod constants;
+mod state;
+mod ui;
+
 fn main() {
+    let ui_plugins = (ui::CameraPlugin, ui::SetupPlugin);
+    let state_plugins = state::AssetStatePlugin;
+
     App::new()
-    .add_plugins(DefaultPlugins)
-    .add_systems(Startup, hello_world)
-    .run();
+        .add_plugins(ui_plugins)
+        .add_plugins(state_plugins)
+        .add_systems(Startup, testing)
+        .run();
 }
 
-
-fn hello_world(mut commands: Commands) {
-    commands.spawn(Camera2d);
-    commands.spawn(Text::new("Hello World"));
-}
+fn testing(mut commands: Commands) {}
