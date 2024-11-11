@@ -21,7 +21,7 @@ fn add_camara(mut commands: Commands) {
     });
     commands.spawn(DirectionalLightBundle {
         directional_light: DirectionalLight {
-            illuminance: light_consts::lux::OVERCAST_DAY,
+            illuminance: 3000.,
             color: Color::WHITE,
             shadows_enabled: true,
             ..default()
