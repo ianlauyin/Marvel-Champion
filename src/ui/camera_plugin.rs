@@ -10,8 +10,14 @@ impl Plugin for CameraPlugin {
 
 fn add_camara(mut commands: Commands) {
     commands.spawn(Camera3dBundle {
-        transform: Transform::from_xyz(0., -1000., 1000.).looking_at(Vec3::ZERO, Vec3::Y),
+        transform: Transform::from_xyz(0., -450., 800.)
+            .looking_at(Vec3::new(0., -80., 0.), Vec3::Y),
+
         ..default()
+    });
+    commands.insert_resource(AmbientLight {
+        brightness: 1.,
+        color: Color::WHITE,
     });
     commands.spawn(DirectionalLightBundle {
         directional_light: DirectionalLight {
@@ -20,8 +26,7 @@ fn add_camara(mut commands: Commands) {
             shadows_enabled: true,
             ..default()
         },
-        transform: Transform::from_translation(Vec3::new(0., 0., 1000.))
-            .looking_at(Vec3::ZERO, Vec3::Y),
+        transform: Transform::from_translation(Vec3::new(0., 0., 800.)),
         ..default()
     });
 }
