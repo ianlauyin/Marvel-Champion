@@ -1,18 +1,13 @@
-mod background_plugin;
-mod camera_plugin;
-mod loading_screen_plugin;
-mod setup_plugin;
+mod camera;
+mod game_mat;
+mod loading_screen;
 
 pub const UI_PLUGINS: (
-    background_plugin::BackgroundPlugin,
-    camera_plugin::CameraPlugin,
-    loading_screen_plugin::LoadingScreenPlugin,
-    setup_plugin::SetupPlugin,
+    game_mat::GameMatPlugin,
+    camera::CameraPlugin,
+    loading_screen::LoadingScreenPlugin,
 ) = (
-    background_plugin::BackgroundPlugin,
-    camera_plugin::CameraPlugin,
-    loading_screen_plugin::LoadingScreenPlugin,
-    setup_plugin::SetupPlugin,
+    game_mat::GameMatPlugin,
+    camera::CameraPlugin,
+    loading_screen::LoadingScreenPlugin,
 );
-
-pub use loading_screen_plugin::LoadingScreenEvent;
