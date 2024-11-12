@@ -5,15 +5,8 @@ mod constants;
 mod ui;
 
 fn main() {
-    let ui_plugins = (
-        ui::CameraPlugin,
-        ui::SetupPlugin,
-        ui::BackgroundPlugin,
-        ui::LoadingScreenPlugin,
-    );
-
     App::new()
-        .add_plugins(ui_plugins)
+        .add_plugins(ui::UI_PLUGINS)
         .add_systems(Startup, spawn_testing_card)
         .run();
 }
