@@ -15,6 +15,6 @@ impl Plugin for SetupPlugin {
                 }),
                 ..default()
             }))
-            .insert_resource(ClearColor(Color::srgb(0.294, 0.675, 0.408)));
+            .insert_resource(ClearColor(Color::srgb(0.404, 0.404, 0.404)));
     }
 }

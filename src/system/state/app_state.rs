@@ -5,6 +5,10 @@ pub enum AppState {
     #[default]
     LoadingAsset,
     MainMenu,
+    Game,
+    DeckBuilding,
+    Collection,
+    Record,
 }
 
 pub struct AppStatePlugin;

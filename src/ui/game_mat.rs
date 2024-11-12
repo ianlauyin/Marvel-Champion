@@ -11,7 +11,7 @@ impl Plugin for GameMatPlugin {
     }
 }
 
-const GAME_MAT_SIZE: Vec3 = Vec3::new(1500., 1000., 50.);
+const GAME_MAT_SIZE: Vec3 = Vec3::new(1000., 1000., 50.);
 const GAME_MAT_PATH: &str = "embedded://game_mat.png";
 
 fn load_game_mat(mut load_asset: ResMut<LoadAsset>, asset_server: Res<AssetServer>) {

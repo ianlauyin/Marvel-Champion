@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 
 use crate::system::AppState;
-use bevy::asset::{LoadState, LoadedUntypedAsset};
+use bevy::asset::LoadState;
 use bevy::prelude::*;
 
 use super::AppStateChangeEvent;
