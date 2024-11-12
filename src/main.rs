@@ -2,16 +2,18 @@ use bevy::prelude::*;
 use constants::CARD_SIZE;
 
 mod constants;
-mod state;
 mod ui;
 
 fn main() {
-    let ui_plugins = (ui::CameraPlugin, ui::SetupPlugin, ui::BackgroundPlugin);
-    let state_plugins = state::AssetStatePlugin;
+    let ui_plugins = (
+        ui::CameraPlugin,
+        ui::SetupPlugin,
+        ui::BackgroundPlugin,
+        ui::LoadingScreenPlugin,
+    );
 
     App::new()
         .add_plugins(ui_plugins)
-        .add_plugins(state_plugins)
         .add_systems(Startup, spawn_testing_card)
         .run();
 }
