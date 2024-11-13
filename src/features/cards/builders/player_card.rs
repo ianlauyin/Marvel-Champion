@@ -1,11 +1,12 @@
 use bevy::prelude::Component;
 
-use crate::features::cards::{CardIcon, CardResource, CardTrait, Keyword};
+use crate::features::cards::{CardIcon, CardResource, CardTrait, Keyword, PlayerCardAspect};
 
 #[derive(Component)]
 pub struct AllyCard {
     pub id: String,
     pub name: String,
+    pub aspect: PlayerCardAspect,
     pub unique: bool,
     pub cost: u8,
     pub res: Vec<CardResource>,
@@ -45,6 +46,7 @@ pub struct AlterEgoCard {
 pub struct EventCard {
     pub id: String,
     pub name: String,
+    pub aspect: PlayerCardAspect,
     pub cost: u8,
     pub res: Vec<CardResource>,
     pub traits: Vec<CardTrait>,
@@ -77,6 +79,7 @@ pub struct HeroCard {
 pub struct ResourceCard {
     pub id: String,
     pub name: String,
+    pub aspect: PlayerCardAspect,
     pub res: Vec<CardResource>,
     pub traits: Vec<CardTrait>,
     pub description: String,
@@ -90,6 +93,7 @@ pub struct SupportCard {
     pub id: String,
     pub name: String,
     pub unique: bool,
+    pub aspect: PlayerCardAspect,
     pub cost: u8,
     pub res: Vec<CardResource>,
     pub card_icons: Vec<CardIcon>,
@@ -104,6 +108,7 @@ pub struct SupportCard {
 pub struct UpgradeCard {
     pub id: String,
     pub name: String,
+    pub aspect: PlayerCardAspect,
     pub unique: bool,
     pub cost: u8,
     pub res: Vec<CardResource>,
