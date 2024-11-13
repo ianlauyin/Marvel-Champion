@@ -38,6 +38,7 @@ fn check_asset(
     mut load_asset: ResMut<LoadAsset>,
     asset_server: Res<AssetServer>,
 ) {
+    let mut removed_count = 0;
     for (index, loading_handle) in load_asset.loading_image_handles.clone().iter().enumerate() {
         if load_asset.image_handles.contains(loading_handle) {
             load_asset.loading_image_handles.remove(index);
@@ -50,8 +51,11 @@ fn check_asset(
         };
         match load_state {
             LoadState::Loaded => {
-                load_asset.loading_image_handles.remove(index);
+                load_asset
+                    .loading_image_handles
+                    .remove(index - removed_count);
                 load_asset.image_handles.insert(loading_handle.clone());
+                removed_count += 1;
             }
             LoadState::Failed(err) => panic!("{err}"),
             _ => return,

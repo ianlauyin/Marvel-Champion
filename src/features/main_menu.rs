@@ -96,6 +96,7 @@ fn handle_button_reaction(
         match interaction {
             Interaction::Pressed => {
                 handle_button_click(commands, main_menu_button.clone());
+                window.cursor.icon = CursorIcon::default();
                 return;
             }
             Interaction::Hovered => {

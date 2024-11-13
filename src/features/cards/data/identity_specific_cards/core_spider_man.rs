@@ -16,6 +16,7 @@ pub fn get_hero() -> HeroCard {
         search_keywords: vec![],
         hand_size: 5,
         nemensis_id: String::from("core_167"),
-        image_path: String::from("embedded://cards/identity_specific_cards/core_spider_man/core_1a.png"),
+        card_image_path: String::from("embedded://cards/identity_specific_cards/core_spider_man/core_1a.png"),
+        card_back_image_path: String::from("embedded://cards/identity_specific_cards/core_spider_man/core_1b.png")
     }
 }

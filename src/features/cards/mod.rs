@@ -1,4 +1,4 @@
-mod builders;
+pub mod builders;
 mod card_icon;
 mod card_resource;
 mod card_trait;

@@ -12,7 +12,8 @@ pub struct AttachmentCard {
     pub traits: Vec<CardTrait>,
     pub description: String,
     pub search_keywords: Vec<String>,
-    pub image_path: String,
+    pub card_image_path: String,
+    pub card_back_image_path: String,
 }
 
 #[derive(Component)]
@@ -24,7 +25,8 @@ pub struct EnvironmentCard {
     pub traits: Vec<CardTrait>,
     pub description: String,
     pub search_keywords: Vec<String>,
-    pub image_path: String,
+    pub card_image_path: String,
+    pub card_back_image_path: String,
 }
 
 #[derive(Component)]
@@ -37,7 +39,8 @@ pub struct MainSchemeCard {
     pub card_icons: Vec<CardIcon>,
     pub description: String,
     pub search_keywords: Vec<String>,
-    pub image_path: String,
+    pub card_image_path: String,
+    pub card_back_image_path: String,
 }
 
 #[derive(Component)]
@@ -54,7 +57,8 @@ pub struct MinionCard {
     pub boost: u8,
     pub description: String,
     pub search_keywords: Vec<String>,
-    pub image_path: String,
+    pub card_image_path: String,
+    pub card_back_image_path: String,
 }
 
 #[derive(Component)]
@@ -67,7 +71,8 @@ pub struct ObligationCard {
     pub card_icons: Vec<CardIcon>,
     pub description: String,
     pub search_keywords: Vec<String>,
-    pub image_path: String,
+    pub card_image_path: String,
+    pub card_back_image_path: String,
 }
 
 #[derive(Component)]
@@ -80,7 +85,8 @@ pub struct SideSchemeCard {
     pub card_icons: Vec<CardIcon>,
     pub description: String,
     pub search_keywords: Vec<String>,
-    pub image_path: String,
+    pub card_image_path: String,
+    pub card_back_image_path: String,
 }
 
 #[derive(Component)]
@@ -91,7 +97,8 @@ pub struct TreacheryCard {
     pub boost: u8,
     pub description: String,
     pub search_keywords: Vec<String>,
-    pub image_path: String,
+    pub card_image_path: String,
+    pub card_back_image_path: String,
 }
 
 #[derive(Component)]
@@ -107,5 +114,6 @@ pub struct VillainCard {
     pub description: String,
     pub search_keywords: Vec<String>,
     pub hand_size: u8,
-    pub image_path: String,
+    pub card_image_path: String,
+    pub card_back_image_path: String,
 }

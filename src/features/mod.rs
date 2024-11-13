@@ -1,6 +1,6 @@
 use bevy::app::{App, Plugin};
 
-mod cards;
+pub mod cards;
 mod collection;
 mod main_menu;
 

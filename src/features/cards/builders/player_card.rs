@@ -21,8 +21,9 @@ pub struct AllyCard {
     pub atk_con_dmg: u8,
     pub description: String,
     pub search_keywords: Vec<String>,
-    pub image_path: String,
+    pub card_image_path: String,
     pub card_amount_max: u8,
+    pub card_back_image_path: String,
 }
 
 #[derive(Component)]
@@ -39,7 +40,8 @@ pub struct AlterEgoCard {
     pub search_keywords: Vec<String>,
     pub hand_size: u8,
     pub nemensis_id: String,
-    pub image_path: String,
+    pub card_image_path: String,
+    pub card_back_image_path: String,
 }
 
 #[derive(Component)]
@@ -52,7 +54,8 @@ pub struct EventCard {
     pub traits: Vec<CardTrait>,
     pub description: String,
     pub search_keywords: Vec<String>,
-    pub image_path: String,
+    pub card_image_path: String,
+    pub card_back_image_path: String,
     pub card_amount_max: u8,
 }
 
@@ -72,7 +75,8 @@ pub struct HeroCard {
     pub search_keywords: Vec<String>,
     pub hand_size: u8,
     pub nemensis_id: String,
-    pub image_path: String,
+    pub card_image_path: String,
+    pub card_back_image_path: String,
 }
 
 #[derive(Component)]
@@ -84,7 +88,8 @@ pub struct ResourceCard {
     pub traits: Vec<CardTrait>,
     pub description: String,
     pub search_keywords: Vec<String>,
-    pub image_path: String,
+    pub card_image_path: String,
+    pub card_back_image_path: String,
     pub card_amount_max: u8,
 }
 
@@ -100,7 +105,8 @@ pub struct SupportCard {
     pub traits: Vec<CardTrait>,
     pub description: String,
     pub search_keywords: Vec<String>,
-    pub image_path: String,
+    pub card_image_path: String,
+    pub card_back_image_path: String,
     pub card_amount_max: u8,
 }
 
@@ -116,6 +122,7 @@ pub struct UpgradeCard {
     pub traits: Vec<CardTrait>,
     pub description: String,
     pub search_keywords: Vec<String>,
-    pub image_path: String,
+    pub card_image_path: String,
+    pub card_back_image_path: String,
     pub card_amount_max: u8,
 }
