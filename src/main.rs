@@ -7,8 +7,8 @@ mod ui;
 
 fn main() {
     App::new()
-        .add_plugins(ui::UI_PLUGINS)
-        .add_plugins(feature::FEATURE_PLUGINS)
-        .add_plugins(system::SYSTEM_PLUGINS)
+        .add_plugins(system::SystemPlugin)
+        .add_plugins(ui::UIPlugin)
+        .add_plugins(feature::FeaturePlugin)
         .run();
 }

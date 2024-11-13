@@ -5,7 +5,7 @@ use bevy::prelude::*;
 #[source(AppState = AppState::Collection)]
 pub enum CollectionState {
     #[default]
-    LoadingAsset,
+    Menu,
 }
 
 pub struct CollectionStatePlugin;
