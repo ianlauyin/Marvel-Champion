@@ -1,4 +1,4 @@
-use crate::system::AppState;
+use crate::systems::AppState;
 use bevy::prelude::*;
 
 #[derive(SubStates, Default, Hash, PartialEq, Eq, Debug, Clone)]

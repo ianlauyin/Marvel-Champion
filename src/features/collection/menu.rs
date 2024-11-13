@@ -1,29 +1,22 @@
 use bevy::prelude::*;
 
-use crate::system::{AppState, AppStateChangeEvent};
-pub struct MainMenuPlugin;
+use super::state::CollectionState;
 
-impl Plugin for MainMenuPlugin {
+pub struct CollectionMenuPlugin;
+
+impl Plugin for CollectionMenuPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(OnEnter(AppState::MainMenu), spawn_main_menu)
-            .add_systems(
-                Update,
-                handle_button_reaction.run_if(in_state(AppState::MainMenu)),
-            )
-            .add_systems(OnExit(AppState::MainMenu), despawn_main_menu);
+        app.add_systems(OnEnter(CollectionState::Menu), || {
+            print!("Enter Collection Menu")
+        });
     }
 }
 
 #[derive(Component)]
-struct MainMenu;
+struct CollectionMenu;
 
 #[derive(Component, Clone)]
-enum MainMenuButton {
-    Play,
-    DeckBuilding,
-    Collection,
-    Record,
-}
+enum MenuButton {}
 
 const BUTTON_MAP: [(&str, MainMenuButton); 4] = [
     ("Play", MainMenuButton::Play),

@@ -1,4 +1,4 @@
-use crate::system::{AppState, LoadAsset, StateLoading};
+use crate::systems::{AppState, LoadAsset, StateLoading};
 use bevy::prelude::*;
 use std::f32::consts::PI;
 

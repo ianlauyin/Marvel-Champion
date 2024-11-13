@@ -1,5 +1,6 @@
 use bevy::app::{App, Plugin};
 
+mod cards;
 mod collection;
 mod main_menu;
 

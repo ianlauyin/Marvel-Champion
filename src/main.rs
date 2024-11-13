@@ -1,14 +1,14 @@
 use bevy::prelude::*;
 
 mod constants;
-mod feature;
-mod system;
+mod features;
+mod systems;
 mod ui;
 
 fn main() {
     App::new()
-        .add_plugins(system::SystemPlugin)
+        .add_plugins(systems::SystemPlugin)
         .add_plugins(ui::UIPlugin)
-        .add_plugins(feature::FeaturePlugin)
+        .add_plugins(features::FeaturePlugin)
         .run();
 }

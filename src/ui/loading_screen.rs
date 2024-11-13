@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 
 use crate::constants::WINDOW_RESOLUTION;
-use crate::system::AppState;
+use crate::systems::AppState;
 pub struct LoadingScreenPlugin;
 
 impl Plugin for LoadingScreenPlugin {

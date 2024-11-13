@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use crate::system::AppState;
+use crate::systems::AppState;
 use bevy::asset::LoadState;
 use bevy::prelude::*;
 
