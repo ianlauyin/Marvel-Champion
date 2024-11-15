@@ -2,7 +2,6 @@ use std::f32::consts::PI;
 
 use bevy::prelude::*;
 use constants::CARD_SIZE;
-use systems::AppState;
 
 mod constants;
 mod features;
@@ -23,9 +22,12 @@ fn spawn_card(
     mut materials: ResMut<Assets<StandardMaterial>>,
     asset_server: Res<AssetServer>,
 ) {
-    let hero_card = crate::features::cards::core_spider_man::get_hero();
-    let card_image_path = hero_card.card_image_path.clone();
-    let card_back_image_path = hero_card.card_back_image_path.clone();
+    let hero_card = crate::features::cards::core_spider_man::get_hero_card();
+    let crate::features::cards::Card::Hero(hero) = &hero_card else {
+        return;
+    };
+    let card_image_path = hero.card_image_path;
+    let card_back_image_path = hero.card_back_image_path;
     commands
         .spawn((
             hero_card,
@@ -62,9 +64,7 @@ fn spawn_card(
         });
 }
 
-fn rotate_card(
-    mut card_q: Query<&mut Transform, With<crate::features::cards::builders::HeroCard>>,
-) {
+fn rotate_card(mut card_q: Query<&mut Transform, With<crate::features::cards::Card>>) {
     let Ok(mut transform) = card_q.get_single_mut() else {
         return;
     };

@@ -1,52 +1,46 @@
-use bevy::prelude::Component;
-
 use crate::features::cards::{CardIcon, CardTrait, Keyword};
 
-#[derive(Component)]
-pub struct AttachmentCard {
-    pub id: String,
-    pub name: String,
+pub struct AttachmentCard<'a> {
+    pub id: &'a str,
+    pub name: &'a str,
     pub unique: bool,
     pub boost: u8,
     pub card_icons: Vec<CardIcon>,
     pub traits: Vec<CardTrait>,
-    pub description: String,
-    pub search_keywords: Vec<String>,
-    pub card_image_path: String,
-    pub card_back_image_path: String,
+    pub description: &'a str,
+    pub search_keywords: Vec<&'a str>,
+    pub card_image_path: &'a str,
+    pub card_back_image_path: &'a str,
 }
 
-#[derive(Component)]
-pub struct EnvironmentCard {
-    pub id: String,
-    pub name: String,
+pub struct EnvironmentCard<'a> {
+    pub id: &'a str,
+    pub name: &'a str,
     pub boost: u8,
     pub card_icons: Vec<CardIcon>,
     pub traits: Vec<CardTrait>,
-    pub description: String,
-    pub search_keywords: Vec<String>,
-    pub card_image_path: String,
-    pub card_back_image_path: String,
+    pub description: &'a str,
+    pub search_keywords: Vec<&'a str>,
+    pub card_image_path: &'a str,
+    pub card_back_image_path: &'a str,
 }
 
-#[derive(Component)]
-pub struct MainSchemeCard {
-    pub id: String,
-    pub name: String,
-    pub next_stage_id: Option<String>,
+pub struct MainSchemeCard<'a> {
+    pub id: &'a str,
+    pub name: &'a str,
+    pub next_stage_id: Option<&'a str>,
     pub target_threat: u8,
     pub initial_threat: u8,
     pub card_icons: Vec<CardIcon>,
-    pub description: String,
-    pub search_keywords: Vec<String>,
-    pub card_image_path: String,
-    pub card_back_image_path: String,
+    pub description: &'a str,
+    pub search_keywords: Vec<&'a str>,
+    pub card_image_path: &'a str,
+    pub card_back_image_path: &'a str,
 }
 
-#[derive(Component)]
-pub struct MinionCard {
-    pub id: String,
-    pub name: String,
+pub struct MinionCard<'a> {
+    pub id: &'a str,
+    pub name: &'a str,
     pub unique: bool,
     pub initial_hit_points: u8,
     pub keywords: Vec<Keyword>,
@@ -55,65 +49,60 @@ pub struct MinionCard {
     pub sch: u8,
     pub atk: u8,
     pub boost: u8,
-    pub description: String,
-    pub search_keywords: Vec<String>,
-    pub card_image_path: String,
-    pub card_back_image_path: String,
+    pub description: &'a str,
+    pub search_keywords: Vec<&'a str>,
+    pub card_image_path: &'a str,
+    pub card_back_image_path: &'a str,
 }
 
-#[derive(Component)]
-pub struct ObligationCard {
-    pub id: String,
-    pub name: String,
-    pub belong_id: String,
+pub struct ObligationCard<'a> {
+    pub id: &'a str,
+    pub name: &'a str,
+    pub belong_id: &'a str,
     pub instant_effect: bool,
     pub boost: u8,
     pub card_icons: Vec<CardIcon>,
-    pub description: String,
-    pub search_keywords: Vec<String>,
-    pub card_image_path: String,
-    pub card_back_image_path: String,
+    pub description: &'a str,
+    pub search_keywords: Vec<&'a str>,
+    pub card_image_path: &'a str,
+    pub card_back_image_path: &'a str,
 }
 
-#[derive(Component)]
-pub struct SideSchemeCard {
-    pub id: String,
-    pub name: String,
+pub struct SideSchemeCard<'a> {
+    pub id: &'a str,
+    pub name: &'a str,
     pub boost: u8,
-    pub target_threat: u8,
     pub initial_threat: u8,
     pub card_icons: Vec<CardIcon>,
-    pub description: String,
-    pub search_keywords: Vec<String>,
-    pub card_image_path: String,
-    pub card_back_image_path: String,
+    pub description: &'a str,
+    pub search_keywords: Vec<&'a str>,
+    pub card_image_path: &'a str,
+    pub card_back_image_path: &'a str,
 }
 
-#[derive(Component)]
-pub struct TreacheryCard {
-    pub id: String,
-    pub name: String,
+pub struct TreacheryCard<'a> {
+    pub id: &'a str,
+    pub name: &'a str,
     pub traits: Vec<CardTrait>,
     pub boost: u8,
-    pub description: String,
-    pub search_keywords: Vec<String>,
-    pub card_image_path: String,
-    pub card_back_image_path: String,
+    pub description: &'a str,
+    pub search_keywords: Vec<&'a str>,
+    pub card_image_path: &'a str,
+    pub card_back_image_path: &'a str,
 }
 
-#[derive(Component)]
-pub struct VillainCard {
-    pub id: String,
-    pub name: String,
+pub struct VillainCard<'a> {
+    pub id: &'a str,
+    pub name: &'a str,
     pub initial_hit_points: u8,
     pub keywords: Vec<Keyword>,
     pub traits: Vec<CardTrait>,
     pub card_icons: Vec<CardIcon>,
     pub sch: u8,
     pub atk: u8,
-    pub description: String,
-    pub search_keywords: Vec<String>,
+    pub description: &'a str,
+    pub search_keywords: Vec<&'a str>,
     pub hand_size: u8,
-    pub card_image_path: String,
-    pub card_back_image_path: String,
+    pub card_image_path: &'a str,
+    pub card_back_image_path: &'a str,
 }

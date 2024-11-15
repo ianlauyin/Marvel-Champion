@@ -1,16 +1,13 @@
-use bevy::prelude::Component;
+use crate::features::cards::{CardAspect, CardIcon, CardResource, CardTrait, Keyword};
 
-use crate::features::cards::{CardIcon, CardResource, CardTrait, Keyword, PlayerCardAspect};
-
-#[derive(Component)]
-pub struct AllyCard {
-    pub id: String,
-    pub name: String,
-    pub aspect: PlayerCardAspect,
+pub struct AllyCard<'a> {
+    pub id: &'a str,
+    pub name: &'a str,
+    pub sub_name: &'a str,
+    pub aspect: CardAspect,
     pub unique: bool,
     pub cost: u8,
     pub res: Vec<CardResource>,
-    pub sub_name: String,
     pub initial_hit_points: u8,
     pub keywords: Vec<Keyword>,
     pub traits: Vec<CardTrait>,
@@ -19,51 +16,50 @@ pub struct AllyCard {
     pub thw_con_dmg: u8,
     pub atk: u8,
     pub atk_con_dmg: u8,
-    pub description: String,
-    pub search_keywords: Vec<String>,
-    pub card_image_path: String,
+    pub description: &'a str,
+    pub search_keywords: Vec<&'a str>,
+    pub card_image_path: &'a str,
+    pub card_back_image_path: &'a str,
     pub card_amount_max: u8,
-    pub card_back_image_path: String,
 }
 
-#[derive(Component)]
-pub struct AlterEgoCard {
-    pub id: String,
-    pub name: String,
-    pub flip_target_id: Vec<String>,
+pub struct AlterEgoCard<'a> {
+    pub id: &'a str,
+    pub name: &'a str,
+    pub flip_target_id: Vec<&'a str>,
     pub initial_hit_points: u8,
     pub keywords: Vec<Keyword>,
     pub traits: Vec<CardTrait>,
     pub card_icons: Vec<CardIcon>,
     pub rec: u8,
-    pub description: String,
-    pub search_keywords: Vec<String>,
+    pub description: &'a str,
+    pub search_keywords: Vec<&'a str>,
     pub hand_size: u8,
-    pub nemensis_id: String,
-    pub card_image_path: String,
-    pub card_back_image_path: String,
+    pub nemesis_id: &'a str,
+    pub nemesis_side_scheme_id: &'a str,
+    pub nemesis_card_id: Vec<&'a str>,
+    pub card_image_path: &'a str,
+    pub card_back_image_path: &'a str,
 }
 
-#[derive(Component)]
-pub struct EventCard {
-    pub id: String,
-    pub name: String,
-    pub aspect: PlayerCardAspect,
+pub struct EventCard<'a> {
+    pub id: &'a str,
+    pub name: &'a str,
+    pub aspect: CardAspect,
     pub cost: u8,
     pub res: Vec<CardResource>,
     pub traits: Vec<CardTrait>,
-    pub description: String,
-    pub search_keywords: Vec<String>,
-    pub card_image_path: String,
-    pub card_back_image_path: String,
+    pub description: &'a str,
+    pub search_keywords: Vec<&'a str>,
+    pub card_image_path: &'a str,
+    pub card_back_image_path: &'a str,
     pub card_amount_max: u8,
 }
 
-#[derive(Component)]
-pub struct HeroCard {
-    pub id: String,
-    pub name: String,
-    pub flip_target_id: Vec<String>,
+pub struct HeroCard<'a> {
+    pub id: &'a str,
+    pub name: &'a str,
+    pub flip_target_id: Vec<&'a str>,
     pub initial_hit_points: u8,
     pub keywords: Vec<Keyword>,
     pub traits: Vec<CardTrait>,
@@ -71,58 +67,58 @@ pub struct HeroCard {
     pub thw: u8,
     pub atk: u8,
     pub def: u8,
-    pub description: String,
-    pub search_keywords: Vec<String>,
+    pub description: &'a str,
+    pub search_keywords: Vec<&'a str>,
     pub hand_size: u8,
-    pub nemensis_id: String,
-    pub card_image_path: String,
-    pub card_back_image_path: String,
+    pub nemesis_id: &'a str,
+    pub nemesis_side_scheme_id: &'a str,
+    pub nemesis_card_id: Vec<&'a str>,
+    pub card_image_path: &'a str,
+    pub card_back_image_path: &'a str,
 }
 
-#[derive(Component)]
-pub struct ResourceCard {
-    pub id: String,
-    pub name: String,
-    pub aspect: PlayerCardAspect,
+pub struct ResourceCard<'a> {
+    pub id: &'a str,
+    pub name: &'a str,
+    pub aspect: CardAspect,
     pub res: Vec<CardResource>,
     pub traits: Vec<CardTrait>,
-    pub description: String,
-    pub search_keywords: Vec<String>,
-    pub card_image_path: String,
-    pub card_back_image_path: String,
+    pub description: &'a str,
+    pub search_keywords: Vec<&'a str>,
+    pub card_image_path: &'a str,
+    pub card_back_image_path: &'a str,
     pub card_amount_max: u8,
 }
 
-#[derive(Component)]
-pub struct SupportCard {
-    pub id: String,
-    pub name: String,
+pub struct SupportCard<'a> {
+    pub id: &'a str,
+    pub name: &'a str,
     pub unique: bool,
-    pub aspect: PlayerCardAspect,
+    pub aspect: CardAspect,
     pub cost: u8,
     pub res: Vec<CardResource>,
     pub card_icons: Vec<CardIcon>,
     pub traits: Vec<CardTrait>,
-    pub description: String,
-    pub search_keywords: Vec<String>,
-    pub card_image_path: String,
-    pub card_back_image_path: String,
+    pub description: &'a str,
+    pub search_keywords: Vec<&'a str>,
+    pub card_image_path: &'a str,
+    pub card_back_image_path: &'a str,
     pub card_amount_max: u8,
 }
 
-#[derive(Component)]
-pub struct UpgradeCard {
-    pub id: String,
-    pub name: String,
-    pub aspect: PlayerCardAspect,
+pub struct UpgradeCard<'a> {
+    pub id: &'a str,
+    pub name: &'a str,
+    pub aspect: CardAspect,
     pub unique: bool,
     pub cost: u8,
     pub res: Vec<CardResource>,
     pub card_icons: Vec<CardIcon>,
     pub traits: Vec<CardTrait>,
-    pub description: String,
-    pub search_keywords: Vec<String>,
-    pub card_image_path: String,
-    pub card_back_image_path: String,
+    pub keywords: Vec<Keyword>,
+    pub description: &'a str,
+    pub search_keywords: Vec<&'a str>,
+    pub card_image_path: &'a str,
+    pub card_back_image_path: &'a str,
     pub card_amount_max: u8,
 }
