@@ -16,57 +16,63 @@ fn main() {
         .run();
 }
 
-fn spawn_card(
+// Only work for vertical card.
+fn spawn_cards(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
     asset_server: Res<AssetServer>,
 ) {
-    let hero_card = crate::features::cards::core_spider_man::get_hero_card();
-    let crate::features::cards::Card::Hero(hero) = &hero_card else {
-        return;
-    };
-    let card_image_path = hero.card_image_path;
-    let card_back_image_path = hero.card_back_image_path;
-    commands
-        .spawn((
-            hero_card,
-            GlobalTransform::default(),
-            InheritedVisibility::VISIBLE,
-            Transform {
-                translation: Vec3::new(0., 0., 800.),
-                ..default()
-            },
-        ))
-        .with_children(|card| {
-            card.spawn(PbrBundle {
-                mesh: meshes.add(Cuboid::from_size(CARD_SIZE)),
-                material: materials.add(StandardMaterial {
-                    base_color_texture: Some(asset_server.load(card_image_path)),
-                    ..default()
-                }),
-                transform: Transform::from_translation(Vec3::new(0., 0., -0.5)),
-                ..default()
-            });
-            card.spawn(PbrBundle {
-                mesh: meshes.add(Cuboid::from_size(CARD_SIZE)),
-                material: materials.add(StandardMaterial {
-                    base_color_texture: Some(asset_server.load(card_back_image_path)),
-                    ..default()
-                }),
-                transform: Transform {
-                    translation: Vec3::new(0., 0., 0.5),
-                    rotation: Quat::from_rotation_y(PI),
+    let cards = crate::features::cards::core_spider_man::get_all_cards(1);
+    let mut x = -64. * 3.;
+    let mut y = 89.;
+    for card in cards {
+        let card_image_path = card.get_card_image_path().to_string();
+        let card_back_image_path = card.get_card_back_image_path().to_string();
+        commands
+            .spawn((
+                card.clone(),
+                GlobalTransform::default(),
+                InheritedVisibility::VISIBLE,
+                Transform {
+                    translation: Vec3::new(x, y, 800.),
                     ..default()
                 },
-                ..default()
+            ))
+            .with_children(|card_node| {
+                card_node.spawn(PbrBundle {
+                    mesh: meshes.add(Cuboid::from_size(CARD_SIZE)),
+                    material: materials.add(StandardMaterial {
+                        base_color_texture: Some(asset_server.load(card_image_path)),
+                        ..default()
+                    }),
+                    transform: Transform::from_translation(Vec3::new(0., 0., -0.5)),
+                    ..default()
+                });
+                card_node.spawn(PbrBundle {
+                    mesh: meshes.add(Cuboid::from_size(CARD_SIZE)),
+                    material: materials.add(StandardMaterial {
+                        base_color_texture: Some(asset_server.load(card_back_image_path)),
+                        ..default()
+                    }),
+                    transform: Transform {
+                        translation: Vec3::new(0., 0., 0.5),
+                        rotation: Quat::from_rotation_y(PI),
+                        ..default()
+                    },
+                    ..default()
+                });
             });
-        });
+        x += 64.;
+        if x > 64. * 3. {
+            y -= 89.;
+            x = -64. * 3.;
+        }
+    }
 }
 
 fn rotate_card(mut card_q: Query<&mut Transform, With<crate::features::cards::Card>>) {
-    let Ok(mut transform) = card_q.get_single_mut() else {
-        return;
-    };
-    transform.rotate(Quat::from_rotation_y(0.05));
+    for mut transform in card_q.iter_mut() {
+        transform.rotate(Quat::from_rotation_y(0.05));
+    }
 }

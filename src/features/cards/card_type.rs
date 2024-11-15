@@ -1,5 +1,4 @@
-use super::Card;
-
+#[derive(Clone)]
 pub enum CardResource {
     Wild,
     Energy,
@@ -7,6 +6,7 @@ pub enum CardResource {
     Physical,
 }
 
+#[derive(Clone)]
 pub enum Identity {
     CoreSpiderMan,
 }
@@ -19,6 +19,7 @@ impl Identity {
     }
 }
 
+#[derive(Clone)]
 pub enum CardAspect {
     Justice,
     Aggression,
@@ -43,6 +44,7 @@ impl CardAspect {
     }
 }
 
+#[derive(Clone)]
 pub enum CardTrait {
     // Charater-related
     Avenger,
@@ -85,6 +87,7 @@ impl CardTrait {
     }
 }
 
+#[derive(Clone)]
 pub enum Counter {
     Web,
 }
@@ -97,6 +100,7 @@ impl Counter {
     }
 }
 
+#[derive(Clone)]
 pub enum Keyword {
     Retaliate,
     Quickstrike,
@@ -114,6 +118,7 @@ impl Keyword {
     }
 }
 
+#[derive(Clone)]
 pub enum CardIcon {
     Acceleration,
 }

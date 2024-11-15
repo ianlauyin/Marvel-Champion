@@ -1,9 +1,28 @@
 use crate::features::cards::Identity::CoreSpiderMan;
 use crate::features::cards::*;
 
+pub fn get_all_cards(player_number: u8) -> Vec<Card> {
+    vec![
+        get_nemesis_card(),
+        get_nemesis_side_scheme_card(player_number),
+        get_sweeping_swoop(),
+        get_vultures_plans(),
+        get_hero_card(),
+        get_alter_ego_card(),
+        get_black_cat(),
+        get_backflip(),
+        get_enhanced_spider_sense(),
+        get_swinging_web_kick(),
+        get_aunt_may(),
+        get_spider_tracer(),
+        get_web_shooter(),
+        get_webbed_up(),
+    ]
+}
+
 // Nemesis Cards
 
-pub fn get_nemesis_card() -> Card {
+fn get_nemesis_card() -> Card {
     Card::Minion(MinionCard {
         id: "core_167",
         name: "Vulture",
@@ -22,7 +41,7 @@ pub fn get_nemesis_card() -> Card {
     })
 }
 
-pub fn get_nemesis_side_scheme_card(player_number: u8) -> Card {
+fn get_nemesis_side_scheme_card(player_number: u8) -> Card {
     Card::SideScheme(SideSchemeCard {
         id: "core_166",
         name: "Highway Robbery",
@@ -38,7 +57,7 @@ pub fn get_nemesis_side_scheme_card(player_number: u8) -> Card {
     })
 }
 
-pub fn get_sweeping_swoop() -> Card {
+fn get_sweeping_swoop() -> Card {
     Card::Treachery(TreacheryCard {
         id: "core_168",
         name: "Sweeping Swoop",
@@ -52,7 +71,7 @@ pub fn get_sweeping_swoop() -> Card {
     })
 }
 
-pub fn get_vultures_plans() -> Card {
+fn get_vultures_plans() -> Card {
     Card::Treachery(TreacheryCard {
         id: "core_169",
         name: "The Vulture's Plans",
@@ -67,7 +86,7 @@ pub fn get_vultures_plans() -> Card {
 
 // Player Cards
 
-pub fn get_hero_card() -> Card {
+fn get_hero_card() -> Card {
     Card::Hero(HeroCard {
         id: "core_1a",
         name: "Spider-Man",
@@ -90,7 +109,7 @@ pub fn get_hero_card() -> Card {
     })
 }
 
-pub fn get_alter_ego_card() -> Card {
+fn get_alter_ego_card() -> Card {
     Card::AlterEgo(AlterEgoCard {
         id: "core_1b",
         name: "Peter Parker",
@@ -112,7 +131,7 @@ pub fn get_alter_ego_card() -> Card {
     })
 }
 
-pub fn get_black_cat() -> Card {
+fn get_black_cat() -> Card {
     Card::Ally(AllyCard {
         id: "core_002",
         name: "Black Cat",
@@ -137,7 +156,7 @@ pub fn get_black_cat() -> Card {
     })
 }
 
-pub fn get_backflip() -> Card {
+fn get_backflip() -> Card {
     Card::Event(EventCard {
         id: "core_003",
         name: "Backflip",
@@ -153,7 +172,7 @@ pub fn get_backflip() -> Card {
     })
 }
 
-pub fn get_enhanced_spider_sense() -> Card {
+fn get_enhanced_spider_sense() -> Card {
     Card::Event(EventCard {
         id: "core_004",
         name: "Enhanced Spider-Sense",
@@ -169,7 +188,7 @@ pub fn get_enhanced_spider_sense() -> Card {
     })
 }
 
-pub fn get_swinging_web_kick() -> Card {
+fn get_swinging_web_kick() -> Card {
     Card::Event(EventCard {
         id: "core_005",
         name: "Swinging Web Kick",
@@ -185,7 +204,7 @@ pub fn get_swinging_web_kick() -> Card {
     })
 }
 
-pub fn get_aunt_may() -> Card {
+fn get_aunt_may() -> Card {
     Card::Support(SupportCard {
         id: "core_006",
         name: "Aunt May",
@@ -203,7 +222,7 @@ pub fn get_aunt_may() -> Card {
     })
 }
 
-pub fn get_spider_tracer() -> Card {
+fn get_spider_tracer() -> Card {
     Card::Upgrade(UpgradeCard {
         id: "core_007",
         name: "Spider-Tracer",
@@ -222,7 +241,7 @@ pub fn get_spider_tracer() -> Card {
     })
 }
 
-pub fn get_web_shooter() -> Card {
+fn get_web_shooter() -> Card {
     Card::Upgrade(UpgradeCard {
         id: "core_008",
         name: "Web-Shooter",
@@ -242,7 +261,7 @@ pub fn get_web_shooter() -> Card {
     })
 }
 
-pub fn get_webbed_up() -> Card {
+fn get_webbed_up() -> Card {
     Card::Upgrade(UpgradeCard {
         id: "core_009",
         name: "Webbed Up",
