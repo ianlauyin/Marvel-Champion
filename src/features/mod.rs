@@ -3,7 +3,6 @@ use bevy::app::{App, Plugin};
 pub mod cards;
 mod collection;
 mod main_menu;
-mod shared;
 
 pub struct FeaturePlugin;
 
