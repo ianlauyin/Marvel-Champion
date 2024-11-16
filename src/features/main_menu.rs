@@ -1,6 +1,8 @@
 use bevy::prelude::*;
 
 use crate::systems::{AppState, AppStateChangeEvent};
+
+use super::shared::spawn_button;
 pub struct MainMenuPlugin;
 
 impl Plugin for MainMenuPlugin {
@@ -25,14 +27,15 @@ enum MainMenuButton {
     Record,
 }
 
-const BUTTON_MAP: [(&str, MainMenuButton); 4] = [
-    ("Play", MainMenuButton::Play),
-    ("Deck Building", MainMenuButton::DeckBuilding),
-    ("Collection", MainMenuButton::Collection),
-    ("Record", MainMenuButton::Record),
+const BUTTON_MAP: [(MainMenuButton, &str); 4] = [
+    (MainMenuButton::Play, "Play"),
+    (MainMenuButton::DeckBuilding, "Deck Building"),
+    (MainMenuButton::Collection, "Collection"),
+    (MainMenuButton::Record, "Record"),
 ];
 
 const BUTTON_SIZE: (Val, Val) = (Val::Px(300.), Val::Px(100.));
+const BUTTON_COLOR: Color = Color::srgb(0.235, 0.235, 0.235);
 
 fn spawn_main_menu(mut commands: Commands) {
     commands
@@ -55,31 +58,8 @@ fn spawn_main_menu(mut commands: Commands) {
             },
         ))
         .with_children(|main_menu| {
-            for (text, button_component) in BUTTON_MAP {
-                main_menu
-                    .spawn((
-                        button_component,
-                        ButtonBundle {
-                            style: Style {
-                                width: BUTTON_SIZE.0,
-                                height: BUTTON_SIZE.1,
-                                border: UiRect::all(Val::Px(2.)),
-                                display: Display::Flex,
-                                justify_content: JustifyContent::Center,
-                                align_items: AlignItems::Center,
-                                ..default()
-                            },
-                            border_color: BorderColor(Color::srgb(0.106, 0.392, 0.557)),
-                            border_radius: BorderRadius::all(Val::Px(5.)),
-                            background_color: BackgroundColor::from(Color::srgb(
-                                0.235, 0.235, 0.235,
-                            )),
-                            ..default()
-                        },
-                    ))
-                    .with_children(|button_div| {
-                        button_div.spawn(TextBundle::from_section(text, TextStyle::default()));
-                    });
+            for (button_component, text) in BUTTON_MAP {
+                spawn_button(main_menu, text, BUTTON_COLOR, BUTTON_SIZE).insert(button_component);
             }
         });
 }

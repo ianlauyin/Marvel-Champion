@@ -1,5 +1,7 @@
 use bevy::prelude::*;
 
+use crate::features::shared::spawn_button;
+
 use super::state::{CollectionState, CollectionStateChangeEvent};
 
 pub struct CollectionMenuPlugin;
@@ -31,50 +33,50 @@ enum CardTypeButton {
     Modular,
 }
 
-const BUTTON_MAP: [(&str, CardTypeButton, Color); 9] = [
+const BUTTON_MAP: [(CardTypeButton, &str, Color); 9] = [
     (
-        "Hero",
         CardTypeButton::Hero,
+        "Hero",
         Color::srgb(0.235, 0.235, 0.235),
     ),
     (
-        "Basic",
         CardTypeButton::Basic,
+        "Basic",
         Color::srgb(0.235, 0.235, 0.235),
     ),
     (
-        "Aggression",
         CardTypeButton::Aggression,
+        "Aggression",
         Color::srgb(0.741, 0.192, 0.192),
     ),
     (
-        "Leadership",
         CardTypeButton::Leadership,
+        "Leadership",
         Color::srgb(0.125, 0.769, 0.882),
     ),
     (
-        "Protection",
         CardTypeButton::Protection,
+        "Protection",
         Color::srgb(0.075, 0.773, 0.075),
     ),
     (
-        "Justice",
         CardTypeButton::Justice,
+        "Justice",
         Color::srgb(0.871, 0.941, 0.086),
     ),
     (
-        "Pool",
         CardTypeButton::Pool,
+        "Pool",
         Color::srgb(0.89, 0.149, 0.816),
     ),
     (
-        "Villain",
         CardTypeButton::Villain,
+        "Villain",
         Color::srgb(0.235, 0.235, 0.235),
     ),
     (
-        "Modular",
         CardTypeButton::Modular,
+        "Modular",
         Color::srgb(0.235, 0.235, 0.235),
     ),
 ];
@@ -101,7 +103,7 @@ fn spawn_card_type_menu(mut commands: Commands) {
             },
         ))
         .with_children(|card_type_menu| {
-            for (text, button_component, color) in BUTTON_MAP {
+            for (button_component, text, color) in BUTTON_MAP {
                 card_type_menu
                     .spawn(NodeBundle {
                         style: Style {
@@ -113,29 +115,8 @@ fn spawn_card_type_menu(mut commands: Commands) {
                         ..default()
                     })
                     .with_children(|card_type_node| {
-                        card_type_node
-                            .spawn((
-                                button_component,
-                                ButtonBundle {
-                                    style: Style {
-                                        width: BUTTON_SIZE.0,
-                                        height: BUTTON_SIZE.1,
-                                        border: UiRect::all(Val::Px(2.)),
-                                        display: Display::Flex,
-                                        justify_content: JustifyContent::Center,
-                                        align_items: AlignItems::Center,
-                                        ..default()
-                                    },
-                                    border_color: BorderColor(Color::srgb(0.725, 0.725, 0.725)),
-                                    border_radius: BorderRadius::all(Val::Px(10.)),
-                                    background_color: BackgroundColor::from(color),
-                                    ..default()
-                                },
-                            ))
-                            .with_children(|button_div| {
-                                button_div
-                                    .spawn(TextBundle::from_section(text, TextStyle::default()));
-                            });
+                        spawn_button(card_type_node, text, color, BUTTON_SIZE)
+                            .insert(button_component);
                     });
             }
         });
