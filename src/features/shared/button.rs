@@ -1,12 +1,12 @@
 use bevy::ecs::system::EntityCommands;
 use bevy::prelude::*;
 
-pub fn spawn_button<'a, 'b>(
-    child_builder: &'b mut ChildBuilder<'a>,
+pub fn spawn_button<'a>(
+    child_builder: &'a mut ChildBuilder,
     text: &str,
     color: Color,
     size: (Val, Val),
-) -> EntityCommands<'b> {
+) -> EntityCommands<'a> {
     let mut button = child_builder.spawn(ButtonBundle {
         style: Style {
             width: size.0,

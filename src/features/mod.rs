@@ -10,7 +10,7 @@ pub struct FeaturePlugin;
 impl Plugin for FeaturePlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((
-            shared::game_mat::GameMatPlugin,
+            shared::GameMatPlugin,
             collection::CollectionPlugin,
             main_menu::MainMenuPlugin,
         ));
