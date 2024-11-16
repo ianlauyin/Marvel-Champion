@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::systems::{AppState, AppStateChangeEvent};
 
-use super::shared::spawn_button;
+use super::shared::CustomButton;
 pub struct MainMenuPlugin;
 
 impl Plugin for MainMenuPlugin {
@@ -34,9 +34,6 @@ const BUTTON_MAP: [(MainMenuButton, &str); 4] = [
     (MainMenuButton::Record, "Record"),
 ];
 
-const BUTTON_SIZE: (Val, Val) = (Val::Px(300.), Val::Px(100.));
-const BUTTON_COLOR: Color = Color::srgb(0.235, 0.235, 0.235);
-
 fn spawn_main_menu(mut commands: Commands) {
     commands
         .spawn((
@@ -59,7 +56,9 @@ fn spawn_main_menu(mut commands: Commands) {
         ))
         .with_children(|main_menu| {
             for (button_component, text) in BUTTON_MAP {
-                spawn_button(main_menu, text, BUTTON_COLOR, BUTTON_SIZE).insert(button_component);
+                CustomButton { text, ..default() }
+                    .spawn(main_menu)
+                    .insert(button_component);
             }
         });
 }

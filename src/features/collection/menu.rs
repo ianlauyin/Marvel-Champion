@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::features::shared::spawn_button;
+use crate::features::shared::{spawn_previous_button, CustomButton};
 
 use super::state::{CollectionState, CollectionStateChangeEvent};
 
@@ -33,52 +33,36 @@ enum CardTypeButton {
     Modular,
 }
 
-const BUTTON_MAP: [(CardTypeButton, &str, Color); 9] = [
-    (
-        CardTypeButton::Hero,
-        "Hero",
-        Color::srgb(0.235, 0.235, 0.235),
-    ),
-    (
-        CardTypeButton::Basic,
-        "Basic",
-        Color::srgb(0.235, 0.235, 0.235),
-    ),
+const BUTTON_MAP: [(CardTypeButton, &str, Option<Color>); 9] = [
+    (CardTypeButton::Hero, "Hero", None),
+    (CardTypeButton::Basic, "Basic", None),
     (
         CardTypeButton::Aggression,
         "Aggression",
-        Color::srgb(0.741, 0.192, 0.192),
+        Some(Color::srgb(0.741, 0.192, 0.192)),
     ),
     (
         CardTypeButton::Leadership,
         "Leadership",
-        Color::srgb(0.125, 0.769, 0.882),
+        Some(Color::srgb(0.125, 0.769, 0.882)),
     ),
     (
         CardTypeButton::Protection,
         "Protection",
-        Color::srgb(0.075, 0.773, 0.075),
+        Some(Color::srgb(0.075, 0.773, 0.075)),
     ),
     (
         CardTypeButton::Justice,
         "Justice",
-        Color::srgb(0.871, 0.941, 0.086),
+        Some(Color::srgb(0.871, 0.941, 0.086)),
     ),
     (
         CardTypeButton::Pool,
         "Pool",
-        Color::srgb(0.89, 0.149, 0.816),
+        Some(Color::srgb(0.89, 0.149, 0.816)),
     ),
-    (
-        CardTypeButton::Villain,
-        "Villain",
-        Color::srgb(0.235, 0.235, 0.235),
-    ),
-    (
-        CardTypeButton::Modular,
-        "Modular",
-        Color::srgb(0.235, 0.235, 0.235),
-    ),
+    (CardTypeButton::Villain, "Villain", None),
+    (CardTypeButton::Modular, "Modular", None),
 ];
 
 const BUTTON_SIZE: (Val, Val) = (Val::Px(300.), Val::Px(100.));
@@ -93,15 +77,52 @@ fn spawn_card_type_menu(mut commands: Commands) {
                     height: Val::Percent(90.),
                     align_self: AlignSelf::Center,
                     justify_self: JustifySelf::Center,
-                    display: Display::Grid,
-                    grid_template_columns: vec![RepeatedGridTrack::auto(3)],
-                    grid_template_rows: vec![RepeatedGridTrack::auto(3)],
+                    display: Display::Flex,
+                    flex_direction: FlexDirection::Column,
                     ..default()
                 },
                 background_color: BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
                 ..default()
             },
         ))
+        .with_children(|card_type_menu| {
+            spawn_card_type_header(card_type_menu);
+            spawn_card_type_button_group(card_type_menu);
+        });
+}
+
+fn spawn_card_type_header(card_type_menu: &mut ChildBuilder) {
+    card_type_menu
+        .spawn(NodeBundle {
+            style: Style {
+                margin: UiRect {
+                    left: Val::Px(10.),
+                    top: Val::Px(5.),
+                    ..default()
+                },
+                ..default()
+            },
+            ..default()
+        })
+        .with_children(|card_type_header| {
+            spawn_previous_button(card_type_header);
+        });
+}
+
+fn spawn_card_type_button_group(card_type_menu: &mut ChildBuilder) {
+    card_type_menu
+        .spawn(NodeBundle {
+            style: Style {
+                width: Val::Percent(100.),
+                height: Val::Percent(100.),
+                align_self: AlignSelf::Center,
+                display: Display::Grid,
+                grid_template_columns: vec![RepeatedGridTrack::auto(3)],
+                grid_template_rows: vec![RepeatedGridTrack::auto(3)],
+                ..default()
+            },
+            ..default()
+        })
         .with_children(|card_type_menu| {
             for (button_component, text, color) in BUTTON_MAP {
                 card_type_menu
@@ -115,8 +136,11 @@ fn spawn_card_type_menu(mut commands: Commands) {
                         ..default()
                     })
                     .with_children(|card_type_node| {
-                        spawn_button(card_type_node, text, color, BUTTON_SIZE)
-                            .insert(button_component);
+                        let mut button = CustomButton { text, ..default() };
+                        if let Some(background_color) = color {
+                            button.background_color = background_color
+                        }
+                        button.spawn(card_type_node).insert(button_component);
                     });
             }
         });
