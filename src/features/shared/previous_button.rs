@@ -15,6 +15,7 @@ impl Plugin for PreviousButtonPlugin {
 
 const BUTTON_SIZE: (Val, Val) = (Val::Px(50.), Val::Px(50.));
 
+/// Reminder: Add handle_interaction in PreviousButtonPlugin when a new previous button is added.
 pub struct PreviousButtonBuilder<T: FreelyMutableState>(pub T);
 
 impl<T: FreelyMutableState + Clone> PreviousButtonBuilder<T> {

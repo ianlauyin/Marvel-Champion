@@ -23,7 +23,7 @@ fn spawn_cards(
     mut materials: ResMut<Assets<StandardMaterial>>,
     asset_server: Res<AssetServer>,
 ) {
-    let cards = crate::features::cards::core_spider_man::get_all_cards(1);
+    let cards = crate::features::cards::core_spider_man::get_all(1);
     let mut x = -64. * 3.;
     let mut y = 89.;
     for card in cards {
