@@ -19,7 +19,7 @@ impl Plugin for AppStatePlugin {
     }
 }
 
-#[derive(Event)]
+#[derive(Event, Clone)]
 pub struct AppStateChangeEvent(pub AppState);
 
 fn change_app_state(

@@ -57,24 +57,28 @@ impl ButtonBuilder<'_> {
 }
 
 fn handle_button_ui(
-    mut button_q: Query<(&mut BackgroundColor, &Interaction), With<Button>>,
+    mut button_q: Query<(&mut BackgroundColor, &Interaction, &Children), With<Button>>,
+    mut text_q: Query<&mut Text>,
     mut window_q: Query<&mut Window>,
 ) {
+    if button_q.is_empty() {
+        return;
+    }
     let mut window = window_q.get_single_mut().unwrap();
     let mut turn_pointer = false;
 
-    for (mut background_color, interaction) in button_q.iter_mut() {
+    for (background_color, interaction, children) in button_q.iter_mut() {
         match interaction {
             Interaction::Pressed => {
-                background_color.0.set_alpha(0.7);
+                handle_button_color(background_color, children, &mut text_q, 0.7);
                 turn_pointer = true
             }
             Interaction::Hovered => {
-                background_color.0.set_alpha(0.5);
+                handle_button_color(background_color, children, &mut text_q, 0.5);
                 turn_pointer = true;
             }
             Interaction::None => {
-                background_color.0.set_alpha(1.);
+                handle_button_color(background_color, children, &mut text_q, 1.);
             }
         }
     }
@@ -84,4 +88,19 @@ fn handle_button_ui(
     } else {
         CursorIcon::default()
     };
+}
+
+fn handle_button_color(
+    mut background_color: Mut<BackgroundColor>,
+    children: &Children,
+    text_q: &mut Query<&mut Text>,
+    alpha: f32,
+) {
+    background_color.0.set_alpha(alpha);
+    for &child in children.iter() {
+        let mut text = text_q.get_mut(child).unwrap();
+        for text_section in text.sections.iter_mut() {
+            text_section.style.color.set_alpha(alpha);
+        }
+    }
 }

@@ -1,6 +1,9 @@
 use bevy::prelude::*;
 
-use crate::features::shared::{ButtonBuilder, PreviousButtonBuilder};
+use crate::{
+    features::shared::{ButtonBuilder, PreviousButtonBuilder},
+    systems::{AppState, AppStateChangeEvent},
+};
 
 use super::state::{CollectionState, CollectionStateChangeEvent};
 
@@ -65,8 +68,6 @@ const BUTTON_MAP: [(CardTypeButton, &str, Option<Color>); 9] = [
     (CardTypeButton::Modular, "Modular", None),
 ];
 
-const BUTTON_SIZE: (Val, Val) = (Val::Px(300.), Val::Px(100.));
-
 fn spawn_card_type_menu(mut commands: Commands) {
     commands
         .spawn((
@@ -105,7 +106,8 @@ fn spawn_card_type_header(card_type_menu: &mut ChildBuilder) {
             ..default()
         })
         .with_children(|card_type_header| {
-            PreviousButtonBuilder.spawn(card_type_header);
+            let event = AppStateChangeEvent(AppState::MainMenu);
+            PreviousButtonBuilder(AppState::MainMenu).spawn(card_type_header);
         });
 }
 
