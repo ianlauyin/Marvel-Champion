@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::features::shared::{spawn_previous_button, CustomButton};
+use crate::features::shared::{ButtonBuilder, PreviousButtonBuilder};
 
 use super::state::{CollectionState, CollectionStateChangeEvent};
 
@@ -105,7 +105,7 @@ fn spawn_card_type_header(card_type_menu: &mut ChildBuilder) {
             ..default()
         })
         .with_children(|card_type_header| {
-            spawn_previous_button(card_type_header);
+            PreviousButtonBuilder.spawn(card_type_header);
         });
 }
 
@@ -136,7 +136,7 @@ fn spawn_card_type_button_group(card_type_menu: &mut ChildBuilder) {
                         ..default()
                     })
                     .with_children(|card_type_node| {
-                        let mut button = CustomButton { text, ..default() };
+                        let mut button = ButtonBuilder { text, ..default() };
                         if let Some(background_color) = color {
                             button.background_color = background_color
                         }
@@ -148,34 +148,14 @@ fn spawn_card_type_button_group(card_type_menu: &mut ChildBuilder) {
 
 fn handle_button_reaction(
     commands: Commands,
-    mut card_type_button_q: Query<(&mut BackgroundColor, &Interaction, &CardTypeButton)>,
-    mut window_q: Query<&mut Window>,
+    mut card_type_button_q: Query<(&Interaction, &CardTypeButton)>,
 ) {
-    let mut window = window_q.get_single_mut().unwrap();
-    let mut is_hovered = false;
-
-    for (mut background_color, interaction, card_type_button) in card_type_button_q.iter_mut() {
-        match interaction {
-            Interaction::Pressed => {
-                handle_button_click(commands, card_type_button.clone());
-                window.cursor.icon = CursorIcon::default();
-                return;
-            }
-            Interaction::Hovered => {
-                background_color.0.set_alpha(0.5);
-                is_hovered = true;
-            }
-            Interaction::None => {
-                background_color.0.set_alpha(1.);
-            }
+    for (interaction, card_type_button) in card_type_button_q.iter_mut() {
+        if *interaction == Interaction::Pressed {
+            handle_button_click(commands, card_type_button.clone());
+            return;
         }
     }
-
-    window.cursor.icon = if is_hovered {
-        CursorIcon::Pointer
-    } else {
-        CursorIcon::default()
-    };
 }
 
 fn handle_button_click(mut commands: Commands, card_type_button: CardTypeButton) {

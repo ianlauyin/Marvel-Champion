@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::systems::{AppState, AppStateChangeEvent};
 
-use super::shared::CustomButton;
+use super::shared::ButtonBuilder;
 pub struct MainMenuPlugin;
 
 impl Plugin for MainMenuPlugin {
@@ -56,7 +56,7 @@ fn spawn_main_menu(mut commands: Commands) {
         ))
         .with_children(|main_menu| {
             for (button_component, text) in BUTTON_MAP {
-                CustomButton { text, ..default() }
+                ButtonBuilder { text, ..default() }
                     .spawn(main_menu)
                     .insert(button_component);
             }
@@ -65,34 +65,14 @@ fn spawn_main_menu(mut commands: Commands) {
 
 fn handle_button_reaction(
     commands: Commands,
-    mut main_menu_button_q: Query<(&mut BackgroundColor, &Interaction, &MainMenuButton)>,
-    mut window_q: Query<&mut Window>,
+    mut main_menu_button_q: Query<(&Interaction, &MainMenuButton)>,
 ) {
-    let mut window = window_q.get_single_mut().unwrap();
-    let mut is_hovered = false;
-
-    for (mut background_color, interaction, main_menu_button) in main_menu_button_q.iter_mut() {
-        match interaction {
-            Interaction::Pressed => {
-                handle_button_click(commands, main_menu_button.clone());
-                window.cursor.icon = CursorIcon::default();
-                return;
-            }
-            Interaction::Hovered => {
-                background_color.0.set_alpha(0.5);
-                is_hovered = true;
-            }
-            Interaction::None => {
-                background_color.0.set_alpha(1.);
-            }
+    for (interaction, main_menu_button) in main_menu_button_q.iter_mut() {
+        if *interaction == Interaction::Pressed {
+            handle_button_click(commands, main_menu_button.clone());
+            return;
         }
     }
-
-    window.cursor.icon = if is_hovered {
-        CursorIcon::Pointer
-    } else {
-        CursorIcon::default()
-    };
 }
 
 fn handle_button_click(mut commands: Commands, main_menu_button: MainMenuButton) {

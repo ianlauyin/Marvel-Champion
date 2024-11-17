@@ -1,7 +1,7 @@
-mod button;
+mod button_builder;
 mod game_mat;
 mod previous_button;
 
-pub use button::CustomButton;
+pub use button_builder::{ButtonBuilder, ButtonUIPlugin};
 pub use game_mat::GameMatPlugin;
-pub use previous_button::{spawn_previous_button, PreviousButtonPlugin};
+pub use previous_button::{PreviousButtonBuilder, PreviousButtonPlugin};
