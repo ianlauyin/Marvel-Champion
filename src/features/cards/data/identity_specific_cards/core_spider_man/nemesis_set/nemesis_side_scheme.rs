@@ -12,6 +12,6 @@ pub fn get_nemesis_side_scheme(player_number: u8) -> Card {
             When Defeated: Return each facedown card here to its owner's hand.",
         search_keywords: vec![],
         card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_166.png",
-        card_back_image_path: "embedded://cards/card_backs_card/encounter_card_back.png",
+        card_back_image_path: "embedded://cards/card_backs/encounter_card_back.png",
     })
 }

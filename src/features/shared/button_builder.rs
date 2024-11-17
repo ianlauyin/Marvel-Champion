@@ -71,7 +71,7 @@ fn handle_button_ui(
         match interaction {
             Interaction::Pressed => {
                 handle_button_color(background_color, children, &mut text_q, 0.7);
-                turn_pointer = true
+                break;
             }
             Interaction::Hovered => {
                 handle_button_color(background_color, children, &mut text_q, 0.5);

@@ -14,7 +14,7 @@ fn main() {
         .add_plugins(systems::SystemPlugin)
         .add_plugins(ui::UIPlugin)
         .add_plugins(features::FeaturePlugin)
-        .add_systems(OnEnter(AppState::DeckBuilding), spawn_cards)
+        // .add_systems(OnEnter(AppState::DeckBuilding), spawn_cards)
         .run();
 }
 
