@@ -1,0 +1,19 @@
+use crate::features::cards::{
+    Card, CardAspect, CardResource, CardTrait, EventCard, Identity::CoreSpiderMan,
+};
+
+pub fn get_backflip() -> Card {
+    Card::Event(EventCard {
+        id: "core_003",
+        name: "Backflip",
+        aspect: CardAspect::IdentitySpecific(CoreSpiderMan),
+        cost: 0,
+        res: vec![CardResource::Physical],
+        traits: vec![CardTrait::Defense,CardTrait::Skill],
+        description: "Interrupt (defense): When you would take any amount of damage from an attack, prevent all of that damage.",
+        search_keywords: vec![],
+        card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_003.png",
+        card_back_image_path: "embedded://cards/card_backs/player_card_back.png",
+        card_amount_max: 2,
+    })
+}
