@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 
 use crate::{
-    features::shared::{handle_previous_interaction, ButtonBuilder, PreviousButtonBuilder},
+    features::shared::{handle_previous_interaction, spawn_menu},
     systems::{clean_up, AppState},
 };
 
@@ -72,83 +72,13 @@ const BUTTON_MAP: [(CardTypeButton, &str, Option<Color>); 9] = [
     (CardTypeButton::Modular, "Modular", None),
 ];
 
-fn spawn_card_type_menu(mut commands: Commands) {
-    commands
-        .spawn((
-            CardTypeMenu,
-            NodeBundle {
-                style: Style {
-                    width: Val::Percent(90.),
-                    height: Val::Percent(90.),
-                    align_self: AlignSelf::Center,
-                    justify_self: JustifySelf::Center,
-                    display: Display::Flex,
-                    flex_direction: FlexDirection::Column,
-                    ..default()
-                },
-                background_color: BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
-                ..default()
-            },
-        ))
-        .with_children(|card_type_menu| {
-            spawn_card_type_header(card_type_menu);
-            spawn_card_type_button_group(card_type_menu);
-        });
-}
-
-fn spawn_card_type_header(card_type_menu: &mut ChildBuilder) {
-    card_type_menu
-        .spawn(NodeBundle {
-            style: Style {
-                margin: UiRect {
-                    left: Val::Px(10.),
-                    top: Val::Px(5.),
-                    ..default()
-                },
-                ..default()
-            },
-            ..default()
-        })
-        .with_children(|card_type_header| {
-            PreviousButtonBuilder(AppState::MainMenu).spawn(card_type_header);
-        });
-}
-
-fn spawn_card_type_button_group(card_type_menu: &mut ChildBuilder) {
-    card_type_menu
-        .spawn(NodeBundle {
-            style: Style {
-                width: Val::Percent(100.),
-                height: Val::Percent(100.),
-                align_self: AlignSelf::Center,
-                display: Display::Grid,
-                grid_template_columns: vec![RepeatedGridTrack::auto(3)],
-                grid_template_rows: vec![RepeatedGridTrack::auto(3)],
-                ..default()
-            },
-            ..default()
-        })
-        .with_children(|card_type_menu| {
-            for (button_component, text, color) in BUTTON_MAP {
-                card_type_menu
-                    .spawn(NodeBundle {
-                        style: Style {
-                            display: Display::Flex,
-                            justify_content: JustifyContent::Center,
-                            align_items: AlignItems::Center,
-                            ..default()
-                        },
-                        ..default()
-                    })
-                    .with_children(|card_type_node| {
-                        let mut button = ButtonBuilder { text, ..default() };
-                        if let Some(background_color) = color {
-                            button.background_color = background_color
-                        }
-                        button.spawn(card_type_node).insert(button_component);
-                    });
-            }
-        });
+fn spawn_card_type_menu(commands: Commands) {
+    spawn_menu(
+        commands,
+        CardTypeMenu,
+        AppState::MainMenu,
+        BUTTON_MAP.to_vec(),
+    );
 }
 
 fn handle_button_reaction(

@@ -15,6 +15,7 @@ impl Plugin for FeaturePlugin {
             main_menu::MainMenuPlugin,
             shared::ButtonUIPlugin,
             collection::CollectionPlugin,
+            shared::ScrollingListPlugin,
         ));
     }
 }
