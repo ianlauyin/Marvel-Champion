@@ -2,7 +2,6 @@ use std::f32::consts::PI;
 
 use bevy::prelude::*;
 use constants::CARD_SIZE;
-use systems::AppState;
 
 mod constants;
 mod features;

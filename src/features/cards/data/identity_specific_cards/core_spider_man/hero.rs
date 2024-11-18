@@ -12,6 +12,7 @@ pub fn get_hero() -> Card {
         atk: 2,
         def: 3,
         description: "Spider-Sense — Interrupt: When the villain initiates an attack against you, draw 1 card.",
+        abilities: vec![],
         search_keywords: vec![],
         hand_size: 5,
         card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_1a.png",

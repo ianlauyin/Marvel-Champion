@@ -13,6 +13,7 @@ pub fn get_spider_tracer() -> Card {
         traits: vec![CardTrait::Item,CardTrait::Tech],
         keywords: vec![],
         description: "Attach to a minion. Forced Interrupt: When attached minion is defeated, remove 3 threat from a scheme.",
+        abilities: vec![],
         search_keywords: vec![],
         card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_007.png",
         card_back_image_path: "embedded://cards/card_backs/player_card_back.png",

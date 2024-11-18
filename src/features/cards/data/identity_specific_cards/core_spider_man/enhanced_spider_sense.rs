@@ -10,6 +10,7 @@ pub fn get_enhanced_spider_sense() -> Card {
         res: vec![CardResource::Mental],
         traits: vec![CardTrait::Superpower],
         description: "Hero Interrupt: When a treachery card is revealed from the encounter deck, cancel its \"When Revealed\" effects.",
+        abilities: vec![],
         search_keywords: vec![],
         card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_004.png",
         card_back_image_path: "embedded://cards/card_backs/player_card_back.png",

@@ -1,4 +1,6 @@
-use crate::features::cards::{Card, CardIcon, SideSchemeCard};
+use bevy::{ecs::system::RunSystemOnce, prelude::World};
+
+use crate::features::cards::{Card, CardAbility, CardIcon, SideSchemeCard};
 
 pub fn get_nemesis_side_scheme(player_number: u8) -> Card {
     Card::SideScheme(SideSchemeCard {
@@ -10,8 +12,20 @@ pub fn get_nemesis_side_scheme(player_number: u8) -> Card {
         description:
             "When Revealed: Each player places a random card from their hand facedown here.
             When Defeated: Return each facedown card here to its owner's hand.",
+        abilities: vec![
+            CardAbility::WhenRevealed(when_revealed),
+            CardAbility::WhenDefeated(when_defeated),
+        ],
         search_keywords: vec![],
         card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_166.png",
         card_back_image_path: "embedded://cards/card_backs/encounter_card_back.png",
     })
+}
+
+fn when_revealed(world: &mut World) {
+    world.run_system_once(|| println!("Hi"))
+}
+
+fn when_defeated(world: &mut World) {
+    world.run_system_once(|| println!("Bye"))
 }

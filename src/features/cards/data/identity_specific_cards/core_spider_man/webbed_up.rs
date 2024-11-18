@@ -14,6 +14,7 @@ pub fn get_webbed_up() -> Card {
         keywords: vec![],
         description: "Hero form only. Attach to an enemy. Max 1 per enemy.
         Forced Interrupt: When attached enemy would attack, discard Webbed Up instead. Then, stun that enemy.",
+        abilities: vec![],
         search_keywords: vec![],
         card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_009.png",
         card_back_image_path: "embedded://cards/card_backs/player_card_back.png",

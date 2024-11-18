@@ -1,3 +1,5 @@
+use bevy::prelude::World;
+
 #[derive(Clone)]
 pub enum CardResource {
     Wild,
@@ -129,4 +131,15 @@ impl CardIcon {
             CardIcon::Acceleration => "Acceleration".to_string(),
         }
     }
+}
+
+#[derive(Clone)]
+pub enum CardAbility {
+    ForcedInterrupt(fn(&mut World)),
+    Interrupt(fn(&mut World)),
+    Boost(fn(&mut World)),
+    WhenDefeated(fn(&mut World)),
+    WhenRevealed(fn(&mut World)),
+    ForcedResponse(fn(&mut World)),
+    Response(fn(&mut World)),
 }

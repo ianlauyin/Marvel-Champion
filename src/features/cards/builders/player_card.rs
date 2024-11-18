@@ -1,4 +1,4 @@
-use crate::features::cards::{CardAspect, CardIcon, CardResource, CardTrait, Keyword};
+use crate::features::cards::{CardAbility, CardAspect, CardIcon, CardResource, CardTrait, Keyword};
 
 #[derive(Clone)]
 pub struct AllyCard<'a> {
@@ -18,6 +18,7 @@ pub struct AllyCard<'a> {
     pub atk: u8,
     pub atk_con_dmg: u8,
     pub description: &'a str,
+    pub abilities: Vec<CardAbility>,
     pub search_keywords: Vec<&'a str>,
     pub card_image_path: &'a str,
     pub card_back_image_path: &'a str,
@@ -35,6 +36,7 @@ pub struct AlterEgoCard<'a> {
     pub card_icons: Vec<CardIcon>,
     pub rec: u8,
     pub description: &'a str,
+    pub abilities: Vec<CardAbility>,
     pub search_keywords: Vec<&'a str>,
     pub hand_size: u8,
     pub nemesis_id: &'a str,
@@ -53,6 +55,7 @@ pub struct EventCard<'a> {
     pub res: Vec<CardResource>,
     pub traits: Vec<CardTrait>,
     pub description: &'a str,
+    pub abilities: Vec<CardAbility>,
     pub search_keywords: Vec<&'a str>,
     pub card_image_path: &'a str,
     pub card_back_image_path: &'a str,
@@ -72,6 +75,7 @@ pub struct HeroCard<'a> {
     pub atk: u8,
     pub def: u8,
     pub description: &'a str,
+    pub abilities: Vec<CardAbility>,
     pub search_keywords: Vec<&'a str>,
     pub hand_size: u8,
     pub nemesis_id: &'a str,
@@ -89,6 +93,7 @@ pub struct ResourceCard<'a> {
     pub res: Vec<CardResource>,
     pub traits: Vec<CardTrait>,
     pub description: &'a str,
+    pub abilities: Vec<CardAbility>,
     pub search_keywords: Vec<&'a str>,
     pub card_image_path: &'a str,
     pub card_back_image_path: &'a str,
@@ -106,6 +111,7 @@ pub struct SupportCard<'a> {
     pub card_icons: Vec<CardIcon>,
     pub traits: Vec<CardTrait>,
     pub description: &'a str,
+    pub abilities: Vec<CardAbility>,
     pub search_keywords: Vec<&'a str>,
     pub card_image_path: &'a str,
     pub card_back_image_path: &'a str,
@@ -124,6 +130,7 @@ pub struct UpgradeCard<'a> {
     pub traits: Vec<CardTrait>,
     pub keywords: Vec<Keyword>,
     pub description: &'a str,
+    pub abilities: Vec<CardAbility>,
     pub search_keywords: Vec<&'a str>,
     pub card_image_path: &'a str,
     pub card_back_image_path: &'a str,
