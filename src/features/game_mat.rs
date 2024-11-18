@@ -1,4 +1,5 @@
-use crate::systems::{AppState, LoadAsset, StateLoading};
+use crate::constants::GAME_MAT_PATH;
+use crate::systems::AppState;
 use bevy::prelude::*;
 use std::f32::consts::PI;
 
@@ -6,20 +7,11 @@ pub struct GameMatPlugin;
 
 impl Plugin for GameMatPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, load_game_mat)
-            .add_systems(OnExit(AppState::LoadingAsset), spawn_game_mat);
+        app.add_systems(OnExit(AppState::LoadingAsset), spawn_game_mat);
     }
 }
 
 const GAME_MAT_SIZE: Vec3 = Vec3::new(1000., 1000., 50.);
-const GAME_MAT_PATH: &str = "embedded://game_mat.png";
-
-fn load_game_mat(mut load_asset: ResMut<LoadAsset>, asset_server: Res<AssetServer>) {
-    load_asset
-        .loading_image_handles
-        .push(asset_server.load(GAME_MAT_PATH));
-    load_asset.state_loading = Some(StateLoading::AppState);
-}
 
 fn spawn_game_mat(
     mut commands: Commands,

@@ -1,5 +1,9 @@
 use bevy::prelude::*;
 
+use crate::constants::GAME_MAT_PATH;
+
+use super::asset_loader::{check_asset, load_asset};
+
 #[derive(States, Default, Hash, PartialEq, Eq, Debug, Clone)]
 pub enum AppState {
     #[default]
@@ -15,17 +19,14 @@ pub struct AppStatePlugin;
 
 impl Plugin for AppStatePlugin {
     fn build(&self, app: &mut App) {
-        app.init_state::<AppState>().observe(change_app_state);
+        app.init_state::<AppState>()
+            .add_systems(
+                Startup,
+                load_asset(AppState::MainMenu, vec![GAME_MAT_PATH.to_string()]),
+            )
+            .add_systems(
+                Update,
+                check_asset::<AppState>.run_if(in_state(AppState::LoadingAsset)),
+            );
     }
-}
-
-#[derive(Event, Clone)]
-pub struct AppStateChangeEvent(pub AppState);
-
-fn change_app_state(
-    trigger: Trigger<AppStateChangeEvent>,
-    mut next_state: ResMut<NextState<AppState>>,
-) {
-    let AppStateChangeEvent(state) = trigger.event();
-    next_state.set(state.clone());
 }

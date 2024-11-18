@@ -135,6 +135,7 @@ impl CardIcon {
 
 #[derive(Clone)]
 pub enum CardAbility {
+    Instant(fn(&mut World)),
     ForcedInterrupt(fn(&mut World)),
     Interrupt(fn(&mut World)),
     Boost(fn(&mut World)),

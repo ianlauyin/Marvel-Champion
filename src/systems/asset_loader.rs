@@ -1,60 +1,61 @@
 use std::collections::HashSet;
 
-use crate::systems::AppState;
 use bevy::asset::LoadState;
 use bevy::prelude::*;
-
-use super::AppStateChangeEvent;
+use bevy::state::state::FreelyMutableState;
 
 pub struct AssetLoaderPlugin;
 
 impl Plugin for AssetLoaderPlugin {
     fn build(&self, app: &mut App) {
-        let check_asset_condition = in_state(AppState::LoadingAsset);
-
-        app.insert_resource(LoadAsset {
-            image_handles: HashSet::new(),
-            loading_image_handles: Vec::new(),
-            state_loading: None,
-        })
-        .add_systems(Update, check_asset.run_if(check_asset_condition));
+        app.insert_resource(LoadedAsset(HashSet::new()));
     }
 }
 
-#[derive(Clone)]
-pub enum StateLoading {
-    AppState,
-}
+#[derive(Resource)]
+pub struct LoadedAsset(HashSet<Handle<Image>>);
 
 #[derive(Resource)]
-pub struct LoadAsset {
-    pub image_handles: HashSet<Handle<Image>>,
-    pub loading_image_handles: Vec<Handle<Image>>,
-    pub state_loading: Option<StateLoading>,
+pub struct LoadAsset<S: States + FreelyMutableState> {
+    pub image_handles: Vec<Handle<Image>>,
+    pub next_state: S,
 }
 
-fn check_asset(
-    commands: Commands,
-    mut load_asset: ResMut<LoadAsset>,
+/// Reminder: Pair with check_asset
+pub fn load_asset<S: States + FreelyMutableState>(
+    next_state: S,
+    paths: Vec<String>,
+) -> impl Fn(Commands, Res<AssetServer>) {
+    move |mut commands: Commands, asset_server: Res<AssetServer>| {
+        commands.insert_resource(LoadAsset {
+            next_state: next_state.clone(),
+            image_handles: paths.iter().map(|path| asset_server.load(path)).collect(),
+        });
+    }
+}
+
+/// Reminder: Pair with load_asset
+pub fn check_asset<S: States + FreelyMutableState>(
+    mut load_asset: ResMut<LoadAsset<S>>,
+    mut loaded_asset: ResMut<LoadedAsset>,
+    mut next_state: ResMut<NextState<S>>,
     asset_server: Res<AssetServer>,
 ) {
     let mut removed_count = 0;
-    for (index, loading_handle) in load_asset.loading_image_handles.clone().iter().enumerate() {
-        if load_asset.image_handles.contains(loading_handle) {
-            load_asset.loading_image_handles.remove(index);
+    for (index, handle) in load_asset.image_handles.clone().iter().enumerate() {
+        if loaded_asset.0.contains(&handle) {
+            load_asset.image_handles.remove(index);
             continue;
         }
 
-        let asset_id = loading_handle.id();
+        let asset_id = handle.id();
         let Some(load_state) = asset_server.get_load_state(asset_id) else {
             panic!("Cannot get load_state");
         };
         match load_state {
             LoadState::Loaded => {
-                load_asset
-                    .loading_image_handles
-                    .remove(index - removed_count);
-                load_asset.image_handles.insert(loading_handle.clone());
+                load_asset.image_handles.remove(index - removed_count);
+                loaded_asset.0.insert(handle.clone());
                 removed_count += 1;
             }
             LoadState::Failed(err) => panic!("{err}"),
@@ -62,18 +63,7 @@ fn check_asset(
         }
     }
 
-    if load_asset.loading_image_handles.is_empty() {
-        let Some(state_loading) = load_asset.state_loading.clone() else {
-            warn!("StateLoading is None");
-            return;
-        };
-        trigger_state_changes(commands, state_loading);
-        load_asset.state_loading = None;
+    if load_asset.image_handles.is_empty() {
+        next_state.set(load_asset.next_state.clone());
     }
-}
-
-fn trigger_state_changes(mut commands: Commands, state_loading: StateLoading) {
-    match state_loading {
-        StateLoading::AppState => commands.trigger(AppStateChangeEvent(AppState::MainMenu)),
-    };
 }

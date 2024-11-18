@@ -1,8 +1,8 @@
 use bevy::prelude::*;
 
 use crate::{
-    features::shared::{ButtonBuilder, PreviousButtonBuilder},
-    systems::{AppState, AppStateChangeEvent},
+    features::shared::{handle_previous_interaction, ButtonBuilder, PreviousButtonBuilder},
+    systems::{clean_up, AppState},
 };
 
 use super::state::{CollectionState, CollectionStateChangeEvent};
@@ -14,9 +14,13 @@ impl Plugin for CollectionMenuPlugin {
         app.add_systems(OnEnter(CollectionState::Menu), spawn_card_type_menu)
             .add_systems(
                 Update,
-                handle_button_reaction.run_if(in_state(CollectionState::Menu)),
+                (
+                    handle_button_reaction,
+                    handle_previous_interaction::<AppState>,
+                )
+                    .run_if(in_state(CollectionState::Menu)),
             )
-            .add_systems(OnExit(CollectionState::Menu), despawn_card_type_menu);
+            .add_systems(OnExit(CollectionState::Menu), clean_up::<CardTypeMenu>);
     }
 }
 
@@ -106,7 +110,6 @@ fn spawn_card_type_header(card_type_menu: &mut ChildBuilder) {
             ..default()
         })
         .with_children(|card_type_header| {
-            let event = AppStateChangeEvent(AppState::MainMenu);
             PreviousButtonBuilder(AppState::MainMenu).spawn(card_type_header);
         });
 }
@@ -174,17 +177,4 @@ fn handle_button_click(mut commands: Commands, card_type_button: CardTypeButton)
             CardTypeButton::Modular => CollectionState::Modular,
         }
     }))
-}
-
-fn despawn_card_type_menu(
-    mut commands: Commands,
-    card_type_menu_q: Query<Entity, With<CardTypeMenu>>,
-) {
-    if card_type_menu_q.is_empty() {
-        warn!("Cannot find main menu when despawning");
-        return;
-    }
-    for entity in card_type_menu_q.iter() {
-        commands.entity(entity).despawn_recursive();
-    }
 }

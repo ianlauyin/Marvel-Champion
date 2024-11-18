@@ -1,5 +1,8 @@
-use crate::features::cards::{
-    AllyCard, Card, CardAspect, CardResource, CardTrait, Identity::CoreSpiderMan,
+use crate::{
+    constants::PLAYER_CARD_BACK_PATH,
+    features::cards::{
+        AllyCard, Card, CardAspect, CardResource, CardTrait, Identity::CoreSpiderMan,
+    },
 };
 pub fn get_black_cat() -> Card {
     Card::Ally(AllyCard {
@@ -22,7 +25,7 @@ pub fn get_black_cat() -> Card {
         abilities: vec![]
         ,search_keywords: vec![],
         card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_002.png",
-        card_back_image_path: "embedded://cards/card_backs/player_card_back.png",
+        card_back_image_path: PLAYER_CARD_BACK_PATH,
         card_amount_max: 1,
     })
 }

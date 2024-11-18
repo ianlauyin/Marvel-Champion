@@ -1,4 +1,7 @@
-use crate::features::cards::{Card, TreacheryCard};
+use crate::{
+    constants::ENCOUNTER_CARD_BACK_PATH,
+    features::cards::{Card, TreacheryCard},
+};
 
 pub fn get_sweeping_swoop() -> Card {
     Card::Treachery(TreacheryCard {
@@ -11,6 +14,6 @@ pub fn get_sweeping_swoop() -> Card {
         abilities: vec![],
         search_keywords: vec![],
         card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_168.png",
-        card_back_image_path: "embedded://cards/card_backs/encounter_card_back.png",
+        card_back_image_path: ENCOUNTER_CARD_BACK_PATH,
     })
 }

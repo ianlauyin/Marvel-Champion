@@ -1,6 +1,9 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, CardTrait, Counter, Identity::CoreSpiderMan, Keyword,
-    UpgradeCard,
+use crate::{
+    constants::PLAYER_CARD_BACK_PATH,
+    features::cards::{
+        Card, CardAspect, CardResource, CardTrait, Counter, Identity::CoreSpiderMan, Keyword,
+        UpgradeCard,
+    },
 };
 pub fn get_web_shooter() -> Card {
     Card::Upgrade(UpgradeCard {
@@ -18,7 +21,7 @@ pub fn get_web_shooter() -> Card {
         abilities: vec![],
         search_keywords: vec![],
         card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_008.png",
-        card_back_image_path: "embedded://cards/card_backs/player_card_back.png",
+        card_back_image_path: PLAYER_CARD_BACK_PATH,
         card_amount_max: 2,
     })
 }

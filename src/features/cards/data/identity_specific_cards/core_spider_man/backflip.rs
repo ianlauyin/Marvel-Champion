@@ -1,5 +1,8 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, CardTrait, EventCard, Identity::CoreSpiderMan,
+use crate::{
+    constants::PLAYER_CARD_BACK_PATH,
+    features::cards::{
+        Card, CardAspect, CardResource, CardTrait, EventCard, Identity::CoreSpiderMan,
+    },
 };
 
 pub fn get_backflip() -> Card {
@@ -14,7 +17,7 @@ pub fn get_backflip() -> Card {
         abilities: vec![],
         search_keywords: vec![],
         card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_003.png",
-        card_back_image_path: "embedded://cards/card_backs/player_card_back.png",
+        card_back_image_path: PLAYER_CARD_BACK_PATH,
         card_amount_max: 2,
     })
 }

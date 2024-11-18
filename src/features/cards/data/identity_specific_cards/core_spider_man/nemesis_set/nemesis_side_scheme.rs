@@ -1,6 +1,9 @@
 use bevy::{ecs::system::RunSystemOnce, prelude::World};
 
-use crate::features::cards::{Card, CardAbility, CardIcon, SideSchemeCard};
+use crate::{
+    constants::ENCOUNTER_CARD_BACK_PATH,
+    features::cards::{Card, CardAbility, CardIcon, SideSchemeCard},
+};
 
 pub fn get_nemesis_side_scheme(player_number: u8) -> Card {
     Card::SideScheme(SideSchemeCard {
@@ -18,7 +21,7 @@ pub fn get_nemesis_side_scheme(player_number: u8) -> Card {
         ],
         search_keywords: vec![],
         card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_166.png",
-        card_back_image_path: "embedded://cards/card_backs/encounter_card_back.png",
+        card_back_image_path: ENCOUNTER_CARD_BACK_PATH,
     })
 }
 

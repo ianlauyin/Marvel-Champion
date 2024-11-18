@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::systems::{AppState, AppStateChangeEvent};
+use crate::systems::{clean_up, AppState};
 
 use super::shared::ButtonBuilder;
 pub struct MainMenuPlugin;
@@ -12,7 +12,7 @@ impl Plugin for MainMenuPlugin {
                 Update,
                 handle_button_reaction.run_if(in_state(AppState::MainMenu)),
             )
-            .add_systems(OnExit(AppState::MainMenu), despawn_main_menu);
+            .add_systems(OnExit(AppState::MainMenu), clean_up::<MainMenu>);
     }
 }
 
@@ -64,34 +64,27 @@ fn spawn_main_menu(mut commands: Commands) {
 }
 
 fn handle_button_reaction(
-    commands: Commands,
+    next_state: ResMut<NextState<AppState>>,
     mut main_menu_button_q: Query<(&Interaction, &MainMenuButton)>,
 ) {
     for (interaction, main_menu_button) in main_menu_button_q.iter_mut() {
         if *interaction == Interaction::Pressed {
-            handle_button_click(commands, main_menu_button.clone());
+            handle_button_click(next_state, main_menu_button.clone());
             return;
         }
     }
 }
 
-fn handle_button_click(mut commands: Commands, main_menu_button: MainMenuButton) {
-    commands.trigger(AppStateChangeEvent({
+fn handle_button_click(
+    mut next_state: ResMut<NextState<AppState>>,
+    main_menu_button: MainMenuButton,
+) {
+    next_state.set({
         match main_menu_button {
             MainMenuButton::Play => AppState::Game,
             MainMenuButton::DeckBuilding => AppState::DeckBuilding,
             MainMenuButton::Collection => AppState::Collection,
             MainMenuButton::Record => AppState::Record,
         }
-    }))
-}
-
-fn despawn_main_menu(mut commands: Commands, main_menu_q: Query<Entity, With<MainMenu>>) {
-    if main_menu_q.is_empty() {
-        warn!("Cannot find main menu when despawning");
-        return;
-    }
-    for entity in main_menu_q.iter() {
-        commands.entity(entity).despawn_recursive();
-    }
+    })
 }

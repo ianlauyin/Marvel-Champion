@@ -1,24 +1,13 @@
+use super::ButtonBuilder;
 use bevy::prelude::*;
 use bevy::state::state::FreelyMutableState;
 
-use crate::systems::AppState;
-
-use super::ButtonBuilder;
-
-pub struct PreviousButtonPlugin;
-
-impl Plugin for PreviousButtonPlugin {
-    fn build(&self, app: &mut App) {
-        app.add_systems(Update, handle_interaction::<AppState>);
-    }
-}
-
 const BUTTON_SIZE: (Val, Val) = (Val::Px(50.), Val::Px(50.));
 
-/// Reminder: Add handle_interaction in PreviousButtonPlugin when a new previous button is added.
-pub struct PreviousButtonBuilder<T: FreelyMutableState>(pub T);
+/// Reminder: Add handle_previous_interaction::<S> in system
+pub struct PreviousButtonBuilder<S: FreelyMutableState>(pub S);
 
-impl<T: FreelyMutableState + Clone> PreviousButtonBuilder<T> {
+impl<S: FreelyMutableState + Clone> PreviousButtonBuilder<S> {
     pub fn spawn<'a>(&self, child_builder: &'a mut ChildBuilder) {
         let button = ButtonBuilder {
             text: "<",
@@ -33,11 +22,11 @@ impl<T: FreelyMutableState + Clone> PreviousButtonBuilder<T> {
 }
 
 #[derive(Component)]
-struct PreviousButton<T: FreelyMutableState>(T);
+pub struct PreviousButton<S: FreelyMutableState>(S);
 
-fn handle_interaction<T: FreelyMutableState>(
-    previous_button_q: Query<(&Interaction, &PreviousButton<T>)>,
-    mut next_state: ResMut<NextState<T>>,
+pub fn handle_previous_interaction<S: FreelyMutableState>(
+    previous_button_q: Query<(&Interaction, &PreviousButton<S>)>,
+    mut next_state: ResMut<NextState<S>>,
 ) {
     if previous_button_q.is_empty() {
         return;
