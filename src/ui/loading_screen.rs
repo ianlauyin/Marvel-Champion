@@ -1,13 +1,18 @@
 use bevy::prelude::*;
 
 use crate::constants::WINDOW_RESOLUTION;
-use crate::systems::{clean_up, AppState};
-pub struct LoadingScreenPlugin;
+use crate::systems::clean_up;
+pub struct LoadingScreenPlugin<S: States> {
+    pub loading_state: S,
+}
 
-impl Plugin for LoadingScreenPlugin {
+impl<S: States> Plugin for LoadingScreenPlugin<S> {
     fn build(&self, app: &mut App) {
-        app.add_systems(OnEnter(AppState::LoadingAsset), spawn_loading_screen)
-            .add_systems(OnExit(AppState::LoadingAsset), clean_up::<LoadingScreen>);
+        app.add_systems(OnEnter(self.loading_state.clone()), spawn_loading_screen)
+            .add_systems(
+                OnExit(self.loading_state.clone()),
+                clean_up::<LoadingScreen>,
+            );
     }
 }
 
@@ -27,7 +32,7 @@ fn spawn_loading_screen(mut commands: Commands) {
                     align_items: AlignItems::Center,
                     ..default()
                 },
-                background_color: BackgroundColor::from(Color::BLACK.with_alpha(0.9)),
+                background_color: BackgroundColor::from(Color::BLACK.with_alpha(0.8)),
                 ..default()
             },
         ))

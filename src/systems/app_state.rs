@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::constants::GAME_MAT_PATH;
+use crate::{constants::GAME_MAT_PATH, ui::LoadingScreenPlugin};
 
 use super::asset_loader::{check_asset, load_asset};
 
@@ -20,6 +20,9 @@ pub struct AppStatePlugin;
 impl Plugin for AppStatePlugin {
     fn build(&self, app: &mut App) {
         app.init_state::<AppState>()
+            .add_plugins(LoadingScreenPlugin {
+                loading_state: AppState::LoadingAsset,
+            })
             .add_systems(
                 Startup,
                 load_asset(AppState::MainMenu, vec![GAME_MAT_PATH.to_string()]),
