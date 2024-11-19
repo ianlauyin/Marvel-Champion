@@ -20,9 +20,6 @@ pub struct AppStatePlugin;
 impl Plugin for AppStatePlugin {
     fn build(&self, app: &mut App) {
         app.init_state::<AppState>()
-            .add_plugins(LoadingScreenPlugin {
-                loading_state: AppState::LoadingAsset,
-            })
             .add_plugins(AssetLoaderPlugin {
                 loading_state: AppState::LoadingAsset,
                 next_state: AppState::MainMenu,

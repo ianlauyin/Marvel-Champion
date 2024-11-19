@@ -5,6 +5,8 @@ use bevy::ecs::schedule::SystemConfigs;
 use bevy::prelude::*;
 use bevy::state::state::FreelyMutableState;
 
+use crate::ui::LoadingScreenPlugin;
+
 pub struct AssetLoaderSetupPlugin;
 
 impl Plugin for AssetLoaderSetupPlugin {
@@ -28,7 +30,10 @@ pub struct AssetLoaderPlugin<S: States + FreelyMutableState> {
 
 impl<S: States + FreelyMutableState> Plugin for AssetLoaderPlugin<S> {
     fn build(&self, app: &mut App) {
-        app.add_systems(
+        app.add_plugins(LoadingScreenPlugin {
+            loading_state: self.loading_state.clone(),
+        })
+        .add_systems(
             Update,
             check_asset(self.loading_state.clone(), self.next_state.clone()),
         );
