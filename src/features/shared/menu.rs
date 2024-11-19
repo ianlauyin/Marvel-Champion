@@ -71,7 +71,7 @@ fn spawn_list<B: Component>(menu: &mut ChildBuilder, button_map: Vec<(B, &str, O
                         width: Val::Percent(100.),
                         align_self: AlignSelf::Center,
                         display: Display::Grid,
-                        grid_template_columns: vec![RepeatedGridTrack::auto(3)],
+                        grid_template_columns: vec![RepeatedGridTrack::auto(1)],
                         row_gap: Val::Px(40.),
                         ..default()
                     },
