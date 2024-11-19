@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::{constants::GAME_MAT_PATH, ui::LoadingScreenPlugin};
 
-use super::asset_loader::{check_asset, load_asset};
+use super::{asset_loader::LoadAsset, AssetLoaderPlugin};
 
 #[derive(States, Default, Hash, PartialEq, Eq, Debug, Clone)]
 pub enum AppState {
@@ -23,13 +23,14 @@ impl Plugin for AppStatePlugin {
             .add_plugins(LoadingScreenPlugin {
                 loading_state: AppState::LoadingAsset,
             })
-            .add_systems(
-                Startup,
-                load_asset(AppState::MainMenu, vec![GAME_MAT_PATH.to_string()]),
-            )
-            .add_systems(
-                Update,
-                check_asset::<AppState>.run_if(in_state(AppState::LoadingAsset)),
-            );
+            .add_plugins(AssetLoaderPlugin {
+                loading_state: AppState::LoadingAsset,
+                next_state: AppState::MainMenu,
+            })
+            .add_systems(Startup, load_asset);
     }
+}
+
+fn load_asset(mut load_asset_res: ResMut<LoadAsset>, asset_server: Res<AssetServer>) {
+    load_asset_res.0.push(asset_server.load(GAME_MAT_PATH));
 }

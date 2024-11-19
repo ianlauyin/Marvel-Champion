@@ -1,14 +1,16 @@
 use std::collections::HashSet;
 
 use bevy::asset::LoadState;
+use bevy::ecs::schedule::SystemConfigs;
 use bevy::prelude::*;
 use bevy::state::state::FreelyMutableState;
 
-pub struct AssetLoaderPlugin;
+pub struct AssetLoaderSetupPlugin;
 
-impl Plugin for AssetLoaderPlugin {
+impl Plugin for AssetLoaderSetupPlugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(LoadedAsset(HashSet::new()));
+        app.insert_resource(LoadedAsset(HashSet::new()))
+            .insert_resource(LoadAsset(Vec::new()));
     }
 }
 
@@ -16,54 +18,55 @@ impl Plugin for AssetLoaderPlugin {
 pub struct LoadedAsset(HashSet<Handle<Image>>);
 
 #[derive(Resource)]
-pub struct LoadAsset<S: States + FreelyMutableState> {
-    pub image_handles: Vec<Handle<Image>>,
+pub struct LoadAsset(pub Vec<Handle<Image>>);
+
+// Add handles in LoadAsset.0, it will check in your defined loading_state.
+pub struct AssetLoaderPlugin<S: States + FreelyMutableState> {
+    pub loading_state: S,
     pub next_state: S,
 }
 
-/// Reminder: Pair with check_asset
-pub fn load_asset<S: States + FreelyMutableState>(
-    next_state: S,
-    paths: Vec<String>,
-) -> impl Fn(Commands, Res<AssetServer>) {
-    move |mut commands: Commands, asset_server: Res<AssetServer>| {
-        commands.insert_resource(LoadAsset {
-            next_state: next_state.clone(),
-            image_handles: paths.iter().map(|path| asset_server.load(path)).collect(),
-        });
+impl<S: States + FreelyMutableState> Plugin for AssetLoaderPlugin<S> {
+    fn build(&self, app: &mut App) {
+        app.add_systems(
+            Update,
+            check_asset(self.loading_state.clone(), self.next_state.clone()),
+        );
     }
 }
 
-/// Reminder: Pair with load_asset
-pub fn check_asset<S: States + FreelyMutableState>(
-    mut load_asset: ResMut<LoadAsset<S>>,
-    mut loaded_asset: ResMut<LoadedAsset>,
-    mut next_state: ResMut<NextState<S>>,
-    asset_server: Res<AssetServer>,
-) {
-    let mut removed_count = 0;
-    for (index, handle) in load_asset.image_handles.clone().iter().enumerate() {
-        if loaded_asset.0.contains(&handle) {
-            load_asset.image_handles.remove(index);
-            continue;
-        }
+fn check_asset<S: States + FreelyMutableState>(loading_state: S, next_state: S) -> SystemConfigs {
+    IntoSystem::into_system(
+        move |mut load_asset: ResMut<LoadAsset>,
+              mut loaded_asset: ResMut<LoadedAsset>,
+              mut next_state_setter: ResMut<NextState<S>>,
+              asset_server: Res<AssetServer>| {
+            let mut removed_count = 0;
+            for (index, handle) in load_asset.0.clone().iter().enumerate() {
+                if loaded_asset.0.contains(&handle) {
+                    load_asset.0.remove(index);
+                    continue;
+                }
 
-        let asset_id = handle.id();
-        let Some(load_state) = asset_server.get_load_state(asset_id) else {
-            panic!("Cannot get load_state");
-        };
-        match load_state {
-            LoadState::Loaded => {
-                load_asset.image_handles.remove(index - removed_count);
-                loaded_asset.0.insert(handle.clone());
-                removed_count += 1;
+                let asset_id = handle.id();
+                let Some(load_state) = asset_server.get_load_state(asset_id) else {
+                    panic!("Cannot get load_state");
+                };
+                match load_state {
+                    LoadState::Loaded => {
+                        load_asset.0.remove(index - removed_count);
+                        loaded_asset.0.insert(handle.clone());
+                        removed_count += 1;
+                    }
+                    LoadState::Failed(err) => panic!("{err}"),
+                    _ => return,
+                }
             }
-            LoadState::Failed(err) => panic!("{err}"),
-            _ => return,
-        }
-    }
 
-    if load_asset.image_handles.is_empty() {
-        next_state.set(load_asset.next_state.clone());
-    }
+            if load_asset.0.is_empty() {
+                next_state_setter.set(next_state.clone());
+            }
+        },
+    )
+    .run_if(in_state(loading_state))
 }

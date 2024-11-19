@@ -1,8 +1,8 @@
 use bevy::app::{App, Plugin};
 
+mod hero;
 mod menu;
 mod state;
-mod sub_menu;
 
 pub struct CollectionPlugin;
 

@@ -12,10 +12,11 @@ impl Plugin for SystemPlugin {
         app.add_plugins((
             setup::SetupPlugin,
             app_state::AppStatePlugin,
-            asset_loader::AssetLoaderPlugin,
+            asset_loader::AssetLoaderSetupPlugin,
         ));
     }
 }
 
 pub use app_state::AppState;
+pub use asset_loader::AssetLoaderPlugin;
 pub use clean_up::clean_up;
