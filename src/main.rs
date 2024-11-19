@@ -14,7 +14,8 @@ fn main() {
         .add_plugins(systems::SystemPlugin)
         .add_plugins(ui::UIPlugin)
         .add_plugins(features::FeaturePlugin)
-        .add_systems(OnEnter(AppState::DeckBuilding), spawn_cards)
+        // .add_systems(OnEnter(AppState::DeckBuilding), spawn_cards)
+        // .add_systems(Update, rotate_card.run_if(in_state(AppState::DeckBuilding)))
         .run();
 }
 
@@ -46,6 +47,8 @@ fn spawn_cards(
                     mesh: meshes.add(Cuboid::from_size(CARD_SIZE)),
                     material: materials.add(StandardMaterial {
                         base_color_texture: Some(asset_server.load(card_image_path)),
+                        perceptual_roughness: 0.8,
+                        metallic: 0.5,
                         ..default()
                     }),
                     transform: Transform::from_translation(Vec3::new(0., 0., -0.5)),
@@ -55,6 +58,8 @@ fn spawn_cards(
                     mesh: meshes.add(Cuboid::from_size(CARD_SIZE)),
                     material: materials.add(StandardMaterial {
                         base_color_texture: Some(asset_server.load(card_back_image_path)),
+                        perceptual_roughness: 0.8,
+                        metallic: 0.5,
                         ..default()
                     }),
                     transform: Transform {

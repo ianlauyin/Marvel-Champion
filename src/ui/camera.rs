@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{pbr::CascadeShadowConfigBuilder, prelude::*};
 
 pub struct CameraPlugin;
 
@@ -21,18 +21,17 @@ fn add_camara(mut commands: Commands) {
         transform: get_original_transform(),
         ..default()
     });
-    commands.insert_resource(AmbientLight {
-        brightness: 1.,
-        color: Color::WHITE,
-    });
     commands.spawn(DirectionalLightBundle {
         directional_light: DirectionalLight {
-            illuminance: 3000.,
-            color: Color::WHITE,
+            illuminance: 2000.,
             shadows_enabled: true,
             ..default()
         },
-        transform: Transform::from_translation(Vec3::new(0., 0., 1200.)),
+        cascade_shadow_config: CascadeShadowConfigBuilder {
+            maximum_distance: 3000.,
+            ..default()
+        }
+        .build(),
         ..default()
     });
 }
