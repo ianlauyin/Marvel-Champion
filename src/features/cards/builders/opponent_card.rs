@@ -1,6 +1,5 @@
 use crate::features::cards::{CardAbility, CardIcon, CardTrait, Keyword};
 
-#[derive(Clone)]
 pub struct AttachmentCard<'a> {
     pub id: &'a str,
     pub name: &'a str,
@@ -15,7 +14,6 @@ pub struct AttachmentCard<'a> {
     pub card_back_image_path: &'a str,
 }
 
-#[derive(Clone)]
 pub struct EnvironmentCard<'a> {
     pub id: &'a str,
     pub name: &'a str,
@@ -29,7 +27,6 @@ pub struct EnvironmentCard<'a> {
     pub card_back_image_path: &'a str,
 }
 
-#[derive(Clone)]
 pub struct MainSchemeCard<'a> {
     pub id: &'a str,
     pub name: &'a str,
@@ -44,7 +41,6 @@ pub struct MainSchemeCard<'a> {
     pub card_back_image_path: &'a str,
 }
 
-#[derive(Clone)]
 pub struct MinionCard<'a> {
     pub id: &'a str,
     pub name: &'a str,
@@ -63,7 +59,6 @@ pub struct MinionCard<'a> {
     pub card_back_image_path: &'a str,
 }
 
-#[derive(Clone)]
 pub struct ObligationCard<'a> {
     pub id: &'a str,
     pub name: &'a str,
@@ -78,7 +73,6 @@ pub struct ObligationCard<'a> {
     pub card_back_image_path: &'a str,
 }
 
-#[derive(Clone)]
 pub struct SideSchemeCard<'a> {
     pub id: &'a str,
     pub name: &'a str,
@@ -92,7 +86,6 @@ pub struct SideSchemeCard<'a> {
     pub card_back_image_path: &'a str,
 }
 
-#[derive(Clone)]
 pub struct TreacheryCard<'a> {
     pub id: &'a str,
     pub name: &'a str,
@@ -105,7 +98,6 @@ pub struct TreacheryCard<'a> {
     pub card_back_image_path: &'a str,
 }
 
-#[derive(Clone)]
 pub struct VillainCard<'a> {
     pub id: &'a str,
     pub name: &'a str,

@@ -1,6 +1,5 @@
 use crate::features::cards::{CardAbility, CardAspect, CardIcon, CardResource, CardTrait, Keyword};
 
-#[derive(Clone)]
 pub struct AllyCard<'a> {
     pub id: &'a str,
     pub name: &'a str,
@@ -25,7 +24,6 @@ pub struct AllyCard<'a> {
     pub card_amount_max: u8,
 }
 
-#[derive(Clone)]
 pub struct AlterEgoCard<'a> {
     pub id: &'a str,
     pub name: &'a str,
@@ -46,7 +44,6 @@ pub struct AlterEgoCard<'a> {
     pub card_back_image_path: &'a str,
 }
 
-#[derive(Clone)]
 pub struct EventCard<'a> {
     pub id: &'a str,
     pub name: &'a str,
@@ -62,7 +59,6 @@ pub struct EventCard<'a> {
     pub card_amount_max: u8,
 }
 
-#[derive(Clone)]
 pub struct HeroCard<'a> {
     pub id: &'a str,
     pub name: &'a str,
@@ -85,7 +81,6 @@ pub struct HeroCard<'a> {
     pub card_back_image_path: &'a str,
 }
 
-#[derive(Clone)]
 pub struct ResourceCard<'a> {
     pub id: &'a str,
     pub name: &'a str,
@@ -100,7 +95,6 @@ pub struct ResourceCard<'a> {
     pub card_amount_max: u8,
 }
 
-#[derive(Clone)]
 pub struct SupportCard<'a> {
     pub id: &'a str,
     pub name: &'a str,
@@ -118,7 +112,6 @@ pub struct SupportCard<'a> {
     pub card_amount_max: u8,
 }
 
-#[derive(Clone)]
 pub struct UpgradeCard<'a> {
     pub id: &'a str,
     pub name: &'a str,

@@ -2,6 +2,7 @@ use std::f32::consts::PI;
 
 use bevy::prelude::*;
 use constants::CARD_SIZE;
+use systems::AppState;
 
 mod constants;
 mod features;
@@ -13,7 +14,7 @@ fn main() {
         .add_plugins(systems::SystemPlugin)
         .add_plugins(ui::UIPlugin)
         .add_plugins(features::FeaturePlugin)
-        // .add_systems(OnEnter(AppState::DeckBuilding), spawn_cards)
+        .add_systems(OnEnter(AppState::DeckBuilding), spawn_cards)
         .run();
 }
 
@@ -32,7 +33,7 @@ fn spawn_cards(
         let card_back_image_path = card.get_card_back_image_path().to_string();
         commands
             .spawn((
-                card.clone(),
+                card,
                 GlobalTransform::default(),
                 InheritedVisibility::VISIBLE,
                 Transform {
