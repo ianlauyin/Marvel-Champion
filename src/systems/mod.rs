@@ -18,5 +18,5 @@ impl Plugin for SystemPlugin {
 }
 
 pub use app_state::AppState;
-pub use asset_loader::AssetLoaderPlugin;
+pub use asset_loader::{AssetLoaderPlugin, LoadAsset};
 pub use clean_up::clean_up;

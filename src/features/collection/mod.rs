@@ -8,6 +8,10 @@ pub struct CollectionPlugin;
 
 impl Plugin for CollectionPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((menu::CollectionMenuPlugin, state::CollectionStatePlugin));
+        app.add_plugins((
+            menu::CollectionMenuPlugin,
+            state::CollectionStatePlugin,
+            hero::CollectionHeroStatePlugin,
+        ));
     }
 }

@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{constants::GAME_MAT_PATH, ui::LoadingScreenPlugin};
+use crate::constants::GAME_MAT_PATH;
 
 use super::{asset_loader::LoadAsset, AssetLoaderPlugin};
 
