@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{constants::GAME_MAT_PATH, features::shared::handle_previous_interaction};
+use crate::constants::GAME_MAT_PATH;
 
 use super::{asset_loader::LoadAsset, AssetLoaderPlugin};
 
