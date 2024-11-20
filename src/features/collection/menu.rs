@@ -1,7 +1,10 @@
 use bevy::prelude::*;
 
 use crate::{
-    features::shared::{handle_previous_interaction, spawn_menu, ButtonMapItem},
+    features::shared::{
+        handle_previous_interaction,
+        menu::{spawn_list, spawn_menu, ListItem},
+    },
     systems::{clean_up, AppState},
 };
 
@@ -31,7 +34,7 @@ fn spawn_card_type_menu(commands: Commands) {
     let button_map = vec![
         (
             CardTypeButton(CollectionState::Hero),
-            ButtonMapItem {
+            ListItem {
                 text: "Hero".to_string(),
                 color: Color::srgb(0.576, 0.576, 0.576),
                 ..default()
@@ -39,7 +42,7 @@ fn spawn_card_type_menu(commands: Commands) {
         ),
         (
             CardTypeButton(CollectionState::Basic),
-            ButtonMapItem {
+            ListItem {
                 text: "Basic".to_string(),
                 color: Color::srgb(0.576, 0.576, 0.576),
                 ..default()
@@ -47,7 +50,7 @@ fn spawn_card_type_menu(commands: Commands) {
         ),
         (
             CardTypeButton(CollectionState::Aggression),
-            ButtonMapItem {
+            ListItem {
                 text: "Aggression".to_string(),
                 color: Color::srgb(0.741, 0.192, 0.192),
                 ..default()
@@ -55,7 +58,7 @@ fn spawn_card_type_menu(commands: Commands) {
         ),
         (
             CardTypeButton(CollectionState::Leadership),
-            ButtonMapItem {
+            ListItem {
                 text: "Leadership".to_string(),
                 color: Color::srgb(0.125, 0.769, 0.882),
                 ..default()
@@ -63,7 +66,7 @@ fn spawn_card_type_menu(commands: Commands) {
         ),
         (
             CardTypeButton(CollectionState::Protection),
-            ButtonMapItem {
+            ListItem {
                 text: "Protection".to_string(),
                 color: Color::srgb(0.075, 0.773, 0.075),
                 ..default()
@@ -71,7 +74,7 @@ fn spawn_card_type_menu(commands: Commands) {
         ),
         (
             CardTypeButton(CollectionState::Justice),
-            ButtonMapItem {
+            ListItem {
                 text: "Justice".to_string(),
                 color: Color::srgb(0.871, 0.941, 0.086),
                 ..default()
@@ -79,7 +82,7 @@ fn spawn_card_type_menu(commands: Commands) {
         ),
         (
             CardTypeButton(CollectionState::Pool),
-            ButtonMapItem {
+            ListItem {
                 text: "Pool".to_string(),
                 color: Color::srgb(0.89, 0.149, 0.816),
                 ..default()
@@ -87,7 +90,7 @@ fn spawn_card_type_menu(commands: Commands) {
         ),
         (
             CardTypeButton(CollectionState::Villain),
-            ButtonMapItem {
+            ListItem {
                 text: "Villain".to_string(),
                 color: Color::srgb(0.576, 0.576, 0.576),
                 ..default()
@@ -95,14 +98,20 @@ fn spawn_card_type_menu(commands: Commands) {
         ),
         (
             CardTypeButton(CollectionState::Modular),
-            ButtonMapItem {
+            ListItem {
                 text: "Modular".to_string(),
                 color: Color::srgb(0.576, 0.576, 0.576),
                 ..default()
             },
         ),
     ];
-    spawn_menu(commands, CardTypeMenu, AppState::MainMenu, button_map);
+    spawn_menu(
+        commands,
+        CardTypeMenu,
+        AppState::MainMenu,
+        button_map,
+        spawn_list,
+    );
 }
 
 fn handle_button_reaction(

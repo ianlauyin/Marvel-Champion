@@ -4,7 +4,10 @@ use crate::{
     features::{
         cards::{get_all_identity, Identity},
         collection::state::CollectionState,
-        shared::{handle_previous_interaction, spawn_menu, ButtonMapItem},
+        shared::{
+            handle_previous_interaction,
+            menu::{spawn_list, spawn_menu, ListItem},
+        },
     },
     systems::{clean_up, LoadAsset},
 };
@@ -38,7 +41,7 @@ fn spawn_hero_list(commands: Commands, asset_server: Res<AssetServer>) {
         .map(|(identity)| {
             (
                 HeroListButton(identity.clone()),
-                ButtonMapItem {
+                ListItem {
                     text: identity.to_string().clone(),
                     image: UiImage::new(asset_server.load(identity.get_title_image_path()))
                         .with_color(Color::srgb(0.365, 0.365, 0.365)),
@@ -48,7 +51,13 @@ fn spawn_hero_list(commands: Commands, asset_server: Res<AssetServer>) {
         })
         .collect();
 
-    spawn_menu(commands, HeroList, CollectionState::Menu, button_map);
+    spawn_menu(
+        commands,
+        HeroList,
+        CollectionState::Menu,
+        button_map,
+        spawn_list,
+    );
 }
 
 fn handle_button_interaction(

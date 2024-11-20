@@ -11,8 +11,7 @@ impl Plugin for CollectionPlugin {
         app.add_plugins((
             menu::CollectionMenuPlugin,
             state::CollectionStatePlugin,
-            hero::CollectionHeroStatePlugin,
-            hero::CollectionHeroListPlugin,
+            hero::CollectionHeroPlugin,
         ));
     }
 }

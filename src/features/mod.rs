@@ -13,9 +13,9 @@ impl Plugin for FeaturePlugin {
         app.add_plugins((
             game_mat::GameMatPlugin,
             main_menu::MainMenuPlugin,
-            shared::ButtonUIPlugin,
             collection::CollectionPlugin,
-            shared::ScrollingListPlugin,
+            shared::ButtonUIPlugin,
+            shared::MenuPlugin,
         ));
     }
 }
