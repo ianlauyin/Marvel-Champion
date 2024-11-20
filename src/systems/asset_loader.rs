@@ -22,6 +22,7 @@ pub struct LoadedAsset(HashSet<Handle<Image>>);
 #[derive(Resource)]
 pub struct LoadAsset(pub Vec<Handle<Image>>);
 
+// Remember to Add AssetLoaderPlugin in state.rs
 // Add handles in LoadAsset.0, it will check in your defined loading_state.
 pub struct AssetLoaderPlugin<S: States + FreelyMutableState> {
     pub loading_state: S,

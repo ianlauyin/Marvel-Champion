@@ -24,8 +24,8 @@ pub enum Card {
 }
 
 impl Card {
-    pub fn get_card_image_path(&self) -> &str {
-        match self {
+    pub fn get_card_image_path(&self) -> String {
+        let image_path = match self {
             Card::Attachment(attachment_card) => attachment_card.card_image_path,
             Card::Environment(environment_card) => environment_card.card_image_path,
             Card::MainScheme(main_scheme_card) => main_scheme_card.card_image_path,
@@ -41,11 +41,12 @@ impl Card {
             Card::Resource(resource_card) => resource_card.card_image_path,
             Card::Support(support_card) => support_card.card_image_path,
             Card::Upgrade(upgrade_card) => upgrade_card.card_image_path,
-        }
+        };
+        image_path.to_string()
     }
 
-    pub fn get_card_back_image_path(&self) -> &str {
-        match self {
+    pub fn get_card_back_image_path(&self) -> String {
+        let image_path = match self {
             Card::Attachment(attachment_card) => attachment_card.card_back_image_path,
             Card::Environment(environment_card) => environment_card.card_back_image_path,
             Card::MainScheme(main_scheme_card) => main_scheme_card.card_back_image_path,
@@ -61,6 +62,7 @@ impl Card {
             Card::Resource(resource_card) => resource_card.card_back_image_path,
             Card::Support(support_card) => support_card.card_back_image_path,
             Card::Upgrade(upgrade_card) => upgrade_card.card_back_image_path,
-        }
+        };
+        image_path.to_string()
     }
 }

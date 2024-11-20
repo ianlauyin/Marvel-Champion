@@ -1,29 +1,13 @@
 use bevy::prelude::World;
 
+use super::Identity;
+
 #[derive(Clone)]
 pub enum CardResource {
     Wild,
     Energy,
     Mental,
     Physical,
-}
-
-#[derive(Clone)]
-pub enum Identity {
-    CoreSpiderMan,
-}
-
-impl Identity {
-    pub fn to_string(&self) -> String {
-        match *self {
-            Identity::CoreSpiderMan => "Core - Spider man".to_string(),
-        }
-    }
-    pub fn get_title_image_path(&self) -> String {
-        match *self {
-            Identity::CoreSpiderMan => "embedded://identities/core_spider_man.png".to_string(),
-        }
-    }
 }
 
 #[derive(Clone)]
