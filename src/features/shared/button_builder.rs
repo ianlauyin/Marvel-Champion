@@ -9,25 +9,27 @@ impl Plugin for ButtonUIPlugin {
     }
 }
 
-pub struct ButtonBuilder<'a> {
-    pub text: &'a str,
-    pub background_color: Color,
+pub struct ButtonBuilder {
+    pub text: String,
+    pub color: Color,
+    pub image: UiImage,
     pub size: (Val, Val),
     pub with_border: bool,
 }
 
-impl Default for ButtonBuilder<'_> {
+impl Default for ButtonBuilder {
     fn default() -> Self {
         Self {
-            text: "",
-            background_color: Color::srgb(0.235, 0.235, 0.235),
+            text: String::default(),
+            color: Color::NONE,
             size: (Val::Px(300.), Val::Px(100.)),
             with_border: true,
+            image: UiImage::default(),
         }
     }
 }
 
-impl ButtonBuilder<'_> {
+impl ButtonBuilder {
     pub fn spawn<'a>(&self, child_builder: &'a mut ChildBuilder) -> EntityCommands<'a> {
         let mut button = child_builder.spawn(ButtonBundle {
             style: Style {
@@ -39,18 +41,22 @@ impl ButtonBuilder<'_> {
                 align_items: AlignItems::Center,
                 ..default()
             },
+            image: self.image.clone(),
             border_color: BorderColor(if self.with_border {
                 Color::srgb(0.725, 0.725, 0.725)
             } else {
                 Color::NONE
             }),
             border_radius: BorderRadius::all(Val::Px(10.)),
-            background_color: BackgroundColor::from(self.background_color),
+            background_color: BackgroundColor::from(self.color),
             ..default()
         });
 
         button.with_children(|button| {
-            button.spawn(TextBundle::from_section(self.text, TextStyle::default()));
+            button.spawn(TextBundle::from_section(
+                self.text.clone(),
+                TextStyle::default(),
+            ));
         });
         button
     }

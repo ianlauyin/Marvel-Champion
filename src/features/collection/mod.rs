@@ -12,6 +12,7 @@ impl Plugin for CollectionPlugin {
             menu::CollectionMenuPlugin,
             state::CollectionStatePlugin,
             hero::CollectionHeroStatePlugin,
+            hero::CollectionHeroListPlugin,
         ));
     }
 }

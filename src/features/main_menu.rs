@@ -20,18 +20,13 @@ impl Plugin for MainMenuPlugin {
 struct MainMenu;
 
 #[derive(Component, Clone)]
-enum MainMenuButton {
-    Play,
-    DeckBuilding,
-    Collection,
-    Record,
-}
+struct MainMenuButton(AppState);
 
 const BUTTON_MAP: [(MainMenuButton, &str); 4] = [
-    (MainMenuButton::Play, "Play"),
-    (MainMenuButton::DeckBuilding, "Deck Building"),
-    (MainMenuButton::Collection, "Collection"),
-    (MainMenuButton::Record, "Record"),
+    (MainMenuButton(AppState::Game), "Play"),
+    (MainMenuButton(AppState::DeckBuilding), "Deck Building"),
+    (MainMenuButton(AppState::Collection), "Collection"),
+    (MainMenuButton(AppState::Record), "Record"),
 ];
 
 fn spawn_main_menu(mut commands: Commands) {
@@ -56,9 +51,13 @@ fn spawn_main_menu(mut commands: Commands) {
         ))
         .with_children(|main_menu| {
             for (button_component, text) in BUTTON_MAP {
-                ButtonBuilder { text, ..default() }
-                    .spawn(main_menu)
-                    .insert(button_component);
+                ButtonBuilder {
+                    text: text.to_string(),
+                    color: Color::srgb(0.576, 0.576, 0.576),
+                    ..default()
+                }
+                .spawn(main_menu)
+                .insert(button_component);
             }
         });
 }
@@ -79,12 +78,5 @@ fn handle_button_click(
     mut next_state: ResMut<NextState<AppState>>,
     main_menu_button: MainMenuButton,
 ) {
-    next_state.set({
-        match main_menu_button {
-            MainMenuButton::Play => AppState::Game,
-            MainMenuButton::DeckBuilding => AppState::DeckBuilding,
-            MainMenuButton::Collection => AppState::Collection,
-            MainMenuButton::Record => AppState::Record,
-        }
-    })
+    next_state.set(main_menu_button.0);
 }

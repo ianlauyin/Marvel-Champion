@@ -4,7 +4,7 @@ pub mod cards;
 mod collection;
 mod game_mat;
 mod main_menu;
-mod shared;
+pub mod shared;
 
 pub struct FeaturePlugin;
 

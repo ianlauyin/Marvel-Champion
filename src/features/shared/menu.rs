@@ -2,11 +2,19 @@ use bevy::{prelude::*, state::state::FreelyMutableState};
 
 use super::{ButtonBuilder, PreviousButtonBuilder, ScrollingList};
 
+#[derive(Default)]
+pub struct ButtonMapItem {
+    pub text: String,
+    pub color: Color,
+    pub image: UiImage,
+}
+
+/// Reminder: Add handle_previous_interaction::<S> in system
 pub fn spawn_menu<T: Component, S: States + FreelyMutableState, B: Component>(
     mut commands: Commands,
     component: T,
     previous_state: S,
-    button_map: Vec<(B, &str, Option<Color>)>,
+    button_map: Vec<(B, ButtonMapItem)>,
 ) {
     commands
         .spawn((
@@ -51,7 +59,7 @@ fn spawn_header<S: States + FreelyMutableState>(menu: &mut ChildBuilder, previou
     });
 }
 
-fn spawn_list<B: Component>(menu: &mut ChildBuilder, button_map: Vec<(B, &str, Option<Color>)>) {
+fn spawn_list<B: Component>(menu: &mut ChildBuilder, button_map: Vec<(B, ButtonMapItem)>) {
     menu.spawn(NodeBundle {
         style: Style {
             height: Val::Percent(100.),
@@ -79,7 +87,7 @@ fn spawn_list<B: Component>(menu: &mut ChildBuilder, button_map: Vec<(B, &str, O
                 },
             ))
             .with_children(|list_div| {
-                for (button_component, text, color) in button_map {
+                for (button_component, button_info) in button_map {
                     list_div
                         .spawn(NodeBundle {
                             style: Style {
@@ -91,10 +99,13 @@ fn spawn_list<B: Component>(menu: &mut ChildBuilder, button_map: Vec<(B, &str, O
                             ..default()
                         })
                         .with_children(|card_type_node| {
-                            let mut button = ButtonBuilder { text, ..default() };
-                            if let Some(background_color) = color {
-                                button.background_color = background_color
-                            }
+                            let ButtonMapItem { text, color, image } = button_info;
+                            let button = ButtonBuilder {
+                                text,
+                                color,
+                                image,
+                                ..default()
+                            };
                             button.spawn(card_type_node).insert(button_component);
                         });
                 }

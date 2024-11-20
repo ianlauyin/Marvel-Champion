@@ -1,6 +1,9 @@
 use bevy::prelude::*;
 
-use crate::{features::collection::state::CollectionState, systems::AssetLoaderPlugin};
+use crate::{
+    features::{collection::state::CollectionState, shared::handle_previous_interaction},
+    systems::AssetLoaderPlugin,
+};
 
 #[derive(SubStates, Default, Hash, PartialEq, Eq, Debug, Clone)]
 #[source(CollectionState = CollectionState::Hero)]

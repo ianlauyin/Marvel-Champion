@@ -19,6 +19,11 @@ impl Identity {
             Identity::CoreSpiderMan => "Core - Spider man".to_string(),
         }
     }
+    pub fn get_title_image_path(&self) -> String {
+        match *self {
+            Identity::CoreSpiderMan => "embedded://identities/core_spider_man.png".to_string(),
+        }
+    }
 }
 
 #[derive(Clone)]

@@ -1,11 +1,11 @@
 use bevy::prelude::*;
 
 use crate::{
-    features::shared::{handle_previous_interaction, spawn_menu},
+    features::shared::{handle_previous_interaction, spawn_menu, ButtonMapItem},
     systems::{clean_up, AppState},
 };
 
-use super::state::{CollectionState, CollectionStateChangeEvent};
+use super::state::CollectionState;
 
 pub struct CollectionMenuPlugin;
 
@@ -14,12 +14,9 @@ impl Plugin for CollectionMenuPlugin {
         app.add_systems(OnEnter(CollectionState::Menu), spawn_card_type_menu)
             .add_systems(
                 Update,
-                (
-                    handle_button_reaction,
-                    handle_previous_interaction::<AppState>,
-                )
-                    .run_if(in_state(CollectionState::Menu)),
+                handle_button_reaction.run_if(in_state(CollectionState::Menu)),
             )
+            .add_systems(Update, handle_previous_interaction(AppState::Collection))
             .add_systems(OnExit(CollectionState::Menu), clean_up::<CardTypeMenu>);
     }
 }
@@ -28,83 +25,101 @@ impl Plugin for CollectionMenuPlugin {
 struct CardTypeMenu;
 
 #[derive(Component, Clone)]
-enum CardTypeButton {
-    Hero,
-    Basic,
-    Aggression,
-    Leadership,
-    Protection,
-    Justice,
-    Pool,
-    Villain,
-    Modular,
-}
-
-const BUTTON_MAP: [(CardTypeButton, &str, Option<Color>); 9] = [
-    (CardTypeButton::Hero, "Hero", None),
-    (CardTypeButton::Basic, "Basic", None),
-    (
-        CardTypeButton::Aggression,
-        "Aggression",
-        Some(Color::srgb(0.741, 0.192, 0.192)),
-    ),
-    (
-        CardTypeButton::Leadership,
-        "Leadership",
-        Some(Color::srgb(0.125, 0.769, 0.882)),
-    ),
-    (
-        CardTypeButton::Protection,
-        "Protection",
-        Some(Color::srgb(0.075, 0.773, 0.075)),
-    ),
-    (
-        CardTypeButton::Justice,
-        "Justice",
-        Some(Color::srgb(0.871, 0.941, 0.086)),
-    ),
-    (
-        CardTypeButton::Pool,
-        "Pool",
-        Some(Color::srgb(0.89, 0.149, 0.816)),
-    ),
-    (CardTypeButton::Villain, "Villain", None),
-    (CardTypeButton::Modular, "Modular", None),
-];
+struct CardTypeButton(CollectionState);
 
 fn spawn_card_type_menu(commands: Commands) {
-    spawn_menu(
-        commands,
-        CardTypeMenu,
-        AppState::MainMenu,
-        BUTTON_MAP.to_vec(),
-    );
+    let button_map = vec![
+        (
+            CardTypeButton(CollectionState::Hero),
+            ButtonMapItem {
+                text: "Hero".to_string(),
+                color: Color::srgb(0.576, 0.576, 0.576),
+                ..default()
+            },
+        ),
+        (
+            CardTypeButton(CollectionState::Basic),
+            ButtonMapItem {
+                text: "Basic".to_string(),
+                color: Color::srgb(0.576, 0.576, 0.576),
+                ..default()
+            },
+        ),
+        (
+            CardTypeButton(CollectionState::Aggression),
+            ButtonMapItem {
+                text: "Aggression".to_string(),
+                color: Color::srgb(0.741, 0.192, 0.192),
+                ..default()
+            },
+        ),
+        (
+            CardTypeButton(CollectionState::Leadership),
+            ButtonMapItem {
+                text: "Leadership".to_string(),
+                color: Color::srgb(0.125, 0.769, 0.882),
+                ..default()
+            },
+        ),
+        (
+            CardTypeButton(CollectionState::Protection),
+            ButtonMapItem {
+                text: "Protection".to_string(),
+                color: Color::srgb(0.075, 0.773, 0.075),
+                ..default()
+            },
+        ),
+        (
+            CardTypeButton(CollectionState::Justice),
+            ButtonMapItem {
+                text: "Justice".to_string(),
+                color: Color::srgb(0.871, 0.941, 0.086),
+                ..default()
+            },
+        ),
+        (
+            CardTypeButton(CollectionState::Pool),
+            ButtonMapItem {
+                text: "Pool".to_string(),
+                color: Color::srgb(0.89, 0.149, 0.816),
+                ..default()
+            },
+        ),
+        (
+            CardTypeButton(CollectionState::Villain),
+            ButtonMapItem {
+                text: "Villain".to_string(),
+                color: Color::srgb(0.576, 0.576, 0.576),
+                ..default()
+            },
+        ),
+        (
+            CardTypeButton(CollectionState::Modular),
+            ButtonMapItem {
+                text: "Modular".to_string(),
+                color: Color::srgb(0.576, 0.576, 0.576),
+                ..default()
+            },
+        ),
+    ];
+    spawn_menu(commands, CardTypeMenu, AppState::MainMenu, button_map);
 }
 
 fn handle_button_reaction(
-    commands: Commands,
+    next_state: ResMut<NextState<CollectionState>>,
     mut card_type_button_q: Query<(&Interaction, &CardTypeButton)>,
 ) {
     for (interaction, card_type_button) in card_type_button_q.iter_mut() {
         if *interaction == Interaction::Pressed {
-            handle_button_click(commands, card_type_button.clone());
+            handle_button_click(next_state, card_type_button.clone());
             return;
         }
     }
 }
 
-fn handle_button_click(mut commands: Commands, card_type_button: CardTypeButton) {
-    commands.trigger(CollectionStateChangeEvent({
-        match card_type_button {
-            CardTypeButton::Hero => CollectionState::Hero,
-            CardTypeButton::Basic => CollectionState::Basic,
-            CardTypeButton::Aggression => CollectionState::Aggression,
-            CardTypeButton::Leadership => CollectionState::Leadership,
-            CardTypeButton::Protection => CollectionState::Protection,
-            CardTypeButton::Justice => CollectionState::Justice,
-            CardTypeButton::Pool => CollectionState::Pool,
-            CardTypeButton::Villain => CollectionState::Villain,
-            CardTypeButton::Modular => CollectionState::Modular,
-        }
-    }))
+fn handle_button_click(
+    mut next_state: ResMut<NextState<CollectionState>>,
+    card_type_button: CardTypeButton,
+) {
+    next_state.set(card_type_button.0);
 }

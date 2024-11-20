@@ -2,7 +2,9 @@ use std::f32::consts::PI;
 
 use bevy::{ecs::system::SystemId, prelude::*};
 use constants::CARD_SIZE;
-use features::cards::{core_spider_man::get_nemesis_set, Card, CardAbility};
+use features::cards::{
+    identity_specific_cards::core_spider_man::get_nemesis_set, Card, CardAbility,
+};
 use systems::AppState;
 
 mod constants;
@@ -98,8 +100,8 @@ fn spawn_component(mut commands: Commands) {
     let CardAbility::WhenRevealed(effect) = side_scheme.abilities[0] else {
         return;
     };
-    let systemId = commands.register_one_shot_system(effect);
-    commands.spawn(TestEffect(systemId));
+    let system_id = commands.register_one_shot_system(effect);
+    commands.spawn(TestEffect(system_id));
 }
 
 fn test_component_effect(mut commands: Commands, test_effect_q: Query<&TestEffect>) {

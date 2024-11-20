@@ -1,5 +1,10 @@
+use crate::features::cards::{Card, Identity};
+
 pub mod core_spider_man;
 
-pub fn get_all_hero_image_path() -> Vec<String> {
-    vec![core_spider_man::get_hero_image_path()]
+pub fn get_all(player_number: u8) -> Vec<(Identity, Vec<Card>)> {
+    vec![(
+        Identity::CoreSpiderMan,
+        core_spider_man::get_all(player_number),
+    )]
 }

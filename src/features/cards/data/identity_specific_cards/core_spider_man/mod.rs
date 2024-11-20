@@ -14,10 +14,6 @@ mod webbed_up;
 
 pub use nemesis_set::get_nemesis_set;
 
-pub fn get_hero_image_path() -> String {
-    hero::get_hero().get_card_image_path().to_string()
-}
-
 pub fn get_player_cards() -> Vec<Card> {
     vec![
         alter_ego::get_alter_ego(),
