@@ -1,7 +1,8 @@
 use std::f32::consts::PI;
 
-use bevy::prelude::*;
+use bevy::{ecs::system::SystemId, prelude::*};
 use constants::CARD_SIZE;
+use features::cards::{core_spider_man::get_nemesis_set, Card, CardAbility};
 use systems::AppState;
 
 mod constants;
@@ -16,6 +17,8 @@ fn main() {
         .add_plugins(features::FeaturePlugin)
         // .add_systems(OnEnter(AppState::DeckBuilding), spawn_cards)
         // .add_systems(Update, rotate_card.run_if(in_state(AppState::DeckBuilding)))
+        // .add_systems(Startup, spawn_component)
+        // .add_systems(OnEnter(AppState::MainMenu), test_component_effect)
         .run();
 }
 
@@ -81,5 +84,29 @@ fn spawn_cards(
 fn rotate_card(mut card_q: Query<&mut Transform, With<crate::features::cards::Card>>) {
     for mut transform in card_q.iter_mut() {
         transform.rotate(Quat::from_rotation_y(0.05));
+    }
+}
+
+#[derive(Component)]
+struct TestEffect(SystemId);
+
+fn spawn_component(mut commands: Commands) {
+    let oppoenent_card = get_nemesis_set(1)[0].clone();
+    let Card::SideScheme(side_scheme) = oppoenent_card else {
+        return;
+    };
+    let CardAbility::WhenRevealed(effect) = side_scheme.abilities[0] else {
+        return;
+    };
+    let systemId = commands.register_one_shot_system(effect);
+    commands.spawn(TestEffect(systemId));
+}
+
+fn test_component_effect(mut commands: Commands, test_effect_q: Query<&TestEffect>) {
+    if test_effect_q.is_empty() {
+        warn!("No TestEffect")
+    }
+    for test_effect in test_effect_q.iter() {
+        commands.run_system(test_effect.0);
     }
 }

@@ -1,4 +1,4 @@
-use bevy::ecs::schedule::SystemConfigs;
+use bevy::prelude::World;
 
 #[derive(Clone)]
 pub enum CardResource {
@@ -133,13 +133,14 @@ impl CardIcon {
     }
 }
 
+#[derive(Clone)]
 pub enum CardAbility {
-    Instant(SystemConfigs),
-    ForcedInterrupt(SystemConfigs),
-    Interrupt(SystemConfigs),
-    Boost(SystemConfigs),
-    WhenDefeated(SystemConfigs),
-    WhenRevealed(SystemConfigs),
-    ForcedResponse(SystemConfigs),
-    Response(SystemConfigs),
+    Instant(fn(&mut World)),
+    ForcedInterrupt(fn(&mut World)),
+    Interrupt(fn(&mut World)),
+    Boost(fn(&mut World)),
+    WhenDefeated(fn(&mut World)),
+    WhenRevealed(fn(&mut World)),
+    ForcedResponse(fn(&mut World)),
+    Response(fn(&mut World)),
 }

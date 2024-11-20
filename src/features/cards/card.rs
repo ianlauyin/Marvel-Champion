@@ -2,7 +2,7 @@ use bevy::prelude::Component;
 
 use super::builders::*;
 
-#[derive(Component)]
+#[derive(Component, Clone)]
 pub enum Card {
     // Opponent Card
     Attachment(AttachmentCard<'static>),

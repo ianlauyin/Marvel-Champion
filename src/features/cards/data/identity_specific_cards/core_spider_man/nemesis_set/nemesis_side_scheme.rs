@@ -1,6 +1,6 @@
 use bevy::{
-    ecs::{schedule::SystemConfigs, system::RunSystemOnce},
-    prelude::{Commands, IntoSystem, IntoSystemConfigs, System, World},
+    ecs::system::{BoxedSystem, RunSystemOnce},
+    prelude::{Commands, IntoSystem, IntoSystemConfigs, World},
 };
 
 use crate::{
@@ -19,8 +19,8 @@ pub fn get_nemesis_side_scheme(player_number: u8) -> Card {
             "When Revealed: Each player places a random card from their hand facedown here.
             When Defeated: Return each facedown card here to its owner's hand.",
         abilities: vec![
-            CardAbility::WhenRevealed(when_revealed()),
-            CardAbility::WhenDefeated(when_defeated()),
+            CardAbility::WhenRevealed(when_revealed),
+            CardAbility::WhenDefeated(when_defeated),
         ],
         search_keywords: vec![],
         card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_166.png",
@@ -28,10 +28,10 @@ pub fn get_nemesis_side_scheme(player_number: u8) -> Card {
     })
 }
 
-fn when_revealed() -> SystemConfigs {
-    IntoSystem::into_system(|| println!("Hi")).into_configs()
+fn when_revealed(world: &mut World) {
+    world.run_system_once(|| println!("hi"));
 }
 
-fn when_defeated() -> SystemConfigs {
-    IntoSystem::into_system(|| println!("Bye")).into_configs()
+fn when_defeated(world: &mut World) {
+    world.run_system_once(|| println!("Bye"));
 }
