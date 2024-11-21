@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::features::{cards::Card, shared::ButtonBuilder};
+use crate::features::shared::ButtonBuilder;
 
 use super::{ListItem, ScrollingList};
 
@@ -53,6 +53,7 @@ pub fn spawn_card_list<B: Component>(menu: &mut ChildBuilder, button_map: Vec<(B
                                 image,
                                 size: (Val::Px(128.), Val::Px(178.)),
                                 with_border: false,
+                                ..default()
                             };
                             button.spawn(card_type_node).insert(button_component);
                         });
