@@ -12,7 +12,7 @@ use crate::{
     systems::{clean_up, LoadAsset},
 };
 
-use super::state::CollectionHeroState;
+use super::{card_list::CollectionHeroIdentity, state::CollectionHeroState};
 
 pub struct CollectionHeroListPlugin;
 
@@ -61,6 +61,7 @@ fn spawn_hero_list(commands: Commands, asset_server: Res<AssetServer>) {
 }
 
 fn handle_button_interaction(
+    mut commands: Commands,
     button_q: Query<(&Interaction, &HeroListButton)>,
     mut next_state: ResMut<NextState<CollectionHeroState>>,
     mut load_asset: ResMut<LoadAsset>,
@@ -73,6 +74,7 @@ fn handle_button_interaction(
                     .0
                     .push(asset_server.load(card.get_card_image_path()));
             }
+            commands.insert_resource(CollectionHeroIdentity(button.0.clone()));
             next_state.set(CollectionHeroState::LoadingCards);
             return;
         }

@@ -9,7 +9,7 @@ pub struct ListItem {
     pub image: UiImage,
 }
 
-/// Reminder: Add handle_previous_interaction::<S> in system
+/// Reminder: Add handle_previous_interaction(current_state) in system
 pub fn spawn_menu<T: Component, S: States + FreelyMutableState, B: Component>(
     mut commands: Commands,
     component: T,

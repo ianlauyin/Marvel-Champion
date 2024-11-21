@@ -50,7 +50,8 @@ fn check_asset<S: States + FreelyMutableState>(loading_state: S, next_state: S) 
             let mut removed_count = 0;
             for (index, handle) in load_asset.0.clone().iter().enumerate() {
                 if loaded_asset.0.contains(&handle) {
-                    load_asset.0.remove(index);
+                    load_asset.0.remove(index - removed_count);
+                    removed_count += 1;
                     continue;
                 }
 
