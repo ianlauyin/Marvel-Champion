@@ -14,7 +14,7 @@ pub fn spawn_menu<T: Component, S: States + FreelyMutableState, B: Component>(
     mut commands: Commands,
     component: T,
     previous_state: S,
-    list_item: Vec<(B, ListItem)>,
+    list_items: Vec<(B, ListItem)>,
     spawn_content: fn(&mut ChildBuilder, Vec<(B, ListItem)>),
 ) {
     commands
@@ -37,7 +37,7 @@ pub fn spawn_menu<T: Component, S: States + FreelyMutableState, B: Component>(
         ))
         .with_children(|menu| {
             spawn_header(menu, previous_state);
-            spawn_content(menu, list_item);
+            spawn_content(menu, list_items);
         });
 }
 

@@ -10,6 +10,7 @@ pub fn spawn_card_list<B: Component>(menu: &mut ChildBuilder, button_map: Vec<(B
             height: Val::Percent(100.),
             display: Display::Flex,
             justify_content: JustifyContent::Center,
+            padding: UiRect::horizontal(Val::Px(10.)),
             overflow: Overflow::clip_y(),
             ..default()
         },
@@ -24,8 +25,9 @@ pub fn spawn_card_list<B: Component>(menu: &mut ChildBuilder, button_map: Vec<(B
                         width: Val::Percent(100.),
                         align_self: AlignSelf::Center,
                         display: Display::Grid,
-                        grid_template_columns: vec![RepeatedGridTrack::auto(3)],
-                        row_gap: Val::Px(40.),
+                        grid_template_columns: vec![RepeatedGridTrack::auto(8)],
+                        row_gap: Val::Px(10.),
+                        column_gap: Val::Px(10.),
                         ..default()
                     },
                     ..default()
@@ -49,7 +51,8 @@ pub fn spawn_card_list<B: Component>(menu: &mut ChildBuilder, button_map: Vec<(B
                                 text,
                                 color,
                                 image,
-                                ..default()
+                                size: (Val::Px(128.), Val::Px(178.)),
+                                with_border: false,
                             };
                             button.spawn(card_type_node).insert(button_component);
                         });

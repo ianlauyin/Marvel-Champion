@@ -65,4 +65,25 @@ impl Card {
         };
         image_path.to_string()
     }
+
+    pub fn get_card_id(&self) -> String {
+        let id = match self {
+            Card::Attachment(attachment_card) => attachment_card.id,
+            Card::Environment(environment_card) => environment_card.id,
+            Card::MainScheme(main_scheme_card) => main_scheme_card.id,
+            Card::Minion(minion_card) => minion_card.id,
+            Card::Obligation(obligation_card) => obligation_card.id,
+            Card::SideScheme(side_scheme_card) => side_scheme_card.id,
+            Card::Treachery(treachery_card) => treachery_card.id,
+            Card::Villain(villain_card) => villain_card.id,
+            Card::Ally(ally_card) => ally_card.id,
+            Card::AlterEgo(alter_ego_card) => alter_ego_card.id,
+            Card::Event(event_card) => event_card.id,
+            Card::Hero(hero_card) => hero_card.id,
+            Card::Resource(resource_card) => resource_card.id,
+            Card::Support(support_card) => support_card.id,
+            Card::Upgrade(upgrade_card) => upgrade_card.id,
+        };
+        id.to_string()
+    }
 }
