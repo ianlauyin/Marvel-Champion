@@ -7,14 +7,13 @@ pub struct SetupPlugin;
 
 impl Plugin for SetupPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins(EmbeddedAssetPlugin::default())
-            .add_plugins(DefaultPlugins.set(WindowPlugin {
-                primary_window: Some(Window {
-                    resolution: WindowResolution::from(WINDOW_RESOLUTION),
-                    ..default()
-                }),
+        app.add_plugins(DefaultPlugins.set(WindowPlugin {
+            primary_window: Some(Window {
+                resolution: WindowResolution::from(WINDOW_RESOLUTION),
                 ..default()
-            }))
-            .insert_resource(ClearColor(Color::srgb(0.404, 0.404, 0.404)));
+            }),
+            ..default()
+        }))
+        .add_plugins(EmbeddedAssetPlugin::default());
     }
 }
