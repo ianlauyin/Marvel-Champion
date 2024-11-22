@@ -11,20 +11,24 @@ impl Plugin for ButtonUIPlugin {
 
 pub struct ButtonBuilder {
     pub text: String,
+    pub text_color: Color,
     pub color: Color,
     pub image: UiImage,
     pub size: (Val, Val),
     pub with_border: bool,
+    pub border_radius: BorderRadius,
 }
 
 impl Default for ButtonBuilder {
     fn default() -> Self {
         Self {
+            text_color: Color::WHITE,
             text: String::default(),
             color: Color::NONE,
             size: (Val::Px(300.), Val::Px(100.)),
             with_border: true,
             image: UiImage::default(),
+            border_radius: BorderRadius::all(Val::Px(10.)),
         }
     }
 }
@@ -47,7 +51,7 @@ impl ButtonBuilder {
             } else {
                 Color::NONE
             }),
-            border_radius: BorderRadius::all(Val::Px(10.)),
+            border_radius: self.border_radius,
             background_color: BackgroundColor::from(self.color),
             ..default()
         });
@@ -55,7 +59,10 @@ impl ButtonBuilder {
         button.with_children(|button| {
             button.spawn(TextBundle::from_section(
                 self.text.clone(),
-                TextStyle::default(),
+                TextStyle {
+                    color: self.text_color,
+                    ..default()
+                },
             ));
         });
         button

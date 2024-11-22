@@ -24,6 +24,7 @@ pub fn spawn_card_detail(mut commands: Commands, card: Card, z_index: ZIndex) {
                 justify_self: JustifySelf::Center,
                 ..default()
             },
+            border_radius: BorderRadius::all(Val::Px(10.)),
             z_index,
             background_color: BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
             ..default()
@@ -38,8 +39,8 @@ fn spawn_escape_button(children_builder: &mut ChildBuilder) {
         .spawn(NodeBundle {
             style: Style {
                 position_type: PositionType::Absolute,
-                top: Val::Px(0.),
-                right: Val::Px(0.),
+                top: Val::Px(5.),
+                right: Val::Px(5.),
                 ..default()
             },
             ..default()
@@ -47,8 +48,11 @@ fn spawn_escape_button(children_builder: &mut ChildBuilder) {
         .with_children(|button_container| {
             ButtonBuilder {
                 text: String::from("X"),
+                text_color: Color::srgb(0.494, 0.494, 0.494),
                 size: (Val::Px(30.), Val::Px(30.)),
                 with_border: false,
+                color: Color::srgb(0.239, 0.239, 0.239),
+                border_radius: BorderRadius::all(Val::Percent(50.)),
                 ..default()
             }
             .spawn(button_container)

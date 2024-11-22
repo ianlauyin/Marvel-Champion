@@ -31,6 +31,7 @@ pub fn spawn_menu<T: Component, S: States + FreelyMutableState, B: Component>(
                     overflow: Overflow::clip_y(),
                     ..default()
                 },
+                border_radius: BorderRadius::all(Val::Px(10.)),
                 background_color: BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
                 ..default()
             },

@@ -45,6 +45,7 @@ fn spawn_main_menu(mut commands: Commands) {
                     align_items: AlignItems::Center,
                     ..default()
                 },
+                border_radius: BorderRadius::all(Val::Px(10.)),
                 background_color: BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
                 ..default()
             },
