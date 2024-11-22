@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{input::common_conditions::input_just_pressed, prelude::*};
 
 use crate::{
     features::{
@@ -6,6 +6,7 @@ use crate::{
         shared::{
             handle_previous_interaction,
             menu::{spawn_card_list, spawn_menu, ListItem},
+            spawn_card_detail,
         },
     },
     systems::clean_up,
@@ -20,7 +21,9 @@ impl Plugin for CollectionHeroCardListPlugin {
         app.add_systems(OnEnter(CollectionHeroState::Cards), spawn_hero_cards)
             .add_systems(
                 Update,
-                handle_card_click.run_if(in_state(CollectionHeroState::Cards)),
+                handle_card_click
+                    .run_if(in_state(CollectionHeroState::Cards))
+                    .run_if(input_just_pressed(MouseButton::Left)),
             )
             .add_systems(
                 Update,
@@ -68,4 +71,18 @@ fn spawn_hero_cards(
     );
 }
 
-fn handle_card_click() {}
+fn handle_card_click(
+    commands: Commands,
+    hero_card_button_q: Query<(&Interaction, &HeroCardButton, &ZIndex)>,
+) {
+    for (interaction, hero_card_button, z_index) in hero_card_button_q.iter() {
+        if *interaction == Interaction::Pressed {
+            let card_detail_z_index = match z_index {
+                ZIndex::Local(value) => ZIndex::Local(value + 1),
+                ZIndex::Global(value) => ZIndex::Global(value + 1),
+            };
+            spawn_card_detail(commands, hero_card_button.0.clone(), card_detail_z_index);
+            return;
+        }
+    }
+}

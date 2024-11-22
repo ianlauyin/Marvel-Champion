@@ -10,6 +10,7 @@ impl Plugin for SetupPlugin {
         app.add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
                 resolution: WindowResolution::from(WINDOW_RESOLUTION),
+                resizable: false,
                 ..default()
             }),
             ..default()

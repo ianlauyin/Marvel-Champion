@@ -1,7 +1,6 @@
 use std::f32::consts::PI;
 
 use bevy::{ecs::system::SystemId, prelude::*};
-use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use constants::CARD_SIZE;
 use features::cards::{
     identity_specific_cards::core_spider_man::get_nemesis_set, Card, CardAbility,
@@ -18,7 +17,6 @@ fn main() {
         .add_plugins(systems::SystemPlugin)
         .add_plugins(ui::UIPlugin)
         .add_plugins(features::FeaturePlugin)
-        // .add_plugins(WorldInspectorPlugin::new())
         // .add_systems(OnEnter(AppState::DeckBuilding), spawn_cards
         // .add_systems(Update, rotate_card.run_if(in_state(AppState::DeckBuilding)))
         // .add_systems(Startup, spawn_component)

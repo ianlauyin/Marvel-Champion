@@ -3,6 +3,7 @@ use bevy::app::{App, Plugin};
 mod app_state;
 mod asset_loader;
 mod clean_up;
+mod devtool;
 mod setup;
 
 pub struct SystemPlugin;
@@ -13,6 +14,7 @@ impl Plugin for SystemPlugin {
             setup::SetupPlugin,
             app_state::AppStatePlugin,
             asset_loader::AssetLoaderSetupPlugin,
+            devtool::DevtoolPlugin,
         ));
     }
 }

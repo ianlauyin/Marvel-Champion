@@ -16,6 +16,7 @@ impl Plugin for FeaturePlugin {
             collection::CollectionPlugin,
             shared::ButtonUIPlugin,
             shared::MenuPlugin,
+            shared::CardDetailPlugin,
         ));
     }
 }
