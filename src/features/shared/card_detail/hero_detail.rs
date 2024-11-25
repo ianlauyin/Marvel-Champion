@@ -1,10 +1,7 @@
 use bevy::prelude::*;
 
 use crate::{
-    constants::{
-        ACCELERATION_ICON_PATH, AMPLIFY_ICON_PATH, CRISIS_ICON_PATH, DETAIL_CARD_SIZE,
-        DETAIL_ICON_SIZE, HAZARD_ICON_PATH,
-    },
+    constants::{DETAIL_CARD_SIZE, DETAIL_ICON_SIZE},
     features::{cards::HeroCard, shared::text_with_background::TextWithBackgroundBuilder},
 };
 
