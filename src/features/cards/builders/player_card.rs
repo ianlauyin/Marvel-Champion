@@ -52,6 +52,7 @@ pub struct EventCard<'a> {
     pub cost: u8,
     pub res: Vec<CardResource>,
     pub traits: Vec<CardTrait>,
+    pub keywords: Vec<Keyword>,
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
     pub card_image_path: &'a str,

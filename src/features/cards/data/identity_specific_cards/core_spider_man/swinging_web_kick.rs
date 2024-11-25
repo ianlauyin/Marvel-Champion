@@ -12,6 +12,7 @@ pub fn get_swinging_web_kick() -> Card {
         cost: 3,
         res: vec![CardResource::Mental],
         traits: vec![CardTrait::Aerial, CardTrait::Attack, CardTrait::Superpower],
+        keywords: vec![],
         description: "Hero Action (attack): Deal 8 damage to an enemy.",
         abilities: vec![],
         card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_005.png",
