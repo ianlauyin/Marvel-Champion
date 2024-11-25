@@ -67,7 +67,7 @@ fn spawn_detail(
         })
         .with_children(|detail_container| {
             let mut text_builder = TextWithBackgroundBuilder {
-                text: ally.name.to_string(),
+                text: format!("{} {}", if ally.unique { "+" } else { "" }, ally.name),
                 style: Style {
                     grid_column: GridPlacement::span(2),
                     ..default()
