@@ -10,7 +10,7 @@ pub fn get_alter_ego() -> Card {
         traits: vec![CardTrait::Genius],
         card_icons: vec![],
         rec: 3,
-        description: "Scientist — Resource: Generate a  resource. (Limit once per round.)",
+        description: "Scientist - Resource: Generate a  resource. (Limit once per round.)",
         abilities: vec![],
         hand_size: 6,
         card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_1b.png",
