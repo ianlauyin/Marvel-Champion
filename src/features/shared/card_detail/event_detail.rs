@@ -27,7 +27,7 @@ pub fn spawn_event_detail(
         })
         .with_children(|container| {
             spawn_image(container, asset_server.load(event.card_image_path));
-            spawn_detail(container, asset_server, event.clone());
+            spawn_detail(container, event.clone());
             spawn_footer(container, event.id);
         });
 }
@@ -46,11 +46,7 @@ fn spawn_image(container: &mut ChildBuilder, image: Handle<Image>) {
     ));
 }
 
-fn spawn_detail(
-    container: &mut ChildBuilder,
-    asset_server: Res<AssetServer>,
-    event: EventCard<'static>,
-) {
+fn spawn_detail(container: &mut ChildBuilder, event: EventCard<'static>) {
     container
         .spawn(NodeBundle {
             style: Style {
