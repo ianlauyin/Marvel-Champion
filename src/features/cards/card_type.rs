@@ -1,5 +1,9 @@
 use bevy::prelude::World;
 
+use crate::constants::{
+    ACCELERATION_ICON_PATH, AMPLIFY_ICON_PATH, CRISIS_ICON_PATH, HAZARD_ICON_PATH,
+};
+
 use super::Identity;
 
 #[derive(Clone)]
@@ -112,13 +116,29 @@ impl Keyword {
 #[derive(Clone)]
 pub enum CardIcon {
     Acceleration,
+    Amplify,
+    Crisis,
+    Hazard,
 }
 
 impl CardIcon {
     pub fn to_string(&self) -> String {
         match *self {
             CardIcon::Acceleration => "Acceleration".to_string(),
+            CardIcon::Amplify => "Amplify".to_string(),
+            CardIcon::Crisis => "Crisis".to_string(),
+            CardIcon::Hazard => "Hazard".to_string(),
         }
+    }
+
+    pub fn get_icon_path(&self) -> String {
+        let path = match *self {
+            CardIcon::Acceleration => ACCELERATION_ICON_PATH,
+            CardIcon::Amplify => AMPLIFY_ICON_PATH,
+            CardIcon::Crisis => CRISIS_ICON_PATH,
+            CardIcon::Hazard => HAZARD_ICON_PATH,
+        };
+        path.to_string()
     }
 }
 
@@ -132,4 +152,10 @@ pub enum CardAbility {
     WhenRevealed(fn(&mut World)),
     ForcedResponse(fn(&mut World)),
     Response(fn(&mut World)),
+}
+
+#[derive(Clone)]
+pub enum Count {
+    PerPlayer(u8),
+    Constant(u8),
 }

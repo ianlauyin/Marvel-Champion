@@ -31,7 +31,7 @@ fn spawn_cards(
     mut materials: ResMut<Assets<StandardMaterial>>,
     asset_server: Res<AssetServer>,
 ) {
-    let cards = crate::features::cards::core_spider_man::get_all(1);
+    let cards = crate::features::cards::core_spider_man::get_all();
     let mut x = -64. * 3.;
     let mut y = 89.;
     for card in cards {
@@ -93,7 +93,7 @@ fn rotate_card(mut card_q: Query<&mut Transform, With<crate::features::cards::Ca
 struct TestEffect(SystemId);
 
 fn spawn_component(mut commands: Commands) {
-    let oppoenent_card = get_nemesis_set(1)[0].clone();
+    let oppoenent_card = get_nemesis_set()[0].clone();
     let Card::SideScheme(side_scheme) = oppoenent_card else {
         return;
     };

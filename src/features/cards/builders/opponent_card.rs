@@ -1,4 +1,4 @@
-use crate::features::cards::{CardAbility, CardIcon, CardTrait, Keyword};
+use crate::features::cards::{CardAbility, CardIcon, CardTrait, Count, Keyword};
 
 #[derive(Clone)]
 pub struct AttachmentCard<'a> {
@@ -83,7 +83,7 @@ pub struct SideSchemeCard<'a> {
     pub id: &'a str,
     pub name: &'a str,
     pub boost: u8,
-    pub initial_threat: u8,
+    pub initial_threat: Count,
     pub card_icons: Vec<CardIcon>,
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,

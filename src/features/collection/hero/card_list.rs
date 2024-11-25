@@ -49,7 +49,7 @@ fn spawn_hero_cards(
 ) {
     let list_items = identity
         .0
-        .get_cards(1)
+        .get_cards()
         .iter()
         .map(|card| {
             (
@@ -73,6 +73,7 @@ fn spawn_hero_cards(
 
 fn handle_card_click(
     commands: Commands,
+    asset_server: Res<AssetServer>,
     hero_card_button_q: Query<(&Interaction, &HeroCardButton, &ZIndex)>,
 ) {
     for (interaction, hero_card_button, z_index) in hero_card_button_q.iter() {
@@ -81,7 +82,12 @@ fn handle_card_click(
                 ZIndex::Local(value) => ZIndex::Local(value + 1),
                 ZIndex::Global(value) => ZIndex::Global(value + 1),
             };
-            spawn_card_detail(commands, hero_card_button.0.clone(), card_detail_z_index);
+            spawn_card_detail(
+                commands,
+                asset_server,
+                hero_card_button.0.clone(),
+                card_detail_z_index,
+            );
             return;
         }
     }

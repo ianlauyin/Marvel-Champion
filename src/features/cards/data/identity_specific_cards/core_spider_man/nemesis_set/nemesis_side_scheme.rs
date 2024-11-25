@@ -1,19 +1,16 @@
-use bevy::{
-    ecs::system::{BoxedSystem, RunSystemOnce},
-    prelude::{Commands, IntoSystem, IntoSystemConfigs, World},
-};
+use bevy::{ecs::system::RunSystemOnce, prelude::World};
 
 use crate::{
     constants::ENCOUNTER_CARD_BACK_PATH,
-    features::cards::{Card, CardAbility, CardIcon, SideSchemeCard},
+    features::cards::{Card, CardAbility, CardIcon, Count, SideSchemeCard},
 };
 
-pub fn get_nemesis_side_scheme(player_number: u8) -> Card {
+pub fn get_nemesis_side_scheme() -> Card {
     Card::SideScheme(SideSchemeCard {
         id: "core_166",
         name: "Highway Robbery",
         boost: 3,
-        initial_threat: 3 * player_number,
+        initial_threat: Count::PerPlayer(3),
         card_icons: vec![CardIcon::Acceleration],
         description:
             "When Revealed: Each player places a random card from their hand facedown here.

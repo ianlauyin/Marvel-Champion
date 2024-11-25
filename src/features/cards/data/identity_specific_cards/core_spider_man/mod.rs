@@ -29,8 +29,8 @@ pub fn get_player_cards() -> Vec<Card> {
     ]
 }
 
-pub fn get_all(player_number: u8) -> Vec<Card> {
+pub fn get_all() -> Vec<Card> {
     let mut cards = get_player_cards();
-    cards.append(&mut nemesis_set::get_nemesis_set(player_number));
+    cards.append(&mut nemesis_set::get_nemesis_set());
     cards
 }

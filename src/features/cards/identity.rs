@@ -21,9 +21,9 @@ impl Identity {
         }
     }
 
-    pub fn get_cards(&self, player_number: u8) -> Vec<Card> {
+    pub fn get_cards(&self) -> Vec<Card> {
         match *self {
-            Identity::CoreSpiderMan => core_spider_man::get_all(player_number),
+            Identity::CoreSpiderMan => core_spider_man::get_all(),
         }
     }
 }
