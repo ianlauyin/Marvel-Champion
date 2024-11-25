@@ -80,23 +80,37 @@ fn spawn_escape_button(children_builder: &mut ChildBuilder) {
 
 fn spawn_content(container: &mut ChildBuilder, asset_server: Res<AssetServer>, card: Card) {
     match card {
-        Card::Attachment(attachment_card) => spawn_attachment_detail(container, attachment_card),
-        Card::Environment(environment_card) => {
-            spawn_environment_detail(container, environment_card)
+        Card::Attachment(attachment_card) => {
+            spawn_attachment_detail(container, asset_server, attachment_card)
         }
-        Card::MainScheme(main_scheme_card) => spawn_main_scheme_detail(container, main_scheme_card),
-        Card::Minion(minion_card) => spawn_minion_detail(container, minion_card),
-        Card::Obligation(obligation_card) => spawn_obligation_detail(container, obligation_card),
-        Card::SideScheme(side_scheme_card) => spawn_side_scheme_detail(container, side_scheme_card),
-        Card::Treachery(treachery_card) => spawn_treachery_detail(container, treachery_card),
-        Card::Villain(villain_card) => spawn_villain_detail(container, villain_card),
-        Card::Ally(ally_card) => spawn_ally_detail(container, ally_card),
-        Card::AlterEgo(alter_ego_card) => spawn_alter_ego_detail(container, alter_ego_card),
-        Card::Event(event_card) => spawn_event_detail(container, event_card),
+        Card::Environment(environment_card) => {
+            spawn_environment_detail(container, asset_server, environment_card)
+        }
+        Card::MainScheme(main_scheme_card) => {
+            spawn_main_scheme_detail(container, asset_server, main_scheme_card)
+        }
+        Card::Minion(minion_card) => spawn_minion_detail(container, asset_server, minion_card),
+        Card::Obligation(obligation_card) => {
+            spawn_obligation_detail(container, asset_server, obligation_card)
+        }
+        Card::SideScheme(side_scheme_card) => {
+            spawn_side_scheme_detail(container, asset_server, side_scheme_card)
+        }
+        Card::Treachery(treachery_card) => {
+            spawn_treachery_detail(container, asset_server, treachery_card)
+        }
+        Card::Villain(villain_card) => spawn_villain_detail(container, asset_server, villain_card),
+        Card::Ally(ally_card) => spawn_ally_detail(container, asset_server, ally_card),
+        Card::AlterEgo(alter_ego_card) => {
+            spawn_alter_ego_detail(container, asset_server, alter_ego_card)
+        }
+        Card::Event(event_card) => spawn_event_detail(container, asset_server, event_card),
         Card::Hero(hero_card) => spawn_hero_detail(container, asset_server, hero_card),
-        Card::Resource(resource_card) => spawn_resource_detail(container, resource_card),
-        Card::Support(support_card) => spawn_support_detail(container, support_card),
-        Card::Upgrade(upgrade_card) => spawn_upgrade_detail(container, upgrade_card),
+        Card::Resource(resource_card) => {
+            spawn_resource_detail(container, asset_server, resource_card)
+        }
+        Card::Support(support_card) => spawn_support_detail(container, asset_server, support_card),
+        Card::Upgrade(upgrade_card) => spawn_upgrade_detail(container, asset_server, upgrade_card),
     };
 }
 

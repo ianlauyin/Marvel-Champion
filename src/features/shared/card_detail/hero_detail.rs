@@ -59,8 +59,8 @@ fn spawn_detail(
                 display: Display::Grid,
                 grid_template_columns: vec![RepeatedGridTrack::auto(4)],
                 grid_template_rows: vec![RepeatedGridTrack::auto(10)],
-                row_gap: Val::Px(30.),
-                column_gap: Val::Px(30.),
+                row_gap: Val::Px(15.),
+                column_gap: Val::Px(15.),
                 ..default()
             },
             ..default()
