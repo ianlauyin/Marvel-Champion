@@ -17,7 +17,6 @@ pub fn get_aunt_may() -> Card {
         traits: vec![CardTrait::Persona],
         description: "Alter-Ego Action: Exhaust Aunt May → heal 4 damage from Peter Parker.",
         abilities: vec![],
-        search_keywords: vec![],
         card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_006.png",
         card_back_image_path: PLAYER_CARD_BACK_PATH,
         card_amount_max: 1,

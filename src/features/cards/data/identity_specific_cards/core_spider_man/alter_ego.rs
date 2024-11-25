@@ -12,7 +12,6 @@ pub fn get_alter_ego() -> Card {
         rec: 3,
         description: "Scientist — Resource: Generate a  resource. (Limit once per round.)",
         abilities: vec![],
-        search_keywords: vec![],
         hand_size: 6,
         card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_1b.png",
         card_back_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_1a.png",

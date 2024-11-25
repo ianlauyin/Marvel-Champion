@@ -6,7 +6,7 @@ mod scrolling_list;
 use bevy::prelude::{App, Plugin};
 pub use card_list::spawn_card_list;
 pub use list::spawn_list;
-pub use menu_frame::{spawn_menu, ListItem};
+pub use menu_frame::{DisplayMethod, ListItem, MenuBuilder};
 pub use scrolling_list::ScrollingList;
 
 pub struct MenuPlugin;

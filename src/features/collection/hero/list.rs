@@ -4,10 +4,7 @@ use crate::{
     features::{
         cards::{get_all_identity, Identity},
         collection::state::CollectionState,
-        shared::{
-            handle_previous_interaction,
-            menu::{spawn_list, spawn_menu, ListItem},
-        },
+        shared::{handle_previous_interaction, DisplayMethod, ListItem, MenuBuilder},
     },
     systems::{clean_up, LoadAsset},
 };
@@ -28,17 +25,17 @@ impl Plugin for CollectionHeroListPlugin {
     }
 }
 
-#[derive(Component)]
+#[derive(Component, Clone)]
 struct HeroList;
 
-#[derive(Component)]
+#[derive(Component, Clone)]
 struct HeroListButton(Identity);
 
 fn spawn_hero_list(commands: Commands, asset_server: Res<AssetServer>) {
     let identities = get_all_identity();
     let button_map = identities
         .iter()
-        .map(|(identity)| {
+        .map(|identity| {
             (
                 HeroListButton(identity.clone()),
                 ListItem {
@@ -50,14 +47,13 @@ fn spawn_hero_list(commands: Commands, asset_server: Res<AssetServer>) {
             )
         })
         .collect();
-
-    spawn_menu(
-        commands,
-        HeroList,
-        CollectionState::Menu,
-        button_map,
-        spawn_list,
-    );
+    MenuBuilder {
+        component: HeroList,
+        previous_state: CollectionState::Menu,
+        list_items: button_map,
+        display_method: DisplayMethod::ButtonList,
+    }
+    .spawn(commands);
 }
 
 fn handle_button_interaction(

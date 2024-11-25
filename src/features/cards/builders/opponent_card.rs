@@ -10,7 +10,6 @@ pub struct AttachmentCard<'a> {
     pub traits: Vec<CardTrait>,
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
-    pub search_keywords: Vec<&'a str>,
     pub card_image_path: &'a str,
     pub card_back_image_path: &'a str,
 }
@@ -24,7 +23,6 @@ pub struct EnvironmentCard<'a> {
     pub traits: Vec<CardTrait>,
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
-    pub search_keywords: Vec<&'a str>,
     pub card_image_path: &'a str,
     pub card_back_image_path: &'a str,
 }
@@ -39,7 +37,6 @@ pub struct MainSchemeCard<'a> {
     pub card_icons: Vec<CardIcon>,
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
-    pub search_keywords: Vec<&'a str>,
     pub card_image_path: &'a str,
     pub card_back_image_path: &'a str,
 }
@@ -58,7 +55,6 @@ pub struct MinionCard<'a> {
     pub boost: u8,
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
-    pub search_keywords: Vec<&'a str>,
     pub card_image_path: &'a str,
     pub card_back_image_path: &'a str,
 }
@@ -73,7 +69,6 @@ pub struct ObligationCard<'a> {
     pub card_icons: Vec<CardIcon>,
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
-    pub search_keywords: Vec<&'a str>,
     pub card_image_path: &'a str,
     pub card_back_image_path: &'a str,
 }
@@ -87,7 +82,6 @@ pub struct SideSchemeCard<'a> {
     pub card_icons: Vec<CardIcon>,
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
-    pub search_keywords: Vec<&'a str>,
     pub card_image_path: &'a str,
     pub card_back_image_path: &'a str,
 }
@@ -100,7 +94,6 @@ pub struct TreacheryCard<'a> {
     pub boost: u8,
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
-    pub search_keywords: Vec<&'a str>,
     pub card_image_path: &'a str,
     pub card_back_image_path: &'a str,
 }
@@ -117,7 +110,6 @@ pub struct VillainCard<'a> {
     pub atk: u8,
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
-    pub search_keywords: Vec<&'a str>,
     pub hand_size: u8,
     pub card_image_path: &'a str,
     pub card_back_image_path: &'a str,

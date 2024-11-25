@@ -4,9 +4,7 @@ use crate::{
     features::{
         cards::{Card, Identity},
         shared::{
-            handle_previous_interaction,
-            menu::{spawn_card_list, spawn_menu, ListItem},
-            spawn_card_detail,
+            handle_previous_interaction, spawn_card_detail, DisplayMethod, ListItem, MenuBuilder,
         },
     },
     systems::clean_up,
@@ -36,10 +34,10 @@ impl Plugin for CollectionHeroCardListPlugin {
 #[derive(Resource)]
 pub struct CollectionHeroIdentity(pub Identity);
 
-#[derive(Component)]
+#[derive(Component, Clone)]
 struct HeroCardList;
 
-#[derive(Component)]
+#[derive(Component, Clone)]
 struct HeroCardButton(Card);
 
 fn spawn_hero_cards(
@@ -61,14 +59,13 @@ fn spawn_hero_cards(
             )
         })
         .collect();
-
-    spawn_menu(
-        commands,
-        HeroCardList,
-        CollectionHeroState::List,
+    MenuBuilder {
+        component: HeroCardList,
+        previous_state: CollectionHeroState::List,
         list_items,
-        spawn_card_list,
-    );
+        display_method: DisplayMethod::CardList,
+    }
+    .spawn(commands);
 }
 
 fn handle_card_click(

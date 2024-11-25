@@ -14,3 +14,5 @@ pub const CRISIS_ICON_PATH: &str = "embedded://icons/crisis.png";
 pub const HAZARD_ICON_PATH: &str = "embedded://icons/hazard.png";
 
 pub const CARD_SIZE: Vec3 = Vec3::new(64., 89., 1.);
+pub const DETAIL_CARD_SIZE: Vec2 = Vec2::new(362., 503.);
+pub const DETAIL_ICON_SIZE: Vec2 = Vec2::splat(60.);

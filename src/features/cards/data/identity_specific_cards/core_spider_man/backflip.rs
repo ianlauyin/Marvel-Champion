@@ -15,7 +15,6 @@ pub fn get_backflip() -> Card {
         traits: vec![CardTrait::Defense,CardTrait::Skill],
         description: "Interrupt (defense): When you would take any amount of damage from an attack, prevent all of that damage.",
         abilities: vec![],
-        search_keywords: vec![],
         card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_003.png",
         card_back_image_path: PLAYER_CARD_BACK_PATH,
         card_amount_max: 2,

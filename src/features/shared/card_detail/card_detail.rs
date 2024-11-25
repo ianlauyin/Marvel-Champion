@@ -38,6 +38,7 @@ pub fn spawn_card_detail(
                 height: Val::Percent(90.),
                 align_self: AlignSelf::Center,
                 justify_self: JustifySelf::Center,
+                display: Display::Flex,
                 ..default()
             },
             border_radius: BorderRadius::all(Val::Px(10.)),

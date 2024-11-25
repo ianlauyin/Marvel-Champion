@@ -1,10 +1,7 @@
 use bevy::prelude::*;
 
 use crate::{
-    features::shared::{
-        handle_previous_interaction,
-        menu::{spawn_list, spawn_menu, ListItem},
-    },
+    features::shared::{handle_previous_interaction, DisplayMethod, ListItem, MenuBuilder},
     systems::{clean_up, AppState},
 };
 
@@ -24,7 +21,7 @@ impl Plugin for CollectionMenuPlugin {
     }
 }
 
-#[derive(Component)]
+#[derive(Component, Clone)]
 struct CardTypeMenu;
 
 #[derive(Component, Clone)]
@@ -105,13 +102,13 @@ fn spawn_card_type_menu(commands: Commands) {
             },
         ),
     ];
-    spawn_menu(
-        commands,
-        CardTypeMenu,
-        AppState::MainMenu,
-        button_map,
-        spawn_list,
-    );
+    MenuBuilder {
+        component: CardTypeMenu,
+        previous_state: AppState::MainMenu,
+        list_items: button_map,
+        display_method: DisplayMethod::ButtonList,
+    }
+    .spawn(commands);
 }
 
 fn handle_button_reaction(

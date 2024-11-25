@@ -12,14 +12,13 @@ pub fn get_nemesis_side_scheme() -> Card {
         boost: 3,
         initial_threat: Count::PerPlayer(3),
         card_icons: vec![CardIcon::Acceleration],
-        description:
-            "When Revealed: Each player places a random card from their hand facedown here.
-            When Defeated: Return each facedown card here to its owner's hand.",
+        description: 
+            "When Revealed: Each player places a random card from their hand facedown here.\nWhen Defeated: Return each facedown card here to its owner's hand.",
+        
         abilities: vec![
             CardAbility::WhenRevealed(when_revealed),
             CardAbility::WhenDefeated(when_defeated),
         ],
-        search_keywords: vec![],
         card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_166.png",
         card_back_image_path: ENCOUNTER_CARD_BACK_PATH,
     })

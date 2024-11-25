@@ -24,7 +24,7 @@ impl<S: FreelyMutableState + Clone> PreviousButtonBuilder<S> {
 }
 
 #[derive(Component)]
-pub struct PreviousButton<S: FreelyMutableState>(S);
+struct PreviousButton<S: FreelyMutableState>(S);
 
 pub fn handle_previous_interaction<S: FreelyMutableState>(current_state: S) -> SystemConfigs {
     IntoSystem::into_system(
