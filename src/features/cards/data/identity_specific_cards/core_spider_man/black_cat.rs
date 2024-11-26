@@ -21,7 +21,7 @@ pub fn get_black_cat() -> Card {
         thw_con_dmg:1,
         atk: 1,
         atk_con_dmg: 0,
-        description: "Forced Response: After you play Black Cat, discard the top 2 cards of your deck. Add each card with a printed resource discarded this way to your hand.",
+        description: "Forced Response: After you play Black Cat, discard the top 2 cards of your deck. Add each card with a printed mental resource discarded this way to your hand.",
         abilities: vec![],
         card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_002.png",
         card_back_image_path: PLAYER_CARD_BACK_PATH,
