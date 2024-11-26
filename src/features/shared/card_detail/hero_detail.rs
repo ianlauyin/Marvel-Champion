@@ -54,7 +54,7 @@ fn spawn_detail(
     container
         .spawn(NodeBundle {
             style: Style {
-                width: Val::Percent(70.),
+                width: Val::Percent(65.),
                 height: Val::Percent(90.),
                 display: Display::Grid,
                 grid_template_columns: vec![RepeatedGridTrack::auto(4)],

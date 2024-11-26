@@ -63,7 +63,7 @@ pub struct MinionCard<'a> {
 pub struct ObligationCard<'a> {
     pub id: &'a str,
     pub name: &'a str,
-    pub belong_id: &'a str,
+    pub belong_id: Vec<&'a str>,
     pub instant_effect: bool,
     pub boost: u8,
     pub card_icons: Vec<CardIcon>,

@@ -7,6 +7,7 @@ mod black_cat;
 mod enhanced_spider_sense;
 mod hero;
 mod nemesis_set;
+mod obligation;
 mod spider_tracer;
 mod swinging_web_kick;
 mod web_shooter;
@@ -31,6 +32,7 @@ pub fn get_player_cards() -> Vec<Card> {
 
 pub fn get_all() -> Vec<Card> {
     let mut cards = get_player_cards();
+    cards.push(obligation::get_obligation());
     cards.append(&mut nemesis_set::get_nemesis_set());
     cards
 }
