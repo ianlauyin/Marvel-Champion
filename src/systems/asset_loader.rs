@@ -1,10 +1,11 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
 use bevy::asset::LoadState;
 use bevy::ecs::schedule::SystemConfigs;
 use bevy::prelude::*;
 use bevy::state::state::FreelyMutableState;
 
+use crate::features::cards::Card;
 use crate::ui::LoadingScreenPlugin;
 
 pub struct AssetLoaderSetupPlugin;
@@ -21,6 +22,15 @@ pub struct LoadedAsset(HashMap<String, Handle<Image>>);
 
 #[derive(Resource)]
 pub struct LoadAsset(pub Vec<(String, Handle<Image>)>);
+
+impl LoadAsset {
+    pub fn add_card(&mut self, card: Card, asset_server: &Res<AssetServer>) {
+        self.0.push((
+            card.get_card_id(),
+            asset_server.load(card.get_card_image_path()),
+        ));
+    }
+}
 
 // Remember to Add AssetLoaderPlugin in state.rs
 // Add handles in LoadAsset.0, it will check in your defined loading_state.

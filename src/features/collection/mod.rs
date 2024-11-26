@@ -1,5 +1,6 @@
 use bevy::app::{App, Plugin};
 
+mod basic;
 mod hero;
 mod menu;
 mod state;
@@ -12,6 +13,7 @@ impl Plugin for CollectionPlugin {
             menu::CollectionMenuPlugin,
             state::CollectionStatePlugin,
             hero::CollectionHeroPlugin,
+            basic::CollectionBasicPlugin,
         ));
     }
 }

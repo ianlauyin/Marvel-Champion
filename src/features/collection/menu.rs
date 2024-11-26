@@ -1,8 +1,11 @@
 use bevy::prelude::*;
 
 use crate::{
-    features::shared::{handle_previous_interaction, DisplayMethod, ListItem, MenuBuilder},
-    systems::{clean_up, AppState},
+    features::{
+        cards::CardDatas,
+        shared::{handle_previous_interaction, DisplayMethod, ListItem, MenuBuilder},
+    },
+    systems::{clean_up, AppState, LoadAsset},
 };
 
 use super::state::CollectionState;
@@ -114,9 +117,19 @@ fn spawn_card_type_menu(commands: Commands) {
 fn handle_button_reaction(
     next_state: ResMut<NextState<CollectionState>>,
     mut card_type_button_q: Query<(&Interaction, &CardTypeButton)>,
+    asset_server: Res<AssetServer>,
+    mut load_asset: ResMut<LoadAsset>,
 ) {
     for (interaction, card_type_button) in card_type_button_q.iter_mut() {
         if *interaction == Interaction::Pressed {
+            let cards = match card_type_button.0 {
+                CollectionState::Basic => CardDatas::get_basic_cards(),
+                _ => vec![],
+            };
+            for card in cards {
+                load_asset.add_card(card, &asset_server);
+            }
+
             handle_button_click(next_state, card_type_button.clone());
             return;
         }
