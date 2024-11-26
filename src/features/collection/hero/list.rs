@@ -66,9 +66,10 @@ fn handle_button_interaction(
     for (interaction, button) in button_q.iter() {
         if *interaction == Interaction::Pressed {
             for card in button.0.get_cards() {
-                load_asset
-                    .0
-                    .push(asset_server.load(card.get_card_image_path()));
+                load_asset.0.push((
+                    card.get_card_id(),
+                    asset_server.load(card.get_card_image_path()),
+                ));
             }
             commands.insert_resource(CollectionHeroIdentity(button.0.clone()));
             next_state.set(CollectionHeroState::LoadingCards);

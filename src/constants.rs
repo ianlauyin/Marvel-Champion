@@ -8,11 +8,5 @@ pub const ENCOUNTER_CARD_BACK_PATH: &str = "embedded://cards/card_backs/encounte
 pub const PLAYER_CARD_BACK_PATH: &str = "embedded://cards/card_backs/player_card_back.png";
 pub const VILLAIN_CARD_BACK_PATH: &str = "embedded://cards/card_backs/villain_card_back.png";
 
-pub const ACCELERATION_ICON_PATH: &str = "embedded://icons/acceleration.png";
-pub const AMPLIFY_ICON_PATH: &str = "embedded://icons/amplify.png";
-pub const CRISIS_ICON_PATH: &str = "embedded://icons/crisis.png";
-pub const HAZARD_ICON_PATH: &str = "embedded://icons/hazard.png";
-
 pub const CARD_SIZE: Vec3 = Vec3::new(64., 89., 1.);
 pub const DETAIL_CARD_SIZE: Vec2 = Vec2::new(362., 503.);
-pub const DETAIL_ICON_SIZE: Vec2 = Vec2::splat(60.);

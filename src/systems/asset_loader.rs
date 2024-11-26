@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 use bevy::asset::LoadState;
 use bevy::ecs::schedule::SystemConfigs;
@@ -11,16 +11,16 @@ pub struct AssetLoaderSetupPlugin;
 
 impl Plugin for AssetLoaderSetupPlugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(LoadedAsset(HashSet::new()))
+        app.insert_resource(LoadedAsset(HashMap::new()))
             .insert_resource(LoadAsset(Vec::new()));
     }
 }
 
 #[derive(Resource)]
-pub struct LoadedAsset(HashSet<Handle<Image>>);
+pub struct LoadedAsset(HashMap<String, Handle<Image>>);
 
 #[derive(Resource)]
-pub struct LoadAsset(pub Vec<Handle<Image>>);
+pub struct LoadAsset(pub Vec<(String, Handle<Image>)>);
 
 // Remember to Add AssetLoaderPlugin in state.rs
 // Add handles in LoadAsset.0, it will check in your defined loading_state.
@@ -48,21 +48,21 @@ fn check_asset<S: States + FreelyMutableState>(loading_state: S, next_state: S) 
               mut next_state_setter: ResMut<NextState<S>>,
               asset_server: Res<AssetServer>| {
             let mut removed_count = 0;
-            for (index, handle) in load_asset.0.clone().iter().enumerate() {
-                if loaded_asset.0.contains(&handle) {
+            for (index, (name, handle)) in load_asset.0.clone().iter().enumerate() {
+                if loaded_asset.0.contains_key(name) {
                     load_asset.0.remove(index - removed_count);
                     removed_count += 1;
                     continue;
                 }
 
-                let asset_id = handle.id();
+                let asset_id = handle.clone().id();
                 let Some(load_state) = asset_server.get_load_state(asset_id) else {
                     panic!("Cannot get load_state");
                 };
                 match load_state {
                     LoadState::Loaded => {
                         load_asset.0.remove(index - removed_count);
-                        loaded_asset.0.insert(handle.clone());
+                        loaded_asset.0.insert(name.clone(), handle.clone());
                         removed_count += 1;
                     }
                     LoadState::Failed(err) => panic!("{err}"),

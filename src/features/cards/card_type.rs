@@ -1,9 +1,5 @@
 use bevy::prelude::World;
 
-use crate::constants::{
-    ACCELERATION_ICON_PATH, AMPLIFY_ICON_PATH, CRISIS_ICON_PATH, HAZARD_ICON_PATH,
-};
-
 use super::Identity;
 
 #[derive(Clone)]
@@ -47,12 +43,15 @@ pub enum CardTrait {
     HeroForHire,
     Genius,
     Persona,
+    SHIELD,
+    SPY,
     // Event-related
     Defense,
     Skill,
     Superpower,
     Aerial,
     Attack,
+    Thwart,
     // Upgrade-related
     Item,
     Tech,
@@ -68,12 +67,15 @@ impl CardTrait {
             CardTrait::HeroForHire => "HeroForHire".to_string(),
             CardTrait::Genius => "Genius".to_string(),
             CardTrait::Persona => "Persona".to_string(),
+            CardTrait::SHIELD => "S.H.I.E.L.D.".to_string(),
+            CardTrait::SPY => "Spy".to_string(),
             // Event-related
             CardTrait::Defense => "Defense".to_string(),
             CardTrait::Skill => "Skill".to_string(),
             CardTrait::Superpower => "Superpower".to_string(),
             CardTrait::Aerial => "Aerial".to_string(),
             CardTrait::Attack => "Attack".to_string(),
+            CardTrait::Thwart => "Thwart".to_string(),
             // Upgrade-related
             CardTrait::Item => "Item".to_string(),
             CardTrait::Tech => "Tech".to_string(),
@@ -129,16 +131,6 @@ impl CardIcon {
             CardIcon::Crisis => "Crisis".to_string(),
             CardIcon::Hazard => "Hazard".to_string(),
         }
-    }
-
-    pub fn get_icon_path(&self) -> String {
-        let path = match *self {
-            CardIcon::Acceleration => ACCELERATION_ICON_PATH,
-            CardIcon::Amplify => AMPLIFY_ICON_PATH,
-            CardIcon::Crisis => CRISIS_ICON_PATH,
-            CardIcon::Hazard => HAZARD_ICON_PATH,
-        };
-        path.to_string()
     }
 }
 

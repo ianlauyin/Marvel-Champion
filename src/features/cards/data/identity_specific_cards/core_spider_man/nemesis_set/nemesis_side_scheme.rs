@@ -13,8 +13,7 @@ pub fn get_nemesis_side_scheme() -> Card {
         initial_threat: Count::PerPlayer(3),
         card_icons: vec![CardIcon::Acceleration],
         description:
-            "When Revealed: Each player places a random card from their hand facedown here.
-            \nWhen Defeated: Return each facedown card here to its owner's hand.",
+            "When Revealed: Each player places a random card from their hand facedown here. When Defeated: Return each facedown card here to its owner's hand.",
 
         abilities: vec![
             CardAbility::WhenRevealed(when_revealed),
