@@ -56,6 +56,8 @@ pub enum CardTrait {
     Item,
     Tech,
     Condition,
+    // Support-related
+    Location,
 }
 
 impl CardTrait {
@@ -80,6 +82,8 @@ impl CardTrait {
             CardTrait::Item => "Item".to_string(),
             CardTrait::Tech => "Tech".to_string(),
             CardTrait::Condition => "Condition".to_string(),
+            // Support-related
+            CardTrait::Location => "Location".to_string(),
         }
     }
 }
