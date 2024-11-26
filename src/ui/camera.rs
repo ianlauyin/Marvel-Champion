@@ -12,10 +12,6 @@ fn get_original_transform() -> Transform {
     Transform::from_xyz(0., 0., 1200.).looking_at(Vec3::ZERO, Vec3::Y)
 }
 
-fn get_gameplay_transform() -> Transform {
-    Transform::from_xyz(0., -450., 1200.).looking_at(Vec3::new(0., -80., 0.), Vec3::Y)
-}
-
 fn add_camara(mut commands: Commands) {
     commands.spawn(Camera3dBundle {
         transform: get_original_transform(),

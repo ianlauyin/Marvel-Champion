@@ -2,7 +2,7 @@ use bevy::{input::common_conditions::input_just_pressed, prelude::*};
 
 use crate::{
     features::{
-        cards::{Card, Identity},
+        cards::{Card, CardDatas, Identity},
         shared::{
             handle_previous_interaction, spawn_card_detail, DisplayMethod, ListItem, MenuBuilder,
         },
@@ -45,9 +45,7 @@ fn spawn_hero_cards(
     asset_server: Res<AssetServer>,
     identity: Res<CollectionHeroIdentity>,
 ) {
-    let list_items = identity
-        .0
-        .get_cards()
+    let list_items = CardDatas::get_identity_cards(identity.0.clone())
         .iter()
         .map(|card| {
             (

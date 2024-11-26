@@ -2,9 +2,7 @@ use std::f32::consts::PI;
 
 use bevy::{ecs::system::SystemId, prelude::*};
 use constants::CARD_SIZE;
-use features::cards::{
-    identity_specific_cards::core_spider_man::get_nemesis_set, Card, CardAbility,
-};
+use features::cards::{Card, CardAbility, CardDatas, Identity};
 use systems::AppState;
 
 mod constants;
@@ -19,8 +17,10 @@ fn main() {
         .add_plugins(features::FeaturePlugin)
         // .add_systems(OnEnter(AppState::DeckBuilding), spawn_cards
         // .add_systems(Update, rotate_card.run_if(in_state(AppState::DeckBuilding)))
-        // .add_systems(Startup, spawn_component)
-        // .add_systems(OnEnter(AppState::MainMenu), test_component_effect)
+        .add_systems(
+            OnEnter(AppState::MainMenu),
+            (spawn_component, test_component_effect).chain(),
+        )
         .run();
 }
 
@@ -31,7 +31,7 @@ fn spawn_cards(
     mut materials: ResMut<Assets<StandardMaterial>>,
     asset_server: Res<AssetServer>,
 ) {
-    let cards = crate::features::cards::core_spider_man::get_all();
+    let cards = crate::features::cards::CardDatas::get_identity_cards(Identity::CoreSpiderMan);
     let mut x = -64. * 3.;
     let mut y = 89.;
     for card in cards {
@@ -92,8 +92,11 @@ fn rotate_card(mut card_q: Query<&mut Transform, With<crate::features::cards::Ca
 #[derive(Component)]
 struct TestEffect(SystemId);
 
-fn spawn_component(mut commands: Commands) {
-    let oppoenent_card = get_nemesis_set()[0].clone();
+fn spawn_component(mut commands: Commands, card_datas: Res<CardDatas>) {
+    let Some(oppoenent_card) = card_datas.0.get("core_166") else {
+        println!("card not found");
+        return;
+    };
     let Card::SideScheme(side_scheme) = oppoenent_card else {
         return;
     };

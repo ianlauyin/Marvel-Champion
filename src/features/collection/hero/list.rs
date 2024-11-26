@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::{
     features::{
-        cards::{get_all_identity, Identity},
+        cards::{get_all_identity, CardDatas, Identity},
         collection::state::CollectionState,
         shared::{handle_previous_interaction, DisplayMethod, ListItem, MenuBuilder},
     },
@@ -65,7 +65,7 @@ fn handle_button_interaction(
 ) {
     for (interaction, button) in button_q.iter() {
         if *interaction == Interaction::Pressed {
-            for card in button.0.get_cards() {
+            for card in CardDatas::get_identity_cards(button.0.clone()) {
                 load_asset.0.push((
                     card.get_card_id(),
                     asset_server.load(card.get_card_image_path()),

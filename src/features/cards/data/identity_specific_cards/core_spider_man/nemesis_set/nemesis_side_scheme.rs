@@ -25,7 +25,7 @@ pub fn get_nemesis_side_scheme() -> Card {
 }
 
 fn when_revealed(world: &mut World) {
-    world.run_system_once(|| println!("hi"));
+    world.run_system_once(|| println!("Revealed"));
 }
 
 fn when_defeated(world: &mut World) {

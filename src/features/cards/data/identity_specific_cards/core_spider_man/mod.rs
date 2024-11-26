@@ -13,8 +13,6 @@ mod swinging_web_kick;
 mod web_shooter;
 mod webbed_up;
 
-pub use nemesis_set::get_nemesis_set;
-
 pub fn get_player_cards() -> Vec<Card> {
     vec![
         alter_ego::get_alter_ego(),

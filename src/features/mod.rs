@@ -12,6 +12,7 @@ impl Plugin for FeaturePlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((
             game_mat::GameMatPlugin,
+            cards::CardDataPlugin,
             main_menu::MainMenuPlugin,
             collection::CollectionPlugin,
             shared::ButtonUIPlugin,

@@ -1,5 +1,3 @@
-use super::{core_spider_man, Card};
-
 pub fn get_all_identity() -> Vec<Identity> {
     vec![Identity::CoreSpiderMan]
 }
@@ -18,12 +16,6 @@ impl Identity {
     pub fn get_title_image_path(&self) -> String {
         match *self {
             Identity::CoreSpiderMan => "embedded://identity/core_spider_man.png".to_string(),
-        }
-    }
-
-    pub fn get_cards(&self) -> Vec<Card> {
-        match *self {
-            Identity::CoreSpiderMan => core_spider_man::get_all(),
         }
     }
 }
