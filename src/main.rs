@@ -17,10 +17,10 @@ fn main() {
         .add_plugins(features::FeaturePlugin)
         // .add_systems(OnEnter(AppState::DeckBuilding), spawn_cards
         // .add_systems(Update, rotate_card.run_if(in_state(AppState::DeckBuilding)))
-        .add_systems(
-            OnEnter(AppState::MainMenu),
-            (spawn_component, test_component_effect).chain(),
-        )
+        // .add_systems(
+        //     OnEnter(AppState::MainMenu),
+        //     (spawn_component, test_component_effect).chain(),
+        // )
         .run();
 }
 
