@@ -22,11 +22,10 @@ struct MainMenu;
 #[derive(Component, Clone)]
 struct MainMenuButton(AppState);
 
-const BUTTON_MAP: [(MainMenuButton, &str); 4] = [
+const BUTTON_MAP: [(MainMenuButton, &str); 3] = [
     (MainMenuButton(AppState::Game), "Play"),
     (MainMenuButton(AppState::DeckBuilding), "Deck Building"),
     (MainMenuButton(AppState::Collection), "Collection"),
-    (MainMenuButton(AppState::Record), "Record"),
 ];
 
 fn spawn_main_menu(mut commands: Commands) {

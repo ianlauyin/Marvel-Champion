@@ -15,7 +15,6 @@ pub enum AppState {
     Game,
     DeckBuilding,
     Collection,
-    Record,
 }
 
 pub struct AppStatePlugin;
