@@ -83,6 +83,7 @@ fn handle_card_click(
                 commands,
                 asset_server,
                 hero_card_button.0.clone(),
+                Vec2::ZERO,
                 card_detail_z_index,
             );
             return;
