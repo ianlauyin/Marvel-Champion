@@ -1,7 +1,9 @@
+use std::f32::consts::PI;
+
 use bevy::{prelude::*, ui::FocusPolicy};
 
 use crate::{
-    constants::DETAIL_CARD_SIZE,
+    constants::CARD_DETAIL_SIZE,
     features::{cards::Card, shared::ButtonBuilder},
 };
 
@@ -31,13 +33,16 @@ pub fn spawn_card_detail(
             NodeBundle {
                 focus_policy: FocusPolicy::Block,
                 style: Style {
+                    width: Val::Px(600.),
+                    height: Val::Px(600.),
                     position_type: PositionType::Relative,
                     bottom: Val::Px(position.y),
-                    left: Val::Px(100.),
-                    padding: UiRect::all(Val::Px(30.)),
+                    left: Val::Px(position.x),
                     justify_self: JustifySelf::Center,
                     align_self: AlignSelf::Center,
                     display: Display::Flex,
+                    justify_content: JustifyContent::Center,
+                    align_items: AlignItems::Center,
                     border: UiRect::all(Val::Px(1.)),
                     ..default()
                 },
@@ -91,18 +96,17 @@ fn spawn_escape_button(children_builder: &mut ChildBuilder) {
 }
 
 fn spawn_content(container: &mut ChildBuilder, card_image: Handle<Image>, vertical: bool) {
-    let (width, height) = if vertical {
-        (Val::Px(DETAIL_CARD_SIZE.x), Val::Px(DETAIL_CARD_SIZE.y))
-    } else {
-        (Val::Px(DETAIL_CARD_SIZE.y), Val::Px(DETAIL_CARD_SIZE.x))
-    };
     container.spawn((
         NodeBundle {
             style: Style {
-                width,
-                height,
+                width: Val::Px(CARD_DETAIL_SIZE.x),
+                height: Val::Px(CARD_DETAIL_SIZE.y),
                 ..default()
             },
+            transform: Transform::from_rotation(Quat::from_axis_angle(
+                Vec3::Z,
+                if vertical { 0. } else { PI / 2. },
+            )),
             border_radius: BorderRadius::all(Val::Px(20.)),
             ..default()
         },

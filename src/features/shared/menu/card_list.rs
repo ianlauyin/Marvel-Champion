@@ -7,7 +7,7 @@ use super::{ListItem, ScrollingList};
 pub fn spawn_card_list<B: Component>(menu: &mut ChildBuilder, button_map: Vec<(B, ListItem)>) {
     menu.spawn(NodeBundle {
         style: Style {
-            height: Val::Percent(100.),
+            height: Val::Percent(50.),
             display: Display::Flex,
             justify_content: JustifyContent::Center,
             padding: UiRect::horizontal(Val::Px(10.)),
@@ -23,11 +23,10 @@ pub fn spawn_card_list<B: Component>(menu: &mut ChildBuilder, button_map: Vec<(B
                 NodeBundle {
                     style: Style {
                         width: Val::Percent(100.),
-                        align_self: AlignSelf::Center,
-                        display: Display::Grid,
-                        grid_template_columns: vec![RepeatedGridTrack::auto(8)],
-                        row_gap: Val::Px(10.),
-                        column_gap: Val::Px(10.),
+                        flex_wrap: FlexWrap::Wrap,
+                        align_items: AlignItems::Center,
+                        row_gap: Val::Px(100.),
+                        column_gap: Val::Px(100.),
                         ..default()
                     },
                     ..default()

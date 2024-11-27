@@ -9,4 +9,4 @@ pub const PLAYER_CARD_BACK_PATH: &str = "embedded://cards/card_backs/player_card
 pub const VILLAIN_CARD_BACK_PATH: &str = "embedded://cards/card_backs/villain_card_back.png";
 
 pub const CARD_SIZE: Vec3 = Vec3::new(64., 89., 1.);
-pub const DETAIL_CARD_SIZE: Vec2 = Vec2::new(362., 503.);
+pub const CARD_DETAIL_SIZE: Vec2 = Vec2::new(362., 503.);
