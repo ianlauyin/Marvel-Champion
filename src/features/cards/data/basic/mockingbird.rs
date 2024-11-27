@@ -13,7 +13,7 @@ pub fn get_mockingbird() -> Card {
         res: vec![CardResource::Physical],
         initial_hit_points: 3,
         keywords: vec![],
-        traits: vec![CardTrait::SHIELD, CardTrait::SPY],
+        traits: vec![CardTrait::SHIELD, CardTrait::Spy],
         card_icons: vec![],
         thw: 1,
         thw_con_dmg: 1,
@@ -21,7 +21,7 @@ pub fn get_mockingbird() -> Card {
         atk_con_dmg: 1,
         description: "Response: After Mockingbird enters play, stun an enemy.",
         abilities: vec![],
-        card_image_path: "embedded://cards/basic/core/core_083.png",
+        card_image_path: "embedded://cards/basic/core_083.png",
         card_back_image_path: PLAYER_CARD_BACK_PATH,
         card_amount_max: 1,
     })

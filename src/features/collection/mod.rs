@@ -1,7 +1,9 @@
 use bevy::app::{App, Plugin};
 
+mod aggression;
 mod basic;
 mod hero;
+mod justice;
 mod menu;
 mod state;
 
@@ -14,6 +16,8 @@ impl Plugin for CollectionPlugin {
             state::CollectionStatePlugin,
             hero::CollectionHeroPlugin,
             basic::CollectionBasicPlugin,
+            aggression::CollectionAggressionPlugin,
+            justice::CollectionJusticePlugin,
         ));
     }
 }

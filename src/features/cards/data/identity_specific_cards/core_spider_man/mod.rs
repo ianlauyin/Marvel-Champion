@@ -28,9 +28,15 @@ pub fn get_player_cards() -> Vec<Card> {
     ]
 }
 
+pub fn get_obligation() -> Card {
+    obligation::get_obligation()
+}
+
 pub fn get_all() -> Vec<Card> {
-    let mut cards = get_player_cards();
-    cards.push(obligation::get_obligation());
-    cards.append(&mut nemesis_set::get_nemesis_set());
-    cards
+    [
+        get_player_cards(),
+        vec![get_obligation()],
+        nemesis_set::get_nemesis_set(),
+    ]
+    .concat()
 }

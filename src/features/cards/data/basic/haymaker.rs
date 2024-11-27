@@ -14,7 +14,7 @@ pub fn get_haymaker() -> Card {
         keywords: vec![],
         description: "Hero Action (attack): Deal 3 damage to an enemy.",
         abilities: vec![],
-        card_image_path: "embedded://cards/basic/core/core_087.png",
+        card_image_path: "embedded://cards/basic/core_087.png",
         card_back_image_path: PLAYER_CARD_BACK_PATH,
         card_amount_max: 3,
     })

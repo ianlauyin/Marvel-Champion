@@ -17,7 +17,7 @@ pub fn get_tenacity() -> Card {
         description:
             "Hero Action: Spend a physical resource and discard this card → ready your hero.",
         abilities: vec![],
-        card_image_path: "embedded://cards/basic/core/core_093.png",
+        card_image_path: "embedded://cards/basic/core_093.png",
         card_back_image_path: PLAYER_CARD_BACK_PATH,
         card_amount_max: 3,
     })

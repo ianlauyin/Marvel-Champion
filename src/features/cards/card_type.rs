@@ -40,11 +40,13 @@ pub enum CardTrait {
     // Charater-related
     Avenger,
     Criminal,
+    Defender,
     HeroForHire,
     Genius,
     Persona,
     SHIELD,
-    SPY,
+    Spy,
+    Gamma,
     // Event-related
     Defense,
     Skill,
@@ -66,11 +68,13 @@ impl CardTrait {
             // Charater-related
             CardTrait::Avenger => "Avenger".to_string(),
             CardTrait::Criminal => "Criminal".to_string(),
+            CardTrait::Defender => "Defender".to_string(),
             CardTrait::HeroForHire => "HeroForHire".to_string(),
             CardTrait::Genius => "Genius".to_string(),
             CardTrait::Persona => "Persona".to_string(),
             CardTrait::SHIELD => "S.H.I.E.L.D.".to_string(),
-            CardTrait::SPY => "Spy".to_string(),
+            CardTrait::Spy => "Spy".to_string(),
+            CardTrait::Gamma => "Gamma".to_string(),
             // Event-related
             CardTrait::Defense => "Defense".to_string(),
             CardTrait::Skill => "Skill".to_string(),
