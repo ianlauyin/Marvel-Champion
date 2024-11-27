@@ -15,6 +15,7 @@ pub struct ButtonBuilder {
     pub color: Color,
     pub image: UiImage,
     pub size: (Val, Val),
+    pub style: Style,
     pub with_border: bool,
     pub border_radius: BorderRadius,
 }
@@ -29,22 +30,25 @@ impl Default for ButtonBuilder {
             with_border: true,
             image: UiImage::default(),
             border_radius: BorderRadius::all(Val::Px(10.)),
+            style: Style::default(),
         }
     }
 }
 
 impl ButtonBuilder {
     pub fn spawn<'a>(&self, child_builder: &'a mut ChildBuilder) -> EntityCommands<'a> {
+        let mut style = self.style.clone();
+        style.width = self.size.0;
+        style.height = self.size.1;
+        style.border = UiRect::all(Val::Px(2.));
+        style.display = Display::Flex;
+        style.justify_content = JustifyContent::Center;
+        style.align_items = AlignItems::Center;
+        style.justify_self = JustifySelf::Center;
+        style.align_self = AlignSelf::Center;
+
         let mut button = child_builder.spawn(ButtonBundle {
-            style: Style {
-                width: self.size.0,
-                height: self.size.1,
-                border: UiRect::all(Val::Px(2.)),
-                display: Display::Flex,
-                justify_content: JustifyContent::Center,
-                align_items: AlignItems::Center,
-                ..default()
-            },
+            style,
             image: self.image.clone(),
             border_color: BorderColor(if self.with_border {
                 Color::srgb(0.725, 0.725, 0.725)
