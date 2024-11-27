@@ -4,6 +4,7 @@ mod aggression;
 mod basic;
 mod hero;
 mod justice;
+mod leadership;
 mod menu;
 mod state;
 
@@ -18,6 +19,7 @@ impl Plugin for CollectionPlugin {
             basic::CollectionBasicPlugin,
             aggression::CollectionAggressionPlugin,
             justice::CollectionJusticePlugin,
+            leadership::CollectionLeadershipPlugin,
         ));
     }
 }

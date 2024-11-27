@@ -7,7 +7,7 @@ use bevy::{
 
 use crate::features::cards::{Card, Identity};
 
-use super::{aggression, basic, identity_specific_cards::core_spider_man, justice};
+use super::{aggression, basic, identity_specific_cards::core_spider_man, justice, leadership};
 
 #[derive(Resource)]
 pub struct CardDatas(pub HashMap<String, Card>);
@@ -20,6 +20,7 @@ impl CardDatas {
             CardDatas::get_basic_cards(),
             CardDatas::get_aggression_cards(),
             CardDatas::get_justice_cards(),
+            CardDatas::get_leadership_cards(),
         ]
         .concat();
         let all_cards = [identity_cards, aspect_cards].concat();
@@ -55,9 +56,11 @@ impl CardDatas {
     pub fn get_aggression_cards() -> Vec<Card> {
         aggression::get_all()
     }
-
     pub fn get_justice_cards() -> Vec<Card> {
         justice::get_all()
+    }
+    pub fn get_leadership_cards() -> Vec<Card> {
+        leadership::get_all()
     }
 }
 
