@@ -9,6 +9,7 @@ pub fn get_the_triskelion() -> Card {
         aspect: CardAspect::Leadership,
         res: vec![CardResource::Energy],
         traits: vec![],
+        keywords: vec![],
         description:
             "Increase your ally limit by 1. (This allows you to control more than 3 allies.)",
         abilities: vec![],

@@ -12,6 +12,7 @@ pub fn get_avengers_mansion() -> Card {
         cost: 4,
         res: vec![CardResource::Mental],
         card_icons: vec![],
+        keywords: vec![],
         traits: vec![CardTrait::Avenger, CardTrait::Location],
         description: "Max 1 per player. Action: Exhaust Avengers Mansion -> choose a player. That player draws 1 card.",
         abilities: vec![],

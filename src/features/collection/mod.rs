@@ -6,6 +6,7 @@ mod hero;
 mod justice;
 mod leadership;
 mod menu;
+mod protection;
 mod state;
 
 pub struct CollectionPlugin;
@@ -20,6 +21,7 @@ impl Plugin for CollectionPlugin {
             aggression::CollectionAggressionPlugin,
             justice::CollectionJusticePlugin,
             leadership::CollectionLeadershipPlugin,
+            protection::CollectionProtectionPlugin,
         ));
     }
 }

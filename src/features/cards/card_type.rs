@@ -43,6 +43,7 @@ pub enum CardTrait {
     Tactic,
     Thwart,
     // Upgrade-related
+    Armor,
     Item,
     Tech,
     Condition,
@@ -52,7 +53,10 @@ pub enum CardTrait {
 
 #[derive(Clone)]
 pub enum Counter {
+    Attack,
     Web,
+    Medical,
+    Snoop,
 }
 
 #[derive(Clone)]
@@ -60,6 +64,7 @@ pub enum Keyword {
     Retaliate,
     Quickstrike,
     Use(u8, Counter),
+    Toughness,
 }
 
 #[derive(Clone)]

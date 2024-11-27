@@ -1,6 +1,6 @@
 use crate::{
     constants::PLAYER_CARD_BACK_PATH,
-    features::cards::{Card, CardAspect, CardResource, CardTrait, SupportCard},
+    features::cards::{Card, CardAspect, CardResource, CardTrait, Counter, Keyword, SupportCard},
 };
 pub fn get_surveillance_team() -> Card {
     Card::Support(SupportCard {
@@ -12,6 +12,7 @@ pub fn get_surveillance_team() -> Card {
         aspect: CardAspect::Justice,
         res: vec![CardResource::Mental],
         traits: vec![CardTrait::SHIELD],
+        keywords:vec![Keyword::Use(3, Counter::Snoop)],
         description: "Uses (3 snoop counters). (Enters play with 3 counters. When those are gone, discard this card) Action: Exhaust Surveillance Team and remove 1 snoop counter from it -> remove 1 threat from a scheme.",
         abilities: vec![],
         card_image_path: "embedded://cards/justice/core_064.png",

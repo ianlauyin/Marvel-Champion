@@ -11,7 +11,7 @@ pub fn get_interrogation_room() -> Card {
         card_icons: vec![],
         aspect: CardAspect::Justice,
         res: vec![CardResource::Energy],
-        traits: vec![CardTrait::Location],
+        traits: vec![CardTrait::Location],keywords:vec![],
         description: "Max 1 per player. Response: After you defeat a minion, exhaust Interrogation Room -> remove 1 threat from a scheme.",
         abilities: vec![],
         card_image_path: "embedded://cards/justice/core_063.png",

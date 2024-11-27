@@ -1,3 +1,5 @@
+use bevy::input::keyboard::Key;
+
 use crate::features::cards::{CardAbility, CardAspect, CardIcon, CardResource, CardTrait, Keyword};
 
 #[derive(Clone)]
@@ -106,6 +108,7 @@ pub struct SupportCard<'a> {
     pub res: Vec<CardResource>,
     pub card_icons: Vec<CardIcon>,
     pub traits: Vec<CardTrait>,
+    pub keywords: Vec<Keyword>,
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
     pub card_image_path: &'a str,
