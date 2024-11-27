@@ -49,7 +49,6 @@ fn on_scroll(
             scrolling_list.position += dy;
             scrolling_list.position = scrolling_list.position.clamp(-max_scroll, 0.);
             style.top = Val::Px(scrolling_list.position);
-            println!("Scrolled");
         }
     }
 }
