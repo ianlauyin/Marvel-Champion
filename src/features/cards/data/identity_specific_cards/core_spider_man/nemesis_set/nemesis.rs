@@ -1,7 +1,4 @@
-use crate::{
-    constants::ENCOUNTER_CARD_BACK_ASSET,
-    features::cards::{Card, CardTrait, Keyword, MinionCard},
-};
+use crate::features::cards::{Card, CardTrait, Keyword, MinionCard};
 
 pub fn get_nemesis() -> Card {
     Card::Minion(MinionCard {
@@ -18,6 +15,5 @@ pub fn get_nemesis() -> Card {
         description: "Quickstrike. (After this minion engages your hero, it attacks.)",
         abilities: vec![],
         card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_167.png",
-        card_back_image_path: ENCOUNTER_CARD_BACK_ASSET.path,
     })
 }

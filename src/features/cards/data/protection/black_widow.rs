@@ -1,7 +1,4 @@
-use crate::{
-    constants::PLAYER_CARD_BACK_ASSET,
-    features::cards::{AllyCard, Card, CardAspect, CardResource, CardTrait},
-};
+use crate::features::cards::{AllyCard, Card, CardAspect, CardResource, CardTrait};
 pub fn get_black_widow() -> Card {
     Card::Ally(AllyCard {
         id: "core_075",
@@ -22,7 +19,6 @@ pub fn get_black_widow() -> Card {
         description: "Interrupt: When a card is revealed from the encounter deck, exhaust Black Widow and spend a Mental resource -> cancel the effects of that card and discard it. Then, reveal another card from the encounter deck.",
         abilities: vec![],
         card_image_path: "embedded://cards/protection/core_075.png",
-        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 1,
     })
 }

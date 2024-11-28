@@ -22,7 +22,6 @@ pub struct AllyCard<'a> {
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
     pub card_image_path: &'a str,
-    pub card_back_image_path: &'a str,
     pub card_amount_max: u8,
 }
 
@@ -43,7 +42,6 @@ pub struct AlterEgoCard<'a> {
     pub nemesis_side_scheme_id: &'a str,
     pub nemesis_card_id: Vec<&'a str>,
     pub card_image_path: &'a str,
-    pub card_back_image_path: &'a str,
 }
 
 #[derive(Clone)]
@@ -58,7 +56,6 @@ pub struct EventCard<'a> {
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
     pub card_image_path: &'a str,
-    pub card_back_image_path: &'a str,
     pub card_amount_max: u8,
 }
 
@@ -81,7 +78,6 @@ pub struct HeroCard<'a> {
     pub nemesis_side_scheme_id: &'a str,
     pub nemesis_card_id: Vec<&'a str>,
     pub card_image_path: &'a str,
-    pub card_back_image_path: &'a str,
 }
 
 #[derive(Clone)]
@@ -94,7 +90,6 @@ pub struct ResourceCard<'a> {
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
     pub card_image_path: &'a str,
-    pub card_back_image_path: &'a str,
     pub card_amount_max: u8,
 }
 
@@ -112,7 +107,6 @@ pub struct SupportCard<'a> {
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
     pub card_image_path: &'a str,
-    pub card_back_image_path: &'a str,
     pub card_amount_max: u8,
 }
 
@@ -130,6 +124,5 @@ pub struct UpgradeCard<'a> {
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
     pub card_image_path: &'a str,
-    pub card_back_image_path: &'a str,
     pub card_amount_max: u8,
 }

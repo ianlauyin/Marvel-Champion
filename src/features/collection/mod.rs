@@ -6,6 +6,7 @@ mod hero;
 mod justice;
 mod leadership;
 mod menu;
+mod pool;
 mod protection;
 mod state;
 
@@ -22,6 +23,7 @@ impl Plugin for CollectionPlugin {
             justice::CollectionJusticePlugin,
             leadership::CollectionLeadershipPlugin,
             protection::CollectionProtectionPlugin,
+            pool::CollectionPoolPlugin,
         ));
     }
 }

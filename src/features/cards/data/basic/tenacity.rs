@@ -1,7 +1,4 @@
-use crate::{
-    constants::PLAYER_CARD_BACK_ASSET,
-    features::cards::{Card, CardAspect, CardResource, CardTrait, UpgradeCard},
-};
+use crate::features::cards::{Card, CardAspect, CardResource, CardTrait, UpgradeCard};
 
 pub fn get_tenacity() -> Card {
     Card::Upgrade(UpgradeCard {
@@ -18,7 +15,6 @@ pub fn get_tenacity() -> Card {
             "Hero Action: Spend a physical resource and discard this card → ready your hero.",
         abilities: vec![],
         card_image_path: "embedded://cards/basic/core_093.png",
-        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 3,
     })
 }

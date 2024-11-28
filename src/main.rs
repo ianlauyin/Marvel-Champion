@@ -31,7 +31,7 @@ fn spawn_cards(
     mut materials: ResMut<Assets<StandardMaterial>>,
     asset_server: Res<AssetServer>,
 ) {
-    let cards = crate::features::cards::CardDatas::get_identity_cards(Identity::CoreSpiderMan);
+    let cards = Identity::CoreSpiderMan.get_cards();
     let mut x = -64. * 3.;
     let mut y = 89.;
     for card in cards {

@@ -7,9 +7,7 @@ use bevy::{
 
 use crate::features::cards::{Card, Identity};
 
-use super::{
-    aggression, basic, identity_specific_cards::core_spider_man, justice, leadership, protection,
-};
+use super::{aggression, basic, justice, leadership, pool, protection};
 
 #[derive(Resource)]
 pub struct CardDatas(pub HashMap<String, Card>);
@@ -17,16 +15,16 @@ pub struct CardDatas(pub HashMap<String, Card>);
 impl CardDatas {
     pub fn init() -> Self {
         let mut hashmap = HashMap::new();
-        let identity_cards = [core_spider_man::get_all()].concat();
         let aspect_cards = [
             CardDatas::get_basic_cards(),
             CardDatas::get_aggression_cards(),
             CardDatas::get_justice_cards(),
             CardDatas::get_leadership_cards(),
             CardDatas::get_protection_cards(),
+            CardDatas::get_pool_cards(),
         ]
         .concat();
-        let all_cards = [identity_cards, aspect_cards].concat();
+        let all_cards = [Identity::get_all_cards(), aspect_cards].concat();
 
         for card in all_cards.iter() {
             hashmap.insert(card.get_card_id(), card.clone());
@@ -34,28 +32,9 @@ impl CardDatas {
         CardDatas(hashmap)
     }
 
-    pub fn get_identity_cards(identity: Identity) -> Vec<Card> {
-        match identity {
-            Identity::CoreSpiderMan => core_spider_man::get_all(),
-        }
-    }
-
-    pub fn get_identity_player_cards(identity: Identity) -> Vec<Card> {
-        match identity {
-            Identity::CoreSpiderMan => core_spider_man::get_player_cards(),
-        }
-    }
-
-    pub fn get_obligation(identity: Identity) -> Card {
-        match identity {
-            Identity::CoreSpiderMan => core_spider_man::get_obligation(),
-        }
-    }
-
     pub fn get_basic_cards() -> Vec<Card> {
         basic::get_all()
     }
-
     pub fn get_aggression_cards() -> Vec<Card> {
         aggression::get_all()
     }
@@ -67,6 +46,16 @@ impl CardDatas {
     }
     pub fn get_protection_cards() -> Vec<Card> {
         protection::get_all()
+    }
+    pub fn get_pool_cards() -> Vec<Card> {
+        pool::get_all()
+    }
+
+    pub fn get(&self, card_id: &str) -> Card {
+        let Some(card) = self.0.get(card_id) else {
+            panic!("Cannot get card with id: {}", card_id);
+        };
+        card.clone()
     }
 }
 

@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::{
     features::{
-        cards::{get_all_identity, CardDatas, Identity},
+        cards::Identity,
         collection::state::CollectionState,
         shared::{handle_previous_interaction, DisplayMethod, ListItem, MenuBuilder},
     },
@@ -32,7 +32,7 @@ struct HeroList;
 struct HeroListButton(Identity);
 
 fn spawn_hero_list(commands: Commands, asset_server: Res<AssetServer>) {
-    let identities = get_all_identity();
+    let identities = Identity::get_all();
     let button_map = identities
         .iter()
         .map(|identity| {
@@ -65,7 +65,7 @@ fn handle_button_interaction(
 ) {
     for (interaction, button) in button_q.iter() {
         if *interaction == Interaction::Pressed {
-            for card in CardDatas::get_identity_cards(button.0.clone()) {
+            for card in button.0.get_cards() {
                 load_asset.add_card(card, &asset_server);
             }
             commands.insert_resource(CollectionHeroIdentity(button.0.clone()));

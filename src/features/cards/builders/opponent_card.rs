@@ -1,4 +1,6 @@
-use crate::features::cards::{CardAbility, CardIcon, CardTrait, Count, Keyword};
+use bevy::input::keyboard::Key;
+
+use crate::features::cards::{CardAbility, CardIcon, CardTrait, Count, Identity, Keyword};
 
 #[derive(Clone)]
 pub struct AttachmentCard<'a> {
@@ -11,7 +13,6 @@ pub struct AttachmentCard<'a> {
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
     pub card_image_path: &'a str,
-    pub card_back_image_path: &'a str,
 }
 
 #[derive(Clone)]
@@ -24,7 +25,6 @@ pub struct EnvironmentCard<'a> {
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
     pub card_image_path: &'a str,
-    pub card_back_image_path: &'a str,
 }
 
 #[derive(Clone)]
@@ -38,7 +38,6 @@ pub struct MainSchemeCard<'a> {
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
     pub card_image_path: &'a str,
-    pub card_back_image_path: &'a str,
 }
 
 #[derive(Clone)]
@@ -56,21 +55,19 @@ pub struct MinionCard<'a> {
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
     pub card_image_path: &'a str,
-    pub card_back_image_path: &'a str,
 }
 
 #[derive(Clone)]
 pub struct ObligationCard<'a> {
     pub id: &'a str,
     pub name: &'a str,
-    pub belong_id: Vec<&'a str>,
+    pub belong: Identity,
     pub instant_effect: bool,
     pub boost: u8,
     pub card_icons: Vec<CardIcon>,
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
     pub card_image_path: &'a str,
-    pub card_back_image_path: &'a str,
 }
 
 #[derive(Clone)]
@@ -83,7 +80,6 @@ pub struct SideSchemeCard<'a> {
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
     pub card_image_path: &'a str,
-    pub card_back_image_path: &'a str,
 }
 
 #[derive(Clone)]
@@ -94,8 +90,8 @@ pub struct TreacheryCard<'a> {
     pub boost: u8,
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
+    pub keyword: Vec<Keyword>,
     pub card_image_path: &'a str,
-    pub card_back_image_path: &'a str,
 }
 
 #[derive(Clone)]
@@ -112,5 +108,4 @@ pub struct VillainCard<'a> {
     pub abilities: Vec<CardAbility>,
     pub hand_size: u8,
     pub card_image_path: &'a str,
-    pub card_back_image_path: &'a str,
 }

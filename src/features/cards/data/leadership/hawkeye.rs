@@ -1,7 +1,4 @@
-use crate::{
-    constants::PLAYER_CARD_BACK_ASSET,
-    features::cards::{AllyCard, Card, CardAspect, CardResource, CardTrait},
-};
+use crate::features::cards::{AllyCard, Card, CardAspect, CardResource, CardTrait};
 pub fn get_hawkeye() -> Card {
     Card::Ally(AllyCard {
         id: "core_066",
@@ -22,7 +19,6 @@ pub fn get_hawkeye() -> Card {
         description: "Hawkeye enters play with 4 arrow counters on him. Response: After a minion enters play, remove 1 arrow counter from Hawkeye -> deal 2 damage to that minion.",
         abilities: vec![],
         card_image_path: "embedded://cards/leadership/core_066.png",
-        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 1,
     })
 }

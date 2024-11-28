@@ -1,7 +1,4 @@
-use crate::{
-    constants::PLAYER_CARD_BACK_ASSET,
-    features::cards::{Card, CardAspect, CardResource, CardTrait, SupportCard},
-};
+use crate::features::cards::{Card, CardAspect, CardResource, CardTrait, SupportCard};
 
 pub fn get_avengers_mansion() -> Card {
     Card::Support(SupportCard {
@@ -17,7 +14,6 @@ pub fn get_avengers_mansion() -> Card {
         description: "Max 1 per player. Action: Exhaust Avengers Mansion -> choose a player. That player draws 1 card.",
         abilities: vec![],
         card_image_path: "embedded://cards/basic/core_091.png",
-        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 1,
     })
 }

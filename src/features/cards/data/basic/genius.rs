@@ -1,7 +1,4 @@
-use crate::{
-    constants::PLAYER_CARD_BACK_ASSET,
-    features::cards::{Card, CardAspect, CardResource, ResourceCard},
-};
+use crate::features::cards::{Card, CardAspect, CardResource, ResourceCard};
 
 pub fn get_genius() -> Card {
     Card::Resource(ResourceCard {
@@ -13,7 +10,6 @@ pub fn get_genius() -> Card {
         description: "Max 1 per deck.",
         abilities: vec![],
         card_image_path: "embedded://cards/basic/core_089.png",
-        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 1,
     })
 }

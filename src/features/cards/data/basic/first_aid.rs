@@ -1,7 +1,4 @@
-use crate::{
-    constants::PLAYER_CARD_BACK_ASSET,
-    features::cards::{Card, CardAspect, CardResource, EventCard},
-};
+use crate::features::cards::{Card, CardAspect, CardResource, EventCard};
 
 pub fn get_first_aid() -> Card {
     Card::Event(EventCard {
@@ -15,7 +12,6 @@ pub fn get_first_aid() -> Card {
         description: "Action: Heal 2 damage from any character.",
         abilities: vec![],
         card_image_path: "embedded://cards/basic/core_086.png",
-        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 3,
     })
 }

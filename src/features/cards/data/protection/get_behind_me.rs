@@ -1,7 +1,4 @@
-use crate::{
-    constants::PLAYER_CARD_BACK_ASSET,
-    features::cards::{Card, CardAspect, CardResource, EventCard},
-};
+use crate::features::cards::{Card, CardAspect, CardResource, EventCard};
 pub fn get_get_behind_me() -> Card {
     Card::Event(EventCard {
         id: "core_078",
@@ -14,7 +11,6 @@ pub fn get_get_behind_me() -> Card {
         description: "Hero Interrupt: When a treachery card is revealed from the encounter deck, cancel its \"When Revealed\" effects. The villain attacks you instead.",
         abilities: vec![],
         card_image_path: "embedded://cards/protection/core_078.png",
-        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 3,
     })
 }

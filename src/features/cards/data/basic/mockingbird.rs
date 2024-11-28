@@ -1,7 +1,4 @@
-use crate::{
-    constants::PLAYER_CARD_BACK_ASSET,
-    features::cards::{AllyCard, Card, CardAspect, CardResource, CardTrait},
-};
+use crate::features::cards::{AllyCard, Card, CardAspect, CardResource, CardTrait};
 pub fn get_mockingbird() -> Card {
     Card::Ally(AllyCard {
         id: "core_083",
@@ -22,7 +19,6 @@ pub fn get_mockingbird() -> Card {
         description: "Response: After Mockingbird enters play, stun an enemy.",
         abilities: vec![],
         card_image_path: "embedded://cards/basic/core_083.png",
-        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 1,
     })
 }

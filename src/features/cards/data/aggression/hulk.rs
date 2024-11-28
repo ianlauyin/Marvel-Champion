@@ -1,7 +1,4 @@
-use crate::{
-    constants::PLAYER_CARD_BACK_ASSET,
-    features::cards::{AllyCard, Card, CardAspect, CardResource, CardTrait},
-};
+use crate::features::cards::{AllyCard, Card, CardAspect, CardResource, CardTrait};
 pub fn get_hulk() -> Card {
     Card::Ally(AllyCard {
         id: "core_050",
@@ -22,7 +19,6 @@ pub fn get_hulk() -> Card {
         description: "Forced Response: After Hulk attacks, discard the top card of your deck. If that card's printed resource has: Physical - Deal 2 damage to an enemy. Energy - Deal 1 damage to each character. Mental - Discard Hulk. Wild - All of the above.",
         abilities: vec![],
         card_image_path: "embedded://cards/aggression/core_050.png",
-        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 1,
     })
 }

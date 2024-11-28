@@ -1,7 +1,4 @@
-use crate::{
-    constants::PLAYER_CARD_BACK_ASSET,
-    features::cards::{AllyCard, Card, CardAspect, CardResource, CardTrait},
-};
+use crate::features::cards::{AllyCard, Card, CardAspect, CardResource, CardTrait};
 pub fn get_tigra() -> Card {
     Card::Ally(AllyCard {
         id: "core_051",
@@ -22,7 +19,6 @@ pub fn get_tigra() -> Card {
         description: "Response: After Tigra attacks and defeats a minion, heal 1 damage from her.",
         abilities: vec![],
         card_image_path: "embedded://cards/aggression/core_051.png",
-        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 1,
     })
 }

@@ -34,6 +34,9 @@ pub enum CardTrait {
     Spy,
     Gamma,
     Android,
+    Elite,
+    Kree,
+    Soldier,
     // Event-related
     Aerial,
     Attack,
@@ -65,6 +68,7 @@ pub enum Keyword {
     Quickstrike,
     Use(u8, Counter),
     Toughness,
+    Surge,
 }
 
 #[derive(Clone)]

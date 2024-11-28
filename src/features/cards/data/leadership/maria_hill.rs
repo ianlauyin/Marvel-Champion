@@ -1,7 +1,4 @@
-use crate::{
-    constants::PLAYER_CARD_BACK_ASSET,
-    features::cards::{AllyCard, Card, CardAspect, CardResource, CardTrait},
-};
+use crate::features::cards::{AllyCard, Card, CardAspect, CardResource, CardTrait};
 pub fn get_maria_hill() -> Card {
     Card::Ally(AllyCard {
         id: "core_067",
@@ -22,7 +19,6 @@ pub fn get_maria_hill() -> Card {
         description: "Response: After Maria Hill enters play, each player draws 1 card.",
         abilities: vec![],
         card_image_path: "embedded://cards/leadership/core_067.png",
-        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 1,
     })
 }

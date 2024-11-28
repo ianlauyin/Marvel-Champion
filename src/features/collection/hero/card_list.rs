@@ -45,7 +45,9 @@ fn spawn_hero_cards(
     asset_server: Res<AssetServer>,
     identity: Res<CollectionHeroIdentity>,
 ) {
-    let list_items = CardDatas::get_identity_cards(identity.0.clone())
+    let list_items = identity
+        .0
+        .get_cards()
         .iter()
         .map(|card| {
             (

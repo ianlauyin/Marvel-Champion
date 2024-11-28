@@ -1,7 +1,4 @@
-use crate::{
-    constants::PLAYER_CARD_BACK_ASSET,
-    features::cards::{AllyCard, Card, CardAspect, CardResource, CardTrait, Keyword},
-};
+use crate::features::cards::{AllyCard, Card, CardAspect, CardResource, CardTrait, Keyword};
 pub fn get_luke_cage() -> Card {
     Card::Ally(AllyCard {
         id: "core_076",
@@ -22,7 +19,6 @@ pub fn get_luke_cage() -> Card {
         description: "Toughness. (This character enters play with a tough status card.)",
         abilities: vec![],
         card_image_path: "embedded://cards/protection/core_076.png",
-        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 1,
     })
 }

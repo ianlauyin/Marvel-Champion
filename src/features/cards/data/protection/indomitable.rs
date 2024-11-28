@@ -1,7 +1,4 @@
-use crate::{
-    constants::PLAYER_CARD_BACK_ASSET,
-    features::cards::{Card, CardAspect, CardResource, CardTrait, UpgradeCard},
-};
+use crate::features::cards::{Card, CardAspect, CardResource, CardTrait, UpgradeCard};
 pub fn get_indomitable() -> Card {
     Card::Upgrade(UpgradeCard {
         id: "core_082",
@@ -13,7 +10,6 @@ pub fn get_indomitable() -> Card {
         description: "Response: After your hero defends, discard indomitable -> ready your hero.",
         abilities: vec![],
         card_image_path: "embedded://cards/protection/core_082.png",
-        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 3,
         unique: false,
         cost: 1,

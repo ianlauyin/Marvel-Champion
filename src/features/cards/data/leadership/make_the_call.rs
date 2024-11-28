@@ -1,7 +1,4 @@
-use crate::{
-    constants::PLAYER_CARD_BACK_ASSET,
-    features::cards::{Card, CardAspect, CardResource, CardTrait, EventCard},
-};
+use crate::features::cards::{Card, CardAspect, CardResource, CardTrait, EventCard};
 pub fn get_make_the_call() -> Card {
     Card::Event(EventCard {
         id: "core_071",
@@ -14,7 +11,6 @@ pub fn get_make_the_call() -> Card {
         description: "Action: Pay the printed cost of an ally in any player's discard pile -> put that ally into play under your control.",
         abilities: vec![],
         card_image_path: "embedded://cards/leadership/core_071.png",
-        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 3,
     })
 }

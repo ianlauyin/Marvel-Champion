@@ -1,7 +1,4 @@
-use crate::{
-    constants::PLAYER_CARD_BACK_ASSET,
-    features::cards::{AllyCard, Card, CardAspect, CardResource, CardTrait},
-};
+use crate::features::cards::{AllyCard, Card, CardAspect, CardResource, CardTrait};
 pub fn get_daredevil() -> Card {
     Card::Ally(AllyCard {
         id: "core_058",
@@ -22,7 +19,6 @@ pub fn get_daredevil() -> Card {
         description: "Response: After Daredevil thwarts, deal 1 damage to an enemy.",
         abilities: vec![],
         card_image_path: "embedded://cards/justice/core_058.png",
-        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 1,
     })
 }

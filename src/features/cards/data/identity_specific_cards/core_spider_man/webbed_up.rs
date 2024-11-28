@@ -1,8 +1,5 @@
-use crate::{
-    constants::PLAYER_CARD_BACK_ASSET,
-    features::cards::{
-        Card, CardAspect, CardResource, CardTrait, Identity::CoreSpiderMan, UpgradeCard,
-    },
+use crate::features::cards::{
+    Card, CardAspect, CardResource, CardTrait, Identity::CoreSpiderMan, UpgradeCard,
 };
 pub fn get_webbed_up() -> Card {
     Card::Upgrade(UpgradeCard {
@@ -18,7 +15,6 @@ pub fn get_webbed_up() -> Card {
         description: "Hero form only. Attach to an enemy. Max 1 per enemy. Forced Interrupt: When attached enemy would attack, discard Webbed Up instead. Then, stun that enemy.",
         abilities: vec![],
         card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_009.png",
-        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 2,
     })
 }
