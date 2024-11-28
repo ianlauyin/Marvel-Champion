@@ -37,6 +37,8 @@ pub enum CardTrait {
     Elite,
     Kree,
     Soldier,
+    Brute,
+    Attorney,
     // Event-related
     Aerial,
     Attack,

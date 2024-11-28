@@ -2,15 +2,15 @@ use crate::features::cards::{AlterEgoCard, Card, CardTrait};
 
 pub fn get_alter_ego() -> Card {
     Card::AlterEgo(AlterEgoCard {
-        id: "core_1b",
+        id: "core_001b",
         name: "Peter Parker",
-        flip_target_id: vec!["core_1a"],
+        flip_target_id: vec!["core_001a"],
         initial_hit_points: 10,
         keywords: vec![],
         traits: vec![CardTrait::Genius],
         card_icons: vec![],
         rec: 3,
-        description: "Scientist - Resource: Generate a mental resource. (Limit once per round.)",
+        description: "Resource: Generate a mental resource. (Limit once per round.)",
         abilities: vec![],
         hand_size: 6,
         card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_001b.png",

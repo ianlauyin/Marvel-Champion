@@ -2,14 +2,14 @@ use crate::features::cards::{AlterEgoCard, Card, CardTrait};
 
 pub fn get_alter_ego() -> Card {
     Card::AlterEgo(AlterEgoCard {
-        id: "core_10b",
+        id: "core_010b",
         name: "Carol Danvers",
-        description: "Commander — Action: Choose a player to draw 1 card. (Limit once per round.)",
+        description: "Action: Choose a player to draw 1 card. (Limit once per round.)",
         abilities: vec![],
         card_image_path:
             "embedded://cards/identity_specific_card/core_captain_marvel/core_010b.png",
         traits: vec![CardTrait::SHIELD, CardTrait::Soldier],
-        flip_target_id: vec!["core_1a"],
+        flip_target_id: vec!["core_010a"],
         initial_hit_points: 12,
         keywords: vec![],
         card_icons: vec![],

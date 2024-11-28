@@ -1,5 +1,5 @@
 use super::{
-    data::{core_captain_marvel, core_spider_man},
+    data::{core_captain_marvel, core_she_hulk, core_spider_man},
     Card,
 };
 
@@ -7,11 +7,16 @@ use super::{
 pub enum Identity {
     CoreSpiderMan,
     CoreCaptainMarvel,
+    CoreSheHulk,
 }
 
 impl Identity {
     pub fn get_all() -> Vec<Self> {
-        vec![Identity::CoreSpiderMan, Identity::CoreCaptainMarvel]
+        vec![
+            Identity::CoreSpiderMan,
+            Identity::CoreCaptainMarvel,
+            Identity::CoreSheHulk,
+        ]
     }
 
     pub fn get_all_cards() -> Vec<Card> {
@@ -26,6 +31,7 @@ impl Identity {
         match *self {
             Identity::CoreSpiderMan => "Core - Spider man".to_string(),
             Identity::CoreCaptainMarvel => "Core - Captain Marvel".to_string(),
+            Identity::CoreSheHulk => "Core - She Hulk".to_string(),
         }
     }
     pub fn get_title_image_path(&self) -> String {
@@ -34,6 +40,7 @@ impl Identity {
             Identity::CoreCaptainMarvel => {
                 "embedded://identity/core_captain_marvel.png".to_string()
             }
+            Identity::CoreSheHulk => "embedded://identity/core_she_hulk.png".to_string(),
         }
     }
 
@@ -41,6 +48,7 @@ impl Identity {
         match *self {
             Identity::CoreSpiderMan => core_spider_man::get_all(),
             Identity::CoreCaptainMarvel => core_captain_marvel::get_all(),
+            Identity::CoreSheHulk => core_she_hulk::get_all(),
         }
     }
 
@@ -48,6 +56,7 @@ impl Identity {
         match *self {
             Identity::CoreSpiderMan => core_spider_man::get_player_cards(),
             Identity::CoreCaptainMarvel => core_captain_marvel::get_player_cards(),
+            Identity::CoreSheHulk => core_she_hulk::get_player_cards(),
         }
     }
 
@@ -55,6 +64,7 @@ impl Identity {
         match *self {
             Identity::CoreSpiderMan => core_spider_man::get_obligation(),
             Identity::CoreCaptainMarvel => core_captain_marvel::get_obligation(),
+            Identity::CoreSheHulk => core_she_hulk::get_obligation(),
         }
     }
 }
