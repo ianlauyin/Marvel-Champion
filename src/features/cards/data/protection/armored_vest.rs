@@ -1,5 +1,5 @@
 use crate::{
-    constants::PLAYER_CARD_BACK_PATH,
+    constants::PLAYER_CARD_BACK_ASSET,
     features::cards::{Card, CardAspect, CardResource, CardTrait, UpgradeCard},
 };
 pub fn get_armored_vest() -> Card {
@@ -13,7 +13,7 @@ pub fn get_armored_vest() -> Card {
         description: "Play under any player's control. Max 1 per player. Your hero gets +1 DEF.",
         abilities: vec![],
         card_image_path: "embedded://cards/protection/core_081.png",
-        card_back_image_path: PLAYER_CARD_BACK_PATH,
+        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 3,
         unique: false,
         cost: 1,

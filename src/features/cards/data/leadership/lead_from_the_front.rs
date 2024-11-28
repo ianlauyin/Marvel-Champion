@@ -1,5 +1,5 @@
 use crate::{
-    constants::PLAYER_CARD_BACK_PATH,
+    constants::PLAYER_CARD_BACK_ASSET,
     features::cards::{Card, CardAspect, CardResource, CardTrait, EventCard},
 };
 pub fn get_lead_from_the_front() -> Card {
@@ -14,7 +14,7 @@ pub fn get_lead_from_the_front() -> Card {
         description: "Hero Action: Choose a player. Each character that player controls gets +1 THW and +1 ATK until the end of the phase.",
         abilities: vec![],
         card_image_path: "embedded://cards/leadership/core_070.png",
-        card_back_image_path: PLAYER_CARD_BACK_PATH,
+        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 3,
     })
 }

@@ -1,5 +1,5 @@
 use crate::{
-    constants::PLAYER_CARD_BACK_PATH,
+    constants::PLAYER_CARD_BACK_ASSET,
     features::cards::{Card, CardAspect, CardResource, CardTrait, EventCard},
 };
 
@@ -15,7 +15,7 @@ pub fn get_emergency() -> Card {
         description: "Interrupt (thwart): When the villain schemes, reduce the amount of threat placed on the scheme by 1.",
         abilities: vec![],
         card_image_path: "embedded://cards/basic/core_085.png",
-        card_back_image_path: PLAYER_CARD_BACK_PATH,
+        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 3,
     })
 }

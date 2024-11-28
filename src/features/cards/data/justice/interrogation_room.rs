@@ -1,5 +1,5 @@
 use crate::{
-    constants::PLAYER_CARD_BACK_PATH,
+    constants::PLAYER_CARD_BACK_ASSET,
     features::cards::{Card, CardAspect, CardResource, CardTrait, SupportCard},
 };
 pub fn get_interrogation_room() -> Card {
@@ -15,7 +15,7 @@ pub fn get_interrogation_room() -> Card {
         description: "Max 1 per player. Response: After you defeat a minion, exhaust Interrogation Room -> remove 1 threat from a scheme.",
         abilities: vec![],
         card_image_path: "embedded://cards/justice/core_063.png",
-        card_back_image_path: PLAYER_CARD_BACK_PATH,
+        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 1,
     })
 }

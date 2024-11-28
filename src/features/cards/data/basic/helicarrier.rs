@@ -1,5 +1,5 @@
 use crate::{
-    constants::PLAYER_CARD_BACK_PATH,
+    constants::PLAYER_CARD_BACK_ASSET,
     features::cards::{Card, CardAspect, CardResource, CardTrait, SupportCard},
 };
 
@@ -17,7 +17,7 @@ pub fn get_helicarrier() -> Card {
         description: "Max 1 per player. Action: Exhaust Helicarrier -> choose a player. Reduce the resource cost of the next card that player plays this phase by 1.",
         abilities: vec![],
         card_image_path: "embedded://cards/basic/core_092.png",
-        card_back_image_path: PLAYER_CARD_BACK_PATH,
+        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 1,
     })
 }

@@ -1,5 +1,5 @@
 use crate::{
-    constants::PLAYER_CARD_BACK_PATH,
+    constants::PLAYER_CARD_BACK_ASSET,
     features::cards::{
         Card, CardAspect, CardResource, CardTrait, Identity::CoreSpiderMan, UpgradeCard,
     },
@@ -18,7 +18,7 @@ pub fn get_spider_tracer() -> Card {
         description: "Attach to a minion. Forced Interrupt: When attached minion is defeated, remove 3 threat from a scheme.",
         abilities: vec![],
         card_image_path: "embedded://cards/identity_specific_card/core_spider_man/core_007.png",
-        card_back_image_path: PLAYER_CARD_BACK_PATH,
+        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 2,
     })
 }

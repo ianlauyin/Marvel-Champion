@@ -1,5 +1,5 @@
 use crate::{
-    constants::PLAYER_CARD_BACK_PATH,
+    constants::PLAYER_CARD_BACK_ASSET,
     features::cards::{AllyCard, Card, CardAspect, CardResource, CardTrait, Keyword},
 };
 pub fn get_luke_cage() -> Card {
@@ -22,7 +22,7 @@ pub fn get_luke_cage() -> Card {
         description: "Toughness. (This character enters play with a tough status card.)",
         abilities: vec![],
         card_image_path: "embedded://cards/protection/core_076.png",
-        card_back_image_path: PLAYER_CARD_BACK_PATH,
+        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 1,
     })
 }

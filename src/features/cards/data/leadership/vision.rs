@@ -1,5 +1,5 @@
 use crate::{
-    constants::PLAYER_CARD_BACK_PATH,
+    constants::PLAYER_CARD_BACK_ASSET,
     features::cards::{AllyCard, Card, CardAspect, CardResource, CardTrait},
 };
 pub fn get_vision() -> Card {
@@ -22,7 +22,7 @@ pub fn get_vision() -> Card {
         description: "Action: Spend a Energy resource -> choose THW or ATK. Until the end of the phase, Vision gets +2 to the chosen power. (Limit once per round.)",
         abilities: vec![],
         card_image_path: "embedded://cards/leadership/core_068.png",
-        card_back_image_path: PLAYER_CARD_BACK_PATH,
+        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 1,
     })
 }

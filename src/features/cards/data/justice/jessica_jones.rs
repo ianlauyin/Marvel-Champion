@@ -1,5 +1,5 @@
 use crate::{
-    constants::PLAYER_CARD_BACK_PATH,
+    constants::PLAYER_CARD_BACK_ASSET,
     features::cards::{AllyCard, Card, CardAspect, CardResource, CardTrait},
 };
 pub fn get_jessica_jones() -> Card {
@@ -22,7 +22,7 @@ pub fn get_jessica_jones() -> Card {
         description: "Jessica Jones gets +1 THW for each side scheme in play.",
         abilities: vec![],
         card_image_path: "embedded://cards/justice/core_059.png",
-        card_back_image_path: PLAYER_CARD_BACK_PATH,
+        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 1,
     })
 }

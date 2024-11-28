@@ -1,5 +1,5 @@
 use crate::{
-    constants::PLAYER_CARD_BACK_PATH,
+    constants::PLAYER_CARD_BACK_ASSET,
     features::cards::{Card, CardAspect, CardResource, ResourceCard},
 };
 pub fn get_the_power_of_protection() -> Card {
@@ -12,7 +12,7 @@ pub fn get_the_power_of_protection() -> Card {
         description: "Max 2 per deck. Double the number of resources this card generates while paying for a Protection (green) card.",
         abilities: vec![],
         card_image_path: "embedded://cards/protection/core_079.png",
-        card_back_image_path: PLAYER_CARD_BACK_PATH,
+        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 2,
     })
 }

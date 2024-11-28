@@ -1,5 +1,5 @@
 use crate::{
-    constants::PLAYER_CARD_BACK_PATH,
+    constants::PLAYER_CARD_BACK_ASSET,
     features::cards::{Card, CardAspect, CardResource, CardTrait, EventCard},
 };
 pub fn get_relentless_assault() -> Card {
@@ -14,7 +14,7 @@ pub fn get_relentless_assault() -> Card {
         description: "Hero Action (attack): Deal 5 damage to a minion. If you paid for this card using a Physical resource, this attack gains overkill. (Excess damage from this attack is dealt to the villain.)",
         abilities: vec![],
         card_image_path: "embedded://cards/aggression/core_053.png",
-        card_back_image_path: PLAYER_CARD_BACK_PATH,
+        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 3,
     })
 }

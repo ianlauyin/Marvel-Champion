@@ -1,5 +1,5 @@
 use crate::{
-    constants::PLAYER_CARD_BACK_PATH,
+    constants::PLAYER_CARD_BACK_ASSET,
     features::cards::{Card, CardAspect, CardResource, EventCard},
 };
 pub fn get_great_responsiblity() -> Card {
@@ -14,7 +14,7 @@ pub fn get_great_responsiblity() -> Card {
         description: "Hero Interrupt: When any amount of threat would be placed on a scheme, you take it as damage instead.",
         abilities: vec![],
         card_image_path: "embedded://cards/justice/core_061.png",
-        card_back_image_path: PLAYER_CARD_BACK_PATH,
+        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 3,
     })
 }

@@ -1,5 +1,5 @@
 use crate::{
-    constants::PLAYER_CARD_BACK_PATH,
+    constants::PLAYER_CARD_BACK_ASSET,
     features::cards::{Card, CardAspect, CardResource, EventCard},
 };
 pub fn get_get_ready() -> Card {
@@ -14,7 +14,7 @@ pub fn get_get_ready() -> Card {
         description: "Action: Ready an ally.",
         abilities: vec![],
         card_image_path: "embedded://cards/leadership/core_069.png",
-        card_back_image_path: PLAYER_CARD_BACK_PATH,
+        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 3,
     })
 }

@@ -1,5 +1,4 @@
-use crate::constants::GAME_MAT_PATH;
-use crate::systems::AppState;
+use crate::{constants::GAME_MAT_ASSET, systems::AppState};
 use bevy::prelude::*;
 use std::f32::consts::PI;
 
@@ -27,7 +26,7 @@ fn spawn_game_mat(
             ..default()
         },
         material: materials.add(StandardMaterial {
-            base_color_texture: asset_server.get_handle(GAME_MAT_PATH),
+            base_color_texture: asset_server.get_handle(GAME_MAT_ASSET.path),
             perceptual_roughness: 1.,
             ..default()
         }),

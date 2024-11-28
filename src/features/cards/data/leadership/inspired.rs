@@ -1,5 +1,5 @@
 use crate::{
-    constants::PLAYER_CARD_BACK_PATH,
+    constants::PLAYER_CARD_BACK_ASSET,
     features::cards::{Card, CardAspect, CardResource, UpgradeCard},
 };
 pub fn get_inspired() -> Card {
@@ -13,7 +13,7 @@ pub fn get_inspired() -> Card {
         abilities: vec![],
         keywords: vec![],
         card_image_path: "embedded://cards/leadership/core_074.png",
-        card_back_image_path: PLAYER_CARD_BACK_PATH,
+        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 3,
         unique: false,
         cost: 1,

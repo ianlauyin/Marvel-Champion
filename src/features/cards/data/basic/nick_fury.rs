@@ -1,5 +1,5 @@
 use crate::{
-    constants::PLAYER_CARD_BACK_PATH,
+    constants::PLAYER_CARD_BACK_ASSET,
     features::cards::{AllyCard, Card, CardAspect, CardResource, CardTrait},
 };
 pub fn get_nick_fury() -> Card {
@@ -22,7 +22,7 @@ pub fn get_nick_fury() -> Card {
         description: "Forced Response: After Nick Fury enters play, choose one: remove 2 threat from a scheme, draw 3 cards, or deal 4 damage to an enemy. At the end of the round, if Nick Fury is still in play, discard him.",
         abilities: vec![],
         card_image_path: "embedded://cards/basic/core_084.png",
-        card_back_image_path: PLAYER_CARD_BACK_PATH,
+        card_back_image_path: PLAYER_CARD_BACK_ASSET.path,
         card_amount_max: 1,
     })
 }
