@@ -11,5 +11,6 @@ pub fn get_nemesis_set() -> Vec<Card> {
         titania::get_titania(),
         genetically_enhanced::get_genetically_enhanced(),
         titanias_fury::get_titanias_fury(),
+        titanias_fury::get_titanias_fury(),
     ]
 }

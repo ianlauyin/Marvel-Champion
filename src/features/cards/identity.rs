@@ -67,4 +67,12 @@ impl Identity {
             Identity::CoreSheHulk => core_she_hulk::get_obligation(),
         }
     }
+
+    pub fn get_nemesis_set(&self) -> Card {
+        match *self {
+            Identity::CoreSpiderMan => core_spider_man::get_obligation(),
+            Identity::CoreCaptainMarvel => core_captain_marvel::get_obligation(),
+            Identity::CoreSheHulk => core_she_hulk::get_obligation(),
+        }
+    }
 }

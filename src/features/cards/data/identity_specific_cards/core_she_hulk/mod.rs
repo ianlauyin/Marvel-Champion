@@ -21,11 +21,17 @@ pub fn get_player_cards() -> Vec<Card> {
         hellcat::get_hellcat(),
         gamma_slam::get_gamma_slam(),
         ground_stomp::get_ground_stomp(),
+        ground_stomp::get_ground_stomp(),
         legal_practice::get_legal_practice(),
+        legal_practice::get_legal_practice(),
+        one_two_punch::get_one_two_punch(),
+        one_two_punch::get_one_two_punch(),
         one_two_punch::get_one_two_punch(),
         split_personality::get_split_personality(),
         superhuman_law_division::get_superhuman_law_division(),
         focused_rage::get_focused_rage(),
+        focused_rage::get_focused_rage(),
+        superhuman_strength::get_superhuman_strength(),
         superhuman_strength::get_superhuman_strength(),
     ]
 }

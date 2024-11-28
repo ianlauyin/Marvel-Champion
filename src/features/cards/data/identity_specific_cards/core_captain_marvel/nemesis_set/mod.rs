@@ -10,6 +10,7 @@ pub fn get_nemesis_set() -> Vec<Card> {
         the_psyche_magnitron::get_the_psyche_magnitron(),
         yon_rogg::get_yogg_rogg(),
         kree_manipulator::get_kree_manipulator(),
+        kree_manipulator::get_kree_manipulator(),
         yon_roggs_treason::get_yon_roggs_treason(),
     ]
 }

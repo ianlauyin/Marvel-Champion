@@ -19,11 +19,18 @@ pub fn get_player_cards() -> Vec<Card> {
         alter_ego::get_alter_ego(),
         spider_woman::get_spider_woman(),
         crisis_interdiction::get_crisis_interdiction(),
+        crisis_interdiction::get_crisis_interdiction(),
+        crisis_interdiction::get_crisis_interdiction(),
         photonic_blast::get_photonic_blast(),
+        photonic_blast::get_photonic_blast(),
+        photonic_blast::get_photonic_blast(),
+        energy_absorption::get_energy_absorption(),
         energy_absorption::get_energy_absorption(),
         alpha_flight_station::get_alpha_flight_station(),
         captain_marvels_helmet::get_captain_marvels_helmet(),
         cosmic_flight::get_cosmic_flight(),
+        cosmic_flight::get_cosmic_flight(),
+        energy_channel::get_energy_channel(),
         energy_channel::get_energy_channel(),
     ]
 }
