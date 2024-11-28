@@ -4,7 +4,7 @@ pub fn get_obligation() -> Card {
     Card::Obligation(ObligationCard {
         id: "core_175",
         name: "Family Emergency",
-        belong: Identity::CoreSpiderMan,
+        belong: Identity::CoreCaptainMarvel,
         instant_effect: true,
         boost: 2,
         card_icons: vec![],

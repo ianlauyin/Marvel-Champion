@@ -47,3 +47,5 @@ pub fn get_all() -> Vec<Card> {
     ]
     .concat()
 }
+
+pub use nemesis_set::get_nemesis_set;
