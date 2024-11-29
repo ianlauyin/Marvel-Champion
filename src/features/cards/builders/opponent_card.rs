@@ -42,6 +42,7 @@ pub struct MainSchemeBCard<'a> {
     pub name: &'a str,
     pub next_stage_id: Option<&'a str>,
     pub target_threat: Count,
+    pub increase_threat: Count,
     pub initial_threat: Count,
     pub card_icons: Vec<CardIcon>,
     pub description: &'a str,

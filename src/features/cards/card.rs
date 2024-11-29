@@ -92,4 +92,26 @@ impl Card {
         };
         id.to_string()
     }
+
+    pub fn get_name(&self) -> String {
+        let id = match self {
+            Card::Attachment(attachment_card) => attachment_card.name,
+            Card::Environment(environment_card) => environment_card.name,
+            Card::MainSchemeA(main_scheme_card) => main_scheme_card.name,
+            Card::MainSchemeB(main_scheme_card) => main_scheme_card.name,
+            Card::Minion(minion_card) => minion_card.name,
+            Card::Obligation(obligation_card) => obligation_card.name,
+            Card::SideScheme(side_scheme_card) => side_scheme_card.name,
+            Card::Treachery(treachery_card) => treachery_card.name,
+            Card::Villain(villain_card) => villain_card.name,
+            Card::Ally(ally_card) => ally_card.name,
+            Card::AlterEgo(alter_ego_card) => alter_ego_card.name,
+            Card::Event(event_card) => event_card.name,
+            Card::Hero(hero_card) => hero_card.name,
+            Card::Resource(resource_card) => resource_card.name,
+            Card::Support(support_card) => support_card.name,
+            Card::Upgrade(upgrade_card) => upgrade_card.name,
+        };
+        id.to_string()
+    }
 }

@@ -43,6 +43,7 @@ pub enum CardTrait {
     Spy,
     Soldier,
     Mercenary,
+    MasterOfEvil,
     // Event-related
     Aerial,
     Attack,
@@ -106,4 +107,13 @@ pub enum CardAbility {
 pub enum Count {
     PerPlayer(u8),
     Constant(u8),
+}
+
+impl Count {
+    pub fn to_actual(&self, player_number: u8) -> u8 {
+        match *self {
+            Count::PerPlayer(n) => n * player_number,
+            Count::Constant(n) => n,
+        }
+    }
 }
