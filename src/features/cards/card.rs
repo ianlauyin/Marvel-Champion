@@ -1,4 +1,4 @@
-use bevy::prelude::Component;
+use bevy::{log::warn, prelude::Component};
 
 use crate::constants::{
     ENCOUNTER_CARD_BACK_ASSET, PLAYER_CARD_BACK_ASSET, VILLAIN_CARD_BACK_ASSET,
@@ -66,7 +66,10 @@ impl Card {
             | Card::Upgrade(_) => PLAYER_CARD_BACK_ASSET.path,
             Card::Villain(_) => VILLAIN_CARD_BACK_ASSET.path,
             // Hero, AlterEgo, MainScheme should have no card back
-            _ => "",
+            _ => {
+                warn!("{} should not have a card back", self.get_name());
+                return "".to_string();
+            }
         };
         image_path.to_string()
     }
