@@ -35,6 +35,7 @@ pub enum CardTrait {
     HeroForHire,
     Gamma,
     Genius,
+    Hydra,
     Kree,
     King,
     Persona,
@@ -78,6 +79,7 @@ pub enum Keyword {
     Use(u8, Counter),
     Toughness,
     Surge,
+    Guard,
 }
 
 #[derive(Clone)]

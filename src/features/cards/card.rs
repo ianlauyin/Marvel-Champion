@@ -11,7 +11,8 @@ pub enum Card {
     // Opponent Card
     Attachment(AttachmentCard<'static>),
     Environment(EnvironmentCard<'static>),
-    MainScheme(MainSchemeCard<'static>),
+    MainSchemeA(MainSchemeACard<'static>),
+    MainSchemeB(MainSchemeBCard<'static>),
     Minion(MinionCard<'static>),
     Obligation(ObligationCard<'static>),
     SideScheme(SideSchemeCard<'static>),
@@ -32,7 +33,8 @@ impl Card {
         let image_path = match self {
             Card::Attachment(attachment_card) => attachment_card.card_image_path,
             Card::Environment(environment_card) => environment_card.card_image_path,
-            Card::MainScheme(main_scheme_card) => main_scheme_card.card_image_path,
+            Card::MainSchemeA(main_scheme_card) => main_scheme_card.card_image_path,
+            Card::MainSchemeB(main_scheme_card) => main_scheme_card.card_image_path,
             Card::Minion(minion_card) => minion_card.card_image_path,
             Card::Obligation(obligation_card) => obligation_card.card_image_path,
             Card::SideScheme(side_scheme_card) => side_scheme_card.card_image_path,
@@ -73,7 +75,8 @@ impl Card {
         let id = match self {
             Card::Attachment(attachment_card) => attachment_card.id,
             Card::Environment(environment_card) => environment_card.id,
-            Card::MainScheme(main_scheme_card) => main_scheme_card.id,
+            Card::MainSchemeA(main_scheme_card) => main_scheme_card.id,
+            Card::MainSchemeB(main_scheme_card) => main_scheme_card.id,
             Card::Minion(minion_card) => minion_card.id,
             Card::Obligation(obligation_card) => obligation_card.id,
             Card::SideScheme(side_scheme_card) => side_scheme_card.id,

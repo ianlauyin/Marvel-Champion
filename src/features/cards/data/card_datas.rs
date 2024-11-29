@@ -5,7 +5,7 @@ use bevy::{
     prelude::Resource,
 };
 
-use crate::features::cards::{Card, Identity};
+use crate::features::cards::{Card, Identity, VillainSet};
 
 use super::{aggression, basic, justice, leadership, pool, protection};
 
@@ -24,7 +24,12 @@ impl CardDatas {
             CardDatas::get_pool_cards(),
         ]
         .concat();
-        let all_cards = [Identity::get_all_cards(), aspect_cards].concat();
+        let all_cards = [
+            Identity::get_all_cards(),
+            VillainSet::get_all_cards(),
+            aspect_cards,
+        ]
+        .concat();
 
         for card in all_cards.iter() {
             hashmap.insert(card.get_card_id(), card.clone());

@@ -58,7 +58,7 @@ pub fn spawn_card_detail(
         .with_children(|container| {
             spawn_escape_button(container);
             let vertical = match card {
-                Card::MainScheme(_) | Card::SideScheme(_) => false,
+                Card::MainSchemeA(_) | Card::MainSchemeB(_) | Card::SideScheme(_) => false,
                 _ => true,
             };
             spawn_content(

@@ -9,6 +9,7 @@ mod menu;
 mod pool;
 mod protection;
 mod state;
+mod villain;
 
 pub struct CollectionPlugin;
 
@@ -24,6 +25,7 @@ impl Plugin for CollectionPlugin {
             leadership::CollectionLeadershipPlugin,
             protection::CollectionProtectionPlugin,
             pool::CollectionPoolPlugin,
+            villain::CollectionVillainPlugin,
         ));
     }
 }

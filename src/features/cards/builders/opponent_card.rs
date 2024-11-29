@@ -1,18 +1,17 @@
-use bevy::input::keyboard::Key;
-
 use crate::features::cards::{CardAbility, CardIcon, CardTrait, Count, Identity, Keyword};
 
 #[derive(Clone)]
 pub struct AttachmentCard<'a> {
     pub id: &'a str,
     pub name: &'a str,
-    pub unique: bool,
     pub boost: u8,
     pub card_icons: Vec<CardIcon>,
     pub traits: Vec<CardTrait>,
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
     pub card_image_path: &'a str,
+    pub atk_modifier: u8,
+    pub sch_modifier: u8,
 }
 
 #[derive(Clone)]
@@ -28,12 +27,22 @@ pub struct EnvironmentCard<'a> {
 }
 
 #[derive(Clone)]
-pub struct MainSchemeCard<'a> {
+pub struct MainSchemeACard<'a> {
     pub id: &'a str,
     pub name: &'a str,
     pub next_stage_id: Option<&'a str>,
-    pub target_threat: u8,
-    pub initial_threat: u8,
+    pub description: &'a str,
+    pub abilities: Vec<CardAbility>,
+    pub card_image_path: &'a str,
+}
+
+#[derive(Clone)]
+pub struct MainSchemeBCard<'a> {
+    pub id: &'a str,
+    pub name: &'a str,
+    pub next_stage_id: Option<&'a str>,
+    pub target_threat: Count,
+    pub initial_threat: Count,
     pub card_icons: Vec<CardIcon>,
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
@@ -98,7 +107,7 @@ pub struct TreacheryCard<'a> {
 pub struct VillainCard<'a> {
     pub id: &'a str,
     pub name: &'a str,
-    pub initial_hit_points: u8,
+    pub initial_hit_points: Count,
     pub keywords: Vec<Keyword>,
     pub traits: Vec<CardTrait>,
     pub card_icons: Vec<CardIcon>,
@@ -106,6 +115,5 @@ pub struct VillainCard<'a> {
     pub atk: u8,
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
-    pub hand_size: u8,
     pub card_image_path: &'a str,
 }

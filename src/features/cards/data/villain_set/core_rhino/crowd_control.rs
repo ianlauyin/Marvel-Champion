@@ -1,0 +1,14 @@
+use crate::features::cards::{Card, CardIcon, Count, SideSchemeCard};
+
+pub fn get_crowd_control() -> Card {
+    Card::SideScheme(SideSchemeCard {
+        id: "core_108",
+        name: "Crowd Control",
+        description: "",
+        abilities: vec![],
+        card_image_path: "embedded://cards/villain/core_rhino/core_108.png",
+        boost: 2,
+        initial_threat: Count::PerPlayer(2),
+        card_icons: vec![CardIcon::Crisis],
+    })
+}
