@@ -1,5 +1,7 @@
 use super::{
-    data::{core_captain_marvel, core_iron_man, core_she_hulk, core_spider_man},
+    data::{
+        core_black_panther, core_captain_marvel, core_iron_man, core_she_hulk, core_spider_man,
+    },
     Card,
 };
 
@@ -9,6 +11,7 @@ pub enum Identity {
     CoreCaptainMarvel,
     CoreSheHulk,
     CoreIronMan,
+    CoreBlackPanther,
 }
 
 impl Identity {
@@ -18,6 +21,7 @@ impl Identity {
             Identity::CoreCaptainMarvel,
             Identity::CoreSheHulk,
             Identity::CoreIronMan,
+            Identity::CoreBlackPanther,
         ]
     }
 
@@ -35,6 +39,7 @@ impl Identity {
             Identity::CoreCaptainMarvel => "Core - Captain Marvel",
             Identity::CoreSheHulk => "Core - She Hulk",
             Identity::CoreIronMan => "Core - Iron Man",
+            Identity::CoreBlackPanther => "Core - Black Panther",
         };
         str.to_string()
     }
@@ -46,6 +51,7 @@ impl Identity {
             Identity::CoreCaptainMarvel => "core_captain_marvel",
             Identity::CoreSheHulk => "core_she_hulk",
             Identity::CoreIronMan => "core_iron_man",
+            Identity::CoreBlackPanther => "core_black_panther",
         };
         format!("{prefix}{name}{postfix}")
     }
@@ -56,6 +62,7 @@ impl Identity {
             Identity::CoreCaptainMarvel => core_captain_marvel::get_all(),
             Identity::CoreSheHulk => core_she_hulk::get_all(),
             Identity::CoreIronMan => core_iron_man::get_all(),
+            Identity::CoreBlackPanther => core_black_panther::get_all(),
         }
     }
 
@@ -65,6 +72,7 @@ impl Identity {
             Identity::CoreCaptainMarvel => core_captain_marvel::get_player_cards(),
             Identity::CoreSheHulk => core_she_hulk::get_player_cards(),
             Identity::CoreIronMan => core_iron_man::get_player_cards(),
+            Identity::CoreBlackPanther => core_black_panther::get_player_cards(),
         }
     }
 
@@ -74,6 +82,7 @@ impl Identity {
             Identity::CoreCaptainMarvel => core_captain_marvel::get_obligation(),
             Identity::CoreSheHulk => core_she_hulk::get_obligation(),
             Identity::CoreIronMan => core_iron_man::get_obligation(),
+            Identity::CoreBlackPanther => core_black_panther::get_obligation(),
         }
     }
 
@@ -83,6 +92,7 @@ impl Identity {
             Identity::CoreCaptainMarvel => core_captain_marvel::get_nemesis_set(),
             Identity::CoreSheHulk => core_she_hulk::get_nemesis_set(),
             Identity::CoreIronMan => core_iron_man::get_nemesis_set(),
+            Identity::CoreBlackPanther => core_black_panther::get_nemesis_set(),
         }
     }
 }

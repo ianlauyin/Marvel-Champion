@@ -25,20 +25,23 @@ pub enum CardAspect {
 pub enum CardTrait {
     // Charater-related
     Avenger,
+    Assassin,
+    Android,
+    Attorney,
+    Brute,
     Criminal,
     Defender,
+    Elite,
     HeroForHire,
+    Gamma,
     Genius,
+    Kree,
+    King,
     Persona,
     SHIELD,
     Spy,
-    Gamma,
-    Android,
-    Elite,
-    Kree,
     Soldier,
-    Brute,
-    Attorney,
+    Mercenary,
     // Event-related
     Aerial,
     Attack,
@@ -52,8 +55,12 @@ pub enum CardTrait {
     Item,
     Tech,
     Condition,
+    Weapon,
     // Support-related
     Location,
+    // Other
+    BlackPanther,
+    Wakanda,
 }
 
 #[derive(Clone)]

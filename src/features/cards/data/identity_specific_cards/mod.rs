@@ -1,3 +1,4 @@
+pub mod core_black_panther;
 pub mod core_captain_marvel;
 pub mod core_iron_man;
 pub mod core_she_hulk;
