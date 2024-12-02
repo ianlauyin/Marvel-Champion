@@ -7,6 +7,7 @@ pub fn get_nemesis_side_scheme() -> Card {
         id: "core_166",
         name: "Highway Robbery",
         boost: 3,
+        traits: vec![],
         initial_threat: Count::PerPlayer(3),
         card_icons: vec![CardIcon::Acceleration],
         description:

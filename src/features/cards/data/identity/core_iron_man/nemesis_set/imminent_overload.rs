@@ -5,6 +5,7 @@ pub fn get_imminent_overload() -> Card {
         id: "core_171",
         name: "Imminent Overload",
         boost: 3,
+        traits: vec![],
         card_icons: vec![CardIcon::Acceleration],
         description: "When Revealed: Place an additional 1 per person threat here.",
         abilities: vec![],

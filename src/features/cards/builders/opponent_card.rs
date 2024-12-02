@@ -86,6 +86,7 @@ pub struct SideSchemeCard<'a> {
     pub name: &'a str,
     pub boost: u8,
     pub initial_threat: Count,
+    pub traits: Vec<CardTrait>,
     pub card_icons: Vec<CardIcon>,
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,

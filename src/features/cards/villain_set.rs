@@ -1,5 +1,5 @@
 use super::{
-    data::{core_klaw, core_rhino},
+    data::{core_klaw, core_rhino, core_ultron},
     Card,
 };
 
@@ -7,11 +7,16 @@ use super::{
 pub enum VillainSet {
     CoreRhino,
     CoreKlaw,
+    CoreUltron,
 }
 
 impl VillainSet {
     pub fn get_all() -> Vec<Self> {
-        vec![VillainSet::CoreRhino, VillainSet::CoreKlaw]
+        vec![
+            VillainSet::CoreRhino,
+            VillainSet::CoreKlaw,
+            VillainSet::CoreUltron,
+        ]
     }
 
     pub fn get_all_cards() -> Vec<Card> {
@@ -26,6 +31,7 @@ impl VillainSet {
         let str = match *self {
             VillainSet::CoreRhino => "Core - Rhino",
             VillainSet::CoreKlaw => "Core - Klaw",
+            VillainSet::CoreUltron => "Core - Ultron",
         };
         str.to_string()
     }
@@ -35,6 +41,7 @@ impl VillainSet {
         let name = match *self {
             VillainSet::CoreRhino => "core_rhino",
             VillainSet::CoreKlaw => "core_klaw",
+            VillainSet::CoreUltron => "core_ultron",
         };
         format!("{prefix}{name}{postfix}")
     }
@@ -43,6 +50,7 @@ impl VillainSet {
         match *self {
             VillainSet::CoreRhino => core_rhino::get_all(),
             VillainSet::CoreKlaw => core_klaw::get_all(),
+            VillainSet::CoreUltron => core_ultron::get_all(),
         }
     }
 }

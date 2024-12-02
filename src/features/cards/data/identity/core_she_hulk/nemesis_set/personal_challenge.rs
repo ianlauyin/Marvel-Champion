@@ -5,6 +5,7 @@ pub fn get_personal_challenge() -> Card {
         id: "core_161",
         name: "Personal Challenge",
         boost: 3,
+        traits: vec![],
         card_icons: vec![CardIcon::Crisis],
         description: "When Revealed: Place an additional 1  threat here.",
         abilities: vec![],

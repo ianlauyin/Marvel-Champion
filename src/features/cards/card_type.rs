@@ -44,6 +44,7 @@ pub enum CardTrait {
     Soldier,
     Mercenary,
     MasterOfEvil,
+    Drone,
     // Event-related
     Aerial,
     Attack,

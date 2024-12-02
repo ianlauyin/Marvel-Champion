@@ -5,6 +5,7 @@ pub fn get_usurp_the_throne() -> Card {
         id: "core_156",
         name: "Usurp The Throne",
         boost: 3,
+        traits: vec![],
         card_icons: vec![CardIcon::Hazard],
         description: "",
         abilities: vec![],

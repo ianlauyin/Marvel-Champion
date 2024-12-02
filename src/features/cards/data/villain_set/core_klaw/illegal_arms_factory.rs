@@ -6,6 +6,7 @@ pub fn get_illegal_arms_factory() -> Card {
         name: "Illegal Arms Factory",
         description: "When Revealed: Place an additional 1 per player threat here.",
         abilities: vec![],
+        traits: vec![],
         card_image_path: "embedded://cards/villain/core_klaw/core_126.png",
         boost: 2,
         initial_threat: Count::Constant(3),

@@ -5,6 +5,7 @@ pub fn get_the_psyche_magnitron() -> Card {
         id: "core_176",
         name: "The Psyche-Magnitron",
         boost: 3,
+        traits: vec![],
         card_icons: vec![CardIcon::Hazard],
         description: "When Revealed: Place an additional 1 per person threat here.",
         abilities: vec![],
