@@ -11,7 +11,7 @@ pub fn get_whiplash() -> Card {
         card_image_path: "embedded://cards/identity/core_iron_man/core_172.png",
         unique: true,
         initial_hit_points: 4,
-        keywords: vec![Keyword::Retaliate],
+        keywords: vec![Keyword::Retaliate(1)],
         traits: vec![CardTrait::Criminal],
         sch: 2,
         atk: 3,

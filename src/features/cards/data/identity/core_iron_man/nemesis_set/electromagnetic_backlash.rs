@@ -9,6 +9,6 @@ pub fn get_electromagnetic_backlash() -> Card {
         abilities: vec![],
         card_image_path: "embedded://cards/identity/core_iron_man/core_174.png",
         traits: vec![],
-        keyword: vec![],
+        keywords: vec![],
     })
 }

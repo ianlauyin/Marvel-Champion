@@ -9,6 +9,6 @@ pub fn get_sonic_boom() -> Card {
         card_image_path: "embedded://cards/villain/core_klaw/core_123.png",
         boost: 0,
         traits: vec![],
-        keyword: vec![],
+        keywords: vec![],
     })
 }

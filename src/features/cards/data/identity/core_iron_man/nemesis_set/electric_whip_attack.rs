@@ -9,6 +9,6 @@ pub fn get_whiplash() -> Card {
         abilities: vec![],
         card_image_path: "embedded://cards/identity/core_iron_man/core_173.png",
         traits: vec![],
-        keyword: vec![],
+        keywords: vec![],
     })
 }

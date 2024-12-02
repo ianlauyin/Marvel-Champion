@@ -12,5 +12,6 @@ pub fn get_armored_rhino_suit() -> Card {
         traits: vec![CardTrait::Armor],
         atk_modifier: 0,
         sch_modifier: 0,
+        keywords:vec![],
     })
 }

@@ -9,6 +9,6 @@ pub fn get_sound_manipulation() -> Card {
         card_image_path: "embedded://cards/villain/core_klaw/core_124.png",
         boost: 2,
         traits: vec![],
-        keyword: vec![],
+        keywords: vec![],
     })
 }

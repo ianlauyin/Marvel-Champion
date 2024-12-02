@@ -9,6 +9,6 @@ pub fn get_heart_shaped_herb() -> Card {
         abilities: vec![],
         card_image_path: "embedded://cards/identity/core_black_panther/core_158.png",
         traits: vec![],
-        keyword:vec![Keyword::Surge],
+        keywords:vec![Keyword::Surge],
     })
 }

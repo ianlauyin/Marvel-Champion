@@ -2,7 +2,7 @@ use bevy::{input::common_conditions::input_just_pressed, prelude::*};
 
 use crate::{
     features::{
-        cards::{Card, CardDatas, Identity},
+        cards::{Card, Identity},
         shared::{
             handle_previous_interaction, spawn_card_detail, DisplayMethod, ListItem, MenuBuilder,
         },

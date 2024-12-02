@@ -10,7 +10,7 @@ pub fn get_hero() -> Card {
         traits: vec![CardTrait::Avenger,CardTrait::Wakanda],
         flip_target_id: vec!["core_040b"],
         initial_hit_points: 11,
-        keywords: vec![Keyword::Retaliate],
+        keywords: vec![Keyword::Retaliate(1)],
         card_icons: vec![],
         thw: 2,
         atk: 2,

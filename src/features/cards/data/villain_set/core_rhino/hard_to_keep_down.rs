@@ -9,6 +9,6 @@ pub fn get_hard_to_keep_down() -> Card {
         card_image_path: "embedded://cards/villain/core_rhino/core_104.png",
         boost: 0,
         traits: vec![],
-        keyword: vec![],
+        keywords: vec![],
     })
 }

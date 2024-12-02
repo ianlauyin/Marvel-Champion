@@ -9,6 +9,6 @@ pub fn get_stampede() -> Card {
         card_image_path: "embedded://cards/villain/core_rhino/core_106.png",
         boost: 1,
         traits: vec![],
-        keyword: vec![],
+        keywords: vec![],
     })
 }

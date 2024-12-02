@@ -9,6 +9,6 @@ pub fn get_swarm_attack() -> Card {
         abilities: vec![],
         card_image_path: "embedded://cards/villain/core_ultron/core_147.png",
         boost: 1,
-        keyword: vec![],
+        keywords: vec![],
     })
 }

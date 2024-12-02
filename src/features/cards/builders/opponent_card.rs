@@ -12,6 +12,7 @@ pub struct AttachmentCard<'a> {
     pub card_image_path: &'a str,
     pub atk_modifier: u8,
     pub sch_modifier: u8,
+    pub keywords: Vec<Keyword>,
 }
 
 #[derive(Clone)]
@@ -101,7 +102,7 @@ pub struct TreacheryCard<'a> {
     pub boost: u8,
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
-    pub keyword: Vec<Keyword>,
+    pub keywords: Vec<Keyword>,
     pub card_image_path: &'a str,
 }
 

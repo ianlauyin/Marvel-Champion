@@ -12,5 +12,6 @@ pub fn get_sonic_converter() -> Card {
         traits: vec![CardTrait::Weapon],
         atk_modifier: 1,
         sch_modifier: 0,
+        keywords:vec![],
     })
 }

@@ -12,5 +12,6 @@ pub fn get_solid_sound_body() -> Card {
         traits: vec![CardTrait::Condition],
         atk_modifier: 0,
         sch_modifier: 0,
+        keywords:vec![],
     })
 }

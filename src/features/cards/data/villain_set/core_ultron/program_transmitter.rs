@@ -11,6 +11,7 @@ pub fn get_program_transmitter() -> Card {
         card_image_path: "embedded://cards/villain/core_ultron/core_141.png",
         boost: 1,
         atk_modifier: 0,
+        keywords:vec![],
         sch_modifier: 1,
     })
 }

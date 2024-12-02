@@ -30,7 +30,9 @@ pub enum CardTrait {
     Attorney,
     Brute,
     Criminal,
+    Cyborg,
     Defender,
+    Drone,
     Elite,
     HeroForHire,
     Gamma,
@@ -44,7 +46,6 @@ pub enum CardTrait {
     Soldier,
     Mercenary,
     MasterOfEvil,
-    Drone,
     // Event-related
     Aerial,
     Attack,
@@ -76,7 +77,7 @@ pub enum Counter {
 
 #[derive(Clone)]
 pub enum Keyword {
-    Retaliate,
+    Retaliate(u8),
     Quickstrike,
     Use(u8, Counter),
     Toughness,

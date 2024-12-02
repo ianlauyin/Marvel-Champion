@@ -9,6 +9,6 @@ pub fn get_ritual_combat() -> Card {
         abilities: vec![],
         card_image_path: "embedded://cards/identity/core_black_panther/core_159.png",
         traits: vec![],
-        keyword:vec![],
+        keywords:vec![],
     })
 }

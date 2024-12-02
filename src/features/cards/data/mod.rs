@@ -1,9 +1,10 @@
 mod aggression;
 mod basic;
 mod card_datas;
-pub mod identity;
+mod identity;
 mod justice;
 mod leadership;
+pub mod modular;
 mod pool;
 mod protection;
 mod villain_set;

@@ -6,7 +6,7 @@ pub fn get_sweeping_swoop() -> Card {
         name: "Sweeping Swoop",
         traits: vec![],
         boost: 0,
-        keyword: vec![],
+        keywords: vec![],
         description:
             "When Revealed: Stun your hero. If Vulture is in play, this card gains surge. Boost: If this activation deals damage to a friendly character, stun that character.",
         abilities: vec![],

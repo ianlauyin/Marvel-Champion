@@ -9,6 +9,6 @@ pub fn get_klaws_vengenace() -> Card {
         card_image_path: "embedded://cards/villain/core_klaw/core_122.png",
         boost: 1,
         traits: vec![],
-        keyword: vec![],
+        keywords: vec![],
     })
 }

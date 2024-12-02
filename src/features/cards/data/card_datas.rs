@@ -5,7 +5,7 @@ use bevy::{
     prelude::Resource,
 };
 
-use crate::features::cards::{Card, Identity, VillainSet};
+use crate::features::cards::{Card, Identity, ModularSet, VillainSet};
 
 use super::{aggression, basic, justice, leadership, pool, protection};
 
@@ -27,6 +27,7 @@ impl CardDatas {
         let all_cards = [
             Identity::get_all_cards(),
             VillainSet::get_all_cards(),
+            ModularSet::get_all_cards(),
             aspect_cards,
         ]
         .concat();

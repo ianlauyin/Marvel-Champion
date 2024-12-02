@@ -7,7 +7,7 @@ pub fn get_kree_manipulator() -> Card {
         boost: 0,
         description:"Surge. (After this card resolves, reveal 1 additional encounter card.) When Revealed: Place 1 threat on the main scheme.",
         abilities: vec![],
-        keyword: vec![Keyword::Surge],
+        keywords: vec![Keyword::Surge],
         card_image_path: "embedded://cards/identity/core_captain_marvel/core_178.png",
         traits: vec![],
     })

@@ -9,6 +9,6 @@ pub fn get_im_tough() -> Card {
         card_image_path: "embedded://cards/villain/core_rhino/core_105.png",
         boost: 0,
         traits: vec![],
-        keyword: vec![],
+        keywords: vec![],
     })
 }

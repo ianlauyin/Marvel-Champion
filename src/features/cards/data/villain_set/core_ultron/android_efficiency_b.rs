@@ -9,6 +9,6 @@ pub fn get_android_efficiency_b() -> Card {
         abilities: vec![],
         card_image_path: "embedded://cards/villain/core_ultron/core_144b.png",
         boost: 0,
-        keyword: vec![],
+        keywords: vec![],
     })
 }
