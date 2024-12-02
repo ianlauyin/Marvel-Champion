@@ -43,7 +43,7 @@ fn spawn_villain_list(commands: Commands, asset_server: Res<AssetServer>) {
                 VillainListButton(villain_set.clone()),
                 ListItem {
                     text: villain_set.to_string().clone(),
-                    image: UiImage::new(asset_server.load(villain_set.get_title_image_path()))
+                    image: ImageNode::new(asset_server.load(villain_set.get_title_image_path()))
                         .with_color(Color::srgb(0.365, 0.365, 0.365)),
                     ..default()
                 },

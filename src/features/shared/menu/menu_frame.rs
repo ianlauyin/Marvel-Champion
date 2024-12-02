@@ -8,7 +8,7 @@ use super::{spawn_card_list, spawn_list};
 pub struct ListItem {
     pub text: String,
     pub color: Color,
-    pub image: UiImage,
+    pub image: ImageNode,
 }
 
 pub enum DisplayMethod {
@@ -31,21 +31,18 @@ impl<T: Component + Clone, S: States + FreelyMutableState, B: Component + Clone>
         commands
             .spawn((
                 self.component.clone(),
-                NodeBundle {
-                    style: Style {
-                        width: Val::Percent(90.),
-                        height: Val::Percent(90.),
-                        align_self: AlignSelf::Center,
-                        justify_self: JustifySelf::Center,
-                        display: Display::Flex,
-                        flex_direction: FlexDirection::Column,
-                        overflow: Overflow::clip_y(),
-                        ..default()
-                    },
-                    border_radius: BorderRadius::all(Val::Px(10.)),
-                    background_color: BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
+                Node {
+                    width: Val::Percent(90.),
+                    height: Val::Percent(90.),
+                    align_self: AlignSelf::Center,
+                    justify_self: JustifySelf::Center,
+                    display: Display::Flex,
+                    flex_direction: FlexDirection::Column,
+                    overflow: Overflow::clip_y(),
                     ..default()
                 },
+                BorderRadius::all(Val::Px(10.)),
+                BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
             ))
             .with_children(|menu| {
                 spawn_header(menu, self.previous_state.clone());
@@ -58,15 +55,12 @@ impl<T: Component + Clone, S: States + FreelyMutableState, B: Component + Clone>
 }
 
 fn spawn_header<S: States + FreelyMutableState>(menu: &mut ChildBuilder, previous_state: S) {
-    menu.spawn(NodeBundle {
-        style: Style {
-            height: Val::Percent(10.),
-            padding: UiRect {
-                left: Val::Px(10.),
-                top: Val::Px(10.),
-                bottom: Val::Px(10.),
-                ..default()
-            },
+    menu.spawn(Node {
+        height: Val::Percent(10.),
+        padding: UiRect {
+            left: Val::Px(10.),
+            top: Val::Px(10.),
+            bottom: Val::Px(10.),
             ..default()
         },
         ..default()

@@ -6,14 +6,11 @@ use super::{ListItem, ScrollingList};
 
 pub fn spawn_card_list<B: Component>(menu: &mut ChildBuilder, button_map: Vec<(B, ListItem)>) {
     // Scrolling List Container
-    menu.spawn(NodeBundle {
-        style: Style {
-            height: Val::Percent(90.),
-            align_self: AlignSelf::Stretch,
-            flex_direction: FlexDirection::Column,
-            overflow: Overflow::clip_y(),
-            ..default()
-        },
+    menu.spawn(Node {
+        height: Val::Percent(90.),
+        align_self: AlignSelf::Stretch,
+        flex_direction: FlexDirection::Column,
+        overflow: Overflow::clip_y(),
         ..default()
     })
     .with_children(|list_container| {
@@ -21,16 +18,13 @@ pub fn spawn_card_list<B: Component>(menu: &mut ChildBuilder, button_map: Vec<(B
         list_container
             .spawn((
                 ScrollingList::default(),
-                NodeBundle {
-                    style: Style {
-                        width: Val::Percent(100.),
-                        display: Display::Grid,
-                        padding: UiRect::all(Val::Px(30.)),
-                        grid_template_columns: vec![RepeatedGridTrack::auto(8)],
-                        row_gap: Val::Px(10.),
-                        column_gap: Val::Px(10.),
-                        ..default()
-                    },
+                Node {
+                    width: Val::Percent(100.),
+                    display: Display::Grid,
+                    padding: UiRect::all(Val::Px(30.)),
+                    grid_template_columns: vec![RepeatedGridTrack::auto(8)],
+                    row_gap: Val::Px(10.),
+                    column_gap: Val::Px(10.),
                     ..default()
                 },
             ))
@@ -38,13 +32,10 @@ pub fn spawn_card_list<B: Component>(menu: &mut ChildBuilder, button_map: Vec<(B
                 // Items
                 for (button_component, button_info) in button_map {
                     list_div
-                        .spawn(NodeBundle {
-                            style: Style {
-                                display: Display::Flex,
-                                justify_content: JustifyContent::Center,
-                                align_items: AlignItems::Center,
-                                ..default()
-                            },
+                        .spawn(Node {
+                            display: Display::Flex,
+                            justify_content: JustifyContent::Center,
+                            align_items: AlignItems::Center,
                             ..default()
                         })
                         .with_children(|card_type_node| {

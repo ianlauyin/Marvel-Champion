@@ -6,14 +6,11 @@ use super::{ListItem, ScrollingList};
 
 pub fn spawn_list<B: Component>(menu: &mut ChildBuilder, button_map: Vec<(B, ListItem)>) {
     // Scrolling List Container
-    menu.spawn(NodeBundle {
-        style: Style {
-            height: Val::Percent(90.),
-            align_self: AlignSelf::Stretch,
-            flex_direction: FlexDirection::Column,
-            overflow: Overflow::clip_y(),
-            ..default()
-        },
+    menu.spawn(Node {
+        height: Val::Percent(90.),
+        align_self: AlignSelf::Stretch,
+        flex_direction: FlexDirection::Column,
+        overflow: Overflow::clip_y(),
         ..default()
     })
     .with_children(|list_container| {
@@ -26,15 +23,12 @@ pub fn spawn_list<B: Component>(menu: &mut ChildBuilder, button_map: Vec<(B, Lis
         list_container
             .spawn((
                 ScrollingList::default(),
-                NodeBundle {
-                    style: Style {
-                        width: Val::Percent(100.),
-                        display: Display::Grid,
-                        padding: UiRect::all(Val::Px(30.)),
-                        grid_template_columns: vec![RepeatedGridTrack::auto(3)],
-                        row_gap,
-                        ..default()
-                    },
+                Node {
+                    width: Val::Percent(100.),
+                    display: Display::Grid,
+                    padding: UiRect::all(Val::Px(30.)),
+                    grid_template_columns: vec![RepeatedGridTrack::auto(3)],
+                    row_gap,
                     ..default()
                 },
             ))

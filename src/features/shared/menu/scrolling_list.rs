@@ -19,15 +19,15 @@ pub struct ScrollingList {
 
 fn on_scroll(
     mut mouse_wheel_events: EventReader<MouseWheel>,
-    mut query_list: Query<(&mut ScrollingList, &mut Style, &Parent, &Node)>,
+    mut query_list: Query<(&mut ScrollingList, &mut Node, &ComputedNode, &Parent)>,
     window_q: Query<&Window>,
-    query_node: Query<(&Node, &Transform)>,
+    query_node: Query<(&ComputedNode, &Transform)>,
 ) {
     for mouse_wheel_event in mouse_wheel_events.read() {
         let Some(cursor_position) = window_q.get_single().unwrap().cursor_position() else {
             return;
         };
-        for (mut scrolling_list, mut style, parent, list_node) in &mut query_list {
+        for (mut scrolling_list, mut node, computed_node, parent) in &mut query_list {
             let (container_node, container_transform) = query_node.get(parent.get()).unwrap();
             if !is_cusrsor_in_container(
                 cursor_position,
@@ -38,7 +38,7 @@ fn on_scroll(
                 return;
             }
 
-            let items_height = list_node.size().y;
+            let items_height = computed_node.size().y;
             let max_scroll = (items_height - container_node.size().y).max(0.);
 
             let dy = match mouse_wheel_event.unit {
@@ -48,7 +48,7 @@ fn on_scroll(
 
             scrolling_list.position += dy;
             scrolling_list.position = scrolling_list.position.clamp(-max_scroll, 0.);
-            style.top = Val::Px(scrolling_list.position);
+            node.top = Val::Px(scrolling_list.position);
         }
     }
 }

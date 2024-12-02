@@ -32,22 +32,19 @@ fn spawn_main_menu(mut commands: Commands) {
     commands
         .spawn((
             MainMenu,
-            NodeBundle {
-                style: Style {
-                    width: Val::Percent(90.),
-                    height: Val::Percent(90.),
-                    align_self: AlignSelf::Center,
-                    justify_self: JustifySelf::Center,
-                    display: Display::Flex,
-                    flex_direction: FlexDirection::Column,
-                    justify_content: JustifyContent::SpaceAround,
-                    align_items: AlignItems::Center,
-                    ..default()
-                },
-                border_radius: BorderRadius::all(Val::Px(10.)),
-                background_color: BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
+            Node {
+                width: Val::Percent(90.),
+                height: Val::Percent(90.),
+                align_self: AlignSelf::Center,
+                justify_self: JustifySelf::Center,
+                display: Display::Flex,
+                flex_direction: FlexDirection::Column,
+                justify_content: JustifyContent::SpaceAround,
+                align_items: AlignItems::Center,
                 ..default()
             },
+            BorderRadius::all(Val::Px(10.)),
+            BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
         ))
         .with_children(|main_menu| {
             for (button_component, text) in BUTTON_MAP {

@@ -15,13 +15,20 @@ fn main() {
         .add_plugins(systems::SystemPlugin)
         .add_plugins(ui::UIPlugin)
         .add_plugins(features::FeaturePlugin)
-        // .add_systems(OnEnter(AppState::DeckBuilding), spawn_cards
+        // .add_systems(OnEnter(AppState::DeckBuilding), spawn_cards)
         // .add_systems(Update, rotate_card.run_if(in_state(AppState::DeckBuilding)))
         // .add_systems(
         //     OnEnter(AppState::MainMenu),
         //     (spawn_component, test_component_effect).chain(),
         // )
         .run();
+}
+
+#[derive(Bundle)]
+struct CardBundle {
+    mesh: Mesh3d,
+    material: MeshMaterial3d<StandardMaterial>,
+    transform: Transform,
 }
 
 // Only work for vertical card.
@@ -48,31 +55,29 @@ fn spawn_cards(
                 },
             ))
             .with_children(|card_node| {
-                card_node.spawn(PbrBundle {
-                    mesh: meshes.add(Cuboid::from_size(CARD_SIZE)),
-                    material: materials.add(StandardMaterial {
+                card_node.spawn(CardBundle {
+                    mesh: Mesh3d(meshes.add(Cuboid::from_size(CARD_SIZE))),
+                    material: MeshMaterial3d(materials.add(StandardMaterial {
                         base_color_texture: Some(asset_server.load(card_image_path)),
                         perceptual_roughness: 0.8,
                         metallic: 0.5,
                         ..default()
-                    }),
+                    })),
                     transform: Transform::from_translation(Vec3::new(0., 0., -0.5)),
-                    ..default()
                 });
-                card_node.spawn(PbrBundle {
-                    mesh: meshes.add(Cuboid::from_size(CARD_SIZE)),
-                    material: materials.add(StandardMaterial {
+                card_node.spawn(CardBundle {
+                    mesh: Mesh3d(meshes.add(Cuboid::from_size(CARD_SIZE))),
+                    material: MeshMaterial3d(materials.add(StandardMaterial {
                         base_color_texture: Some(asset_server.load(card_back_image_path)),
                         perceptual_roughness: 0.8,
                         metallic: 0.5,
                         ..default()
-                    }),
+                    })),
                     transform: Transform {
                         translation: Vec3::new(0., 0., 0.5),
                         rotation: Quat::from_rotation_y(PI),
                         ..default()
                     },
-                    ..default()
                 });
             });
         x += 64.;
@@ -103,7 +108,7 @@ fn spawn_component(mut commands: Commands, card_datas: Res<CardDatas>) {
     let CardAbility::WhenRevealed(effect) = side_scheme.abilities[0] else {
         return;
     };
-    let system_id = commands.register_one_shot_system(effect);
+    let system_id = commands.register_system(effect);
     commands.spawn(TestEffect(system_id));
 }
 

@@ -30,28 +30,25 @@ pub fn spawn_card_detail(
 ) {
     commands
         .spawn((
-            NodeBundle {
-                focus_policy: FocusPolicy::Block,
-                style: Style {
-                    width: Val::Px(600.),
-                    height: Val::Px(600.),
-                    position_type: PositionType::Relative,
-                    bottom: Val::Px(position.y),
-                    left: Val::Px(position.x),
-                    justify_self: JustifySelf::Center,
-                    align_self: AlignSelf::Center,
-                    display: Display::Flex,
-                    justify_content: JustifyContent::Center,
-                    align_items: AlignItems::Center,
-                    border: UiRect::all(Val::Px(1.)),
-                    ..default()
-                },
-                border_color: BorderColor::from(Color::WHITE),
-                border_radius: BorderRadius::all(Val::Px(10.)),
-                z_index,
-                background_color: BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
+            Node {
+                width: Val::Px(600.),
+                height: Val::Px(600.),
+                position_type: PositionType::Relative,
+                bottom: Val::Px(position.y),
+                left: Val::Px(position.x),
+                justify_self: JustifySelf::Center,
+                align_self: AlignSelf::Center,
+                display: Display::Flex,
+                justify_content: JustifyContent::Center,
+                align_items: AlignItems::Center,
+                border: UiRect::all(Val::Px(1.)),
                 ..default()
             },
+            FocusPolicy::Block,
+            BorderColor::from(Color::WHITE),
+            BorderRadius::all(Val::Px(10.)),
+            BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
+            z_index,
             Interaction::default(),
             CardDetail,
         ))
@@ -71,13 +68,10 @@ pub fn spawn_card_detail(
 
 fn spawn_escape_button(children_builder: &mut ChildBuilder) {
     children_builder
-        .spawn(NodeBundle {
-            style: Style {
-                position_type: PositionType::Absolute,
-                top: Val::Px(5.),
-                right: Val::Px(5.),
-                ..default()
-            },
+        .spawn(Node {
+            position_type: PositionType::Absolute,
+            top: Val::Px(5.),
+            right: Val::Px(5.),
             ..default()
         })
         .with_children(|button_container| {
@@ -97,20 +91,18 @@ fn spawn_escape_button(children_builder: &mut ChildBuilder) {
 
 fn spawn_content(container: &mut ChildBuilder, card_image: Handle<Image>, vertical: bool) {
     container.spawn((
-        NodeBundle {
-            style: Style {
-                width: Val::Px(CARD_DETAIL_SIZE.x),
-                height: Val::Px(CARD_DETAIL_SIZE.y),
-                ..default()
-            },
-            transform: Transform::from_rotation(Quat::from_axis_angle(
-                Vec3::Z,
-                if vertical { 0. } else { PI / 2. },
-            )),
-            border_radius: BorderRadius::all(Val::Px(20.)),
+        Node {
+            width: Val::Px(CARD_DETAIL_SIZE.x),
+            height: Val::Px(CARD_DETAIL_SIZE.y),
+
             ..default()
         },
-        UiImage::new(card_image),
+        Transform::from_rotation(Quat::from_axis_angle(
+            Vec3::Z,
+            if vertical { 0. } else { PI / 2. },
+        )),
+        BorderRadius::all(Val::Px(20.)),
+        ImageNode::new(card_image),
     ));
 }
 
@@ -130,18 +122,17 @@ fn on_escape(
 
 fn on_drag(
     mut cursor_ev: EventReader<CursorMoved>,
-    mut card_detail_q: Query<(&Interaction, &mut Style), With<CardDetail>>,
+    mut card_detail_q: Query<(&Interaction, &mut Node), With<CardDetail>>,
 ) {
-    for (inteaction, mut style) in &mut card_detail_q {
+    for (inteaction, mut node) in &mut card_detail_q {
         if *inteaction == Interaction::Pressed {
             for cursor in cursor_ev.read() {
-                let (Some(delta), Val::Px(y), Val::Px(x)) =
-                    (cursor.delta, style.bottom, style.left)
+                let (Some(delta), Val::Px(y), Val::Px(x)) = (cursor.delta, node.bottom, node.left)
                 else {
                     return;
                 };
-                style.bottom = Val::Px(y - delta.y);
-                style.left = Val::Px(x + delta.x);
+                node.bottom = Val::Px(y - delta.y);
+                node.left = Val::Px(x + delta.x);
             }
             return;
         }

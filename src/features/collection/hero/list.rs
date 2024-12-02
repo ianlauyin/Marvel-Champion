@@ -40,7 +40,7 @@ fn spawn_hero_list(commands: Commands, asset_server: Res<AssetServer>) {
                 HeroListButton(identity.clone()),
                 ListItem {
                     text: identity.to_string().clone(),
-                    image: UiImage::new(asset_server.load(identity.get_title_image_path()))
+                    image: ImageNode::new(asset_server.load(identity.get_title_image_path()))
                         .with_color(Color::srgb(0.365, 0.365, 0.365)),
                     ..default()
                 },

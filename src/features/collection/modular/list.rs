@@ -43,7 +43,7 @@ fn spawn_modular_list(commands: Commands, asset_server: Res<AssetServer>) {
                 ModularListButton(modular_set.clone()),
                 ListItem {
                     text: modular_set.to_string().clone(),
-                    image: UiImage::new(asset_server.load(modular_set.get_title_image_path()))
+                    image: ImageNode::new(asset_server.load(modular_set.get_title_image_path()))
                         .with_color(Color::srgb(0.365, 0.365, 0.365)),
                     ..default()
                 },

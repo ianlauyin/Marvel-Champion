@@ -53,7 +53,7 @@ fn spawn_hero_cards(
             (
                 HeroCardButton(card.clone()),
                 ListItem {
-                    image: UiImage::new(asset_server.load(card.get_card_image_path())),
+                    image: ImageNode::new(asset_server.load(card.get_card_image_path())),
                     ..default()
                 },
             )
@@ -75,10 +75,7 @@ fn handle_card_click(
 ) {
     for (interaction, hero_card_button, z_index) in hero_card_button_q.iter() {
         if *interaction == Interaction::Pressed {
-            let card_detail_z_index = match z_index {
-                ZIndex::Local(value) => ZIndex::Local(value + 1),
-                ZIndex::Global(value) => ZIndex::Global(value + 1),
-            };
+            let card_detail_z_index = ZIndex(z_index.0 + 1);
             spawn_card_detail(
                 commands,
                 asset_server,
