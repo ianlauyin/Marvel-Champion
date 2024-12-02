@@ -18,6 +18,7 @@ pub fn get_nemesis_side_scheme() -> Card {
             CardAbility::WhenDefeated(when_defeated),
         ],
         card_image_path: "embedded://cards/identity/core_spider_man/core_166.png",
+        boost_effect:None,
     })
 }
 

@@ -15,5 +15,6 @@ pub fn get_weapon_runner() -> Card {
         keywords: vec![Keyword::Surge],
         sch: 1,
         atk: 1,
+        boost_effect:None,
     })
 }

@@ -16,5 +16,6 @@ pub fn get_hydra_mercenary() -> Card {
         keywords: vec![Keyword::Guard],
         sch: 0,
         atk: 1,
+        boost_effect: None,
     })
 }

@@ -11,5 +11,6 @@ pub fn get_sweeping_swoop() -> Card {
             "When Revealed: Stun your hero. If Vulture is in play, this card gains surge. Boost: If this activation deals damage to a friendly character, stun that character.",
         abilities: vec![],
         card_image_path: "embedded://cards/identity/core_spider_man/core_168.png",
+        boost_effect:None,
     })
 }

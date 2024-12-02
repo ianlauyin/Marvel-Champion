@@ -10,5 +10,6 @@ pub fn get_shadow_of_the_past() -> Card {
         boost: 2,
         traits: vec![],
         keywords: vec![],
+        boost_effect:None,
     })
 }

@@ -11,5 +11,6 @@ pub fn get_concussive_blast() -> Card {
         boost: 0,
         traits: vec![],
         keywords: vec![],
+        boost_effect:None,
     })
 }

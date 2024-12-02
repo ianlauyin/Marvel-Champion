@@ -15,5 +15,6 @@ pub fn get_advanced_ultron_drone() -> Card {
         keywords: vec![Keyword::Guard],
         sch: 1,
         atk: 1,
+        boost_effect:None,
     })
 }

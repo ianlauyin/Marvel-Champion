@@ -10,5 +10,6 @@ pub fn get_titanias_fury() -> Card {
         card_image_path: "embedded://cards/identity/core_she_hulk/core_164.png",
         traits: vec![],
         keywords: vec![],
+        boost_effect:None,
     })
 }

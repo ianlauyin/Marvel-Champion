@@ -15,5 +15,6 @@ pub fn get_whiplash() -> Card {
         traits: vec![CardTrait::Criminal],
         sch: 2,
         atk: 3,
+        boost_effect:None,
     })
 }

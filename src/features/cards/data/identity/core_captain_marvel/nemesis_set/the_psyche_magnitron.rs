@@ -11,5 +11,6 @@ pub fn get_the_psyche_magnitron() -> Card {
         abilities: vec![],
         card_image_path: "embedded://cards/identity/core_captain_marvel/core_176.png",
         initial_threat: Count::Constant(3),
+        boost_effect: None,
     })
 }

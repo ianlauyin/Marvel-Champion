@@ -10,5 +10,6 @@ pub fn get_kree_manipulator() -> Card {
         keywords: vec![Keyword::Surge],
         card_image_path: "embedded://cards/identity/core_captain_marvel/core_178.png",
         traits: vec![],
+        boost_effect:None,
     })
 }

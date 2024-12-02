@@ -13,5 +13,6 @@ pub fn get_solid_sound_body() -> Card {
         atk_modifier: 0,
         sch_modifier: 0,
         keywords:vec![],
+        boost_effect:None,
     })
 }

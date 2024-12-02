@@ -15,5 +15,6 @@ pub fn get_armored_guard() -> Card {
         keywords: vec![Keyword::Guard,Keyword::Toughness],
         sch: 0,
         atk: 1,
+        boost_effect:None,
     })
 }

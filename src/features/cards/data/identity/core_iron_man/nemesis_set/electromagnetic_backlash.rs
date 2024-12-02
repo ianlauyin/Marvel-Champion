@@ -10,5 +10,6 @@ pub fn get_electromagnetic_backlash() -> Card {
         card_image_path: "embedded://cards/identity/core_iron_man/core_174.png",
         traits: vec![],
         keywords: vec![],
+        boost_effect:None,
     })
 }

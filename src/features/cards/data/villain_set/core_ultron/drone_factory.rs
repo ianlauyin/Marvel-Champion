@@ -11,5 +11,6 @@ pub fn get_drone_factory() -> Card {
         boost: 2,
         initial_threat: Count::Constant(4),
         card_icons: vec![CardIcon::Acceleration],
+        boost_effect:None,
     })
 }

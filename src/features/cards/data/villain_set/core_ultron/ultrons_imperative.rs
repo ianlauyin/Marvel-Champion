@@ -11,5 +11,6 @@ pub fn get_ultrons_imperative() -> Card {
         boost: 3,
         initial_threat: Count::PerPlayer(2),
         card_icons: vec![CardIcon::Hazard],
+        boost_effect:None,
     })
 }

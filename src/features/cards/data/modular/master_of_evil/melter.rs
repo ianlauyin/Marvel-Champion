@@ -16,5 +16,6 @@ pub fn get_melter() -> Card {
         keywords: vec![],
         sch: 1,
         atk: 3,
+        boost_effect:None,
     })
 }

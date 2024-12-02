@@ -13,5 +13,6 @@ pub fn get_charge() -> Card {
         atk_modifier: 3,
         sch_modifier: 0,
         keywords:vec![],
+        boost_effect:None,
     })
 }

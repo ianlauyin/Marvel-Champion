@@ -15,5 +15,6 @@ pub fn get_shocker() -> Card {
         keywords: vec![],
         sch: 1,
         atk: 2,
+        boost_effect: None,
     })
 }

@@ -12,5 +12,6 @@ pub fn get_the_doomsday_chair() -> Card {
         traits: vec![],
         card_icons: vec![CardIcon::Acceleration],
         initial_threat: Count::Constant(8),
+        boost_effect:None,
     })
 }

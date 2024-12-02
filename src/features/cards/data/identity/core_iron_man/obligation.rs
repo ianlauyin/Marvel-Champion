@@ -11,5 +11,6 @@ pub fn get_obligation() -> Card {
         description: "Give to the Tony Stark player. You may flip to alter-ego form. Choose: Exhaust Tony Stark -> remove Business Problems from the game. Exhaust each upgrade you control. Discard this obligation.",
         abilities: vec![],
         card_image_path: "embedded://cards/identity/core_iron_man/core_170.png",
+        boost_effect:None,
     })
 }

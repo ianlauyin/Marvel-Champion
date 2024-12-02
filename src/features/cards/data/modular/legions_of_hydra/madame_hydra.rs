@@ -16,5 +16,6 @@ pub fn get_madame_hydra() -> Card {
         keywords: vec![],
         sch: 2,
         atk: 2,
+        boost_effect:None,
     })
 }

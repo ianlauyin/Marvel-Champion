@@ -16,5 +16,6 @@ pub fn get_radioactive_man() -> Card {
         keywords: vec![],
         sch: 1,
         atk: 1,
+        boost_effect:None,
     })
 }

@@ -15,5 +15,6 @@ pub fn get_titania() -> Card {
         traits: vec![CardTrait::Brute, CardTrait::Elite],
         sch: 1,
         atk: 0,
+        boost_effect: None,
     })
 }

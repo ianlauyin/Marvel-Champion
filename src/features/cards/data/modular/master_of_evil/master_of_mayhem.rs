@@ -11,5 +11,6 @@ pub fn get_master_of_mayhem() -> Card {
         boost: 2,
         traits: vec![],
         keywords: vec![],
+        boost_effect:None,
     })
 }

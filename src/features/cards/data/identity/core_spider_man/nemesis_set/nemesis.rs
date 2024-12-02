@@ -15,5 +15,6 @@ pub fn get_nemesis() -> Card {
         description: "Quickstrike. (After this minion engages your hero, it attacks.)",
         abilities: vec![],
         card_image_path: "embedded://cards/identity/core_spider_man/core_167.png",
+        boost_effect: None,
     })
 }

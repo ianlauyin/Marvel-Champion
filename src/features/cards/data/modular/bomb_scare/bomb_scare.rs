@@ -11,5 +11,6 @@ pub fn get_bomb_scare() -> Card {
         traits: vec![],
         initial_threat: Count::Constant(2),
         card_icons: vec![CardIcon::Acceleration],
+        boost_effect: None,
     })
 }

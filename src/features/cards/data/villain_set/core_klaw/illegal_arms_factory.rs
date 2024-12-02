@@ -11,5 +11,6 @@ pub fn get_illegal_arms_factory() -> Card {
         boost: 2,
         initial_threat: Count::Constant(3),
         card_icons: vec![CardIcon::Hazard],
+        boost_effect: None,
     })
 }

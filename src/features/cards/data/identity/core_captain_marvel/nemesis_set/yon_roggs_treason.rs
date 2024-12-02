@@ -10,5 +10,6 @@ pub fn get_yon_roggs_treason() -> Card {
         keywords: vec![],
         card_image_path: "embedded://cards/identity/core_captain_marvel/core_179.png",
         traits: vec![],
+        boost_effect:None,
     })
 }

@@ -15,5 +15,6 @@ pub fn get_sandman() -> Card {
         keywords: vec![Keyword::Toughness],
         sch: 2,
         atk: 3,
+        boost_effect: None,
     })
 }

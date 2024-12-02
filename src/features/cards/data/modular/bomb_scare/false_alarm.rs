@@ -11,5 +11,6 @@ pub fn get_false_alarm() -> Card {
         boost: 1,
         traits: vec![],
         keywords: vec![],
+        boost_effect: None,
     })
 }

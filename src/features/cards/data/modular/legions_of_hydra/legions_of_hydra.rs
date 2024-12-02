@@ -12,5 +12,6 @@ pub fn get_legions_of_hydra() -> Card {
         traits: vec![],
         card_icons: vec![CardIcon::Hazard],
         initial_threat: Count::Constant(3),
+        boost_effect:None,
     })
 }

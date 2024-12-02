@@ -14,5 +14,6 @@ pub fn get_biomechanical_upgrades() -> Card {
         atk_modifier:0,
         sch_modifier: 0,
         keywords:vec![Keyword::Surge],
+        boost_effect:None,
     })
 }

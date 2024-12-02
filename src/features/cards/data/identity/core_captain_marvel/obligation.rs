@@ -11,5 +11,6 @@ pub fn get_obligation() -> Card {
         description: "Give to the Carol Danvers player. You may flip to alter-ego form. Choose: Exhaust Carol Danvers -> remove Family Emergency from the game. You are stunned. This card gains surge. Discard this obligation.",
         abilities: vec![],
         card_image_path: "embedded://cards/identity/core_captain_marvel/core_175.png",
+        boost_effect:None,
     })
 }

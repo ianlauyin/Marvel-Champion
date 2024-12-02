@@ -13,5 +13,6 @@ pub fn get_upgraded_drones() -> Card {
         atk_modifier: 0,
         sch_modifier: 0,
         keywords:vec![],
+        boost_effect:None,
     })
 }

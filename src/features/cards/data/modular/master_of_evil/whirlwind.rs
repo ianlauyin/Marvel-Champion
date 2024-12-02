@@ -16,5 +16,6 @@ pub fn get_whirlwind() -> Card {
         keywords: vec![],
         sch: 1,
         atk: 2,
+        boost_effect:None,
     })
 }

@@ -11,5 +11,6 @@ pub fn get_breakin_and_takin() -> Card {
         boost: 2,
         initial_threat: Count::Constant(2),
         card_icons: vec![CardIcon::Hazard],
+        boost_effect: None,
     })
 }

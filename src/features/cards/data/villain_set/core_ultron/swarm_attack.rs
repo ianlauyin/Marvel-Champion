@@ -10,5 +10,6 @@ pub fn get_swarm_attack() -> Card {
         card_image_path: "embedded://cards/villain/core_ultron/core_147.png",
         boost: 1,
         keywords: vec![],
+        boost_effect:None,
     })
 }

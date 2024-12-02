@@ -10,5 +10,6 @@ pub fn get_hard_to_keep_down() -> Card {
         boost: 0,
         traits: vec![],
         keywords: vec![],
+        boost_effect:None,
     })
 }

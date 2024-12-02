@@ -12,5 +12,6 @@ pub fn get_the_immortal_klaw() -> Card {
         boost: 0,
         initial_threat: Count::PerPlayer(3),
         card_icons: vec![CardIcon::Acceleration],
+        boost_effect: None,
     })
 }

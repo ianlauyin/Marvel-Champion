@@ -11,5 +11,6 @@ pub fn get_crowd_control() -> Card {
         boost: 2,
         initial_threat: Count::PerPlayer(2),
         card_icons: vec![CardIcon::Crisis],
+        boost_effect: None,
     })
 }

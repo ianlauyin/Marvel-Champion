@@ -11,5 +11,6 @@ pub fn get_usurp_the_throne() -> Card {
         abilities: vec![],
         card_image_path: "embedded://cards/identity/core_black_panther/core_156.png",
         initial_threat: Count::PerPlayer(3),
+        boost_effect: None,
     })
 }

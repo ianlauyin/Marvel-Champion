@@ -14,5 +14,6 @@ pub fn get_concussion_blasters() -> Card {
         atk_modifier: 1,
         sch_modifier: 0,
         keywords: vec![],
+        boost_effect:None,
     })
 }

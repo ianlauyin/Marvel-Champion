@@ -10,5 +10,6 @@ pub fn get_ultron_drones() -> Card {
         abilities: vec![],
         card_image_path: "embedded://cards/villain/core_ultron/core_140.png",
         boost: 0,
+        boost_effect:None,
     })
 }

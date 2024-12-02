@@ -12,5 +12,6 @@ pub fn get_the_master_of_evil() -> Card {
         traits: vec![],
         card_icons: vec![CardIcon::Acceleration],
         initial_threat: Count::PerPlayer(3),
+        boost_effect:None,
     })
 }

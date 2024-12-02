@@ -10,5 +10,6 @@ pub fn get_klaws_vengenace() -> Card {
         boost: 1,
         traits: vec![],
         keywords: vec![],
+        boost_effect:None,
     })
 }

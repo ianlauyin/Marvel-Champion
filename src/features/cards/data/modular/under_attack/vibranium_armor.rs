@@ -14,5 +14,6 @@ pub fn get_vibranium_armor() -> Card {
         atk_modifier: 0,
         sch_modifier: 0,
         keywords:vec![],
+        boost_effect:None,
     })
 }

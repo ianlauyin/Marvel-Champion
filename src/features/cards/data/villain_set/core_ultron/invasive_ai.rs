@@ -11,5 +11,6 @@ pub fn get_invasive_ai() -> Card {
         boost: 2,
         initial_threat: Count::PerPlayer(3),
         card_icons: vec![CardIcon::Hazard],
+        boost_effect: None,
     })
 }

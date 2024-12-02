@@ -12,5 +12,6 @@ pub fn get_under_attack() -> Card {
         traits: vec![],
         card_icons: vec![CardIcon::Crisis],
         initial_threat: Count::Constant(3),
+        boost_effect:None,
     })
 }

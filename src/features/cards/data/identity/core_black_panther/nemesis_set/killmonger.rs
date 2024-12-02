@@ -15,5 +15,6 @@ pub fn get_killmonger() -> Card {
         traits: vec![CardTrait::Assassin, CardTrait::Elite, CardTrait::Mercenary],
         sch: 2,
         atk: 2,
+        boost_effect: None,
     })
 }

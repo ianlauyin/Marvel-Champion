@@ -10,5 +10,6 @@ pub fn get_gang_up() -> Card {
         boost: 1,
         traits: vec![],
         keywords: vec![],
+        boost_effect:None,
     })
 }

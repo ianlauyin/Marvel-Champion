@@ -10,5 +10,6 @@ pub fn get_sound_manipulation() -> Card {
         boost: 2,
         traits: vec![],
         keywords: vec![],
+        boost_effect:None,
     })
 }

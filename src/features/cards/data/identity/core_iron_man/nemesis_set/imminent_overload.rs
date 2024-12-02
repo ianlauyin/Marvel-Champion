@@ -11,5 +11,6 @@ pub fn get_imminent_overload() -> Card {
         abilities: vec![],
         card_image_path: "embedded://cards/identity/core_iron_man/core_171.png",
         initial_threat: Count::Constant(3),
+        boost_effect: None,
     })
 }

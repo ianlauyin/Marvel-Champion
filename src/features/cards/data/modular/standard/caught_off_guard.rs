@@ -10,5 +10,6 @@ pub fn get_caught_off_guard() -> Card {
         boost: 1,
         traits: vec![],
         keywords: vec![],
+        boost_effect:None,
     })
 }

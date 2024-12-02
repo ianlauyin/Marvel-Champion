@@ -10,5 +10,6 @@ pub fn get_rage_of_ultron() -> Card {
         card_image_path: "embedded://cards/villain/core_ultron/core_145.png",
         boost: 2,
         keywords: vec![],
+        boost_effect:None,
     })
 }

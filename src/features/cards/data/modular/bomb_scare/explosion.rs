@@ -11,5 +11,6 @@ pub fn get_explosion() -> Card {
         boost: 2,
         traits: vec![],
         keywords: vec![],
+        boost_effect:None,
     })
 }

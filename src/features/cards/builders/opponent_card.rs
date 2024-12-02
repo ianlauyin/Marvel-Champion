@@ -1,3 +1,5 @@
+use bevy::prelude::World;
+
 use crate::features::cards::{CardAbility, CardIcon, CardTrait, Count, Identity, Keyword};
 
 #[derive(Clone)]
@@ -13,6 +15,7 @@ pub struct AttachmentCard<'a> {
     pub atk_modifier: u8,
     pub sch_modifier: u8,
     pub keywords: Vec<Keyword>,
+    pub boost_effect: Option<fn(&mut World)>,
 }
 
 #[derive(Clone)]
@@ -25,6 +28,7 @@ pub struct EnvironmentCard<'a> {
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
     pub card_image_path: &'a str,
+    pub boost_effect: Option<fn(&mut World)>,
 }
 
 #[derive(Clone)]
@@ -66,6 +70,7 @@ pub struct MinionCard<'a> {
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
     pub card_image_path: &'a str,
+    pub boost_effect: Option<fn(&mut World)>,
 }
 
 #[derive(Clone)]
@@ -79,6 +84,7 @@ pub struct ObligationCard<'a> {
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
     pub card_image_path: &'a str,
+    pub boost_effect: Option<fn(&mut World)>,
 }
 
 #[derive(Clone)]
@@ -92,6 +98,7 @@ pub struct SideSchemeCard<'a> {
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
     pub card_image_path: &'a str,
+    pub boost_effect: Option<fn(&mut World)>,
 }
 
 #[derive(Clone)]
@@ -104,6 +111,7 @@ pub struct TreacheryCard<'a> {
     pub abilities: Vec<CardAbility>,
     pub keywords: Vec<Keyword>,
     pub card_image_path: &'a str,
+    pub boost_effect: Option<fn(&mut World)>,
 }
 
 #[derive(Clone)]

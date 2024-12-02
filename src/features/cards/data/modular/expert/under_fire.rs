@@ -10,5 +10,6 @@ pub fn get_under_fire() -> Card {
         boost: 3,
         traits: vec![],
         keywords: vec![Keyword::Surge],
+        boost_effect: None,
     })
 }

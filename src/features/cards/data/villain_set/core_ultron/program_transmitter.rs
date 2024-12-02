@@ -13,5 +13,6 @@ pub fn get_program_transmitter() -> Card {
         atk_modifier: 0,
         keywords:vec![],
         sch_modifier: 1,
+        boost_effect:None,
     })
 }

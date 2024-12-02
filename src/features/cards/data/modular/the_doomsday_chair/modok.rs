@@ -16,5 +16,6 @@ pub fn get_modok() -> Card {
         keywords: vec![Keyword::Retaliate(2)],
         sch: 2,
         atk: 2,
+        boost_effect:None,
     })
 }

@@ -16,5 +16,6 @@ pub fn get_hydra_soldier() -> Card {
         keywords: vec![Keyword::Guard],
         sch: 1,
         atk: 2,
+        boost_effect:None,
     })
 }

@@ -10,5 +10,6 @@ pub fn get_exhaustion() -> Card {
         boost: 2,
         traits: vec![],
         keywords: vec![Keyword::Surge],
+        boost_effect: None,
     })
 }

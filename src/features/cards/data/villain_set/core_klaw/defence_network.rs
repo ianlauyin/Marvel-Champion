@@ -11,5 +11,6 @@ pub fn get_defence_network() -> Card {
         boost: 2,
         initial_threat: Count::Constant(2),
         card_icons: vec![CardIcon::Crisis],
+        boost_effect: None,
     })
 }

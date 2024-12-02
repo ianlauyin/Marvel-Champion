@@ -16,5 +16,6 @@ pub fn get_yogg_rogg() -> Card {
         traits: vec![CardTrait::Elite, CardTrait::Kree],
         sch: 2,
         atk: 3,
+        boost_effect: None,
     })
 }

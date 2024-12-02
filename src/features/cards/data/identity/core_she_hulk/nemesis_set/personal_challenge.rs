@@ -11,5 +11,6 @@ pub fn get_personal_challenge() -> Card {
         abilities: vec![],
         card_image_path: "embedded://cards/identity/core_she_hulk/core_161.png",
         initial_threat: Count::Constant(3),
+        boost_effect: None,
     })
 }

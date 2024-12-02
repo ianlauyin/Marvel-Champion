@@ -11,5 +11,6 @@ pub fn get_obligation() -> Card {
         description: "Give to the Jennifer Walters player. You may flip to alter-ego form. Choose: Exhaust Jennifer Walters → remove Legal Work from the game. Give the main scheme 1 acceleration token. Discard this obligation.",
         abilities: vec![],
         card_image_path: "embedded://cards/identity/core_she_hulk/core_160.png",
+        boost_effect:None,
     })
 }

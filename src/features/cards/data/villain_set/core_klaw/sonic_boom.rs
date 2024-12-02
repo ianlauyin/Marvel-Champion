@@ -10,5 +10,6 @@ pub fn get_sonic_boom() -> Card {
         boost: 0,
         traits: vec![],
         keywords: vec![],
+        boost_effect:None,
     })
 }

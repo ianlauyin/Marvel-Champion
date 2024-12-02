@@ -10,5 +10,6 @@ pub fn get_repair_sequence() -> Card {
         card_image_path: "embedded://cards/villain/core_ultron/core_146.png",
         boost: 1,
         keywords: vec![],
+        boost_effect:None,
     })
 }

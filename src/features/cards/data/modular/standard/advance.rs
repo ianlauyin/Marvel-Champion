@@ -10,5 +10,6 @@ pub fn get_advance() -> Card {
         boost: 0,
         traits: vec![],
         keywords: vec![],
+        boost_effect: None,
     })
 }
