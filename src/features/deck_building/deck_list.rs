@@ -18,10 +18,7 @@ const CURRENT_STATE: DeckBuildingState = DeckBuildingState::SelectDeck;
 impl Plugin for DeckBuildingDeckListPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(OnEnter(CURRENT_STATE), spawn_deck_list)
-            .add_systems(
-                Update,
-                handle_previous_interaction(DeckBuildingState::SelectDeck),
-            )
+            .add_systems(Update, handle_previous_interaction(CURRENT_STATE))
             .add_systems(
                 Update,
                 handle_button_interaction.run_if(in_state(CURRENT_STATE)),
