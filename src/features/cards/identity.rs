@@ -1,3 +1,5 @@
+use serde::{Deserialize, Serialize};
+
 use super::{
     data::{
         core_black_panther, core_captain_marvel, core_iron_man, core_she_hulk, core_spider_man,
@@ -5,7 +7,7 @@ use super::{
     Card,
 };
 
-#[derive(Clone)]
+#[derive(Clone, Serialize, Deserialize)]
 pub enum Identity {
     CoreSpiderMan,
     CoreCaptainMarvel,
@@ -43,16 +45,22 @@ impl Identity {
         };
         str.to_string()
     }
-    pub fn get_title_image_path(&self) -> String {
-        let prefix = "embedded://identity/";
-        let postfix = ".png";
-        let name = match *self {
+
+    pub fn get_key(&self) -> String {
+        let key = match *self {
             Identity::CoreSpiderMan => "core_spider_man",
             Identity::CoreCaptainMarvel => "core_captain_marvel",
             Identity::CoreSheHulk => "core_she_hulk",
             Identity::CoreIronMan => "core_iron_man",
             Identity::CoreBlackPanther => "core_black_panther",
         };
+        key.to_string()
+    }
+
+    pub fn get_title_image_path(&self) -> String {
+        let prefix = "embedded://identity/";
+        let postfix = ".png";
+        let name = self.get_key();
         format!("{prefix}{name}{postfix}")
     }
 

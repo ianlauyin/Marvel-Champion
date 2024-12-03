@@ -3,6 +3,7 @@ use bevy::app::{App, Plugin};
 mod app_state;
 mod asset_loader;
 mod clean_up;
+mod decks_storage;
 mod devtool;
 mod setup;
 
@@ -15,6 +16,7 @@ impl Plugin for SystemPlugin {
             app_state::AppStatePlugin,
             asset_loader::AssetLoaderSetupPlugin,
             devtool::DevtoolPlugin,
+            decks_storage::DecksStoragePlugin,
         ));
     }
 }
