@@ -15,20 +15,11 @@ pub struct CardDatas(pub HashMap<String, Card>);
 impl CardDatas {
     pub fn init() -> Self {
         let mut hashmap = HashMap::new();
-        let aspect_cards = [
-            CardDatas::get_basic_cards(),
-            CardDatas::get_aggression_cards(),
-            CardDatas::get_justice_cards(),
-            CardDatas::get_leadership_cards(),
-            CardDatas::get_protection_cards(),
-            CardDatas::get_pool_cards(),
-        ]
-        .concat();
         let all_cards = [
             Identity::get_all_cards(),
             VillainSet::get_all_cards(),
             ModularSet::get_all_cards(),
-            aspect_cards,
+            CardDatas::get_aspect_cards(),
         ]
         .concat();
 
@@ -36,6 +27,18 @@ impl CardDatas {
             hashmap.insert(card.get_card_id(), card.clone());
         }
         CardDatas(hashmap)
+    }
+
+    pub fn get_aspect_cards() -> Vec<Card> {
+        [
+            CardDatas::get_basic_cards(),
+            CardDatas::get_aggression_cards(),
+            CardDatas::get_justice_cards(),
+            CardDatas::get_leadership_cards(),
+            CardDatas::get_protection_cards(),
+            CardDatas::get_pool_cards(),
+        ]
+        .concat()
     }
 
     pub fn get_basic_cards() -> Vec<Card> {

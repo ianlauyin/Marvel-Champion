@@ -53,9 +53,9 @@ impl DecksStorage<'_> {
 struct Decks(Vec<Deck>);
 
 #[derive(Serialize, Deserialize)]
-struct Deck {
-    deck_name: String,
-    cards: Vec<String>,
+pub struct Deck {
+    pub name: String,
+    pub cards: Vec<String>,
 }
 
 pub struct DecksStoragePlugin;

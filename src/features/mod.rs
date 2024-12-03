@@ -2,6 +2,7 @@ use bevy::app::{App, Plugin};
 
 pub mod cards;
 mod collection;
+mod deck_building;
 mod game_mat;
 mod main_menu;
 pub mod shared;
@@ -18,6 +19,7 @@ impl Plugin for FeaturePlugin {
             shared::ButtonUIPlugin,
             shared::MenuPlugin,
             shared::CardDetailPlugin,
+            deck_building::DeckBuildingPlugin,
         ));
     }
 }
