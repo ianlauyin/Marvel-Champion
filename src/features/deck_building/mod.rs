@@ -13,7 +13,7 @@ impl Plugin for DeckBuildingPlugin {
             identity_list::DeckBuildingIdentityListPlugin,
             state::DeckBuildingStatePlugin,
             deck_list::DeckBuildingDeckListPlugin,
-            deck_editor::DeckEditorPlugin,
+            deck_editor::DeckBuildingPlugin,
         ));
     }
 }

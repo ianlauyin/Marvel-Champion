@@ -18,6 +18,7 @@ impl DecksStorage<'_> {
             vec![]
         }
     }
+
     pub fn save_deck(&mut self, deck: Deck, index: usize) {
         let mut decks = self.get_decks();
         decks[index] = deck;
@@ -52,7 +53,7 @@ impl DecksStorage<'_> {
 #[derive(Resource, Serialize, Deserialize)]
 struct Decks(Vec<Deck>);
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct Deck {
     pub name: String,
     pub cards: Vec<String>,
@@ -62,6 +63,11 @@ pub struct DecksStoragePlugin;
 
 impl Plugin for DecksStoragePlugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(PkvStore::new("IanLau", "MarvelChampion"));
+        let (name, storage) = if cfg!(debug_assertions) {
+            ("IanLau_Debug", "MarvelChampion_Debug") // Debug mode strings
+        } else {
+            ("IanLau", "MarvelChampion") // Release mode strings
+        };
+        app.insert_resource(PkvStore::new(name, storage));
     }
 }

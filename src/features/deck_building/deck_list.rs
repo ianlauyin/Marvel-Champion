@@ -34,7 +34,7 @@ pub struct DeckListIdentity(pub Identity);
 struct DeckList;
 
 #[derive(Component, Clone)]
-struct DeckListButton(Option<usize>);
+struct DeckListButton(EditingDeck);
 
 fn spawn_deck_list(commands: Commands, pkv: ResMut<PkvStore>, identity: Res<DeckListIdentity>) {
     let mut deck_storage = DecksStorage {
@@ -47,16 +47,20 @@ fn spawn_deck_list(commands: Commands, pkv: ResMut<PkvStore>, identity: Res<Deck
         .enumerate()
         .map(|(index, deck)| {
             (
-                DeckListButton(Some(index)),
+                DeckListButton(EditingDeck {
+                    index: Some(index),
+                    deck: deck.clone(),
+                }),
                 ListItem {
                     text: deck.name.clone(),
+                    color: Color::srgb(0.576, 0.576, 0.576),
                     ..default()
                 },
             )
         })
         .collect();
     button_map.push((
-        DeckListButton(None),
+        DeckListButton(EditingDeck::new()),
         ListItem {
             text: "+".to_string(),
             color: Color::srgb(0.576, 0.576, 0.576),
@@ -90,7 +94,7 @@ fn handle_button_interaction(
             for card in cards {
                 load_asset.add_card(card, &asset_server);
             }
-            commands.insert_resource(EditingDeck(button.0));
+            commands.insert_resource(button.0.clone());
             next_state.set(DeckBuildingState::LoadingCards);
             return;
         }
