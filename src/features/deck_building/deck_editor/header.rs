@@ -19,10 +19,14 @@ impl Plugin for DeckEditorHeaderPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins(TextInputPlugin)
             .add_systems(Update, handle_previous_interaction(CURRENT_STATE))
-            .add_systems(Update, handle_text_input_finished)
             .add_systems(
                 Update,
-                handle_button_interaction.run_if(in_state(CURRENT_STATE)),
+                (
+                    handle_button_interaction,
+                    handle_title_interaction,
+                    handle_text_input_finished,
+                )
+                    .run_if(in_state(CURRENT_STATE)),
             );
     }
 }
@@ -42,6 +46,7 @@ pub fn spawn_header(menu: &mut ChildBuilder, name: String) {
     menu.spawn(Node {
         padding: UiRect::all(Val::Px(10.)),
         display: Display::Flex,
+        column_gap: Val::Px(30.),
         ..default()
     })
     .with_children(|header| {
@@ -60,12 +65,16 @@ fn spawn_title(header: &mut ChildBuilder, name: String) {
                 justify_content: JustifyContent::Center,
                 align_items: AlignItems::Center,
                 padding: UiRect::all(Val::Px(10.)),
+                border: UiRect::all(Val::Px(2.)),
                 ..default()
             },
             Title { is_editing: false },
+            BorderColor::from(Color::WHITE),
+            BorderRadius::all(Val::Px(5.)),
+            Interaction::default(),
         ))
         .with_children(|title_node| {
-            title_node.spawn((Text::new(name), Title { is_editing: false }));
+            title_node.spawn(Text::new(name));
         });
 }
 
@@ -96,9 +105,36 @@ fn spawn_buttons(header: &mut ChildBuilder) {
         });
 }
 
-fn handle_text_input_finished(mut events: EventReader<TextInputSubmitEvent>) {
+fn handle_title_interaction(
+    mut commands: Commands,
+    mut title_q: Query<(Entity, &Interaction, &mut Title)>,
+) {
+    let (entity, interaction, mut title) = title_q.get_single_mut().unwrap();
+    if *interaction == Interaction::Pressed {
+        title.is_editing = true;
+        commands
+            .entity(entity)
+            .despawn_descendants()
+            .with_child(TextInput);
+    }
+}
+
+fn handle_text_input_finished(
+    mut events: EventReader<TextInputSubmitEvent>,
+    mut commands: Commands,
+    mut title_q: Query<(Entity, &mut Title)>,
+    mut editing_deck: ResMut<EditingDeck>,
+) {
     for event in events.read() {
-        info!("{:?} submitted: {}", event.entity, event.value);
+        let name = event.value.clone();
+        let (entity, mut title) = title_q.get_single_mut().unwrap();
+
+        editing_deck.deck.name = name.clone();
+        commands
+            .entity(entity)
+            .despawn_descendants()
+            .with_child(Text::new(name));
+        title.is_editing = false;
     }
 }
 
