@@ -1,7 +1,7 @@
 use crate::systems::{clean_up, Deck};
 use bevy::prelude::*;
 
-use super::{super::state::DeckBuildingState, header::spawn_header};
+use super::{super::state::DeckBuildingState, content::spawn_content, header::spawn_header};
 
 #[derive(Resource, Clone)]
 pub struct EditingDeck {
@@ -54,5 +54,6 @@ pub fn spawn_editor(mut commands: Commands, editing_deck: Res<EditingDeck>) {
         ))
         .with_children(|menu| {
             spawn_header(menu, editing_deck.deck.name.clone());
+            spawn_content(menu, editing_deck.deck.clone());
         });
 }
