@@ -42,31 +42,7 @@ impl CardDatas {
     }
 
     pub fn get_basic_cards() -> Vec<Card> {
-        [
-            basic::get_all(),
-            basic::get_all(),
-            basic::get_all(),
-            basic::get_all(),
-            basic::get_all(),
-            basic::get_all(),
-            basic::get_all(),
-            basic::get_all(),
-            basic::get_all(),
-            basic::get_all(),
-            basic::get_all(),
-            basic::get_all(),
-            basic::get_all(),
-            basic::get_all(),
-            basic::get_all(),
-            basic::get_all(),
-            basic::get_all(),
-            basic::get_all(),
-            basic::get_all(),
-            basic::get_all(),
-            basic::get_all(),
-            basic::get_all(),
-        ]
-        .concat()
+        basic::get_all()
     }
     pub fn get_aggression_cards() -> Vec<Card> {
         aggression::get_all()
