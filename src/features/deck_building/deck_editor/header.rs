@@ -7,7 +7,9 @@ use crate::{
 };
 use bevy::prelude::*;
 use bevy_pkv::PkvStore;
-use bevy_simple_text_input::{TextInput, TextInputPlugin, TextInputSubmitEvent};
+use bevy_simple_text_input::{
+    TextInput, TextInputAction, TextInputPlugin, TextInputSubmitEvent, TextInputValue,
+};
 
 use super::EditingDeck;
 
@@ -25,6 +27,7 @@ impl Plugin for DeckEditorHeaderPlugin {
                     handle_button_interaction,
                     handle_title_interaction,
                     handle_text_input_finished,
+                    handle_text_input_escape,
                 )
                     .run_if(in_state(CURRENT_STATE)),
             );
@@ -138,12 +141,37 @@ fn handle_text_input_finished(
     }
 }
 
+fn handle_text_input_escape(
+    keys: Res<ButtonInput<KeyCode>>,
+    mut commands: Commands,
+    mut title_q: Query<(Entity, &mut Title, &Children)>,
+    text_input_query: Query<Entity, With<TextInput>>,
+    editing_deck: Res<EditingDeck>,
+) {
+    let Ok(text_input_entity) = text_input_query.get_single() else {
+        return;
+    };
+    let Ok((entity, mut title, children)) = title_q.get_single_mut() else {
+        return;
+    };
+    if children.contains(&text_input_entity) {
+        if keys.just_pressed(KeyCode::Escape) {
+            commands
+                .entity(entity)
+                .despawn_descendants()
+                .with_child(Text::new(editing_deck.deck.name.clone()));
+            title.is_editing = false;
+        }
+    }
+}
+
 fn handle_button_interaction(
     button_q: Query<(&Interaction, &ButtonAction)>,
-    editing_deck: Res<EditingDeck>,
+    text_value_q: Query<&TextInputValue>,
+    editing_deck: ResMut<EditingDeck>,
+    deck_list_identity: Res<DeckListIdentity>,
     pkv: ResMut<PkvStore>,
     mut next_state: ResMut<NextState<DeckBuildingState>>,
-    deck_list_identity: Res<DeckListIdentity>,
 ) {
     for (interaction, button_action) in button_q.iter() {
         if *interaction == Interaction::Pressed {
@@ -152,7 +180,9 @@ fn handle_button_interaction(
                 identity: deck_list_identity.0.clone(),
             };
             match *button_action {
-                ButtonAction::Save => handle_save(decks_storage, editing_deck.clone()),
+                ButtonAction::Save => {
+                    handle_save(decks_storage, editing_deck.clone(), text_value_q)
+                }
                 ButtonAction::Remove => {
                     if let Some(index) = editing_deck.index {
                         decks_storage.remove_deck(index);
@@ -165,7 +195,15 @@ fn handle_button_interaction(
     }
 }
 
-fn handle_save(mut decks_storage: DecksStorage, editing_deck: EditingDeck) {
+fn handle_save(
+    mut decks_storage: DecksStorage,
+    mut editing_deck: EditingDeck,
+    text_value_q: Query<&TextInputValue>,
+) {
+    if let Ok(text_value) = text_value_q.get_single() {
+        editing_deck.deck.name = text_value.0.clone();
+    }
+
     if let Some(index) = editing_deck.index {
         decks_storage.save_deck(editing_deck.deck, index);
     } else {
