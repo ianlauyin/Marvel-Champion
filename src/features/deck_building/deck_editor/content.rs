@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use crate::{
     constants::CARD_SIZE,
     features::{
-        cards::Card,
+        cards::{Card, CardDatas},
         deck_building::state::DeckBuildingState,
         shared::{spawn_card_list, ListItem},
     },
@@ -30,23 +30,24 @@ pub fn spawn_content(
             ..default()
         })
         .with_children(|content| {
-            spawn_deck_card_list(content, deck_cards, loaded_asset);
-            spawn_selection_list(content);
+            spawn_deck_card_list(content, &deck_cards, &loaded_asset);
+            spawn_info(content, deck_cards.len() as u8);
+            spawn_selection_list(content, &loaded_asset);
         });
 }
 
 fn spawn_deck_card_list(
     content: &mut ChildBuilder,
-    deck_cards: Vec<Card>,
-    loaded_asset: Res<LoadedAssetMap>,
+    deck_cards: &Vec<Card>,
+    loaded_asset: &Res<LoadedAssetMap>,
 ) {
     content
         .spawn(Node {
-            width: Val::Percent(40.),
+            width: Val::Percent(45.),
             ..default()
         })
         .with_children(|deck_card_list_node| {
-            let list_items = convert_card_into_button_map(deck_cards, loaded_asset);
+            let list_items = convert_card_into_button_map(deck_cards, &loaded_asset);
             spawn_card_list(
                 deck_card_list_node,
                 list_items,
@@ -55,15 +56,43 @@ fn spawn_deck_card_list(
                     Val::Px(CARD_SIZE.truncate().y),
                 ),
                 Val::Percent(90.),
-                6,
+                7,
             );
         });
 }
-fn spawn_selection_list(content: &mut ChildBuilder) {}
+
+fn spawn_info(content: &mut ChildBuilder, deck_cards_amount: u8) {
+    content.spawn(Node {
+        width: Val::Percent(10.),
+        ..default()
+    });
+}
+
+fn spawn_selection_list(content: &mut ChildBuilder, loaded_asset: &Res<LoadedAssetMap>) {
+    content
+        .spawn(Node {
+            width: Val::Percent(45.),
+            ..default()
+        })
+        .with_children(|card_list_node| {
+            let cards = CardDatas::get_aspect_cards();
+            let list_items = convert_card_into_button_map(&cards, loaded_asset);
+            spawn_card_list(
+                card_list_node,
+                list_items,
+                (
+                    Val::Px(CARD_SIZE.truncate().x),
+                    Val::Px(CARD_SIZE.truncate().y),
+                ),
+                Val::Percent(90.),
+                7,
+            );
+        });
+}
 
 fn convert_card_into_button_map(
-    deck_cards: Vec<Card>,
-    loaded_asset: Res<LoadedAssetMap>,
+    deck_cards: &Vec<Card>,
+    loaded_asset: &Res<LoadedAssetMap>,
 ) -> Vec<(Card, ListItem)> {
     deck_cards
         .iter()
