@@ -28,16 +28,13 @@ impl Plugin for CollectionHeroListPlugin {
 #[derive(Component, Clone)]
 struct HeroList;
 
-#[derive(Component, Clone)]
-struct HeroListButton(Identity);
-
 fn spawn_hero_list(commands: Commands, asset_server: Res<AssetServer>) {
     let identities = Identity::get_all();
     let button_map = identities
         .iter()
         .map(|identity| {
             (
-                HeroListButton(identity.clone()),
+                identity.clone(),
                 ListItem {
                     text: identity.to_string().clone(),
                     image: ImageNode::new(asset_server.load(identity.get_title_image_path()))
@@ -58,17 +55,17 @@ fn spawn_hero_list(commands: Commands, asset_server: Res<AssetServer>) {
 
 fn handle_button_interaction(
     mut commands: Commands,
-    button_q: Query<(&Interaction, &HeroListButton)>,
+    button_q: Query<(&Interaction, &Identity), With<Button>>,
     mut next_state: ResMut<NextState<CollectionHeroState>>,
     mut load_asset: ResMut<LoadAsset>,
     asset_server: Res<AssetServer>,
 ) {
-    for (interaction, button) in button_q.iter() {
+    for (interaction, identity) in button_q.iter() {
         if *interaction == Interaction::Pressed {
-            for card in button.0.get_cards() {
+            for card in identity.get_cards() {
                 load_asset.add_card(card, &asset_server);
             }
-            commands.insert_resource(CollectionHeroIdentity(button.0.clone()));
+            commands.insert_resource(CollectionHeroIdentity(identity.clone()));
             next_state.set(CollectionHeroState::LoadingCards);
             return;
         }

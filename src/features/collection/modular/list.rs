@@ -31,16 +31,13 @@ impl Plugin for CollectionModularListPlugin {
 #[derive(Component, Clone)]
 struct ModularList;
 
-#[derive(Component, Clone)]
-struct ModularListButton(ModularSet);
-
 fn spawn_modular_list(commands: Commands, asset_server: Res<AssetServer>) {
     let modular_sets = ModularSet::get_all();
     let button_map = modular_sets
         .iter()
         .map(|modular_set| {
             (
-                ModularListButton(modular_set.clone()),
+                modular_set.clone(),
                 ListItem {
                     text: modular_set.to_string().clone(),
                     image: ImageNode::new(asset_server.load(modular_set.get_title_image_path()))
@@ -61,17 +58,17 @@ fn spawn_modular_list(commands: Commands, asset_server: Res<AssetServer>) {
 
 fn handle_button_interaction(
     mut commands: Commands,
-    button_q: Query<(&Interaction, &ModularListButton)>,
+    button_q: Query<(&Interaction, &ModularSet), With<Button>>,
     mut next_state: ResMut<NextState<CollectionModularState>>,
     mut load_asset: ResMut<LoadAsset>,
     asset_server: Res<AssetServer>,
 ) {
-    for (interaction, button) in button_q.iter() {
+    for (interaction, modular_set) in button_q.iter() {
         if *interaction == Interaction::Pressed {
-            for card in button.0.get_cards() {
+            for card in modular_set.get_cards() {
                 load_asset.add_card(card, &asset_server);
             }
-            commands.insert_resource(CollectionModularSet(button.0.clone()));
+            commands.insert_resource(CollectionModularSet(modular_set.clone()));
             next_state.set(CollectionModularState::LoadingCards);
             return;
         }

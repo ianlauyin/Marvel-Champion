@@ -41,15 +41,12 @@ impl Plugin for CollectionLeadershipCardListPlugin {
 #[derive(Component, Clone)]
 struct LeadershipCardList;
 
-#[derive(Component, Clone)]
-struct LeadershipCardButton(Card);
-
 fn spawn_leadership_cards(commands: Commands, asset_server: Res<AssetServer>) {
     let list_items = CardDatas::get_leadership_cards()
         .iter()
         .map(|card| {
             (
-                LeadershipCardButton(card.clone()),
+                card.clone(),
                 ListItem {
                     image: ImageNode::new(asset_server.load(card.get_image_path())),
                     ..default()
@@ -69,15 +66,15 @@ fn spawn_leadership_cards(commands: Commands, asset_server: Res<AssetServer>) {
 fn handle_card_click(
     commands: Commands,
     asset_server: Res<AssetServer>,
-    leadership_card_button_q: Query<(&Interaction, &LeadershipCardButton, &ZIndex)>,
+    leadership_card_button_q: Query<(&Interaction, &Card, &ZIndex), With<Card>>,
 ) {
-    for (interaction, leadership_card_button, z_index) in leadership_card_button_q.iter() {
+    for (interaction, card, z_index) in leadership_card_button_q.iter() {
         if *interaction == Interaction::Pressed {
             let card_detail_z_index = ZIndex(z_index.0 + 1);
             spawn_card_detail(
                 commands,
                 asset_server,
-                leadership_card_button.0.clone(),
+                card.clone(),
                 Vec2::ZERO,
                 card_detail_z_index,
             );

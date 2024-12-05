@@ -17,7 +17,7 @@ impl Plugin for FeaturePlugin {
             main_menu::MainMenuPlugin,
             collection::CollectionPlugin,
             shared::ButtonUIPlugin,
-            shared::MenuPlugin,
+            shared::ScrollingListPlugin,
             shared::CardDetailPlugin,
             deck_building::DeckBuildingPlugin,
         ));

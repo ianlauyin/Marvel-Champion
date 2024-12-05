@@ -1,6 +1,8 @@
+use bevy::prelude::Component;
+
 use super::{data::modular, Card};
 
-#[derive(Clone)]
+#[derive(Component, Clone)]
 pub enum ModularSet {
     Standard,
     Expert,

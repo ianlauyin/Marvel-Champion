@@ -100,7 +100,7 @@ fn handle_button_interaction(
                     .iter()
                     .map(|card| card.get_id())
                     .collect();
-                editing_deck.deck.cards.append(&mut identity_cards_ids);
+                editing_deck.deck.card_ids.append(&mut identity_cards_ids);
             }
 
             commands.insert_resource(button.0.clone());

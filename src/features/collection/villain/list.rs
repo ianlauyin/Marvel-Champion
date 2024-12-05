@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::{
     features::{
-        cards::VillainSet,
+        cards::Villain,
         collection::state::CollectionState,
         shared::{handle_previous_interaction, DisplayMethod, ListItem, MenuBuilder},
     },
@@ -31,19 +31,16 @@ impl Plugin for CollectionVillainListPlugin {
 #[derive(Component, Clone)]
 struct VillainList;
 
-#[derive(Component, Clone)]
-struct VillainListButton(VillainSet);
-
 fn spawn_villain_list(commands: Commands, asset_server: Res<AssetServer>) {
-    let villain_sets = VillainSet::get_all();
-    let button_map = villain_sets
+    let villains = Villain::get_all();
+    let button_map = villains
         .iter()
-        .map(|villain_set| {
+        .map(|villain| {
             (
-                VillainListButton(villain_set.clone()),
+                villain.clone(),
                 ListItem {
-                    text: villain_set.to_string().clone(),
-                    image: ImageNode::new(asset_server.load(villain_set.get_title_image_path()))
+                    text: villain.to_string().clone(),
+                    image: ImageNode::new(asset_server.load(villain.get_title_image_path()))
                         .with_color(Color::srgb(0.365, 0.365, 0.365)),
                     ..default()
                 },
@@ -61,17 +58,17 @@ fn spawn_villain_list(commands: Commands, asset_server: Res<AssetServer>) {
 
 fn handle_button_interaction(
     mut commands: Commands,
-    button_q: Query<(&Interaction, &VillainListButton)>,
+    button_q: Query<(&Interaction, &Villain), With<Button>>,
     mut next_state: ResMut<NextState<CollectionVillainState>>,
     mut load_asset: ResMut<LoadAsset>,
     asset_server: Res<AssetServer>,
 ) {
-    for (interaction, button) in button_q.iter() {
+    for (interaction, villain) in button_q.iter() {
         if *interaction == Interaction::Pressed {
-            for card in button.0.get_cards() {
+            for card in villain.get_cards() {
                 load_asset.add_card(card, &asset_server);
             }
-            commands.insert_resource(CollectionVillainSet(button.0.clone()));
+            commands.insert_resource(CollectionVillainSet(villain.clone()));
             next_state.set(CollectionVillainState::LoadingCards);
             return;
         }

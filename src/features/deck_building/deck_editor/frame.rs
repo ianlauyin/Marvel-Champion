@@ -1,4 +1,7 @@
-use crate::systems::{clean_up, Deck};
+use crate::{
+    features::cards::CardDatas,
+    systems::{clean_up, Deck},
+};
 use bevy::prelude::*;
 
 use super::{super::state::DeckBuildingState, content::spawn_content, header::spawn_header};
@@ -15,7 +18,7 @@ impl EditingDeck {
             index: None,
             deck: Deck {
                 name: "New Deck".to_string(),
-                cards: vec![],
+                card_ids: vec![],
             },
         }
     }
@@ -35,7 +38,17 @@ impl Plugin for DeckEditorFramePlugin {
 #[derive(Component)]
 struct DeckEditor;
 
-pub fn spawn_editor(mut commands: Commands, editing_deck: Res<EditingDeck>) {
+pub fn spawn_editor(
+    mut commands: Commands,
+    editing_deck: Res<EditingDeck>,
+    card_datas: Res<CardDatas>,
+) {
+    let cards = editing_deck
+        .deck
+        .card_ids
+        .iter()
+        .map(|card_id| card_datas.get(&card_id))
+        .collect();
     commands
         .spawn((
             DeckEditor,
@@ -54,6 +67,6 @@ pub fn spawn_editor(mut commands: Commands, editing_deck: Res<EditingDeck>) {
         ))
         .with_children(|menu| {
             spawn_header(menu, editing_deck.deck.name.clone());
-            spawn_content(menu, editing_deck.deck.clone());
+            spawn_content(menu, cards);
         });
 }

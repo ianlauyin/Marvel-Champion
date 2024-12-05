@@ -38,15 +38,12 @@ impl Plugin for CollectionJusticeCardListPlugin {
 #[derive(Component, Clone)]
 struct JusticeCardList;
 
-#[derive(Component, Clone)]
-struct JusticeCardButton(Card);
-
 fn spawn_justice_cards(commands: Commands, asset_server: Res<AssetServer>) {
     let list_items = CardDatas::get_justice_cards()
         .iter()
         .map(|card| {
             (
-                JusticeCardButton(card.clone()),
+                card.clone(),
                 ListItem {
                     image: ImageNode::new(asset_server.load(card.get_image_path())),
                     ..default()
@@ -66,15 +63,15 @@ fn spawn_justice_cards(commands: Commands, asset_server: Res<AssetServer>) {
 fn handle_card_click(
     commands: Commands,
     asset_server: Res<AssetServer>,
-    justice_card_button_q: Query<(&Interaction, &JusticeCardButton, &ZIndex)>,
+    justice_card_button_q: Query<(&Interaction, &Card, &ZIndex), With<Card>>,
 ) {
-    for (interaction, justice_card_button, z_index) in justice_card_button_q.iter() {
+    for (interaction, card, z_index) in justice_card_button_q.iter() {
         if *interaction == Interaction::Pressed {
             let card_detail_z_index = ZIndex(z_index.0 + 1);
             spawn_card_detail(
                 commands,
                 asset_server,
-                justice_card_button.0.clone(),
+                card.clone(),
                 Vec2::ZERO,
                 card_detail_z_index,
             );

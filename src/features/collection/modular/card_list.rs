@@ -40,9 +40,6 @@ pub struct CollectionModularSet(pub ModularSet);
 #[derive(Component, Clone)]
 struct ModularCardList;
 
-#[derive(Component, Clone)]
-struct ModularCardButton(Card);
-
 fn spawn_modular_cards(
     commands: Commands,
     asset_server: Res<AssetServer>,
@@ -54,7 +51,7 @@ fn spawn_modular_cards(
         .iter()
         .map(|card| {
             (
-                ModularCardButton(card.clone()),
+                card.clone(),
                 ListItem {
                     image: ImageNode::new(asset_server.load(card.get_image_path())),
                     ..default()
@@ -74,15 +71,15 @@ fn spawn_modular_cards(
 fn handle_card_click(
     commands: Commands,
     asset_server: Res<AssetServer>,
-    modular_card_button_q: Query<(&Interaction, &ModularCardButton, &ZIndex)>,
+    modular_card_button_q: Query<(&Interaction, &Card, &ZIndex), With<Card>>,
 ) {
-    for (interaction, modular_card_button, z_index) in modular_card_button_q.iter() {
+    for (interaction, card, z_index) in modular_card_button_q.iter() {
         if *interaction == Interaction::Pressed {
             let card_detail_z_index = ZIndex(z_index.0 + 1);
             spawn_card_detail(
                 commands,
                 asset_server,
-                modular_card_button.0.clone(),
+                card.clone(),
                 Vec2::ZERO,
                 card_detail_z_index,
             );

@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::features::shared::ButtonBuilder;
 
-use super::{ListItem, ScrollingList};
+use super::super::{ListItem, ScrollingList};
 
 pub fn spawn_card_list<B: Component>(menu: &mut ChildBuilder, button_map: Vec<(B, ListItem)>) {
     // Scrolling List Container

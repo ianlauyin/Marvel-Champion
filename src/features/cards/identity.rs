@@ -1,3 +1,4 @@
+use bevy::prelude::Component;
 use serde::{Deserialize, Serialize};
 
 use super::{
@@ -7,7 +8,7 @@ use super::{
     Card,
 };
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Component, Clone, Serialize, Deserialize)]
 pub enum Identity {
     CoreSpiderMan,
     CoreCaptainMarvel,

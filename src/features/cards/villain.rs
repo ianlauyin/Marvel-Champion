@@ -1,27 +1,25 @@
+use bevy::prelude::Component;
+
 use super::{
     data::{core_klaw, core_rhino, core_ultron},
     Card,
 };
 
-#[derive(Clone)]
-pub enum VillainSet {
+#[derive(Component, Clone)]
+pub enum Villain {
     CoreRhino,
     CoreKlaw,
     CoreUltron,
 }
 
-impl VillainSet {
+impl Villain {
     pub fn get_all() -> Vec<Self> {
-        vec![
-            VillainSet::CoreRhino,
-            VillainSet::CoreKlaw,
-            VillainSet::CoreUltron,
-        ]
+        vec![Villain::CoreRhino, Villain::CoreKlaw, Villain::CoreUltron]
     }
 
     pub fn get_all_cards() -> Vec<Card> {
         let mut cards = Vec::new();
-        for identity in VillainSet::get_all() {
+        for identity in Villain::get_all() {
             cards.push(identity.get_cards());
         }
         cards.concat()
@@ -29,9 +27,9 @@ impl VillainSet {
 
     pub fn to_string(&self) -> String {
         let str = match *self {
-            VillainSet::CoreRhino => "Core - Rhino",
-            VillainSet::CoreKlaw => "Core - Klaw",
-            VillainSet::CoreUltron => "Core - Ultron",
+            Villain::CoreRhino => "Core - Rhino",
+            Villain::CoreKlaw => "Core - Klaw",
+            Villain::CoreUltron => "Core - Ultron",
         };
         str.to_string()
     }
@@ -39,18 +37,18 @@ impl VillainSet {
         let prefix = "embedded://villain/";
         let postfix = ".png";
         let name = match *self {
-            VillainSet::CoreRhino => "core_rhino",
-            VillainSet::CoreKlaw => "core_klaw",
-            VillainSet::CoreUltron => "core_ultron",
+            Villain::CoreRhino => "core_rhino",
+            Villain::CoreKlaw => "core_klaw",
+            Villain::CoreUltron => "core_ultron",
         };
         format!("{prefix}{name}{postfix}")
     }
 
     pub fn get_cards(&self) -> Vec<Card> {
         match *self {
-            VillainSet::CoreRhino => core_rhino::get_all(),
-            VillainSet::CoreKlaw => core_klaw::get_all(),
-            VillainSet::CoreUltron => core_ultron::get_all(),
+            Villain::CoreRhino => core_rhino::get_all(),
+            Villain::CoreKlaw => core_klaw::get_all(),
+            Villain::CoreUltron => core_ultron::get_all(),
         }
     }
 }

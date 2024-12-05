@@ -56,7 +56,7 @@ struct Decks(Vec<Deck>);
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Deck {
     pub name: String,
-    pub cards: Vec<String>,
+    pub card_ids: Vec<String>,
 }
 
 pub struct DecksStoragePlugin;

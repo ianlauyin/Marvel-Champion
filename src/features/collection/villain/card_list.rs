@@ -2,7 +2,7 @@ use bevy::{input::common_conditions::input_just_pressed, prelude::*};
 
 use crate::{
     features::{
-        cards::{Card, VillainSet},
+        cards::{Card, Villain},
         shared::{
             handle_previous_interaction, spawn_card_detail, DisplayMethod, ListItem, MenuBuilder,
         },
@@ -35,13 +35,10 @@ impl Plugin for CollectionVillainCardListPlugin {
 }
 
 #[derive(Resource)]
-pub struct CollectionVillainSet(pub VillainSet);
+pub struct CollectionVillainSet(pub Villain);
 
 #[derive(Component, Clone)]
 struct VillainCardList;
-
-#[derive(Component, Clone)]
-struct VillainCardButton(Card);
 
 fn spawn_villain_cards(
     commands: Commands,
@@ -54,7 +51,7 @@ fn spawn_villain_cards(
         .iter()
         .map(|card| {
             (
-                VillainCardButton(card.clone()),
+                card.clone(),
                 ListItem {
                     image: ImageNode::new(asset_server.load(card.get_image_path())),
                     ..default()
@@ -74,15 +71,15 @@ fn spawn_villain_cards(
 fn handle_card_click(
     commands: Commands,
     asset_server: Res<AssetServer>,
-    villain_card_button_q: Query<(&Interaction, &VillainCardButton, &ZIndex)>,
+    villain_card_button_q: Query<(&Interaction, &Card, &ZIndex), With<Card>>,
 ) {
-    for (interaction, villain_card_button, z_index) in villain_card_button_q.iter() {
+    for (interaction, card, z_index) in villain_card_button_q.iter() {
         if *interaction == Interaction::Pressed {
             let card_detail_z_index = ZIndex(z_index.0 + 1);
             spawn_card_detail(
                 commands,
                 asset_server,
-                villain_card_button.0.clone(),
+                card.clone(),
                 Vec2::ZERO,
                 card_detail_z_index,
             );
