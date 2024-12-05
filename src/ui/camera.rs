@@ -13,21 +13,17 @@ fn get_original_transform() -> Transform {
 }
 
 fn add_camara(mut commands: Commands) {
-    commands.spawn(Camera3dBundle {
-        transform: get_original_transform(),
-        ..default()
-    });
-    commands.spawn(DirectionalLightBundle {
-        directional_light: DirectionalLight {
+    commands.spawn((Camera3d::default(), get_original_transform()));
+    commands.spawn((
+        DirectionalLight {
             illuminance: 2000.,
             shadows_enabled: true,
             ..default()
         },
-        cascade_shadow_config: CascadeShadowConfigBuilder {
+        CascadeShadowConfigBuilder {
             maximum_distance: 3000.,
             ..default()
         }
         .build(),
-        ..default()
-    });
+    ));
 }

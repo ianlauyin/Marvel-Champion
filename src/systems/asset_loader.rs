@@ -20,12 +20,6 @@ impl Plugin for AssetLoaderSetupPlugin {
 #[derive(Resource)]
 pub struct LoadedAssetMap(pub HashMap<String, Handle<Image>>);
 
-impl LoadedAssetMap {
-    pub fn get_card_handle(&mut self, card: Card) -> Handle<Image> {
-        self.0.get(&card.get_id()).unwrap().clone()
-    }
-}
-
 #[derive(Resource)]
 pub struct LoadAsset(pub Vec<(String, Handle<Image>)>);
 

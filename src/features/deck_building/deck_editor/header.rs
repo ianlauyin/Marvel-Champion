@@ -7,9 +7,7 @@ use crate::{
 };
 use bevy::prelude::*;
 use bevy_pkv::PkvStore;
-use bevy_simple_text_input::{
-    TextInput, TextInputAction, TextInputPlugin, TextInputSubmitEvent, TextInputValue,
-};
+use bevy_simple_text_input::{TextInput, TextInputPlugin, TextInputSubmitEvent, TextInputValue};
 
 use super::EditingDeck;
 
