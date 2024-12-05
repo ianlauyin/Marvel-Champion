@@ -3,7 +3,6 @@ use bevy::{
     prelude::*,
 };
 
-use crate::constants::WINDOW_RESOLUTION;
 pub struct ScrollingListPlugin;
 
 impl Plugin for ScrollingListPlugin {
@@ -21,17 +20,17 @@ fn on_scroll(
     mut mouse_wheel_events: EventReader<MouseWheel>,
     mut query_list: Query<(&mut ScrollingList, &mut Node, &ComputedNode, &Parent)>,
     window_q: Query<&Window>,
-    query_node: Query<(&ComputedNode, &Transform)>,
+    query_node: Query<(&ComputedNode, &GlobalTransform)>,
 ) {
     for mouse_wheel_event in mouse_wheel_events.read() {
         let Some(cursor_position) = window_q.get_single().unwrap().cursor_position() else {
             return;
         };
         for (mut scrolling_list, mut node, computed_node, parent) in &mut query_list {
-            let (container_node, container_transform) = query_node.get(parent.get()).unwrap();
+            let (container_node, global_transform) = query_node.get(parent.get()).unwrap();
+            let container_transform = global_transform.compute_transform();
             if !is_cusrsor_in_container(
                 cursor_position,
-                WINDOW_RESOLUTION / 2.,
                 container_transform.translation.truncate(),
                 container_node.size() / 2.,
             ) {
@@ -55,17 +54,14 @@ fn on_scroll(
 
 fn is_cusrsor_in_container(
     cursor_position: Vec2,
-    window_half_size: Vec2,
     container_center: Vec2,
     container_half_size: Vec2,
 ) -> bool {
-    let position = cursor_position - window_half_size;
-
     let container_left_bottom_bound = container_center - container_half_size;
     let container_right_top_bound = container_center + container_half_size;
 
-    position.x >= container_left_bottom_bound.x
-        && position.x <= container_right_top_bound.x
-        && position.y >= container_left_bottom_bound.y
-        && position.y <= container_right_top_bound.y
+    cursor_position.x >= container_left_bottom_bound.x
+        && cursor_position.x <= container_right_top_bound.x
+        && cursor_position.y >= container_left_bottom_bound.y
+        && cursor_position.y <= container_right_top_bound.y
 }

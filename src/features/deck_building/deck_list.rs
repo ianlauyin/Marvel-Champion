@@ -101,9 +101,63 @@ fn handle_button_interaction(
                     .map(|card| card.get_id())
                     .collect();
                 editing_deck.deck.card_ids.append(&mut identity_cards_ids);
+                let mut identity_cards_ids = identity
+                    .get_player_cards()
+                    .iter()
+                    .map(|card| card.get_id())
+                    .collect();
+                editing_deck.deck.card_ids.append(&mut identity_cards_ids);
+                let mut identity_cards_ids = identity
+                    .get_player_cards()
+                    .iter()
+                    .map(|card| card.get_id())
+                    .collect();
+                editing_deck.deck.card_ids.append(&mut identity_cards_ids);
+                let mut identity_cards_ids = identity
+                    .get_player_cards()
+                    .iter()
+                    .map(|card| card.get_id())
+                    .collect();
+                editing_deck.deck.card_ids.append(&mut identity_cards_ids);
+                let mut identity_cards_ids = identity
+                    .get_player_cards()
+                    .iter()
+                    .map(|card| card.get_id())
+                    .collect();
+                editing_deck.deck.card_ids.append(&mut identity_cards_ids);
+                let mut identity_cards_ids = identity
+                    .get_player_cards()
+                    .iter()
+                    .map(|card| card.get_id())
+                    .collect();
+                editing_deck.deck.card_ids.append(&mut identity_cards_ids);
+                let mut identity_cards_ids = identity
+                    .get_player_cards()
+                    .iter()
+                    .map(|card| card.get_id())
+                    .collect();
+                editing_deck.deck.card_ids.append(&mut identity_cards_ids);
+                let mut identity_cards_ids = identity
+                    .get_player_cards()
+                    .iter()
+                    .map(|card| card.get_id())
+                    .collect();
+                editing_deck.deck.card_ids.append(&mut identity_cards_ids);
+                let mut identity_cards_ids = identity
+                    .get_player_cards()
+                    .iter()
+                    .map(|card| card.get_id())
+                    .collect();
+                editing_deck.deck.card_ids.append(&mut identity_cards_ids);
+                let mut identity_cards_ids = identity
+                    .get_player_cards()
+                    .iter()
+                    .map(|card| card.get_id())
+                    .collect();
+                editing_deck.deck.card_ids.append(&mut identity_cards_ids);
             }
 
-            commands.insert_resource(button.0.clone());
+            commands.insert_resource(editing_deck);
             next_state.set(DeckBuildingState::LoadingCards);
             return;
         }
