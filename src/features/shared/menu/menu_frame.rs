@@ -2,7 +2,8 @@ use bevy::{prelude::*, state::state::FreelyMutableState};
 
 use crate::features::shared::previous_button::PreviousButtonBuilder;
 
-use super::{spawn_card_list, spawn_list};
+use super::super::spawn_card_list;
+use super::spawn_list;
 
 #[derive(Default, Clone)]
 pub struct ListItem {
@@ -48,7 +49,13 @@ impl<T: Component + Clone, S: States + FreelyMutableState, B: Component + Clone>
                 spawn_header(menu, self.previous_state.clone());
                 match self.display_method {
                     DisplayMethod::ButtonList => spawn_list(menu, self.list_items.clone()),
-                    DisplayMethod::CardList => spawn_card_list(menu, self.list_items.clone()),
+                    DisplayMethod::CardList => spawn_card_list(
+                        menu,
+                        self.list_items.clone(),
+                        (Val::Px(128.), Val::Px(178.)),
+                        Val::Percent(90.),
+                        8,
+                    ),
                 }
             });
     }

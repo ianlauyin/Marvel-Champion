@@ -12,13 +12,19 @@ pub struct AssetLoaderSetupPlugin;
 
 impl Plugin for AssetLoaderSetupPlugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(LoadedAsset(HashMap::new()))
+        app.insert_resource(LoadedAssetMap(HashMap::new()))
             .insert_resource(LoadAsset(Vec::new()));
     }
 }
 
 #[derive(Resource)]
-pub struct LoadedAsset(HashMap<String, Handle<Image>>);
+pub struct LoadedAssetMap(pub HashMap<String, Handle<Image>>);
+
+impl LoadedAssetMap {
+    pub fn get_card_handle(&mut self, card: Card) -> Handle<Image> {
+        self.0.get(&card.get_id()).unwrap().clone()
+    }
+}
 
 #[derive(Resource)]
 pub struct LoadAsset(pub Vec<(String, Handle<Image>)>);
@@ -52,7 +58,7 @@ impl<S: States + FreelyMutableState> Plugin for AssetLoaderPlugin<S> {
 fn check_asset<S: States + FreelyMutableState>(loading_state: S, next_state: S) -> SystemConfigs {
     IntoSystem::into_system(
         move |mut load_asset: ResMut<LoadAsset>,
-              mut loaded_asset: ResMut<LoadedAsset>,
+              mut loaded_asset: ResMut<LoadedAssetMap>,
               mut next_state_setter: ResMut<NextState<S>>,
               asset_server: Res<AssetServer>| {
             let mut removed_count = 0;

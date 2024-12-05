@@ -1,6 +1,6 @@
 use crate::{
     features::cards::CardDatas,
-    systems::{clean_up, Deck},
+    systems::{clean_up, Deck, LoadedAssetMap},
 };
 use bevy::prelude::*;
 
@@ -42,13 +42,15 @@ pub fn spawn_editor(
     mut commands: Commands,
     editing_deck: Res<EditingDeck>,
     card_datas: Res<CardDatas>,
+    loaded_asset_map: Res<LoadedAssetMap>,
 ) {
-    let cards = editing_deck
+    let card_list_items = editing_deck
         .deck
         .card_ids
         .iter()
-        .map(|card_id| card_datas.get(&card_id))
+        .map(|card_id| card_datas.get(card_id))
         .collect();
+
     commands
         .spawn((
             DeckEditor,
@@ -65,8 +67,8 @@ pub fn spawn_editor(
             BorderRadius::all(Val::Px(10.)),
             BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
         ))
-        .with_children(|menu| {
-            spawn_header(menu, editing_deck.deck.name.clone());
-            spawn_content(menu, cards);
+        .with_children(|content| {
+            spawn_header(content, editing_deck.deck.name.clone());
+            spawn_content(content, card_list_items, loaded_asset_map);
         });
 }
