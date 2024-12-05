@@ -25,10 +25,8 @@ pub struct LoadAsset(pub Vec<(String, Handle<Image>)>);
 
 impl LoadAsset {
     pub fn add_card(&mut self, card: Card, asset_server: &Res<AssetServer>) {
-        self.0.push((
-            card.get_card_id(),
-            asset_server.load(card.get_card_image_path()),
-        ));
+        self.0
+            .push((card.get_id(), asset_server.load(card.get_image_path())));
     }
 }
 

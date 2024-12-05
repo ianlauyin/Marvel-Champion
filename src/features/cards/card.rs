@@ -29,7 +29,7 @@ pub enum Card {
 }
 
 impl Card {
-    pub fn get_card_image_path(&self) -> String {
+    pub fn get_image_path(&self) -> String {
         let image_path = match self {
             Card::Attachment(attachment_card) => attachment_card.card_image_path,
             Card::Environment(environment_card) => environment_card.card_image_path,
@@ -51,7 +51,7 @@ impl Card {
         image_path.to_string()
     }
 
-    pub fn get_card_back_image_path(&self) -> String {
+    pub fn get_back_image_path(&self) -> String {
         let image_path = match self {
             Card::Attachment(_)
             | Card::Environment(_)
@@ -74,7 +74,7 @@ impl Card {
         image_path.to_string()
     }
 
-    pub fn get_card_id(&self) -> String {
+    pub fn get_id(&self) -> String {
         let id = match self {
             Card::Attachment(attachment_card) => attachment_card.id,
             Card::Environment(environment_card) => environment_card.id,

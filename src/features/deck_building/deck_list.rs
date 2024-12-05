@@ -86,14 +86,23 @@ fn handle_button_interaction(
 ) {
     for (interaction, button) in button_q.iter() {
         if *interaction == Interaction::Pressed {
-            let cards = [
-                deck_list_identity.0.get_cards(),
-                CardDatas::get_aspect_cards(),
-            ]
-            .concat();
+            let identity = deck_list_identity.0.clone();
+            let mut editing_deck = button.0.clone();
+            let cards = [identity.get_player_cards(), CardDatas::get_aspect_cards()].concat();
             for card in cards {
                 load_asset.add_card(card, &asset_server);
             }
+
+            // Add identity_cards when create new deck
+            if editing_deck.index.is_none() {
+                let mut identity_cards_ids = identity
+                    .get_player_cards()
+                    .iter()
+                    .map(|card| card.get_id())
+                    .collect();
+                editing_deck.deck.cards.append(&mut identity_cards_ids);
+            }
+
             commands.insert_resource(button.0.clone());
             next_state.set(DeckBuildingState::LoadingCards);
             return;

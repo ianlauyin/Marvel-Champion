@@ -42,8 +42,8 @@ fn spawn_cards(
     let mut x = -64. * 3.;
     let mut y = 89.;
     for card in cards {
-        let card_image_path = card.get_card_image_path().to_string();
-        let card_back_image_path = card.get_card_back_image_path().to_string();
+        let card_image_path = card.get_image_path().to_string();
+        let card_back_image_path = card.get_back_image_path().to_string();
         commands
             .spawn((
                 card,

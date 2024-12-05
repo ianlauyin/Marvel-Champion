@@ -24,7 +24,7 @@ impl CardDatas {
         .concat();
 
         for card in all_cards.iter() {
-            hashmap.insert(card.get_card_id(), card.clone());
+            hashmap.insert(card.get_id(), card.clone());
         }
         CardDatas(hashmap)
     }

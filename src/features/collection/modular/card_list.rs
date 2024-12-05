@@ -56,7 +56,7 @@ fn spawn_modular_cards(
             (
                 ModularCardButton(card.clone()),
                 ListItem {
-                    image: ImageNode::new(asset_server.load(card.get_card_image_path())),
+                    image: ImageNode::new(asset_server.load(card.get_image_path())),
                     ..default()
                 },
             )

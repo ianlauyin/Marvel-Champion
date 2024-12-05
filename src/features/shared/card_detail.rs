@@ -60,7 +60,7 @@ pub fn spawn_card_detail(
             };
             spawn_content(
                 container,
-                asset_server.load(card.get_card_image_path()),
+                asset_server.load(card.get_image_path()),
                 vertical,
             );
         });

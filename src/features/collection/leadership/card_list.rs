@@ -51,7 +51,7 @@ fn spawn_leadership_cards(commands: Commands, asset_server: Res<AssetServer>) {
             (
                 LeadershipCardButton(card.clone()),
                 ListItem {
-                    image: ImageNode::new(asset_server.load(card.get_card_image_path())),
+                    image: ImageNode::new(asset_server.load(card.get_image_path())),
                     ..default()
                 },
             )

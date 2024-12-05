@@ -53,7 +53,7 @@ fn spawn_hero_cards(
             (
                 HeroCardButton(card.clone()),
                 ListItem {
-                    image: ImageNode::new(asset_server.load(card.get_card_image_path())),
+                    image: ImageNode::new(asset_server.load(card.get_image_path())),
                     ..default()
                 },
             )
