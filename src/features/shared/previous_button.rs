@@ -5,7 +5,7 @@ use bevy::state::state::FreelyMutableState;
 
 const BUTTON_SIZE: (Val, Val) = (Val::Px(50.), Val::Px(50.));
 
-/// Reminder: Add handle_previous_interaction::<S> in state.rs
+/// Reminder: Add handle_previous_interaction(current_state) in system
 pub struct PreviousButtonBuilder<S: FreelyMutableState>(pub S);
 
 impl<S: FreelyMutableState + Clone> PreviousButtonBuilder<S> {
