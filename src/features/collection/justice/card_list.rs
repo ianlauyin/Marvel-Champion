@@ -63,11 +63,13 @@ fn spawn_justice_cards(commands: Commands, asset_server: Res<AssetServer>) {
 fn handle_card_click(
     commands: Commands,
     asset_server: Res<AssetServer>,
-    justice_card_button_q: Query<(&Interaction, &Card, &ZIndex), With<Card>>,
+    card_button_q: Query<(&Interaction, &Card), With<Button>>,
+    z_index_q: Query<&ZIndex>,
 ) {
-    for (interaction, card, z_index) in justice_card_button_q.iter() {
+    let current_largest_z_index_i32 = z_index_q.iter().map(|z_index| z_index.0).max().unwrap();
+    for (interaction, card) in card_button_q.iter() {
         if *interaction == Interaction::Pressed {
-            let card_detail_z_index = ZIndex(z_index.0 + 1);
+            let card_detail_z_index = ZIndex(current_largest_z_index_i32 + 1);
             spawn_card_detail(
                 commands,
                 asset_server,
