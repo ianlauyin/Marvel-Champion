@@ -1,9 +1,6 @@
 use bevy::prelude::*;
 
-use crate::systems::{
-    clean_up, AppState, MouseDragDropClick, MouseDragEvent, MouseDropEvent, MousePlugin,
-    MouseShortClickEvent,
-};
+use crate::systems::{clean_up, AppState};
 
 use super::shared::ButtonBuilder;
 pub struct MainMenuPlugin;
@@ -12,18 +9,12 @@ const CURRENT_STATE: AppState = AppState::MainMenu;
 
 impl Plugin for MainMenuPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins(MousePlugin {
-            current_state: CURRENT_STATE,
-        })
-        .add_systems(OnEnter(CURRENT_STATE), spawn_main_menu)
-        .add_systems(
-            Update,
-            handle_button_reaction.run_if(in_state(CURRENT_STATE)),
-        )
-        .add_systems(OnExit(CURRENT_STATE), clean_up::<MainMenu>)
-        .add_observer(test_click)
-        .add_observer(test_drag)
-        .add_observer(test_drop);
+        app.add_systems(OnEnter(CURRENT_STATE), spawn_main_menu)
+            .add_systems(
+                Update,
+                handle_button_reaction.run_if(in_state(CURRENT_STATE)),
+            )
+            .add_systems(OnExit(CURRENT_STATE), clean_up::<MainMenu>);
     }
 }
 
@@ -42,7 +33,6 @@ const BUTTON_MAP: [(MainMenuButton, &str); 3] = [
 fn spawn_main_menu(mut commands: Commands) {
     commands
         .spawn((
-            MouseDragDropClick::default(),
             MainMenu,
             Node {
                 width: Val::Percent(90.),
@@ -88,17 +78,4 @@ fn handle_button_click(
     main_menu_button: MainMenuButton,
 ) {
     next_state.set(main_menu_button.0);
-}
-
-//Test
-fn test_click(_: Trigger<MouseShortClickEvent>) {
-    println!("click");
-}
-
-fn test_drag(_: Trigger<MouseDragEvent>) {
-    println!("drag");
-}
-
-fn test_drop(_: Trigger<MouseDropEvent>) {
-    println!("drop");
 }
