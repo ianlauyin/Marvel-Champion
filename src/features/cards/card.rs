@@ -1,10 +1,10 @@
-use bevy::{log::warn, prelude::Component};
+use bevy::{ecs::event, log::warn, prelude::Component};
 
 use crate::constants::{
     ENCOUNTER_CARD_BACK_ASSET, PLAYER_CARD_BACK_ASSET, VILLAIN_CARD_BACK_ASSET,
 };
 
-use super::builders::*;
+use super::{builders::*, CardAspect};
 
 #[derive(Component, Clone)]
 pub enum Card {
@@ -116,5 +116,17 @@ impl Card {
             Card::Upgrade(upgrade_card) => upgrade_card.name,
         };
         id.to_string()
+    }
+
+    pub fn get_aspect(&self) -> Result<CardAspect, &str> {
+        let aspect = match self {
+            Card::Ally(ally_card) => ally_card.aspect.clone(),
+            Card::Event(event_card) => event_card.aspect.clone(),
+            Card::Resource(resource_card) => resource_card.aspect.clone(),
+            Card::Support(support_card) => support_card.aspect.clone(),
+            Card::Upgrade(upgrade_card) => upgrade_card.aspect.clone(),
+            _ => return Err("Wrong type of card"),
+        };
+        Ok(aspect)
     }
 }

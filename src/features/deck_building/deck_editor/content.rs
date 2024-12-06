@@ -1,9 +1,11 @@
+use std::collections::{HashMap, HashSet};
+
 use bevy::prelude::*;
 
 use crate::{
     constants::CARD_SIZE,
     features::{
-        cards::{Card, CardDatas},
+        cards::{Card, CardAspect, CardDatas},
         deck_building::state::DeckBuildingState,
         shared::{spawn_card_list, ListItem},
     },
@@ -30,8 +32,9 @@ pub fn spawn_content(
             ..default()
         })
         .with_children(|content| {
+            let aspect_names = get_aspect_names(&deck_cards);
             spawn_deck_card_list(content, &deck_cards, &loaded_asset);
-            spawn_info(content, deck_cards.len() as u8);
+            spawn_info(content, deck_cards.len() as u8, aspect_names);
             spawn_selection_list(content, &loaded_asset);
         });
 }
@@ -61,11 +64,32 @@ fn spawn_deck_card_list(
         });
 }
 
-fn spawn_info(content: &mut ChildBuilder, deck_cards_amount: u8) {
-    content.spawn(Node {
-        width: Val::Percent(10.),
-        ..default()
-    });
+fn spawn_info(content: &mut ChildBuilder, deck_cards_amount: u8, aspects: Vec<(String, Color)>) {
+    content
+        .spawn(Node {
+            width: Val::Percent(10.),
+            padding: UiRect::vertical(Val::Px(30.)),
+            display: Display::Flex,
+            flex_direction: FlexDirection::Column,
+            ..default()
+        })
+        .with_children(|info_container| {
+            info_container.spawn((
+                Text::new(format!("Cards: {}", deck_cards_amount)),
+                Node {
+                    margin: UiRect::bottom(Val::Px(50.)),
+                    ..default()
+                },
+            ));
+            info_container.spawn(Text::new("Aspects:"));
+            for (aspect, color) in aspects {
+                info_container.spawn((
+                    Text::new(aspect),
+                    TextColor(color),
+                    TextFont::from_font_size(16.),
+                ));
+            }
+        });
 }
 
 fn spawn_selection_list(content: &mut ChildBuilder, loaded_asset: &Res<LoadedAssetMap>) {
@@ -107,4 +131,32 @@ fn convert_card_into_button_map(
             )
         })
         .collect()
+}
+
+fn get_aspect_names(deck_cards: &Vec<Card>) -> Vec<(String, Color)> {
+    let mut hash_map: HashMap<String, Color> = HashMap::new();
+    for card in deck_cards {
+        let Ok(aspect) = card.get_aspect() else {
+            continue;
+        };
+        match aspect {
+            CardAspect::Justice => {
+                hash_map.insert(aspect.to_string(), Color::srgb(0.871, 0.941, 0.086));
+            }
+            CardAspect::Aggression => {
+                hash_map.insert(aspect.to_string(), Color::srgb(0.741, 0.192, 0.192));
+            }
+            CardAspect::Protection => {
+                hash_map.insert(aspect.to_string(), Color::srgb(0.075, 0.773, 0.075));
+            }
+            CardAspect::Leadership => {
+                hash_map.insert(aspect.to_string(), Color::srgb(0.125, 0.769, 0.882));
+            }
+            CardAspect::Pool => {
+                hash_map.insert(aspect.to_string(), Color::srgb(0.89, 0.149, 0.816));
+            }
+            _ => continue,
+        }
+    }
+    hash_map.into_iter().collect()
 }
