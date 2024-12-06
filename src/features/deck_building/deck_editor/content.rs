@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
 use bevy::prelude::*;
 
@@ -20,6 +20,7 @@ impl Plugin for DeckEditorContentPlugin {
     fn build(&self, app: &mut App) {}
 }
 
+// UI
 pub fn spawn_content(
     content_container: &mut ChildBuilder,
     deck_cards: Vec<Card>,
@@ -34,9 +35,15 @@ pub fn spawn_content(
         .with_children(|content| {
             let aspect_names = get_aspect_names(&deck_cards);
             spawn_deck_card_list(content, &deck_cards, &loaded_asset);
-            spawn_info(content, deck_cards.len() as u8, aspect_names);
+            spawn_info(content, get_card_amount(&deck_cards), aspect_names);
             spawn_selection_list(content, &loaded_asset);
         });
+}
+
+#[derive(Component)]
+enum CardList {
+    Deck,
+    Selection,
 }
 
 fn spawn_deck_card_list(
@@ -45,10 +52,13 @@ fn spawn_deck_card_list(
     loaded_asset: &Res<LoadedAssetMap>,
 ) {
     content
-        .spawn(Node {
-            width: Val::Percent(45.),
-            ..default()
-        })
+        .spawn((
+            CardList::Deck,
+            Node {
+                width: Val::Percent(45.),
+                ..default()
+            },
+        ))
         .with_children(|deck_card_list_node| {
             let list_items = convert_card_into_button_map(deck_cards, &loaded_asset);
             spawn_card_list(
@@ -94,10 +104,13 @@ fn spawn_info(content: &mut ChildBuilder, deck_cards_amount: u8, aspects: Vec<(S
 
 fn spawn_selection_list(content: &mut ChildBuilder, loaded_asset: &Res<LoadedAssetMap>) {
     content
-        .spawn(Node {
-            width: Val::Percent(45.),
-            ..default()
-        })
+        .spawn((
+            CardList::Selection,
+            Node {
+                width: Val::Percent(45.),
+                ..default()
+            },
+        ))
         .with_children(|card_list_node| {
             let cards = CardDatas::get_aspect_cards();
             let list_items = convert_card_into_button_map(&cards, loaded_asset);
@@ -114,6 +127,9 @@ fn spawn_selection_list(content: &mut ChildBuilder, loaded_asset: &Res<LoadedAss
         });
 }
 
+// System
+
+// Util
 fn convert_card_into_button_map(
     deck_cards: &Vec<Card>,
     loaded_asset: &Res<LoadedAssetMap>,
@@ -131,6 +147,13 @@ fn convert_card_into_button_map(
             )
         })
         .collect()
+}
+
+fn get_card_amount(deck_cards: &Vec<Card>) -> u8 {
+    deck_cards
+        .iter()
+        .filter(|card| !matches!(card, Card::Hero(_) | Card::AlterEgo(_)))
+        .count() as u8
 }
 
 fn get_aspect_names(deck_cards: &Vec<Card>) -> Vec<(String, Color)> {

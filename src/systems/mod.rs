@@ -5,6 +5,7 @@ mod asset_loader;
 mod clean_up;
 mod decks_storage;
 mod devtool;
+mod mouse_click;
 mod setup;
 
 pub struct SystemPlugin;
@@ -25,3 +26,4 @@ pub use app_state::AppState;
 pub use asset_loader::{AssetLoaderPlugin, LoadAsset, LoadedAssetMap};
 pub use clean_up::clean_up;
 pub use decks_storage::{Deck, DecksStorage};
+pub use mouse_click::*;
