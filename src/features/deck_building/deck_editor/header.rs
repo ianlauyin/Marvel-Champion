@@ -7,7 +7,9 @@ use crate::{
 };
 use bevy::prelude::*;
 use bevy_pkv::PkvStore;
-use bevy_simple_text_input::{TextInput, TextInputPlugin, TextInputSubmitEvent, TextInputValue};
+use bevy_simple_text_input::{
+    TextInput, TextInputInactive, TextInputPlugin, TextInputSubmitEvent, TextInputValue,
+};
 
 use super::EditingDeck;
 
@@ -30,11 +32,6 @@ impl Plugin for DeckEditorHeaderPlugin {
                     .run_if(in_state(CURRENT_STATE)),
             );
     }
-}
-
-#[derive(Component)]
-struct Title {
-    is_editing: bool,
 }
 
 #[derive(Component)]
@@ -69,13 +66,12 @@ fn spawn_title(header: &mut ChildBuilder, name: String) {
                 border: UiRect::all(Val::Px(2.)),
                 ..default()
             },
-            Title { is_editing: false },
             BorderColor::from(Color::WHITE),
             BorderRadius::all(Val::Px(5.)),
             Interaction::default(),
         ))
         .with_children(|title_node| {
-            title_node.spawn(Text::new(name));
+            title_node.spawn((TextInput, TextInputValue(name), TextInputInactive(true)));
         });
 }
 
@@ -106,60 +102,41 @@ fn spawn_buttons(header: &mut ChildBuilder) {
         });
 }
 
-fn handle_title_interaction(
-    mut commands: Commands,
-    mut title_q: Query<(Entity, &Interaction, &mut Title)>,
-) {
-    let (entity, interaction, mut title) = title_q.get_single_mut().unwrap();
+fn handle_title_interaction(mut text_input_q: Query<(&Interaction, &mut TextInputInactive)>) {
+    let (interaction, mut inactive) = text_input_q.get_single_mut().unwrap();
     if *interaction == Interaction::Pressed {
-        title.is_editing = true;
-        commands
-            .entity(entity)
-            .despawn_descendants()
-            .with_child(TextInput);
+        inactive.0 = false;
     }
 }
 
 fn handle_text_input_finished(
     mut events: EventReader<TextInputSubmitEvent>,
-    mut commands: Commands,
-    mut title_q: Query<(Entity, &mut Title)>,
+    mut text_input_q: Query<(&mut TextInputInactive, &mut TextInputValue)>,
     mut editing_deck: ResMut<EditingDeck>,
 ) {
     for event in events.read() {
         let name = event.value.clone();
-        let (entity, mut title) = title_q.get_single_mut().unwrap();
+        let Ok((mut inactive, mut value)) = text_input_q.get_single_mut() else {
+            return;
+        };
 
         editing_deck.deck.name = name.clone();
-        commands
-            .entity(entity)
-            .despawn_descendants()
-            .with_child(Text::new(name));
-        title.is_editing = false;
+        value.0 = name.clone();
+        inactive.0 = true;
     }
 }
 
 fn handle_text_input_escape(
     keys: Res<ButtonInput<KeyCode>>,
-    mut commands: Commands,
-    mut title_q: Query<(Entity, &mut Title, &Children)>,
-    text_input_query: Query<Entity, With<TextInput>>,
+    mut text_input_q: Query<(&mut TextInputInactive, &mut TextInputValue)>,
     editing_deck: Res<EditingDeck>,
 ) {
-    let Ok(text_input_entity) = text_input_query.get_single() else {
+    let Ok((mut inactive, mut value)) = text_input_q.get_single_mut() else {
         return;
     };
-    let Ok((entity, mut title, children)) = title_q.get_single_mut() else {
-        return;
-    };
-    if children.contains(&text_input_entity) {
-        if keys.just_pressed(KeyCode::Escape) {
-            commands
-                .entity(entity)
-                .despawn_descendants()
-                .with_child(Text::new(editing_deck.deck.name.clone()));
-            title.is_editing = false;
-        }
+    if keys.just_pressed(KeyCode::Escape) {
+        value.0 = editing_deck.deck.name.clone();
+        inactive.0 = true;
     }
 }
 
