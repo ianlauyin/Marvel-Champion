@@ -4,7 +4,7 @@ use crate::features::shared::ButtonBuilder;
 
 use super::{ListItem, ScrollingList};
 
-pub fn spawn_card_list<B: Component>(
+pub fn spawn_card_list<B: Bundle>(
     parent: &mut ChildBuilder,
     button_map: Vec<(B, ListItem)>,
     card_size: (Val, Val),

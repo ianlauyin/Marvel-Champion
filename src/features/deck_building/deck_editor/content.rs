@@ -9,7 +9,11 @@ use crate::{
         deck_building::state::DeckBuildingState,
         shared::{spawn_card_list, ListItem},
     },
-    systems::LoadedAssetMap,
+    systems::{
+        LoadedAssetMap, MouseDragDropClick, MouseDragEvent, MouseDropEvent, MousePlugin,
+        MouseShortClickEvent,
+    },
+    utils::get_card_amount,
 };
 
 pub struct DeckEditorContentPlugin;
@@ -17,7 +21,15 @@ pub struct DeckEditorContentPlugin;
 const CURRENT_STATE: DeckBuildingState = DeckBuildingState::DeckBuilding;
 
 impl Plugin for DeckEditorContentPlugin {
-    fn build(&self, app: &mut App) {}
+    fn build(&self, app: &mut App) {
+        app.add_plugins(MousePlugin {
+            current_state: CURRENT_STATE,
+        })
+        .add_systems(
+            Update,
+            (handle_click, handle_drag, handle_drop).run_if(in_state(CURRENT_STATE)),
+        );
+    }
 }
 
 // UI
@@ -128,17 +140,62 @@ fn spawn_selection_list(content: &mut ChildBuilder, loaded_asset: &Res<LoadedAss
 }
 
 // System
+fn handle_click(
+    mut click_ev: EventReader<MouseShortClickEvent>,
+    card_q: Query<&Card, With<MouseDragDropClick>>,
+) {
+    for ev in click_ev.read() {
+        if let Ok(card) = card_q.get(ev.0) {
+            println!("{}", card.get_name());
+        }
+    }
+}
+
+fn handle_drag(
+    mut click_ev: EventReader<MouseDragEvent>,
+    card_q: Query<&Card, With<MouseDragDropClick>>,
+) {
+    for ev in click_ev.read() {
+        if let Ok(card) = card_q.get(ev.entity) {
+            println!("{}", card.get_name());
+            println!("{}", ev.position);
+            println!("drag");
+        }
+    }
+}
+
+fn handle_drop(
+    mut click_ev: EventReader<MouseDropEvent>,
+    card_q: Query<&Card, With<MouseDragDropClick>>,
+) {
+    for ev in click_ev.read() {
+        if let Ok(card) = card_q.get(ev.entity) {
+            println!("{}", card.get_name());
+            println!("{}", ev.position);
+            println!("drop");
+        }
+    }
+}
 
 // Util
+#[derive(Bundle)]
+struct DragDropCard {
+    interaction: MouseDragDropClick,
+    card: Card,
+}
+
 fn convert_card_into_button_map(
     deck_cards: &Vec<Card>,
     loaded_asset: &Res<LoadedAssetMap>,
-) -> Vec<(Card, ListItem)> {
+) -> Vec<(DragDropCard, ListItem)> {
     deck_cards
         .iter()
         .map(|card| {
             (
-                card.clone(),
+                DragDropCard {
+                    interaction: MouseDragDropClick::default(),
+                    card: card.clone(),
+                },
                 ListItem {
                     text: "".to_string(),
                     color: Color::NONE,
@@ -147,13 +204,6 @@ fn convert_card_into_button_map(
             )
         })
         .collect()
-}
-
-fn get_card_amount(deck_cards: &Vec<Card>) -> u8 {
-    deck_cards
-        .iter()
-        .filter(|card| !matches!(card, Card::Hero(_) | Card::AlterEgo(_)))
-        .count() as u8
 }
 
 fn get_aspect_names(deck_cards: &Vec<Card>) -> Vec<(String, Color)> {
