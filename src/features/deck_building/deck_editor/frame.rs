@@ -44,12 +44,7 @@ pub fn spawn_editor(
     card_datas: Res<CardDatas>,
     loaded_asset_map: Res<LoadedAssetMap>,
 ) {
-    let card_list_items = editing_deck
-        .deck
-        .card_ids
-        .iter()
-        .map(|card_id| card_datas.get(card_id))
-        .collect();
+    let card_list_items = card_datas.from_ids(editing_deck.deck.card_ids.clone());
 
     commands
         .spawn((
