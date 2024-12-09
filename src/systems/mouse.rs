@@ -40,6 +40,7 @@ pub struct MouseShortClickEvent(pub Entity);
 #[derive(Event)]
 pub struct MouseDragEvent {
     pub entity: Entity,
+    pub delta_position: Option<Vec2>,
     pub position: Vec2,
 }
 
@@ -62,11 +63,13 @@ fn listen_mouse_click(
     for (entity, interaction, mut mouse_target) in mouse_target_q.iter_mut() {
         if *interaction == Interaction::Pressed || !mouse_target.stop_watch.is_paused() {
             mouse_target.stop_watch.tick(time.delta());
+            let mut delta_position = None;
             if let Some(cursor) = cursor_ev.read().next() {
+                delta_position = Some(cursor.position - mouse_target.position);
                 mouse_target.position = cursor.position;
             }
             if *interaction == Interaction::Pressed {
-                handle_pressed(entity, mouse_drag_writer, &mut mouse_target);
+                handle_pressed(entity, mouse_drag_writer, &mut mouse_target, delta_position);
                 return;
             }
             handle_released(
@@ -83,11 +86,13 @@ fn handle_pressed(
     entity: Entity,
     mut mouse_drag_writer: EventWriter<MouseDragEvent>,
     mouse_target: &mut MouseDragDropClick,
+    delta_position: Option<Vec2>,
 ) {
     if mouse_target.stop_watch.elapsed_secs() >= TIME_BOUNDARY {
         mouse_drag_writer.send(MouseDragEvent {
             entity,
             position: mouse_target.position,
+            delta_position,
         });
     } else if mouse_target.stop_watch.is_paused() {
         mouse_target.stop_watch.unpause();

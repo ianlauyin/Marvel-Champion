@@ -1,4 +1,4 @@
-use bevy::{ecs::event, log::warn, prelude::Component};
+use bevy::{log::warn, prelude::Component};
 
 use crate::constants::{
     ENCOUNTER_CARD_BACK_ASSET, PLAYER_CARD_BACK_ASSET, VILLAIN_CARD_BACK_ASSET,

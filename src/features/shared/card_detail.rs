@@ -34,7 +34,7 @@ pub fn spawn_card_detail(
                 width: Val::Px(600.),
                 height: Val::Px(600.),
                 position_type: PositionType::Relative,
-                bottom: Val::Px(position.y),
+                top: Val::Px(position.y),
                 left: Val::Px(position.x),
                 justify_self: JustifySelf::Center,
                 align_self: AlignSelf::Center,
@@ -127,11 +127,11 @@ fn on_drag(
     for (inteaction, mut node) in &mut card_detail_q {
         if *inteaction == Interaction::Pressed {
             for cursor in cursor_ev.read() {
-                let (Some(delta), Val::Px(y), Val::Px(x)) = (cursor.delta, node.bottom, node.left)
+                let (Some(delta), Val::Px(y), Val::Px(x)) = (cursor.delta, node.top, node.left)
                 else {
                     return;
                 };
-                node.bottom = Val::Px(y - delta.y);
+                node.top = Val::Px(y + delta.y);
                 node.left = Val::Px(x + delta.x);
             }
             return;

@@ -31,12 +31,13 @@ fn on_scroll(
         for (mut scrolling_list, mut node, computed_node, parent) in &mut query_list {
             let (container_node, global_transform) = query_node.get(parent.get()).unwrap();
             let container_transform = global_transform.compute_transform();
+
             if !is_cusrsor_in_container(
                 cursor_position,
                 container_transform.translation.truncate(),
                 container_node.size() / 2.,
             ) {
-                return;
+                continue;
             }
 
             let items_height = computed_node.size().y;

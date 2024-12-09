@@ -8,6 +8,7 @@ use crate::{
         },
     },
     systems::clean_up,
+    utils::get_largest_z_index,
 };
 
 use super::state::CollectionHeroState;
@@ -71,16 +72,14 @@ fn handle_card_click(
     card_button_q: Query<(&Interaction, &Card), With<Button>>,
     z_index_q: Query<&ZIndex>,
 ) {
-    let current_largest_z_index_i32 = z_index_q.iter().map(|z_index| z_index.0).max().unwrap();
     for (interaction, card) in card_button_q.iter() {
         if *interaction == Interaction::Pressed {
-            let card_detail_z_index = ZIndex(current_largest_z_index_i32 + 1);
             spawn_card_detail(
                 commands,
                 asset_server,
                 card.clone(),
                 Vec2::ZERO,
-                card_detail_z_index,
+                get_largest_z_index(z_index_q),
             );
             return;
         }

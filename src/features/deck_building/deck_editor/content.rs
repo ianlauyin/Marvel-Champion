@@ -1,19 +1,19 @@
 use std::collections::HashMap;
 
-use bevy::prelude::*;
+use bevy::{prelude::*, transform};
 
 use crate::{
     constants::CARD_SIZE,
     features::{
         cards::{Card, CardAspect, CardDatas},
         deck_building::state::DeckBuildingState,
-        shared::{spawn_card_list, ListItem},
+        shared::{spawn_card_detail, spawn_card_list, ListItem},
     },
     systems::{
         LoadedAssetMap, MouseDragDropClick, MouseDragEvent, MouseDropEvent, MousePlugin,
         MouseShortClickEvent,
     },
-    utils::get_card_amount,
+    utils::{get_card_amount, get_largest_z_index, is_cusrsor_in_container},
 };
 
 pub struct DeckEditorContentPlugin;
@@ -142,38 +142,90 @@ fn spawn_selection_list(content: &mut ChildBuilder, loaded_asset: &Res<LoadedAss
 // System
 fn handle_click(
     mut click_ev: EventReader<MouseShortClickEvent>,
+    commands: Commands,
     card_q: Query<&Card, With<MouseDragDropClick>>,
+    z_index_q: Query<&ZIndex>,
+    asset_server: Res<AssetServer>,
 ) {
     for ev in click_ev.read() {
         if let Ok(card) = card_q.get(ev.0) {
-            println!("{}", card.get_name());
+            spawn_card_detail(
+                commands,
+                asset_server,
+                card.clone(),
+                Vec2::ZERO,
+                get_largest_z_index(z_index_q),
+            );
+            return;
         }
     }
 }
 
+#[derive(Component)]
+struct DraggingCard(CardList);
+
 fn handle_drag(
     mut click_ev: EventReader<MouseDragEvent>,
+    commands: Commands,
     card_q: Query<&Card, With<MouseDragDropClick>>,
+    mut drag_card_q: Query<&mut Node, With<DraggingCard>>,
+    asset_server: Res<AssetServer>,
 ) {
     for ev in click_ev.read() {
         if let Ok(card) = card_q.get(ev.entity) {
-            println!("{}", card.get_name());
-            println!("{}", ev.position);
-            println!("drag");
+            if drag_card_q.is_empty() {
+                let image = asset_server.load(card.get_image_path());
+                let card_list = find_card_in_card_list();
+                spawn_dragging_card(commands, card_list, image, ev.position);
+                return;
+            }
+            let Ok(mut drag_card_node) = drag_card_q.get_single_mut() else {
+                warn!("Should not have more than one dragging card.");
+                return;
+            };
+            let (Some(delta), Val::Px(y), Val::Px(x)) =
+                (ev.delta_position, drag_card_node.top, drag_card_node.left)
+            else {
+                return;
+            };
+            drag_card_node.top = Val::Px(y + delta.y);
+            drag_card_node.left = Val::Px(x + delta.x);
+            return;
         }
     }
+}
+
+fn spawn_dragging_card(
+    mut commands: Commands,
+    card_list: CardList,
+    image: Handle<Image>,
+    position: Vec2,
+) {
+    commands.spawn((
+        DraggingCard(card_list),
+        Node {
+            width: Val::Px(CARD_SIZE.x),
+            height: Val::Px(CARD_SIZE.y),
+            position_type: PositionType::Relative,
+            top: Val::Px(position.y - CARD_SIZE.y / 2.),
+            left: Val::Px(position.x - CARD_SIZE.x / 2.),
+            ..default()
+        },
+        ImageNode::new(image),
+    ));
 }
 
 fn handle_drop(
     mut click_ev: EventReader<MouseDropEvent>,
-    card_q: Query<&Card, With<MouseDragDropClick>>,
+    mut commands: Commands,
+    dragging_card_q: Query<Entity, With<DraggingCard>>,
 ) {
-    for ev in click_ev.read() {
-        if let Ok(card) = card_q.get(ev.entity) {
-            println!("{}", card.get_name());
-            println!("{}", ev.position);
-            println!("drop");
-        }
+    for _ in click_ev.read() {
+        let Ok(card) = dragging_card_q.get_single() else {
+            warn!("Should have one dragging card when drop");
+            return;
+        };
+        commands.entity(card).despawn();
     }
 }
 
@@ -185,10 +237,10 @@ struct DragDropCard {
 }
 
 fn convert_card_into_button_map(
-    deck_cards: &Vec<Card>,
+    cards: &Vec<Card>,
     loaded_asset: &Res<LoadedAssetMap>,
 ) -> Vec<(DragDropCard, ListItem)> {
-    deck_cards
+    cards
         .iter()
         .map(|card| {
             (
@@ -232,4 +284,8 @@ fn get_aspect_names(deck_cards: &Vec<Card>) -> Vec<(String, Color)> {
         }
     }
     hash_map.into_iter().collect()
+}
+
+fn find_card_in_card_list() -> CardList {
+    CardList::Deck
 }
