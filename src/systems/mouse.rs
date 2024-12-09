@@ -68,15 +68,14 @@ fn listen_mouse_click(
             if *interaction == Interaction::Pressed {
                 handle_pressed(entity, mouse_drag_writer, &mut mouse_target);
                 return;
-            } else if !mouse_target.stop_watch.is_paused() {
-                handle_released(
-                    entity,
-                    mouse_click_writer,
-                    mouse_drop_writer,
-                    &mut mouse_target,
-                );
-                return;
             }
+            handle_released(
+                entity,
+                mouse_click_writer,
+                mouse_drop_writer,
+                &mut mouse_target,
+            );
+            return;
         }
     }
 }
