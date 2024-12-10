@@ -10,10 +10,14 @@ use crate::{
         shared::{CardDetailBuilder, CardListBuilder, ListItem},
     },
     systems::{
-        LoadedAssetMap, MouseDragDropClick, MouseDragEvent, MouseDropEvent, MousePlugin,
-        MouseShortClickEvent,
+        listen_mouse_click, LoadedAssetMap, MouseDragDropClick, MouseDragEvent, MouseDropEvent,
+        MousePlugin, MouseShortClickEvent,
     },
-    utils::{get_card_amount, get_largest_z_index, is_cusrsor_in_container},
+    ui::{NodeMove, NodeMoveRemoveEvent},
+    utils::{
+        get_card_amount, get_largest_z_index, global_transform_to_node_vec2,
+        is_cusrsor_in_container,
+    },
 };
 
 use super::EditingDeck;
@@ -31,10 +35,16 @@ impl Plugin for DeckEditorContentPlugin {
             Update,
             (
                 handle_click,
-                handle_drag,
                 handle_drop,
                 handle_editing_deck_changed,
+                handle_return_card_cleanup,
             )
+                .run_if(in_state(CURRENT_STATE)),
+        )
+        .add_systems(
+            PreUpdate,
+            handle_drag
+                .after(listen_mouse_click)
                 .run_if(in_state(CURRENT_STATE)),
         );
     }
@@ -224,40 +234,47 @@ fn handle_click(
 struct DraggingCard {
     card_list_item: CardListItem,
     card: Card,
+    initial_position: Vec2,
 }
 
 fn handle_drag(
     mut click_ev: EventReader<MouseDragEvent>,
-    commands: Commands,
-    card_q: Query<(&Card, &CardListItem), With<MouseDragDropClick>>,
+    mut commands: Commands,
+    card_q: Query<(&Card, &CardListItem, &GlobalTransform), With<MouseDragDropClick>>,
     mut drag_card_q: Query<&mut Node, With<DraggingCard>>,
     asset_server: Res<AssetServer>,
+    window_q: Query<&Window>,
 ) {
+    let window = window_q.get_single().unwrap();
+    let Some(cursor_position) = window.cursor_position() else {
+        return;
+    };
     for ev in click_ev.read() {
-        if let Ok((card, card_list_item)) = card_q.get(ev.entity) {
+        if let Ok((card, card_list_item, global_transform)) = card_q.get(ev.entity) {
             if drag_card_q.is_empty() {
+                let card_position = global_transform_to_node_vec2(global_transform);
                 let image = asset_server.load(card.get_image_path());
                 spawn_dragging_card(
-                    commands,
+                    commands.reborrow(),
                     card.clone(),
                     card_list_item.clone(),
                     image,
-                    ev.position,
+                    cursor_position,
+                    card_position,
                 );
-                return;
+                continue;
             }
             let Ok(mut drag_card_node) = drag_card_q.get_single_mut() else {
                 warn!("Should not have more than one dragging card.");
-                return;
+                continue;
             };
             let (Some(delta), Val::Px(y), Val::Px(x)) =
                 (ev.delta_position, drag_card_node.top, drag_card_node.left)
             else {
-                return;
+                continue;
             };
             drag_card_node.top = Val::Px(y + delta.y);
             drag_card_node.left = Val::Px(x + delta.x);
-            return;
         }
     }
 }
@@ -267,10 +284,14 @@ fn spawn_dragging_card(
     card: Card,
     card_list_item: CardListItem,
     image: Handle<Image>,
-    position: Vec2,
+    spawn_position: Vec2,
+    card_position: Vec2,
 ) {
+    let top_f32 = spawn_position.y - CARD_SIZE.y / 2.;
+    let left_f32 = spawn_position.x - CARD_SIZE.x / 2.;
     commands.spawn((
         DraggingCard {
+            initial_position: card_position,
             card_list_item,
             card,
         },
@@ -278,11 +299,12 @@ fn spawn_dragging_card(
             width: Val::Px(CARD_SIZE.x),
             height: Val::Px(CARD_SIZE.y),
             position_type: PositionType::Relative,
-            top: Val::Px(position.y - CARD_SIZE.y / 2.),
-            left: Val::Px(position.x - CARD_SIZE.x / 2.),
+            top: Val::Px(top_f32),
+            left: Val::Px(left_f32),
             ..default()
         },
         ImageNode::new(image),
+        BorderRadius::all(Val::Percent(5.)),
     ));
 }
 
@@ -300,19 +322,31 @@ fn handle_drop(
         warn!("Should have one dragging card when drop");
         return;
     };
+    let mut entity_commands = commands.entity(entity);
     let cursor_position = ev.position;
     if let Ok(drop_card_list) = find_card_belongs(&cursor_position, card_list_q) {
         match (dragging_card.card_list_item.clone(), drop_card_list) {
             (CardListItem::Deck, CardList::Selection) => {
-                handle_remove_card_from_deck(&mut editing_deck, &dragging_card.card)
+                handle_remove_card_from_deck(&mut editing_deck, &dragging_card.card);
+                entity_commands.despawn();
             }
             (CardListItem::Selection, CardList::Deck) => {
-                handle_add_card_to_deck(&mut editing_deck, &dragging_card.card)
+                handle_add_card_to_deck(&mut editing_deck, &dragging_card.card);
+                entity_commands.despawn();
             }
-            _ => {}
+            _ => handle_return_card(
+                entity_commands,
+                cursor_position,
+                dragging_card.initial_position,
+            ),
         }
+    } else {
+        handle_return_card(
+            entity_commands,
+            cursor_position,
+            dragging_card.initial_position,
+        );
     }
-    commands.entity(entity).despawn();
 }
 
 fn handle_remove_card_from_deck(editing_deck: &mut ResMut<EditingDeck>, card: &Card) {
@@ -331,6 +365,25 @@ fn handle_remove_card_from_deck(editing_deck: &mut ResMut<EditingDeck>, card: &C
 
 fn handle_add_card_to_deck(editing_deck: &mut ResMut<EditingDeck>, card: &Card) {
     editing_deck.deck.card_ids.push(card.get_id());
+}
+
+fn handle_return_card(
+    mut entity_commands: EntityCommands,
+    current_position: Vec2,
+    target_position: Vec2,
+) {
+    entity_commands
+        .remove::<DraggingCard>()
+        .insert(NodeMove::new(current_position, target_position));
+}
+
+fn handle_return_card_cleanup(
+    mut commands: Commands,
+    mut node_remove_event: EventReader<NodeMoveRemoveEvent>,
+) {
+    for ev in node_remove_event.read() {
+        commands.entity(ev.0).despawn();
+    }
 }
 
 // Util
