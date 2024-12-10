@@ -71,12 +71,18 @@ enum CardList {
     Selection,
 }
 
+#[derive(Component, Clone)]
+enum CardListItem {
+    Deck,
+    Selection,
+}
+
 fn spawn_deck_card_list(
     mut commands: Commands,
     deck_cards: &Vec<Card>,
     loaded_asset: &Res<LoadedAssetMap>,
 ) -> Entity {
-    let list_items = convert_card_into_button_map(deck_cards, &loaded_asset);
+    let list_items = convert_card_into_button_map(CardListItem::Deck, deck_cards, &loaded_asset);
     let list = CardListBuilder {
         button_map: list_items.clone(),
         card_size: (
@@ -134,7 +140,7 @@ fn spawn_info(
 
 fn spawn_selection_list(mut commands: Commands, loaded_asset: &Res<LoadedAssetMap>) -> Entity {
     let cards = CardDatas::get_aspect_cards();
-    let list_items = convert_card_into_button_map(&cards, loaded_asset);
+    let list_items = convert_card_into_button_map(CardListItem::Selection, &cards, loaded_asset);
     let list = CardListBuilder {
         button_map: list_items,
         card_size: (
@@ -170,7 +176,11 @@ fn handle_editing_deck_changed(
             if *card_list == CardList::Deck {
                 let cards = card_datas.from_ids(&editing_deck.deck.card_ids);
                 let deck_list = CardListBuilder {
-                    button_map: convert_card_into_button_map(&cards, &loaded_asset),
+                    button_map: convert_card_into_button_map(
+                        CardListItem::Deck,
+                        &cards,
+                        &loaded_asset,
+                    ),
                     card_size: (
                         Val::Px(CARD_SIZE.truncate().x),
                         Val::Px(CARD_SIZE.truncate().y),
@@ -212,27 +222,28 @@ fn handle_click(
 
 #[derive(Component)]
 struct DraggingCard {
-    card_list: CardList,
+    card_list_item: CardListItem,
     card: Card,
 }
 
 fn handle_drag(
     mut click_ev: EventReader<MouseDragEvent>,
     commands: Commands,
-    card_q: Query<&Card, With<MouseDragDropClick>>,
+    card_q: Query<(&Card, &CardListItem), With<MouseDragDropClick>>,
     mut drag_card_q: Query<&mut Node, With<DraggingCard>>,
-    card_list_q: Query<(&GlobalTransform, &ComputedNode, &CardList)>,
     asset_server: Res<AssetServer>,
 ) {
     for ev in click_ev.read() {
-        if let Ok(card) = card_q.get(ev.entity) {
+        if let Ok((card, card_list_item)) = card_q.get(ev.entity) {
             if drag_card_q.is_empty() {
                 let image = asset_server.load(card.get_image_path());
-                let Ok(card_list) = find_card_belongs(&ev.position, card_list_q) else {
-                    warn!("The card is not in both of the container");
-                    return;
-                };
-                spawn_dragging_card(commands, card.clone(), card_list, image, ev.position);
+                spawn_dragging_card(
+                    commands,
+                    card.clone(),
+                    card_list_item.clone(),
+                    image,
+                    ev.position,
+                );
                 return;
             }
             let Ok(mut drag_card_node) = drag_card_q.get_single_mut() else {
@@ -254,12 +265,15 @@ fn handle_drag(
 fn spawn_dragging_card(
     mut commands: Commands,
     card: Card,
-    card_list: CardList,
+    card_list_item: CardListItem,
     image: Handle<Image>,
     position: Vec2,
 ) {
     commands.spawn((
-        DraggingCard { card_list, card },
+        DraggingCard {
+            card_list_item,
+            card,
+        },
         Node {
             width: Val::Px(CARD_SIZE.x),
             height: Val::Px(CARD_SIZE.y),
@@ -288,28 +302,20 @@ fn handle_drop(
     };
     let cursor_position = ev.position;
     if let Ok(drop_card_list) = find_card_belongs(&cursor_position, card_list_q) {
-        match (dragging_card.card_list.clone(), drop_card_list) {
-            (CardList::Deck, CardList::Selection) => handle_remove_card_from_deck(
-                &mut editing_deck,
-                &mut commands,
-                &dragging_card.card,
-                ev.entity,
-            ),
-            (CardList::Selection, CardList::Deck) => handle_add_card_to_deck(),
-            _ => return_to_list(),
+        match (dragging_card.card_list_item.clone(), drop_card_list) {
+            (CardListItem::Deck, CardList::Selection) => {
+                handle_remove_card_from_deck(&mut editing_deck, &dragging_card.card)
+            }
+            (CardListItem::Selection, CardList::Deck) => {
+                handle_add_card_to_deck(&mut editing_deck, &dragging_card.card)
+            }
+            _ => {}
         }
-    } else {
-        return_to_list();
     }
     commands.entity(entity).despawn();
 }
 
-fn handle_remove_card_from_deck(
-    editing_deck: &mut ResMut<EditingDeck>,
-    commands: &mut Commands,
-    card: &Card,
-    card_entity: Entity,
-) {
+fn handle_remove_card_from_deck(editing_deck: &mut ResMut<EditingDeck>, card: &Card) {
     let card_id = card.get_id();
     let Some(first_index) = editing_deck
         .deck
@@ -321,25 +327,22 @@ fn handle_remove_card_from_deck(
         return;
     };
     editing_deck.deck.card_ids.remove(first_index);
-    commands.entity(card_entity).despawn();
 }
 
-fn handle_add_card_to_deck() {
-    println!("Add")
-}
-
-fn return_to_list() {
-    println!("return")
+fn handle_add_card_to_deck(editing_deck: &mut ResMut<EditingDeck>, card: &Card) {
+    editing_deck.deck.card_ids.push(card.get_id());
 }
 
 // Util
 #[derive(Bundle, Clone)]
 struct DragDropCard {
+    belongs: CardListItem,
     interaction: MouseDragDropClick,
     card: Card,
 }
 
 fn convert_card_into_button_map(
+    belongs: CardListItem,
     cards: &Vec<Card>,
     loaded_asset: &Res<LoadedAssetMap>,
 ) -> Vec<(DragDropCard, ListItem)> {
@@ -348,6 +351,7 @@ fn convert_card_into_button_map(
         .map(|card| {
             (
                 DragDropCard {
+                    belongs: belongs.clone(),
                     interaction: MouseDragDropClick::default(),
                     card: card.clone(),
                 },
