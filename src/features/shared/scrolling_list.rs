@@ -15,6 +15,7 @@ impl Plugin for ScrollingListPlugin {
 
 #[derive(Component, Default)]
 pub struct ScrollingList {
+    pub disable: bool,
     position: f32,
 }
 
@@ -29,6 +30,9 @@ fn on_scroll(
             return;
         };
         for (mut scrolling_list, mut node, computed_node, parent) in &mut query_list {
+            if scrolling_list.disable {
+                continue;
+            }
             let (container_node, global_transform) = query_node.get(parent.get()).unwrap();
             let container_transform = global_transform.compute_transform();
 

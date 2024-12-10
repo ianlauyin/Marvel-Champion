@@ -9,7 +9,7 @@ impl<S: FreelyMutableState> Plugin for MousePlugin<S> {
             .add_event::<MouseDragEvent>()
             .add_event::<MouseDropEvent>()
             .add_systems(
-                PreUpdate,
+                Update,
                 listen_mouse_click.run_if(in_state(self.current_state.clone())),
             );
     }

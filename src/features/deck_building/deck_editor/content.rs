@@ -7,7 +7,7 @@ use crate::{
     features::{
         cards::{Card, CardAspect, CardDatas},
         deck_building::state::DeckBuildingState,
-        shared::{CardDetailBuilder, CardListBuilder, ListItem},
+        shared::{CardDetailBuilder, CardListBuilder, ListItem, ScrollingList},
     },
     systems::{
         listen_mouse_click, LoadedAssetMap, MouseDragDropClick, MouseDragEvent, MouseDropEvent,
@@ -38,13 +38,8 @@ impl Plugin for DeckEditorContentPlugin {
                 handle_drop,
                 handle_editing_deck_changed,
                 handle_return_card_cleanup,
+                handle_drag.after(listen_mouse_click),
             )
-                .run_if(in_state(CURRENT_STATE)),
-        )
-        .add_systems(
-            PreUpdate,
-            handle_drag
-                .after(listen_mouse_click)
                 .run_if(in_state(CURRENT_STATE)),
         );
     }
@@ -244,6 +239,7 @@ fn handle_drag(
     mut drag_card_q: Query<&mut Node, With<DraggingCard>>,
     asset_server: Res<AssetServer>,
     window_q: Query<&Window>,
+    mut scrolling_list_q: Query<&mut ScrollingList>,
 ) {
     let window = window_q.get_single().unwrap();
     let Some(cursor_position) = window.cursor_position() else {
@@ -262,6 +258,9 @@ fn handle_drag(
                     cursor_position,
                     card_position,
                 );
+                for mut scrolling_list in scrolling_list_q.iter_mut() {
+                    scrolling_list.disable = true
+                }
                 continue;
             }
             let Ok(mut drag_card_node) = drag_card_q.get_single_mut() else {
@@ -380,9 +379,17 @@ fn handle_return_card(
 fn handle_return_card_cleanup(
     mut commands: Commands,
     mut node_remove_event: EventReader<NodeMoveRemoveEvent>,
+    node_move_q: Query<&NodeMove>,
+    dragging_card_q: Query<&DraggingCard>,
+    mut scrolling_list_q: Query<&mut ScrollingList>,
 ) {
     for ev in node_remove_event.read() {
         commands.entity(ev.0).despawn();
+    }
+    if node_move_q.is_empty() && dragging_card_q.is_empty() {
+        for mut scrolling_list in scrolling_list_q.iter_mut() {
+            scrolling_list.disable = false
+        }
     }
 }
 
