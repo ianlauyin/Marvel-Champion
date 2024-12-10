@@ -1,9 +1,9 @@
 use bevy::prelude::*;
 
 pub fn is_cusrsor_in_container(
-    cursor_position: Vec2,
-    container_center: Vec2,
-    container_half_size: Vec2,
+    cursor_position: &Vec2,
+    container_center: &Vec2,
+    container_half_size: &Vec2,
 ) -> bool {
     let container_left_bottom_bound = container_center - container_half_size;
     let container_right_top_bound = container_center + container_half_size;

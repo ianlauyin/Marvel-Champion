@@ -40,18 +40,20 @@ enum ButtonAction {
     Remove,
 }
 
-pub fn spawn_header(menu: &mut ChildBuilder, name: String) {
-    menu.spawn(Node {
-        padding: UiRect::all(Val::Px(10.)),
-        display: Display::Flex,
-        column_gap: Val::Px(30.),
-        ..default()
-    })
-    .with_children(|header| {
-        PreviousButtonBuilder(DeckBuildingState::SelectDeck).spawn(header);
-        spawn_title(header, name);
-        spawn_buttons(header);
-    });
+pub fn spawn_header(mut commands: Commands, name: String) -> Entity {
+    commands
+        .spawn(Node {
+            padding: UiRect::all(Val::Px(10.)),
+            display: Display::Flex,
+            column_gap: Val::Px(30.),
+            ..default()
+        })
+        .with_children(|header| {
+            PreviousButtonBuilder(DeckBuildingState::SelectDeck).spawn(header);
+            spawn_title(header, name);
+            spawn_buttons(header);
+        })
+        .id()
 }
 
 fn spawn_title(header: &mut ChildBuilder, name: String) {

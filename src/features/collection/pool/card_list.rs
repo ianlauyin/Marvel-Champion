@@ -5,7 +5,7 @@ use crate::{
         cards::{Card, CardDatas},
         collection::state::CollectionState,
         shared::{
-            handle_previous_interaction, spawn_card_detail, DisplayMethod, ListItem, MenuBuilder,
+            handle_previous_interaction, CardDetailBuilder, DisplayMethod, ListItem, MenuBuilder,
         },
     },
     systems::clean_up,
@@ -63,13 +63,12 @@ fn handle_card_click(
 ) {
     for (interaction, card) in card_button_q.iter() {
         if *interaction == Interaction::Pressed {
-            spawn_card_detail(
-                commands,
-                asset_server,
-                card.clone(),
-                Vec2::ZERO,
-                get_largest_z_index(z_index_q),
-            );
+            CardDetailBuilder {
+                card: card.clone(),
+                position: Vec2::ZERO,
+                z_index: get_largest_z_index(z_index_q),
+            }
+            .spawn(commands, asset_server);
             return;
         }
     }

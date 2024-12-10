@@ -1,13 +1,13 @@
 use std::collections::HashMap;
 
-use bevy::{prelude::*, transform};
+use bevy::prelude::*;
 
 use crate::{
     constants::CARD_SIZE,
     features::{
         cards::{Card, CardAspect, CardDatas},
         deck_building::state::DeckBuildingState,
-        shared::{spawn_card_detail, spawn_card_list, ListItem},
+        shared::{CardDetailBuilder, CardListBuilder, ListItem},
     },
     systems::{
         LoadedAssetMap, MouseDragDropClick, MouseDragEvent, MouseDropEvent, MousePlugin,
@@ -15,6 +15,8 @@ use crate::{
     },
     utils::{get_card_amount, get_largest_z_index, is_cusrsor_in_container},
 };
+
+use super::EditingDeck;
 
 pub struct DeckEditorContentPlugin;
 
@@ -27,43 +29,65 @@ impl Plugin for DeckEditorContentPlugin {
         })
         .add_systems(
             Update,
-            (handle_click, handle_drag, handle_drop).run_if(in_state(CURRENT_STATE)),
+            (
+                handle_click,
+                handle_drag,
+                handle_drop,
+                handle_editing_deck_changed,
+            )
+                .run_if(in_state(CURRENT_STATE)),
         );
     }
 }
 
 // UI
 pub fn spawn_content(
-    content_container: &mut ChildBuilder,
+    mut commands: Commands,
     deck_cards: Vec<Card>,
     loaded_asset: Res<LoadedAssetMap>,
-) {
-    content_container
+) -> Entity {
+    let aspect_names = get_aspect_names(&deck_cards);
+    let deck_card_list = spawn_deck_card_list(commands.reborrow(), &deck_cards, &loaded_asset);
+    let info = spawn_info(
+        commands.reborrow(),
+        get_card_amount(&deck_cards),
+        aspect_names,
+    );
+    let selection_list = spawn_selection_list(commands.reborrow(), &loaded_asset);
+
+    commands
         .spawn(Node {
             display: Display::Flex,
             height: Val::Percent(100.),
             ..default()
         })
-        .with_children(|content| {
-            let aspect_names = get_aspect_names(&deck_cards);
-            spawn_deck_card_list(content, &deck_cards, &loaded_asset);
-            spawn_info(content, get_card_amount(&deck_cards), aspect_names);
-            spawn_selection_list(content, &loaded_asset);
-        });
+        .add_children(&[deck_card_list, info, selection_list])
+        .id()
 }
 
-#[derive(Component)]
+#[derive(Component, Clone, PartialEq, Eq)]
 enum CardList {
     Deck,
     Selection,
 }
 
 fn spawn_deck_card_list(
-    content: &mut ChildBuilder,
+    mut commands: Commands,
     deck_cards: &Vec<Card>,
     loaded_asset: &Res<LoadedAssetMap>,
-) {
-    content
+) -> Entity {
+    let list_items = convert_card_into_button_map(deck_cards, &loaded_asset);
+    let list = CardListBuilder {
+        button_map: list_items.clone(),
+        card_size: (
+            Val::Px(CARD_SIZE.truncate().x),
+            Val::Px(CARD_SIZE.truncate().y),
+        ),
+        height: Val::Percent(90.),
+        columns: 7,
+    }
+    .spawn(commands.reborrow());
+    commands
         .spawn((
             CardList::Deck,
             Node {
@@ -71,23 +95,16 @@ fn spawn_deck_card_list(
                 ..default()
             },
         ))
-        .with_children(|deck_card_list_node| {
-            let list_items = convert_card_into_button_map(deck_cards, &loaded_asset);
-            spawn_card_list(
-                deck_card_list_node,
-                list_items,
-                (
-                    Val::Px(CARD_SIZE.truncate().x),
-                    Val::Px(CARD_SIZE.truncate().y),
-                ),
-                Val::Percent(90.),
-                7,
-            );
-        });
+        .add_child(list)
+        .id()
 }
 
-fn spawn_info(content: &mut ChildBuilder, deck_cards_amount: u8, aspects: Vec<(String, Color)>) {
-    content
+fn spawn_info(
+    mut commands: Commands,
+    deck_cards_amount: u8,
+    aspects: Vec<(String, Color)>,
+) -> Entity {
+    commands
         .spawn(Node {
             width: Val::Percent(10.),
             padding: UiRect::vertical(Val::Px(30.)),
@@ -111,11 +128,25 @@ fn spawn_info(content: &mut ChildBuilder, deck_cards_amount: u8, aspects: Vec<(S
                     TextFont::from_font_size(16.),
                 ));
             }
-        });
+        })
+        .id()
 }
 
-fn spawn_selection_list(content: &mut ChildBuilder, loaded_asset: &Res<LoadedAssetMap>) {
-    content
+fn spawn_selection_list(mut commands: Commands, loaded_asset: &Res<LoadedAssetMap>) -> Entity {
+    let cards = CardDatas::get_aspect_cards();
+    let list_items = convert_card_into_button_map(&cards, loaded_asset);
+    let list = CardListBuilder {
+        button_map: list_items,
+        card_size: (
+            Val::Px(CARD_SIZE.truncate().x),
+            Val::Px(CARD_SIZE.truncate().y),
+        ),
+        height: Val::Percent(90.),
+        columns: 7,
+    }
+    .spawn(commands.reborrow());
+
+    commands
         .spawn((
             CardList::Selection,
             Node {
@@ -123,20 +154,39 @@ fn spawn_selection_list(content: &mut ChildBuilder, loaded_asset: &Res<LoadedAss
                 ..default()
             },
         ))
-        .with_children(|card_list_node| {
-            let cards = CardDatas::get_aspect_cards();
-            let list_items = convert_card_into_button_map(&cards, loaded_asset);
-            spawn_card_list(
-                card_list_node,
-                list_items,
-                (
-                    Val::Px(CARD_SIZE.truncate().x),
-                    Val::Px(CARD_SIZE.truncate().y),
-                ),
-                Val::Percent(90.),
-                7,
-            );
-        });
+        .add_child(list)
+        .id()
+}
+
+fn handle_editing_deck_changed(
+    mut commands: Commands,
+    editing_deck: Res<EditingDeck>,
+    card_list_q: Query<(Entity, &CardList)>,
+    loaded_asset: Res<LoadedAssetMap>,
+    card_datas: Res<CardDatas>,
+) {
+    if editing_deck.is_changed() {
+        for (entity, card_list) in card_list_q.iter() {
+            if *card_list == CardList::Deck {
+                let cards = card_datas.from_ids(&editing_deck.deck.card_ids);
+                let deck_list = CardListBuilder {
+                    button_map: convert_card_into_button_map(&cards, &loaded_asset),
+                    card_size: (
+                        Val::Px(CARD_SIZE.truncate().x),
+                        Val::Px(CARD_SIZE.truncate().y),
+                    ),
+                    height: Val::Percent(90.),
+                    columns: 7,
+                }
+                .spawn(commands.reborrow());
+                let mut deck_list_container = commands.entity(entity);
+
+                deck_list_container.despawn_descendants();
+                deck_list_container.add_child(deck_list);
+                return;
+            }
+        }
+    }
 }
 
 // System
@@ -149,34 +199,40 @@ fn handle_click(
 ) {
     for ev in click_ev.read() {
         if let Ok(card) = card_q.get(ev.0) {
-            spawn_card_detail(
-                commands,
-                asset_server,
-                card.clone(),
-                Vec2::ZERO,
-                get_largest_z_index(z_index_q),
-            );
+            CardDetailBuilder {
+                card: card.clone(),
+                position: Vec2::ZERO,
+                z_index: get_largest_z_index(z_index_q),
+            }
+            .spawn(commands, asset_server);
             return;
         }
     }
 }
 
 #[derive(Component)]
-struct DraggingCard(CardList);
+struct DraggingCard {
+    card_list: CardList,
+    card: Card,
+}
 
 fn handle_drag(
     mut click_ev: EventReader<MouseDragEvent>,
     commands: Commands,
     card_q: Query<&Card, With<MouseDragDropClick>>,
     mut drag_card_q: Query<&mut Node, With<DraggingCard>>,
+    card_list_q: Query<(&GlobalTransform, &ComputedNode, &CardList)>,
     asset_server: Res<AssetServer>,
 ) {
     for ev in click_ev.read() {
         if let Ok(card) = card_q.get(ev.entity) {
             if drag_card_q.is_empty() {
                 let image = asset_server.load(card.get_image_path());
-                let card_list = find_card_in_card_list();
-                spawn_dragging_card(commands, card_list, image, ev.position);
+                let Ok(card_list) = find_card_belongs(&ev.position, card_list_q) else {
+                    warn!("The card is not in both of the container");
+                    return;
+                };
+                spawn_dragging_card(commands, card.clone(), card_list, image, ev.position);
                 return;
             }
             let Ok(mut drag_card_node) = drag_card_q.get_single_mut() else {
@@ -197,12 +253,13 @@ fn handle_drag(
 
 fn spawn_dragging_card(
     mut commands: Commands,
+    card: Card,
     card_list: CardList,
     image: Handle<Image>,
     position: Vec2,
 ) {
     commands.spawn((
-        DraggingCard(card_list),
+        DraggingCard { card_list, card },
         Node {
             width: Val::Px(CARD_SIZE.x),
             height: Val::Px(CARD_SIZE.y),
@@ -218,19 +275,65 @@ fn spawn_dragging_card(
 fn handle_drop(
     mut click_ev: EventReader<MouseDropEvent>,
     mut commands: Commands,
-    dragging_card_q: Query<Entity, With<DraggingCard>>,
+    dragging_card_q: Query<(Entity, &DraggingCard)>,
+    card_list_q: Query<(&GlobalTransform, &ComputedNode, &CardList)>,
+    mut editing_deck: ResMut<EditingDeck>,
 ) {
-    for _ in click_ev.read() {
-        let Ok(card) = dragging_card_q.get_single() else {
-            warn!("Should have one dragging card when drop");
-            return;
-        };
-        commands.entity(card).despawn();
+    let Some(ev) = click_ev.read().next() else {
+        return;
+    };
+    let Ok((entity, dragging_card)) = dragging_card_q.get_single() else {
+        warn!("Should have one dragging card when drop");
+        return;
+    };
+    let cursor_position = ev.position;
+    if let Ok(drop_card_list) = find_card_belongs(&cursor_position, card_list_q) {
+        match (dragging_card.card_list.clone(), drop_card_list) {
+            (CardList::Deck, CardList::Selection) => handle_remove_card_from_deck(
+                &mut editing_deck,
+                &mut commands,
+                &dragging_card.card,
+                ev.entity,
+            ),
+            (CardList::Selection, CardList::Deck) => handle_add_card_to_deck(),
+            _ => return_to_list(),
+        }
+    } else {
+        return_to_list();
     }
+    commands.entity(entity).despawn();
+}
+
+fn handle_remove_card_from_deck(
+    editing_deck: &mut ResMut<EditingDeck>,
+    commands: &mut Commands,
+    card: &Card,
+    card_entity: Entity,
+) {
+    let card_id = card.get_id();
+    let Some(first_index) = editing_deck
+        .deck
+        .card_ids
+        .iter()
+        .position(|deck_card_id| **deck_card_id == card_id)
+    else {
+        warn!("Should have at least one card with same id when removing");
+        return;
+    };
+    editing_deck.deck.card_ids.remove(first_index);
+    commands.entity(card_entity).despawn();
+}
+
+fn handle_add_card_to_deck() {
+    println!("Add")
+}
+
+fn return_to_list() {
+    println!("return")
 }
 
 // Util
-#[derive(Bundle)]
+#[derive(Bundle, Clone)]
 struct DragDropCard {
     interaction: MouseDragDropClick,
     card: Card,
@@ -286,6 +389,15 @@ fn get_aspect_names(deck_cards: &Vec<Card>) -> Vec<(String, Color)> {
     hash_map.into_iter().collect()
 }
 
-fn find_card_in_card_list() -> CardList {
-    CardList::Deck
+fn find_card_belongs(
+    cursor_position: &Vec2,
+    card_list_q: Query<(&GlobalTransform, &ComputedNode, &CardList)>,
+) -> Result<CardList, String> {
+    for (global_transform, node, card_list) in card_list_q.iter() {
+        let center_position = global_transform.compute_transform().translation.truncate();
+        if is_cusrsor_in_container(cursor_position, &center_position, &(node.size() / 2.)) {
+            return Ok(card_list.clone());
+        }
+    }
+    Err("The card is not in both of the container".to_string())
 }

@@ -67,7 +67,7 @@ impl CardDatas {
         card.clone()
     }
 
-    pub fn from_ids(&self, card_ids: Vec<String>) -> Vec<Card> {
+    pub fn from_ids(&self, card_ids: &Vec<String>) -> Vec<Card> {
         card_ids.iter().map(|card_id| self.get(card_id)).collect()
     }
 }

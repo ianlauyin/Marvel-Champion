@@ -1,8 +1,7 @@
 use bevy::{prelude::*, state::state::FreelyMutableState};
 
-use crate::features::shared::previous_button::PreviousButtonBuilder;
+use crate::features::shared::{previous_button::PreviousButtonBuilder, CardListBuilder};
 
-use super::super::spawn_card_list;
 use super::spawn_list;
 
 #[derive(Default, Clone)]
@@ -28,51 +27,54 @@ pub struct MenuBuilder<T: Component, S: States + FreelyMutableState, B: Componen
 impl<T: Component + Clone, S: States + FreelyMutableState, B: Component + Clone>
     MenuBuilder<T, S, B>
 {
-    pub fn spawn(&self, mut commands: Commands) {
-        commands
-            .spawn((
-                self.component.clone(),
-                Node {
-                    width: Val::Percent(90.),
-                    height: Val::Percent(90.),
-                    align_self: AlignSelf::Center,
-                    justify_self: JustifySelf::Center,
-                    display: Display::Flex,
-                    flex_direction: FlexDirection::Column,
-                    overflow: Overflow::clip_y(),
-                    ..default()
-                },
-                BorderRadius::all(Val::Px(10.)),
-                BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
-            ))
-            .with_children(|menu| {
-                spawn_header(menu, self.previous_state.clone());
-                match self.display_method {
-                    DisplayMethod::ButtonList => spawn_list(menu, self.list_items.clone()),
-                    DisplayMethod::CardList => spawn_card_list(
-                        menu,
-                        self.list_items.clone(),
-                        (Val::Px(128.), Val::Px(178.)),
-                        Val::Percent(90.),
-                        8,
-                    ),
-                }
-            });
+    pub fn spawn(&self, mut commands: Commands) -> Entity {
+        let header = spawn_header(commands.reborrow(), self.previous_state.clone());
+        let list = match self.display_method {
+            DisplayMethod::ButtonList => spawn_list(commands.reborrow(), self.list_items.clone()),
+            DisplayMethod::CardList => CardListBuilder {
+                button_map: self.list_items.clone(),
+                card_size: (Val::Px(128.), Val::Px(178.)),
+                height: Val::Percent(90.),
+                columns: 8,
+            }
+            .spawn(commands.reborrow()),
+        };
+        let mut menu_frame = commands.spawn((
+            self.component.clone(),
+            Node {
+                width: Val::Percent(90.),
+                height: Val::Percent(90.),
+                align_self: AlignSelf::Center,
+                justify_self: JustifySelf::Center,
+                display: Display::Flex,
+                flex_direction: FlexDirection::Column,
+                overflow: Overflow::clip_y(),
+                ..default()
+            },
+            BorderRadius::all(Val::Px(10.)),
+            BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
+        ));
+        menu_frame.add_children(&[header, list]).id()
     }
 }
 
-fn spawn_header<S: States + FreelyMutableState>(menu: &mut ChildBuilder, previous_state: S) {
-    menu.spawn(Node {
-        height: Val::Percent(10.),
-        padding: UiRect {
-            left: Val::Px(10.),
-            top: Val::Px(10.),
-            bottom: Val::Px(10.),
+fn spawn_header<S: States + FreelyMutableState>(
+    mut commands: Commands,
+    previous_state: S,
+) -> Entity {
+    commands
+        .spawn(Node {
+            height: Val::Percent(10.),
+            padding: UiRect {
+                left: Val::Px(10.),
+                top: Val::Px(10.),
+                bottom: Val::Px(10.),
+                ..default()
+            },
             ..default()
-        },
-        ..default()
-    })
-    .with_children(|header| {
-        PreviousButtonBuilder(previous_state).spawn(header);
-    });
+        })
+        .with_children(|header| {
+            PreviousButtonBuilder(previous_state).spawn(header);
+        })
+        .id()
 }

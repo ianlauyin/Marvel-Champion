@@ -33,9 +33,9 @@ fn on_scroll(
             let container_transform = global_transform.compute_transform();
 
             if !is_cusrsor_in_container(
-                cursor_position,
-                container_transform.translation.truncate(),
-                container_node.size() / 2.,
+                &cursor_position,
+                &container_transform.translation.truncate(),
+                &(container_node.size() / 2.),
             ) {
                 continue;
             }

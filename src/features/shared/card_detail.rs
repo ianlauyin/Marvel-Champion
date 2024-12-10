@@ -21,49 +21,52 @@ struct CardDetail;
 #[derive(Component)]
 struct EscapeButton;
 
-pub fn spawn_card_detail(
-    mut commands: Commands,
-    asset_server: Res<AssetServer>,
-    card: Card,
-    position: Vec2,
-    z_index: ZIndex,
-) {
-    commands
-        .spawn((
-            Node {
-                width: Val::Px(600.),
-                height: Val::Px(600.),
-                position_type: PositionType::Relative,
-                top: Val::Px(position.y),
-                left: Val::Px(position.x),
-                justify_self: JustifySelf::Center,
-                align_self: AlignSelf::Center,
-                display: Display::Flex,
-                justify_content: JustifyContent::Center,
-                align_items: AlignItems::Center,
-                border: UiRect::all(Val::Px(1.)),
-                ..default()
-            },
-            FocusPolicy::Block,
-            BorderColor::from(Color::WHITE),
-            BorderRadius::all(Val::Px(10.)),
-            BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
-            z_index,
-            Interaction::default(),
-            CardDetail,
-        ))
-        .with_children(|container| {
-            spawn_escape_button(container);
-            let vertical = match card {
-                Card::MainSchemeA(_) | Card::MainSchemeB(_) | Card::SideScheme(_) => false,
-                _ => true,
-            };
-            spawn_content(
-                container,
-                asset_server.load(card.get_image_path()),
-                vertical,
-            );
-        });
+pub struct CardDetailBuilder {
+    pub card: Card,
+    pub position: Vec2,
+    pub z_index: ZIndex,
+}
+
+impl CardDetailBuilder {
+    pub fn spawn(&self, mut commands: Commands, asset_server: Res<AssetServer>) -> Entity {
+        commands
+            .spawn((
+                Node {
+                    width: Val::Px(600.),
+                    height: Val::Px(600.),
+                    position_type: PositionType::Relative,
+                    top: Val::Px(self.position.y),
+                    left: Val::Px(self.position.x),
+                    justify_self: JustifySelf::Center,
+                    align_self: AlignSelf::Center,
+                    display: Display::Flex,
+                    justify_content: JustifyContent::Center,
+                    align_items: AlignItems::Center,
+                    border: UiRect::all(Val::Px(1.)),
+                    ..default()
+                },
+                FocusPolicy::Block,
+                BorderColor::from(Color::WHITE),
+                BorderRadius::all(Val::Px(10.)),
+                BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
+                self.z_index,
+                Interaction::default(),
+                CardDetail,
+            ))
+            .with_children(|container| {
+                spawn_escape_button(container);
+                let vertical = match self.card {
+                    Card::MainSchemeA(_) | Card::MainSchemeB(_) | Card::SideScheme(_) => false,
+                    _ => true,
+                };
+                spawn_content(
+                    container,
+                    asset_server.load(self.card.get_image_path()),
+                    vertical,
+                );
+            })
+            .id()
+    }
 }
 
 fn spawn_escape_button(children_builder: &mut ChildBuilder) {

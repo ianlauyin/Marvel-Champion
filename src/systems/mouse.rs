@@ -15,7 +15,7 @@ impl<S: FreelyMutableState> Plugin for MousePlugin<S> {
     }
 }
 
-#[derive(Component)]
+#[derive(Component, Clone)]
 #[require(Interaction)]
 pub struct MouseDragDropClick {
     stop_watch: Stopwatch,

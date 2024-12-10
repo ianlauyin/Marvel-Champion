@@ -44,8 +44,9 @@ pub fn spawn_editor(
     card_datas: Res<CardDatas>,
     loaded_asset_map: Res<LoadedAssetMap>,
 ) {
-    let card_list_items = card_datas.from_ids(editing_deck.deck.card_ids.clone());
-
+    let card_list_items = card_datas.from_ids(&editing_deck.deck.card_ids);
+    let header = spawn_header(commands.reborrow(), editing_deck.deck.name.clone());
+    let content = spawn_content(commands.reborrow(), card_list_items, loaded_asset_map);
     commands
         .spawn((
             DeckEditor,
@@ -62,8 +63,5 @@ pub fn spawn_editor(
             BorderRadius::all(Val::Px(10.)),
             BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
         ))
-        .with_children(|content| {
-            spawn_header(content, editing_deck.deck.name.clone());
-            spawn_content(content, card_list_items, loaded_asset_map);
-        });
+        .add_children(&[header, content]);
 }
