@@ -8,7 +8,7 @@ use super::{
     Card,
 };
 
-#[derive(Component, Clone, Serialize, Deserialize)]
+#[derive(Component, Clone, Serialize, Deserialize, Hash, PartialEq, Eq)]
 pub enum Identity {
     CoreSpiderMan,
     CoreCaptainMarvel,

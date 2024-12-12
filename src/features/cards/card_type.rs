@@ -10,7 +10,7 @@ pub enum CardResource {
     Physical,
 }
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq, Eq, Hash)]
 pub enum CardAspect {
     Justice,
     Aggression,

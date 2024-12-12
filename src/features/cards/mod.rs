@@ -2,6 +2,7 @@ mod builders;
 mod card;
 mod card_type;
 mod data;
+mod deck_validator;
 mod identity;
 mod modular_set;
 mod villain;
