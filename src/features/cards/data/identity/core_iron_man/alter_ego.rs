@@ -1,9 +1,10 @@
-use crate::features::cards::{AlterEgoCard, Card, CardTrait};
+use crate::features::cards::{AlterEgoCard, Card, CardAspect, CardTrait, Identity::CoreIronMan};
 
 pub fn get_alter_ego() -> Card {
     Card::AlterEgo(AlterEgoCard {
         id: "core_029b",
         name: "Tony Stark",
+        aspect: CardAspect::IdentitySpecific(CoreIronMan),
         description: "Action: Look at the top 3 cards of your deck. Add 1 to your hand and discard the others. (Limit once per round.)",
         abilities: vec![],
         card_image_path:

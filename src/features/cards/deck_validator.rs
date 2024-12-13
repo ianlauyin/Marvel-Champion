@@ -2,15 +2,19 @@ use std::collections::HashMap;
 
 use crate::utils::{get_card_amount, get_deck_aspect};
 
-use super::{Card, CardAspect};
+use super::{Card, CardAspect, Identity};
 
 pub struct DeckValidator {
+    identity: Identity,
     build_validators: Vec<fn(&Vec<Card>) -> Result<(), String>>,
     play_validators: Vec<fn(&Vec<Card>) -> Result<(), String>>,
 }
 
 impl DeckValidator {
     pub fn validate_build(&mut self, deck_cards: Vec<Card>) -> Result<(), String> {
+        if let Err(message) = self.validate_identity_cards(&deck_cards) {
+            return Err(message);
+        }
         self.build_validators
             .iter_mut()
             .try_for_each(|validator| validator(&deck_cards))
@@ -23,11 +27,46 @@ impl DeckValidator {
             .try_for_each(|validator| validator(&deck_cards))
     }
 
-    pub fn default() -> Self {
+    pub fn default(identity: Identity) -> Self {
         Self {
+            identity,
             build_validators: vec![aspects_rules_validator, cards_amount_limit_validator],
             play_validators: vec![deck_cards_amount_validator],
         }
+    }
+
+    fn validate_identity_cards(&self, deck_cards: &Vec<Card>) -> Result<(), String> {
+        let mut hash_map: HashMap<String, u8> = HashMap::new();
+
+        for comparing_card in self.identity.get_player_cards() {
+            println!("{:?}", hash_map);
+            if let Some(amount) = hash_map.get_mut(&comparing_card.get_id()) {
+                *amount += 1;
+            } else {
+                hash_map.insert(comparing_card.get_id(), 1);
+            };
+        }
+
+        for card in deck_cards {
+            if let Ok(CardAspect::IdentitySpecific(identity)) = card.get_aspect() {
+                if identity != self.identity {
+                    return Err("Cannot include identity cards that is your identity.".to_string());
+                }
+                let card_id = card.get_id();
+                if let Some(amount) = hash_map.get_mut(&card_id) {
+                    *amount -= 1;
+                    if *amount == 0 {
+                        hash_map.remove(&card_id);
+                    }
+                } else {
+                    return Err("Cannot include more than original identity cards".to_string());
+                }
+            }
+        }
+        if !hash_map.is_empty() {
+            return Err("Cannot exclude original identity cards".to_string());
+        }
+        Ok(())
     }
 }
 
@@ -82,6 +121,7 @@ mod test {
     use crate::features::cards::{
         deck_validator::{
             aspects_rules_validator, cards_amount_limit_validator, deck_cards_amount_validator,
+            DeckValidator,
         },
         Card, CardDatas, Identity,
     };
@@ -97,6 +137,13 @@ mod test {
             CardDatas::get_aggression_cards()[0..8].to_vec(),
         ]
         .concat()
+    }
+
+    #[test]
+    fn test_validate_identity_cards() {
+        let valid_deck = get_valid_deck();
+        let validator = DeckValidator::default(Identity::CoreSpiderMan);
+        assert_eq!(validator.validate_identity_cards(&valid_deck), Ok(()));
     }
 
     #[test]

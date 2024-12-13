@@ -125,6 +125,8 @@ impl Card {
             Card::Resource(resource_card) => resource_card.aspect.clone(),
             Card::Support(support_card) => support_card.aspect.clone(),
             Card::Upgrade(upgrade_card) => upgrade_card.aspect.clone(),
+            Card::AlterEgo(alter_ego_card) => alter_ego_card.aspect.clone(),
+            Card::Hero(hero_card) => hero_card.aspect.clone(),
             _ => return Err("Wrong type of card"),
         };
         Ok(aspect)

@@ -39,7 +39,7 @@ impl Identity {
 
     pub fn get_validator(&self) -> DeckValidator {
         match self {
-            _ => DeckValidator::default(),
+            _ => DeckValidator::default(self.clone()),
         }
     }
 

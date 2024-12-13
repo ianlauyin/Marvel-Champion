@@ -1,4 +1,6 @@
-use crate::features::cards::{Card, CardTrait, HeroCard, Keyword};
+use crate::features::cards::{
+    Card, CardAspect, CardTrait, HeroCard, Identity::CoreBlackPanther, Keyword,
+};
 
 pub fn get_hero() -> Card {
     Card::Hero(HeroCard {
@@ -6,6 +8,7 @@ pub fn get_hero() -> Card {
         name: "Black Panther",
         description:"Retaliate 1. (After this character is attacked, deal 1 damage to the attacking character.)",
         abilities: vec![],
+        aspect: CardAspect::IdentitySpecific(CoreBlackPanther),
         card_image_path: "embedded://cards/identity/core_black_panther/core_040a.png",
         traits: vec![CardTrait::Avenger,CardTrait::Wakanda],
         flip_target_id: vec!["core_040b"],

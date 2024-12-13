@@ -1,9 +1,10 @@
-use crate::features::cards::{AlterEgoCard, Card, CardTrait};
+use crate::features::cards::{AlterEgoCard, Card, CardAspect, CardTrait, Identity::CoreSheHulk};
 
 pub fn get_alter_ego() -> Card {
     Card::AlterEgo(AlterEgoCard {
         id: "core_019b",
         name: "Jennifer Walters",
+        aspect: CardAspect::IdentitySpecific(CoreSheHulk),
         card_icons: vec![],
         description: "Interrupt: When threat would be placed on a scheme, prevent 1 of that threat. (Limit once per round.)",
         abilities: vec![],

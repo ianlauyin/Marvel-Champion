@@ -28,6 +28,7 @@ pub struct AlterEgoCard<'a> {
     pub id: &'a str,
     pub name: &'a str,
     pub flip_target_id: Vec<&'a str>,
+    pub aspect: CardAspect,
     pub initial_hit_points: u8,
     pub keywords: Vec<Keyword>,
     pub traits: Vec<CardTrait>,
@@ -61,6 +62,7 @@ pub struct EventCard<'a> {
 pub struct HeroCard<'a> {
     pub id: &'a str,
     pub name: &'a str,
+    pub aspect: CardAspect,
     pub flip_target_id: Vec<&'a str>,
     pub initial_hit_points: u8,
     pub keywords: Vec<Keyword>,

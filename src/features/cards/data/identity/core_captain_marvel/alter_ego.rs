@@ -1,9 +1,12 @@
-use crate::features::cards::{AlterEgoCard, Card, CardTrait};
+use crate::features::cards::{
+    AlterEgoCard, Card, CardAspect, CardTrait, Identity::CoreCaptainMarvel,
+};
 
 pub fn get_alter_ego() -> Card {
     Card::AlterEgo(AlterEgoCard {
         id: "core_010b",
         name: "Carol Danvers",
+        aspect: CardAspect::IdentitySpecific(CoreCaptainMarvel),
         description: "Action: Choose a player to draw 1 card. (Limit once per round.)",
         abilities: vec![],
         card_image_path: "embedded://cards/identity/core_captain_marvel/core_010b.png",

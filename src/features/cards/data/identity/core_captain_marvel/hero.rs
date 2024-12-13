@@ -1,9 +1,10 @@
-use crate::features::cards::{Card, CardTrait, HeroCard};
+use crate::features::cards::{Card, CardAspect, CardTrait, HeroCard, Identity::CoreCaptainMarvel};
 
 pub fn get_hero() -> Card {
     Card::Hero(HeroCard {
         id: "core_010a",
         name: "Captain Marvel",
+        aspect: CardAspect::IdentitySpecific(CoreCaptainMarvel),
         description:"Action: Spend a Energy resource and heal 1 damage from Captain Marvel -> draw 1 card. (Limit once per round.)",
         abilities: vec![],
         card_image_path: "embedded://cards/identity/core_captain_marvel/core_010a.png",

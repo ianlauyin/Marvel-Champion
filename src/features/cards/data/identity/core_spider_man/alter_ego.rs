@@ -1,9 +1,10 @@
-use crate::features::cards::{AlterEgoCard, Card, CardTrait};
+use crate::features::cards::{AlterEgoCard, Card, CardAspect, CardTrait, Identity::CoreSpiderMan};
 
 pub fn get_alter_ego() -> Card {
     Card::AlterEgo(AlterEgoCard {
         id: "core_001b",
         name: "Peter Parker",
+        aspect: CardAspect::IdentitySpecific(CoreSpiderMan),
         flip_target_id: vec!["core_001a"],
         initial_hit_points: 10,
         keywords: vec![],

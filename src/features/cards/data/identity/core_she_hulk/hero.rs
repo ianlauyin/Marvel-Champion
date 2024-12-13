@@ -1,9 +1,10 @@
-use crate::features::cards::{Card, CardTrait, HeroCard};
+use crate::features::cards::{Card, CardAspect, CardTrait, HeroCard, Identity::CoreSheHulk};
 
 pub fn get_hero() -> Card {
     Card::Hero(HeroCard {
         id: "core_019a",
         name: "She-Hulk",
+        aspect: CardAspect::IdentitySpecific(CoreSheHulk),
         card_icons: vec![],
         description: "Response: After you change to this form, deal 2 damage to an enemy.",
         abilities: vec![],

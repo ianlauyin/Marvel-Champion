@@ -1,4 +1,6 @@
-use crate::features::cards::{AlterEgoCard, Card, CardTrait};
+use crate::features::cards::{
+    AlterEgoCard, Card, CardAspect, CardTrait, Identity::CoreBlackPanther,
+};
 
 pub fn get_alter_ego() -> Card {
     Card::AlterEgo(AlterEgoCard {
@@ -6,6 +8,7 @@ pub fn get_alter_ego() -> Card {
         name: "T'Challa",
         description: "Setup: Search your deck for a Black Panther upgrade and add it to your hand. Shuffle your deck.",
         abilities: vec![],
+        aspect: CardAspect::IdentitySpecific(CoreBlackPanther),
         card_image_path:
             "embedded://cards/identity/core_black_panther/core_040b.png",
         traits: vec![CardTrait::King, CardTrait::Wakanda],

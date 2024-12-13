@@ -1,8 +1,9 @@
-use crate::features::cards::{Card, CardTrait, HeroCard};
+use crate::features::cards::{Card, CardAspect, CardTrait, HeroCard, Identity::CoreSpiderMan};
 pub fn get_hero() -> Card {
     Card::Hero(HeroCard {
         id: "core_001a",
         name: "Spider-Man",
+        aspect: CardAspect::IdentitySpecific(CoreSpiderMan),
         flip_target_id: vec!["core_001b"],
         initial_hit_points: 10,
         keywords: vec![],

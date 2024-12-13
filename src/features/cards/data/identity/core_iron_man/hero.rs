@@ -1,9 +1,10 @@
-use crate::features::cards::{Card, CardTrait, HeroCard};
+use crate::features::cards::{Card, CardAspect, CardTrait, HeroCard, Identity::CoreIronMan};
 
 pub fn get_hero() -> Card {
     Card::Hero(HeroCard {
         id: "core_029a",
         name: "Iron Man",
+        aspect: CardAspect::IdentitySpecific(CoreIronMan),
         description:
             "You get +1 hand size for each Tech upgrade you control (to a maximum hand size of 7).",
         abilities: vec![],
