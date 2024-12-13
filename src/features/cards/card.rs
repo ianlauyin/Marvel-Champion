@@ -4,7 +4,7 @@ use crate::constants::{
     ENCOUNTER_CARD_BACK_ASSET, PLAYER_CARD_BACK_ASSET, VILLAIN_CARD_BACK_ASSET,
 };
 
-use super::{builders::*, CardAspect};
+use super::{builders::*, CardAspect, Keyword};
 
 #[derive(Component, Clone)]
 pub enum Card {
@@ -128,5 +128,33 @@ impl Card {
             _ => return Err("Wrong type of card"),
         };
         Ok(aspect)
+    }
+
+    pub fn count_in_deck_amount(&self) -> bool {
+        match self {
+            Card::Ally(ally_card) => !ally_card.keywords.contains(&Keyword::Permanent),
+            Card::Event(event_card) => !event_card.keywords.contains(&Keyword::Permanent),
+            Card::Support(support_card) => !support_card.keywords.contains(&Keyword::Permanent),
+            Card::Upgrade(upgrade_card) => !upgrade_card.keywords.contains(&Keyword::Permanent),
+            Card::Resource(_) => true,
+            Card::Hero(_) | Card::AlterEgo(_) => false,
+            _ => {
+                warn!("Opponent card should not be count in deck");
+                return false;
+            }
+        }
+    }
+
+    pub fn get_card_amount_max(&self) -> Result<u8, String> {
+        match self {
+            Card::Ally(ally_card) => Ok(ally_card.card_amount_max),
+            Card::Event(event_card) => Ok(event_card.card_amount_max),
+            Card::Support(support_card) => Ok(support_card.card_amount_max),
+            Card::Upgrade(upgrade_card) => Ok(upgrade_card.card_amount_max),
+            Card::Resource(resource_card) => Ok(resource_card.card_amount_max),
+            Card::Hero(_) => Ok(2),
+            Card::AlterEgo(_) => Ok(1),
+            _ => Err("Opponent card should not be count in deck".to_string()),
+        }
     }
 }

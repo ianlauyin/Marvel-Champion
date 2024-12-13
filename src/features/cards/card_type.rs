@@ -81,7 +81,7 @@ pub enum CardTrait {
     Wakanda,
 }
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq, Eq)]
 pub enum Counter {
     Attack,
     Web,
@@ -89,7 +89,7 @@ pub enum Counter {
     Snoop,
 }
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq, Eq)]
 pub enum Keyword {
     Retaliate(u8),
     Quickstrike,
@@ -97,6 +97,7 @@ pub enum Keyword {
     Toughness,
     Surge,
     Guard,
+    Permanent,
 }
 
 #[derive(Clone)]
@@ -119,7 +120,7 @@ pub enum CardAbility {
     Response(fn(&mut World)),
 }
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq, Eq)]
 pub enum Count {
     PerPlayer(u8),
     Constant(u8),

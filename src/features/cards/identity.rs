@@ -5,6 +5,7 @@ use super::{
     data::{
         core_black_panther, core_captain_marvel, core_iron_man, core_she_hulk, core_spider_man,
     },
+    deck_validator::DeckValidator,
     Card,
 };
 
@@ -34,6 +35,12 @@ impl Identity {
             cards.push(identity.get_cards());
         }
         cards.concat()
+    }
+
+    pub fn get_validator(&self) -> DeckValidator {
+        match self {
+            _ => DeckValidator::default(),
+        }
     }
 
     pub fn to_string(&self) -> String {
