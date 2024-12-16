@@ -7,7 +7,7 @@ use crate::{
         deck_building::{
             deck_editor::EditingDeck, deck_list::EditIdentity, state::DeckBuildingState,
         },
-        shared::{CardDetailBuilder, ScrollingList},
+        shared::{CardDetailBuilder, Popup, ScrollingList},
     },
     systems::{
         listen_mouse_click, MouseDragDropClick, MouseDragEvent, MouseDropEvent, MousePlugin,
@@ -223,8 +223,7 @@ fn handle_edit_card_intent(
     match validator.validate_build(&new_deck) {
         Ok(()) => editing_deck.deck.card_ids = new_deck_card_ids,
         Err(message) => {
-            // TODO : show error message
-            warn!(message);
+            commands.spawn(Popup::new(message));
         }
     }
     commands.remove_resource::<EditDeckIntent>();

@@ -20,6 +20,7 @@ impl Plugin for FeaturePlugin {
             shared::ScrollingListPlugin,
             shared::CardDetailPlugin,
             deck_building::DeckBuildingPlugin,
+            shared::PopupPlugin,
         ));
     }
 }
