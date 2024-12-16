@@ -1,6 +1,6 @@
 use bevy::prelude::World;
 
-use super::Identity;
+use super::{Card, CardDatas, Identity};
 
 #[derive(Clone)]
 pub enum CardResource {
@@ -31,6 +31,18 @@ impl CardAspect {
             CardAspect::Pool => "Pool".to_string(),
             CardAspect::IdentitySpecific(identity) => identity.to_string(),
             CardAspect::Basic => "Basic".to_string(),
+        }
+    }
+
+    pub fn get_cards(&self) -> Vec<Card> {
+        match self {
+            CardAspect::Justice => CardDatas::get_justice_cards(),
+            CardAspect::Aggression => CardDatas::get_aggression_cards(),
+            CardAspect::Protection => CardDatas::get_protection_cards(),
+            CardAspect::Leadership => CardDatas::get_leadership_cards(),
+            CardAspect::Pool => CardDatas::get_pool_cards(),
+            CardAspect::IdentitySpecific(identity) => identity.get_cards(),
+            CardAspect::Basic => CardDatas::get_basic_cards(),
         }
     }
 }

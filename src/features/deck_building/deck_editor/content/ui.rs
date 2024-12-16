@@ -11,7 +11,7 @@ use crate::{
     utils::get_card_amount,
 };
 
-use super::utils::{convert_card_into_button_map, get_aspect_names};
+use super::utils::{convert_card_into_button_map, get_aspect_names, get_selectable_cards};
 
 const CURRENT_STATE: DeckBuildingState = DeckBuildingState::DeckBuilding;
 pub struct DeckEditorContentUIPlugin;
@@ -37,7 +37,7 @@ pub fn spawn_content(
         get_card_amount(&deck_cards),
         aspect_names,
     );
-    let selection_list = spawn_selection_list(commands.reborrow(), &loaded_asset);
+    let selection_list = spawn_selection_list(commands.reborrow(), &deck_cards, &loaded_asset);
 
     commands
         .spawn(Node {
@@ -116,11 +116,9 @@ fn spawn_info(
                         margin: UiRect::bottom(Val::Px(50.)),
                         ..default()
                     },
-                ))
-                .with_child((
-                    TextSpan::new(deck_cards_amount.to_string()),
                     DeckInfo::Amount,
-                ));
+                ))
+                .with_child(TextSpan::new(deck_cards_amount.to_string()));
             info_container
                 .spawn((
                     Text::new("Aspects: "),
@@ -140,8 +138,12 @@ fn spawn_info(
         .id()
 }
 
-fn spawn_selection_list(mut commands: Commands, loaded_asset: &Res<LoadedAssetMap>) -> Entity {
-    let cards = CardDatas::get_aspect_cards();
+fn spawn_selection_list(
+    mut commands: Commands,
+    deck_cards: &Vec<Card>,
+    loaded_asset: &Res<LoadedAssetMap>,
+) -> Entity {
+    let cards = get_selectable_cards(deck_cards);
     let list_items = convert_card_into_button_map(CardListItem::Selection, &cards, loaded_asset);
     let list = CardListBuilder {
         button_map: list_items,
@@ -170,6 +172,7 @@ fn handle_editing_deck_changed(
     mut commands: Commands,
     editing_deck: Res<EditingDeck>,
     content_container_q: Query<(Entity, &ContentContainer)>,
+    deck_info_q: Query<(Entity, &DeckInfo)>,
     loaded_asset: Res<LoadedAssetMap>,
     card_datas: Res<CardDatas>,
 ) {
@@ -177,26 +180,35 @@ fn handle_editing_deck_changed(
         let cards = card_datas.from_ids(&editing_deck.deck.card_ids);
         for (entity, content_container) in content_container_q.iter() {
             match *content_container {
-                ContentContainer::Deck => handle_deck_container_change(
+                ContentContainer::Deck => handle_container_change(
                     commands.reborrow(),
                     entity,
                     cards.clone(),
                     &loaded_asset,
+                    CardListItem::Deck,
                 ),
-                _ => {}
+                ContentContainer::Selection => handle_container_change(
+                    commands.reborrow(),
+                    entity,
+                    get_selectable_cards(&cards),
+                    &loaded_asset,
+                    CardListItem::Selection,
+                ),
             }
         }
+        handle_deck_info_change(commands, deck_info_q, &cards);
     }
 }
 
-fn handle_deck_container_change(
+fn handle_container_change(
     mut commands: Commands,
     container: Entity,
     cards: Vec<Card>,
     loaded_asset: &Res<LoadedAssetMap>,
+    belongs: CardListItem,
 ) {
     let deck_list = CardListBuilder {
-        button_map: convert_card_into_button_map(CardListItem::Deck, &cards, loaded_asset),
+        button_map: convert_card_into_button_map(belongs, &cards, loaded_asset),
         card_size: (
             Val::Px(CARD_SIZE.truncate().x),
             Val::Px(CARD_SIZE.truncate().y),
@@ -210,4 +222,38 @@ fn handle_deck_container_change(
     deck_list_container.despawn_descendants();
     deck_list_container.add_child(deck_list);
     return;
+}
+
+fn handle_deck_info_change(
+    mut commands: Commands,
+    deck_info_q: Query<(Entity, &DeckInfo)>,
+    deck_cards: &Vec<Card>,
+) {
+    for (entity, deck_info) in deck_info_q.iter() {
+        match deck_info {
+            DeckInfo::Amount => {
+                let amount_text = commands
+                    .spawn(TextSpan::new(get_card_amount(deck_cards).to_string()))
+                    .id();
+                commands
+                    .entity(entity)
+                    .despawn_descendants()
+                    .add_child(amount_text);
+            }
+            DeckInfo::Aspects => {
+                commands
+                    .entity(entity)
+                    .despawn_descendants()
+                    .with_children(|aspects_node| {
+                        for (aspect, color) in get_aspect_names(deck_cards) {
+                            aspects_node.spawn((
+                                TextSpan::new(format!("{} ", aspect)),
+                                TextColor(color),
+                                TextFont::from_font_size(16.),
+                            ));
+                        }
+                    });
+            }
+        }
+    }
 }

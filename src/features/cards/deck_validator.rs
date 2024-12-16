@@ -69,7 +69,7 @@ impl DeckValidator {
     }
 }
 
-fn aspects_rules_validator(deck_cards: &Vec<Card>) -> Result<(), String> {
+pub fn aspects_rules_validator(deck_cards: &Vec<Card>) -> Result<(), String> {
     let card_aspects = get_deck_aspect(deck_cards);
     let filterd_card_aspects: Vec<&CardAspect> = card_aspects
         .iter()

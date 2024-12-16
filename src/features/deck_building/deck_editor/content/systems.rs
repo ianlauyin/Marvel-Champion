@@ -43,8 +43,8 @@ impl Plugin for DeckEditorContentSystemPlugin {
                 handle_click,
                 handle_drop,
                 handle_return_card_cleanup,
-                handle_drag.after(listen_mouse_click),
                 handle_edit_card_intent,
+                handle_drag.after(listen_mouse_click),
             )
                 .run_if(in_state(CURRENT_STATE)),
         );

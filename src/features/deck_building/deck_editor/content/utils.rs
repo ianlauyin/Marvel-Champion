@@ -4,7 +4,7 @@ use bevy::prelude::*;
 
 use crate::{
     features::{
-        cards::{Card, CardAspect},
+        cards::{Card, CardAspect, CardDatas},
         shared::ListItem,
     },
     systems::{LoadedAssetMap, MouseDragDropClick},
@@ -74,13 +74,26 @@ pub fn get_aspect_names(deck_cards: &Vec<Card>) -> Vec<(String, Color)> {
 
 pub fn find_card_belongs(
     cursor_position: &Vec2,
-    card_list_q: Query<(&GlobalTransform, &ComputedNode, &ContentContainer)>,
+    content_container_q: Query<(&GlobalTransform, &ComputedNode, &ContentContainer)>,
 ) -> Result<ContentContainer, String> {
-    for (global_transform, node, card_list) in card_list_q.iter() {
+    for (global_transform, node, content_container) in content_container_q.iter() {
         let center_position = global_transform.compute_transform().translation.truncate();
         if is_cusrsor_in_container(cursor_position, &center_position, &(node.size() / 2.)) {
-            return Ok(card_list.clone());
+            return Ok(content_container.clone());
         }
     }
     Err("The card is not in both of the container".to_string())
+}
+
+pub fn get_selectable_cards(deck_cards: &Vec<Card>) -> Vec<Card> {
+    for card in deck_cards {
+        let Ok(aspect) = card.get_aspect() else {
+            continue;
+        };
+        match aspect {
+            CardAspect::IdentitySpecific(_) | CardAspect::Basic => continue,
+            _ => return [CardDatas::get_basic_cards(), aspect.get_cards()].concat(),
+        }
+    }
+    return CardDatas::get_aspect_cards();
 }
