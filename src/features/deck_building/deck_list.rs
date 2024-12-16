@@ -28,7 +28,7 @@ impl Plugin for DeckBuildingDeckListPlugin {
 }
 
 #[derive(Resource)]
-pub struct DeckListIdentity(pub Identity);
+pub struct EditIdentity(pub Identity);
 
 #[derive(Component, Clone)]
 struct DeckList;
@@ -36,7 +36,7 @@ struct DeckList;
 #[derive(Component, Clone)]
 struct DeckListButton(EditingDeck);
 
-fn spawn_deck_list(commands: Commands, pkv: ResMut<PkvStore>, identity: Res<DeckListIdentity>) {
+fn spawn_deck_list(commands: Commands, pkv: ResMut<PkvStore>, identity: Res<EditIdentity>) {
     let mut deck_storage = DecksStorage {
         pkv,
         identity: identity.0.clone(),
@@ -82,7 +82,7 @@ fn handle_button_interaction(
     mut next_state: ResMut<NextState<DeckBuildingState>>,
     mut load_asset: ResMut<LoadAsset>,
     asset_server: Res<AssetServer>,
-    deck_list_identity: Res<DeckListIdentity>,
+    deck_list_identity: Res<EditIdentity>,
 ) {
     for (interaction, button) in button_q.iter() {
         if *interaction == Interaction::Pressed {

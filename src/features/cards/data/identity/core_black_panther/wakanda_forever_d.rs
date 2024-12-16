@@ -14,6 +14,6 @@ pub fn get_wakanda_forever_d() -> Card {
         aspect: CardAspect::IdentitySpecific(CoreBlackPanther),
         cost: 1,
         res: vec![CardResource::Wild],
-        card_amount_max: 1,
+        card_amount_max: 2,
     })
 }

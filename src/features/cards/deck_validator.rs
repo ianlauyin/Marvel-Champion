@@ -11,7 +11,7 @@ pub struct DeckValidator {
 }
 
 impl DeckValidator {
-    pub fn validate_build(&mut self, deck_cards: Vec<Card>) -> Result<(), String> {
+    pub fn validate_build(&mut self, deck_cards: &Vec<Card>) -> Result<(), String> {
         if let Err(message) = self.validate_identity_cards(&deck_cards) {
             return Err(message);
         }
@@ -20,7 +20,7 @@ impl DeckValidator {
             .try_for_each(|validator| validator(&deck_cards))
     }
 
-    pub fn validate(&mut self, deck_cards: Vec<Card>) -> Result<(), String> {
+    pub fn validate(&mut self, deck_cards: &Vec<Card>) -> Result<(), String> {
         [self.play_validators.clone(), self.build_validators.clone()]
             .concat()
             .iter_mut()
@@ -39,7 +39,6 @@ impl DeckValidator {
         let mut hash_map: HashMap<String, u8> = HashMap::new();
 
         for comparing_card in self.identity.get_player_cards() {
-            println!("{:?}", hash_map);
             if let Some(amount) = hash_map.get_mut(&comparing_card.get_id()) {
                 *amount += 1;
             } else {

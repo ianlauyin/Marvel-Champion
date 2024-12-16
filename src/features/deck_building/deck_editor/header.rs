@@ -1,6 +1,6 @@
 use crate::{
     features::{
-        deck_building::{deck_list::DeckListIdentity, state::DeckBuildingState},
+        deck_building::{deck_list::EditIdentity, state::DeckBuildingState},
         shared::{handle_previous_interaction, ButtonBuilder, PreviousButtonBuilder},
     },
     systems::DecksStorage,
@@ -146,7 +146,7 @@ fn handle_button_interaction(
     button_q: Query<(&Interaction, &ButtonAction)>,
     text_value_q: Query<&TextInputValue>,
     editing_deck: ResMut<EditingDeck>,
-    deck_list_identity: Res<DeckListIdentity>,
+    edit_identity: Res<EditIdentity>,
     pkv: ResMut<PkvStore>,
     mut next_state: ResMut<NextState<DeckBuildingState>>,
 ) {
@@ -154,7 +154,7 @@ fn handle_button_interaction(
         if *interaction == Interaction::Pressed {
             let mut decks_storage = DecksStorage {
                 pkv,
-                identity: deck_list_identity.0.clone(),
+                identity: edit_identity.0.clone(),
             };
             match *button_action {
                 ButtonAction::Save => {

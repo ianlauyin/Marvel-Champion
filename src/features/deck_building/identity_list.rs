@@ -8,7 +8,7 @@ use crate::{
     systems::{clean_up, AppState, LoadAsset},
 };
 
-use super::{deck_list::DeckListIdentity, state::DeckBuildingState};
+use super::{deck_list::EditIdentity, state::DeckBuildingState};
 
 pub struct DeckBuildingIdentityListPlugin;
 
@@ -69,7 +69,7 @@ fn handle_button_interaction(
             for card in button.0.get_cards() {
                 load_asset.add_card(card, &asset_server);
             }
-            commands.insert_resource(DeckListIdentity(button.0.clone()));
+            commands.insert_resource(EditIdentity(button.0.clone()));
             next_state.set(DeckBuildingState::SelectDeck);
             return;
         }

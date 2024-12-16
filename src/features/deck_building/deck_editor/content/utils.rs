@@ -1,0 +1,86 @@
+use std::collections::HashMap;
+
+use bevy::prelude::*;
+
+use crate::{
+    features::{
+        cards::{Card, CardAspect},
+        shared::ListItem,
+    },
+    systems::{LoadedAssetMap, MouseDragDropClick},
+    utils::is_cusrsor_in_container,
+};
+
+use super::ui::{CardListItem, ContentContainer};
+
+#[derive(Bundle, Clone)]
+pub struct DragDropCard {
+    belongs: CardListItem,
+    interaction: MouseDragDropClick,
+    card: Card,
+}
+
+pub fn convert_card_into_button_map(
+    belongs: CardListItem,
+    cards: &Vec<Card>,
+    loaded_asset: &Res<LoadedAssetMap>,
+) -> Vec<(DragDropCard, ListItem)> {
+    cards
+        .iter()
+        .map(|card| {
+            (
+                DragDropCard {
+                    belongs: belongs.clone(),
+                    interaction: MouseDragDropClick::default(),
+                    card: card.clone(),
+                },
+                ListItem {
+                    text: "".to_string(),
+                    color: Color::NONE,
+                    image: ImageNode::new(loaded_asset.0.get(&card.get_id()).unwrap().clone()),
+                },
+            )
+        })
+        .collect()
+}
+
+pub fn get_aspect_names(deck_cards: &Vec<Card>) -> Vec<(String, Color)> {
+    let mut hash_map: HashMap<String, Color> = HashMap::new();
+    for card in deck_cards {
+        let Ok(aspect) = card.get_aspect() else {
+            continue;
+        };
+        match aspect {
+            CardAspect::Justice => {
+                hash_map.insert(aspect.to_string(), Color::srgb(0.871, 0.941, 0.086));
+            }
+            CardAspect::Aggression => {
+                hash_map.insert(aspect.to_string(), Color::srgb(0.741, 0.192, 0.192));
+            }
+            CardAspect::Protection => {
+                hash_map.insert(aspect.to_string(), Color::srgb(0.075, 0.773, 0.075));
+            }
+            CardAspect::Leadership => {
+                hash_map.insert(aspect.to_string(), Color::srgb(0.125, 0.769, 0.882));
+            }
+            CardAspect::Pool => {
+                hash_map.insert(aspect.to_string(), Color::srgb(0.89, 0.149, 0.816));
+            }
+            _ => continue,
+        }
+    }
+    hash_map.into_iter().collect()
+}
+
+pub fn find_card_belongs(
+    cursor_position: &Vec2,
+    card_list_q: Query<(&GlobalTransform, &ComputedNode, &ContentContainer)>,
+) -> Result<ContentContainer, String> {
+    for (global_transform, node, card_list) in card_list_q.iter() {
+        let center_position = global_transform.compute_transform().translation.truncate();
+        if is_cusrsor_in_container(cursor_position, &center_position, &(node.size() / 2.)) {
+            return Ok(card_list.clone());
+        }
+    }
+    Err("The card is not in both of the container".to_string())
+}
