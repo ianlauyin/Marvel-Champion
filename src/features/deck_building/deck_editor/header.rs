@@ -1,7 +1,8 @@
 use crate::{
     features::{
+        cards::{CardDatas, Identity},
         deck_building::{deck_list::EditIdentity, state::DeckBuildingState},
-        shared::{handle_previous_interaction, ButtonBuilder, PreviousButtonBuilder},
+        shared::{handle_previous_interaction, ButtonBuilder, Popup, PreviousButtonBuilder},
     },
     systems::DecksStorage,
 };
@@ -143,10 +144,12 @@ fn handle_text_input_escape(
 }
 
 fn handle_button_interaction(
+    commands: Commands,
     button_q: Query<(&Interaction, &ButtonAction)>,
     text_value_q: Query<&TextInputValue>,
     editing_deck: ResMut<EditingDeck>,
     edit_identity: Res<EditIdentity>,
+    card_datas: Res<CardDatas>,
     pkv: ResMut<PkvStore>,
     mut next_state: ResMut<NextState<DeckBuildingState>>,
 ) {
@@ -157,26 +160,45 @@ fn handle_button_interaction(
                 identity: edit_identity.0.clone(),
             };
             match *button_action {
-                ButtonAction::Save => {
-                    handle_save(decks_storage, editing_deck.clone(), text_value_q)
-                }
+                ButtonAction::Save => handle_save(
+                    commands,
+                    decks_storage,
+                    editing_deck.clone(),
+                    card_datas,
+                    edit_identity.0.clone(),
+                    text_value_q,
+                    next_state,
+                ),
                 ButtonAction::Remove => {
                     if let Some(index) = editing_deck.index {
                         decks_storage.remove_deck(index);
                     }
+                    next_state.set(DeckBuildingState::SelectDeck);
                 }
             }
-            next_state.set(DeckBuildingState::SelectDeck);
             return;
         }
     }
 }
 
 fn handle_save(
+    mut commands: Commands,
     mut decks_storage: DecksStorage,
     mut editing_deck: EditingDeck,
+    card_datas: Res<CardDatas>,
+    identity: Identity,
     text_value_q: Query<&TextInputValue>,
+    mut next_state: ResMut<NextState<DeckBuildingState>>,
 ) {
+    let cards = card_datas.from_ids(&editing_deck.deck.card_ids);
+    match identity.get_validator().validate(&cards) {
+        Ok(_) => (),
+        Err(message) => {
+            commands.spawn(Popup::new(message));
+            return;
+        }
+    }
+
     if let Ok(text_value) = text_value_q.get_single() {
         editing_deck.deck.name = text_value.0.clone();
     }
@@ -186,4 +208,5 @@ fn handle_save(
     } else {
         decks_storage.add_deck(editing_deck.deck);
     }
+    next_state.set(DeckBuildingState::SelectDeck);
 }

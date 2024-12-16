@@ -11,6 +11,14 @@ pub struct DeckValidator {
 }
 
 impl DeckValidator {
+    pub fn default(identity: Identity) -> Self {
+        Self {
+            identity,
+            build_validators: vec![aspects_rules_validator, cards_amount_limit_validator],
+            play_validators: vec![deck_cards_amount_validator],
+        }
+    }
+
     pub fn validate_build(&mut self, deck_cards: &Vec<Card>) -> Result<(), String> {
         if let Err(message) = self.validate_identity_cards(&deck_cards) {
             return Err(message);
@@ -25,14 +33,6 @@ impl DeckValidator {
             .concat()
             .iter_mut()
             .try_for_each(|validator| validator(&deck_cards))
-    }
-
-    pub fn default(identity: Identity) -> Self {
-        Self {
-            identity,
-            build_validators: vec![aspects_rules_validator, cards_amount_limit_validator],
-            play_validators: vec![deck_cards_amount_validator],
-        }
     }
 
     fn validate_identity_cards(&self, deck_cards: &Vec<Card>) -> Result<(), String> {
