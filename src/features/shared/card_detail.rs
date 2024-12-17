@@ -1,72 +1,79 @@
 use std::f32::consts::PI;
 
-use bevy::{prelude::*, ui::FocusPolicy};
+use bevy::{input::common_conditions::input_just_pressed, prelude::*, ui::FocusPolicy};
 
 use crate::{
     constants::CARD_DETAIL_SIZE,
     features::{cards::Card, shared::CustomButton},
+    utils::get_largest_z_index,
 };
 
 pub struct CardDetailPlugin;
 
 impl Plugin for CardDetailPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, (on_drag, on_escape));
+        app.add_systems(Update, (on_drag, on_escape))
+            .add_systems(
+                Update,
+                handle_card_detail_button_click.run_if(input_just_pressed(MouseButton::Left)),
+            )
+            .add_observer(handle_card_detail_spawn);
     }
 }
 
-#[derive(Component)]
-struct CardDetail;
+#[derive(Component, Clone)]
+pub struct CardDetailButton(pub Card);
 
 #[derive(Component)]
 struct EscapeButton;
 
-pub struct CardDetailBuilder {
-    pub card: Card,
-    pub position: Vec2,
-    pub z_index: ZIndex,
-}
+#[derive(Component)]
+pub struct CardDetail(pub Card);
 
-impl CardDetailBuilder {
-    pub fn spawn(&self, mut commands: Commands, asset_server: Res<AssetServer>) -> Entity {
-        commands
-            .spawn((
-                Node {
-                    width: Val::Px(600.),
-                    height: Val::Px(600.),
-                    position_type: PositionType::Relative,
-                    top: Val::Px(self.position.y),
-                    left: Val::Px(self.position.x),
-                    justify_self: JustifySelf::Center,
-                    align_self: AlignSelf::Center,
-                    display: Display::Flex,
-                    justify_content: JustifyContent::Center,
-                    align_items: AlignItems::Center,
-                    border: UiRect::all(Val::Px(1.)),
-                    ..default()
-                },
-                FocusPolicy::Block,
-                BorderColor::from(Color::WHITE),
-                BorderRadius::all(Val::Px(10.)),
-                BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
-                self.z_index,
-                Interaction::default(),
-                CardDetail,
-            ))
-            .with_children(|container| {
-                spawn_escape_button(container);
-                let vertical = match self.card {
-                    Card::MainSchemeA(_) | Card::MainSchemeB(_) | Card::SideScheme(_) => false,
-                    _ => true,
-                };
-                spawn_content(
-                    container,
-                    asset_server.load(self.card.get_image_path()),
-                    vertical,
-                );
-            })
-            .id()
-    }
+fn handle_card_detail_spawn(
+    trigger: Trigger<OnAdd, CardDetail>,
+    mut commands: Commands,
+    card_detail_q: Query<&CardDetail>,
+    asset_server: Res<AssetServer>,
+    z_index_q: Query<&ZIndex>,
+) {
+    let card_detail = card_detail_q.get(trigger.entity()).unwrap();
+    commands
+        .entity(trigger.entity())
+        .insert((
+            Node {
+                width: Val::Px(600.),
+                height: Val::Px(600.),
+                position_type: PositionType::Relative,
+                justify_self: JustifySelf::Center,
+                align_self: AlignSelf::Center,
+                top: Val::Px(0.),
+                left: Val::Px(0.),
+                display: Display::Flex,
+                justify_content: JustifyContent::Center,
+                align_items: AlignItems::Center,
+                border: UiRect::all(Val::Px(1.)),
+                ..default()
+            },
+            FocusPolicy::Block,
+            BorderColor::from(Color::WHITE),
+            BorderRadius::all(Val::Px(10.)),
+            BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
+            get_largest_z_index(z_index_q),
+            Interaction::default(),
+        ))
+        .with_children(|container| {
+            spawn_escape_button(container);
+            let vertical = match card_detail.0 {
+                Card::MainSchemeA(_) | Card::MainSchemeB(_) | Card::SideScheme(_) => false,
+                _ => true,
+            };
+            spawn_content(
+                container,
+                asset_server.load(card_detail.0.get_image_path()),
+                vertical,
+            );
+        });
 }
 
 fn spawn_escape_button(children_builder: &mut ChildBuilder) {
@@ -108,6 +115,18 @@ fn spawn_content(container: &mut ChildBuilder, card_image: Handle<Image>, vertic
         BorderRadius::all(Val::Px(20.)),
         ImageNode::new(card_image),
     ));
+}
+
+fn handle_card_detail_button_click(
+    mut commands: Commands,
+    card_button_q: Query<(&Interaction, &CardDetailButton)>,
+) {
+    for (interaction, card) in card_button_q.iter() {
+        if *interaction == Interaction::Pressed {
+            commands.spawn(CardDetail(card.0.clone()));
+            return;
+        }
+    }
 }
 
 fn on_escape(

@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use crate::{
     features::{
         cards::Identity,
-        shared::{DisplayMethod, ListItem, MenuBuilder, PreviousButtonPlugin},
+        shared::{DisplayMethod, ListItem, MenuBuilder},
     },
     systems::{clean_up, AppState, LoadAsset},
 };

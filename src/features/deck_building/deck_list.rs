@@ -4,7 +4,7 @@ use bevy_pkv::PkvStore;
 use crate::{
     features::{
         cards::{CardDatas, Identity},
-        shared::{DisplayMethod, ListItem, MenuBuilder, PreviousButtonPlugin},
+        shared::{DisplayMethod, ListItem, MenuBuilder},
     },
     systems::{clean_up, DecksStorage, LoadAsset},
 };

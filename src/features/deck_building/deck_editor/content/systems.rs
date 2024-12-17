@@ -7,14 +7,14 @@ use crate::{
         deck_building::{
             deck_editor::EditingDeck, deck_list::EditIdentity, state::DeckBuildingState,
         },
-        shared::{CardDetailBuilder, Popup, ScrollingList},
+        shared::{CardDetail, Popup, ScrollingList},
     },
     systems::{
         listen_mouse_click, MouseDragDropClick, MouseDragEvent, MouseDropEvent, MousePlugin,
         MouseShortClickEvent,
     },
     ui::{NodeMove, NodeMoveRemoveEvent},
-    utils::{get_largest_z_index, global_transform_to_node_vec2},
+    utils::global_transform_to_node_vec2,
 };
 
 use super::{
@@ -53,19 +53,12 @@ impl Plugin for DeckEditorContentSystemPlugin {
 
 fn handle_click(
     mut click_ev: EventReader<MouseShortClickEvent>,
-    commands: Commands,
+    mut commands: Commands,
     card_q: Query<&Card, With<MouseDragDropClick>>,
-    z_index_q: Query<&ZIndex>,
-    asset_server: Res<AssetServer>,
 ) {
     for ev in click_ev.read() {
         if let Ok(card) = card_q.get(ev.0) {
-            CardDetailBuilder {
-                card: card.clone(),
-                position: Vec2::ZERO,
-                z_index: get_largest_z_index(z_index_q),
-            }
-            .spawn(commands, asset_server);
+            commands.spawn(CardDetail(card.clone()));
             return;
         }
     }

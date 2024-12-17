@@ -16,7 +16,7 @@ pub enum DisplayMethod {
     CardList,
 }
 
-/// Reminder: Add handle_previous_interaction(current_state) in system
+/// Reminder: Add PreviousButtonPlugin::<State>::default() in state plugin
 pub struct MenuBuilder<T: Component, S: States + FreelyMutableState, B: Component> {
     pub component: T,
     pub previous_state: S,
