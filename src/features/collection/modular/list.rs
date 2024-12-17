@@ -4,7 +4,7 @@ use crate::{
     features::{
         cards::ModularSet,
         collection::state::CollectionState,
-        shared::{handle_previous_interaction, DisplayMethod, ListItem, MenuBuilder},
+        shared::{DisplayMethod, ListItem, MenuBuilder},
     },
     systems::{clean_up, LoadAsset},
 };
@@ -16,10 +16,6 @@ pub struct CollectionModularListPlugin;
 impl Plugin for CollectionModularListPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(OnEnter(CollectionState::Modular), spawn_modular_list)
-            .add_systems(
-                Update,
-                handle_previous_interaction(CollectionState::Modular),
-            )
             .add_systems(
                 Update,
                 handle_button_interaction.run_if(in_state(CollectionModularState::List)),

@@ -2,7 +2,7 @@ use crate::{
     features::{
         cards::{CardDatas, Identity},
         deck_building::{deck_list::EditIdentity, state::DeckBuildingState},
-        shared::{handle_previous_interaction, ButtonBuilder, Popup, PreviousButtonBuilder},
+        shared::{CustomButton, Popup, PreviousButton},
     },
     systems::DecksStorage,
 };
@@ -20,18 +20,16 @@ const CURRENT_STATE: DeckBuildingState = DeckBuildingState::DeckBuilding;
 
 impl Plugin for DeckEditorHeaderPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins(TextInputPlugin)
-            .add_systems(Update, handle_previous_interaction(CURRENT_STATE))
-            .add_systems(
-                Update,
-                (
-                    handle_button_interaction,
-                    handle_title_interaction,
-                    handle_text_input_finished,
-                    handle_text_input_escape,
-                )
-                    .run_if(in_state(CURRENT_STATE)),
-            );
+        app.add_plugins(TextInputPlugin).add_systems(
+            Update,
+            (
+                handle_button_interaction,
+                handle_title_interaction,
+                handle_text_input_finished,
+                handle_text_input_escape,
+            )
+                .run_if(in_state(CURRENT_STATE)),
+        );
     }
 }
 
@@ -50,7 +48,7 @@ pub fn spawn_header(mut commands: Commands, name: String) -> Entity {
             ..default()
         })
         .with_children(|header| {
-            PreviousButtonBuilder(DeckBuildingState::SelectDeck).spawn(header);
+            header.spawn(PreviousButton(DeckBuildingState::SelectDeck));
             spawn_title(header, name);
             spawn_buttons(header);
         })
@@ -86,22 +84,24 @@ fn spawn_buttons(header: &mut ChildBuilder) {
             ..default()
         })
         .with_children(|buttons_node| {
-            let mut button_builder = ButtonBuilder {
-                text: "Save".to_string(),
-                color: Color::srgb(0.212, 0.616, 0.263),
-                size: (Val::Px(100.), Val::Px(50.)),
-                ..default()
-            };
-
-            button_builder
-                .spawn(buttons_node)
-                .insert(ButtonAction::Save);
-
-            button_builder.text = "Remove".to_string();
-            button_builder.color = Color::srgb(0.616, 0.212, 0.212);
-            button_builder
-                .spawn(buttons_node)
-                .insert(ButtonAction::Remove);
+            buttons_node.spawn((
+                ButtonAction::Save,
+                CustomButton {
+                    text: "Save".to_string(),
+                    color: Color::srgb(0.212, 0.616, 0.263),
+                    size: (Val::Px(100.), Val::Px(50.)),
+                    ..default()
+                },
+            ));
+            buttons_node.spawn((
+                ButtonAction::Remove,
+                CustomButton {
+                    text: "Remove".to_string(),
+                    color: Color::srgb(0.616, 0.212, 0.212),
+                    size: (Val::Px(100.), Val::Px(50.)),
+                    ..default()
+                },
+            ));
         });
 }
 

@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use crate::{
     features::{
         cards::CardDatas,
-        shared::{handle_previous_interaction, DisplayMethod, ListItem, MenuBuilder},
+        shared::{DisplayMethod, ListItem, MenuBuilder},
     },
     systems::{clean_up, AppState, LoadAsset},
 };
@@ -19,7 +19,6 @@ impl Plugin for CollectionMenuPlugin {
                 Update,
                 handle_button_reaction.run_if(in_state(CollectionState::Menu)),
             )
-            .add_systems(Update, handle_previous_interaction(AppState::Collection))
             .add_systems(OnExit(CollectionState::Menu), clean_up::<CardTypeMenu>);
     }
 }

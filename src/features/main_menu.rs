@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::systems::{clean_up, AppState};
 
-use super::shared::ButtonBuilder;
+use super::shared::CustomButton;
 pub struct MainMenuPlugin;
 
 const CURRENT_STATE: AppState = AppState::MainMenu;
@@ -50,13 +50,14 @@ fn spawn_main_menu(mut commands: Commands) {
         ))
         .with_children(|main_menu| {
             for (button_component, text) in BUTTON_MAP {
-                ButtonBuilder {
-                    text: text.to_string(),
-                    color: Color::srgb(0.576, 0.576, 0.576),
-                    ..default()
-                }
-                .spawn(main_menu)
-                .insert(button_component);
+                main_menu.spawn((
+                    button_component,
+                    CustomButton {
+                        text: text.to_string(),
+                        color: Color::srgb(0.576, 0.576, 0.576),
+                        ..default()
+                    },
+                ));
             }
         });
 }

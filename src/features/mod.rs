@@ -17,7 +17,7 @@ impl Plugin for FeaturePlugin {
             cards::CardDataPlugin,
             main_menu::MainMenuPlugin,
             collection::CollectionPlugin,
-            shared::ButtonUIPlugin,
+            shared::CustomButtonPlugin,
             shared::ScrollingListPlugin,
             shared::CardDetailPlugin,
             deck_building::DeckBuildingPlugin,

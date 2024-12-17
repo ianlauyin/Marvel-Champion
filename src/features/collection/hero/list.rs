@@ -4,7 +4,7 @@ use crate::{
     features::{
         cards::Identity,
         collection::state::CollectionState,
-        shared::{handle_previous_interaction, DisplayMethod, ListItem, MenuBuilder},
+        shared::{DisplayMethod, ListItem, MenuBuilder},
     },
     systems::{clean_up, LoadAsset},
 };
@@ -16,7 +16,6 @@ pub struct CollectionHeroListPlugin;
 impl Plugin for CollectionHeroListPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(OnEnter(CollectionState::Hero), spawn_hero_list)
-            .add_systems(Update, handle_previous_interaction(CollectionState::Hero))
             .add_systems(
                 Update,
                 handle_button_interaction.run_if(in_state(CollectionHeroState::List)),

@@ -4,7 +4,7 @@ use bevy_pkv::PkvStore;
 use crate::{
     features::{
         cards::{CardDatas, Identity},
-        shared::{handle_previous_interaction, DisplayMethod, ListItem, MenuBuilder},
+        shared::{DisplayMethod, ListItem, MenuBuilder, PreviousButtonPlugin},
     },
     systems::{clean_up, DecksStorage, LoadAsset},
 };
@@ -18,7 +18,6 @@ const CURRENT_STATE: DeckBuildingState = DeckBuildingState::SelectDeck;
 impl Plugin for DeckBuildingDeckListPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(OnEnter(CURRENT_STATE), spawn_deck_list)
-            .add_systems(Update, handle_previous_interaction(CURRENT_STATE))
             .add_systems(
                 Update,
                 handle_button_interaction.run_if(in_state(CURRENT_STATE)),

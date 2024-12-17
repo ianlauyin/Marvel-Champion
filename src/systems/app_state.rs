@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::constants::GAME_MAT_ASSET;
+use crate::{constants::GAME_MAT_ASSET, features::shared::PreviousButtonPlugin};
 
 use super::{asset_loader::LoadAsset, AssetLoaderPlugin};
 
@@ -19,6 +19,7 @@ pub struct AppStatePlugin;
 impl Plugin for AppStatePlugin {
     fn build(&self, app: &mut App) {
         app.init_state::<AppState>()
+            .add_plugins(PreviousButtonPlugin::<AppState>::default())
             .add_plugins(AssetLoaderPlugin {
                 loading_state: AppState::LoadingAsset,
                 next_state: AppState::MainMenu,

@@ -4,7 +4,7 @@ use crate::{
     features::{
         cards::Villain,
         collection::state::CollectionState,
-        shared::{handle_previous_interaction, DisplayMethod, ListItem, MenuBuilder},
+        shared::{DisplayMethod, ListItem, MenuBuilder},
     },
     systems::{clean_up, LoadAsset},
 };
@@ -16,10 +16,6 @@ pub struct CollectionVillainListPlugin;
 impl Plugin for CollectionVillainListPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(OnEnter(CollectionState::Villain), spawn_villain_list)
-            .add_systems(
-                Update,
-                handle_previous_interaction(CollectionState::Villain),
-            )
             .add_systems(
                 Update,
                 handle_button_interaction.run_if(in_state(CollectionVillainState::List)),

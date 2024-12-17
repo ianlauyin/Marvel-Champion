@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use crate::{
     features::{
         cards::Identity,
-        shared::{handle_previous_interaction, DisplayMethod, ListItem, MenuBuilder},
+        shared::{DisplayMethod, ListItem, MenuBuilder, PreviousButtonPlugin},
     },
     systems::{clean_up, AppState, LoadAsset},
 };
@@ -17,7 +17,6 @@ const CURRENT_STATE: DeckBuildingState = DeckBuildingState::SelectIdentity;
 impl Plugin for DeckBuildingIdentityListPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(OnEnter(CURRENT_STATE), spawn_hero_list)
-            .add_systems(Update, handle_previous_interaction(AppState::DeckBuilding))
             .add_systems(
                 Update,
                 handle_button_interaction.run_if(in_state(CURRENT_STATE)),

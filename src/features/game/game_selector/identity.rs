@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use crate::{
     features::{
         cards::Identity,
-        shared::{handle_previous_interaction, DisplayMethod, ListItem, MenuBuilder},
+        shared::{DisplayMethod, ListItem, MenuBuilder},
     },
     systems::{clean_up, AppState},
 };
@@ -17,7 +17,6 @@ const CURRENT_STATE: GameSelectorState = GameSelectorState::Identity;
 impl Plugin for GameSelectorIdentityPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(OnEnter(CURRENT_STATE), spawn_identity_list)
-            .add_systems(Update, handle_previous_interaction(AppState::Game))
             .add_systems(OnExit(CURRENT_STATE), clean_up::<GameIdentityList>);
     }
 }

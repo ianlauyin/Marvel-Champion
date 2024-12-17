@@ -1,44 +1,53 @@
-use super::ButtonBuilder;
-use bevy::ecs::schedule::SystemConfigs;
+use std::marker::PhantomData;
+
+use super::CustomButton;
 use bevy::prelude::*;
 use bevy::state::state::FreelyMutableState;
 
 const BUTTON_SIZE: (Val, Val) = (Val::Px(50.), Val::Px(50.));
 
-/// Reminder: Add handle_previous_interaction(current_state) in system
-pub struct PreviousButtonBuilder<S: FreelyMutableState>(pub S);
+/// Reminder: Add PreviousButtonPlugin::<State>::default() in state plugin
+#[derive(Component)]
+pub struct PreviousButton<S: FreelyMutableState>(pub S);
 
-impl<S: FreelyMutableState + Clone> PreviousButtonBuilder<S> {
-    pub fn spawn<'a>(&self, child_builder: &'a mut ChildBuilder) {
-        let button = ButtonBuilder {
-            text: String::from("<"),
-            color: Color::NONE,
-            size: BUTTON_SIZE,
-            with_border: false,
-            ..default()
-        };
-        button
-            .spawn(child_builder)
-            .insert(PreviousButton(self.0.clone()));
+pub struct PreviousButtonPlugin<S>(PhantomData<S>);
+
+impl<S> Default for PreviousButtonPlugin<S> {
+    fn default() -> Self {
+        Self(PhantomData)
     }
 }
 
-#[derive(Component)]
-struct PreviousButton<S: FreelyMutableState>(S);
+impl<S: FreelyMutableState> Plugin for PreviousButtonPlugin<S> {
+    fn build(&self, app: &mut App) {
+        app.add_systems(Update, handle_previous_interaction::<S>)
+            .add_observer(handle_previous_button_spawn::<S>);
+    }
+}
 
-pub fn handle_previous_interaction<S: FreelyMutableState>(current_state: S) -> SystemConfigs {
-    IntoSystem::into_system(
-        |previous_button_q: Query<(&Interaction, &PreviousButton<S>)>,
-         mut next_state: ResMut<NextState<S>>| {
-            if previous_button_q.is_empty() {
-                return;
-            }
-            for (interaction, previous_button) in previous_button_q.iter() {
-                if *interaction == Interaction::Pressed {
-                    next_state.set(previous_button.0.clone());
-                }
-            }
-        },
-    )
-    .run_if(in_state(current_state))
+fn handle_previous_button_spawn<S: FreelyMutableState>(
+    on_add: Trigger<OnAdd, PreviousButton<S>>,
+    mut commands: Commands,
+) {
+    commands.entity(on_add.entity()).insert(CustomButton {
+        text: String::from("<"),
+        color: Color::NONE,
+        size: BUTTON_SIZE,
+        with_border: false,
+        ..default()
+    });
+}
+
+fn handle_previous_interaction<S: FreelyMutableState>(
+    previous_button_q: Query<(&Interaction, &PreviousButton<S>)>,
+    mut next_state: ResMut<NextState<S>>,
+) {
+    if previous_button_q.is_empty() {
+        return;
+    }
+    for (interaction, previous_button) in previous_button_q.iter() {
+        if *interaction == Interaction::Pressed {
+            next_state.set(previous_button.0.clone());
+        }
+    }
 }

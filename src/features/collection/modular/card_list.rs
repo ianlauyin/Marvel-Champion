@@ -3,9 +3,7 @@ use bevy::{input::common_conditions::input_just_pressed, prelude::*};
 use crate::{
     features::{
         cards::{Card, ModularSet},
-        shared::{
-            handle_previous_interaction, CardDetailBuilder, DisplayMethod, ListItem, MenuBuilder,
-        },
+        shared::{CardDetailBuilder, DisplayMethod, ListItem, MenuBuilder},
     },
     systems::clean_up,
     utils::get_largest_z_index,
@@ -23,10 +21,6 @@ impl Plugin for CollectionModularCardListPlugin {
                 handle_card_click
                     .run_if(in_state(CollectionModularState::Cards))
                     .run_if(input_just_pressed(MouseButton::Left)),
-            )
-            .add_systems(
-                Update,
-                handle_previous_interaction(CollectionModularState::Cards),
             )
             .add_systems(
                 OnExit(CollectionModularState::Cards),

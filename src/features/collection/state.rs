@@ -1,4 +1,4 @@
-use crate::systems::AppState;
+use crate::{features::shared::PreviousButtonPlugin, systems::AppState};
 use bevy::prelude::*;
 
 #[derive(SubStates, Default, Hash, PartialEq, Eq, Debug, Clone)]
@@ -21,6 +21,7 @@ pub struct CollectionStatePlugin;
 
 impl Plugin for CollectionStatePlugin {
     fn build(&self, app: &mut App) {
-        app.add_sub_state::<CollectionState>();
+        app.add_sub_state::<CollectionState>()
+            .add_plugins(PreviousButtonPlugin::<CollectionState>::default());
     }
 }

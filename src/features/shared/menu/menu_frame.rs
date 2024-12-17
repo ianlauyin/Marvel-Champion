@@ -1,6 +1,6 @@
 use bevy::{prelude::*, state::state::FreelyMutableState};
 
-use crate::features::shared::{previous_button::PreviousButtonBuilder, CardListBuilder};
+use crate::features::shared::{previous_button::PreviousButton, CardListBuilder};
 
 use super::spawn_list;
 
@@ -74,7 +74,7 @@ fn spawn_header<S: States + FreelyMutableState>(
             ..default()
         })
         .with_children(|header| {
-            PreviousButtonBuilder(previous_state).spawn(header);
+            header.spawn(PreviousButton(previous_state));
         })
         .id()
 }

@@ -4,7 +4,7 @@ use bevy::{prelude::*, ui::FocusPolicy};
 
 use crate::{
     constants::CARD_DETAIL_SIZE,
-    features::{cards::Card, shared::ButtonBuilder},
+    features::{cards::Card, shared::CustomButton},
 };
 
 pub struct CardDetailPlugin;
@@ -78,17 +78,18 @@ fn spawn_escape_button(children_builder: &mut ChildBuilder) {
             ..default()
         })
         .with_children(|button_container| {
-            ButtonBuilder {
-                text: String::from("X"),
-                text_color: Color::srgb(0.494, 0.494, 0.494),
-                size: (Val::Px(30.), Val::Px(30.)),
-                with_border: false,
-                color: Color::srgb(0.239, 0.239, 0.239),
-                border_radius: BorderRadius::all(Val::Percent(50.)),
-                ..default()
-            }
-            .spawn(button_container)
-            .insert(EscapeButton);
+            button_container.spawn((
+                EscapeButton,
+                CustomButton {
+                    text: String::from("X"),
+                    text_color: Color::srgb(0.494, 0.494, 0.494),
+                    size: (Val::Px(30.), Val::Px(30.)),
+                    with_border: false,
+                    color: Color::srgb(0.239, 0.239, 0.239),
+                    border_radius: BorderRadius::all(Val::Percent(50.)),
+                    ..default()
+                },
+            ));
         });
 }
 

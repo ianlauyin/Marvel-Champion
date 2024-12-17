@@ -4,9 +4,7 @@ use crate::{
     features::{
         cards::{Card, CardDatas},
         collection::state::CollectionState,
-        shared::{
-            handle_previous_interaction, CardDetailBuilder, DisplayMethod, ListItem, MenuBuilder,
-        },
+        shared::{CardDetailBuilder, DisplayMethod, ListItem, MenuBuilder},
     },
     systems::clean_up,
     utils::get_largest_z_index,
@@ -25,7 +23,6 @@ impl Plugin for CollectionPoolCardListPlugin {
                     .run_if(in_state(CollectionPoolState::Cards))
                     .run_if(input_just_pressed(MouseButton::Left)),
             )
-            .add_systems(Update, handle_previous_interaction(CollectionState::Pool))
             .add_systems(OnExit(CollectionPoolState::Cards), clean_up::<PoolCardList>);
     }
 }

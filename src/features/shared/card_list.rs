@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::features::shared::ButtonBuilder;
+use crate::features::shared::CustomButton;
 
 use super::{ListItem, ScrollingList};
 
@@ -48,14 +48,16 @@ impl<B: Bundle + Clone> CardListBuilder<B> {
                                 })
                                 .with_children(|card_type_node| {
                                     let ListItem { color, image, .. } = button_info;
-                                    let button = ButtonBuilder {
-                                        color,
-                                        image,
-                                        size: self.card_size,
-                                        with_border: false,
-                                        ..default()
-                                    };
-                                    button.spawn(card_type_node).insert(button_component);
+                                    card_type_node.spawn((
+                                        button_component,
+                                        CustomButton {
+                                            color,
+                                            image,
+                                            size: self.card_size,
+                                            with_border: false,
+                                            ..default()
+                                        },
+                                    ));
                                 });
                         }
                     });
