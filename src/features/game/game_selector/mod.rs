@@ -1,3 +1,4 @@
+mod deck;
 mod identity;
 mod state;
 
@@ -10,6 +11,7 @@ impl Plugin for GameSelectorPlugin {
         app.add_plugins((
             state::GameSelectorStatePlugin,
             identity::GameSelectorIdentityPlugin,
+            deck::GameSelectorDeckPlugin,
         ));
     }
 }
