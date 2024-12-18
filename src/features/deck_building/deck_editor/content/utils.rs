@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use bevy::prelude::*;
+use bevy::{prelude::*, ui::RelativeCursorPosition};
 
 use crate::{
     features::{
@@ -8,7 +8,6 @@ use crate::{
         shared::ListItem,
     },
     systems::{LoadedAssetMap, MouseDragDropClick},
-    utils::is_cusrsor_in_container,
 };
 
 use super::ui::{CardListItem, ContentContainer};
@@ -73,12 +72,10 @@ pub fn get_aspect_names(deck_cards: &Vec<Card>) -> Vec<(String, Color)> {
 }
 
 pub fn find_card_belongs(
-    cursor_position: &Vec2,
-    content_container_q: Query<(&GlobalTransform, &ComputedNode, &ContentContainer)>,
+    content_container_q: Query<(&RelativeCursorPosition, &ContentContainer)>,
 ) -> Result<ContentContainer, String> {
-    for (global_transform, node, content_container) in content_container_q.iter() {
-        let center_position = global_transform.compute_transform().translation.truncate();
-        if is_cusrsor_in_container(cursor_position, &center_position, &(node.size() / 2.)) {
+    for (relative_cursor_position, content_container) in content_container_q.iter() {
+        if relative_cursor_position.mouse_over() {
             return Ok(content_container.clone());
         }
     }

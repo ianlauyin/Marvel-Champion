@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, ui::RelativeCursorPosition};
 
 use crate::{
     constants::CARD_SIZE,
@@ -50,6 +50,7 @@ pub fn spawn_content(
 }
 
 #[derive(Component, Clone, PartialEq, Eq)]
+#[require(RelativeCursorPosition)]
 pub enum ContentContainer {
     Deck,
     Selection,

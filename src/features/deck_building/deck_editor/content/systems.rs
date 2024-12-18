@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, ui::RelativeCursorPosition};
 
 use crate::{
     constants::CARD_SIZE,
@@ -150,7 +150,7 @@ fn handle_drop(
     mut click_ev: EventReader<MouseDropEvent>,
     mut commands: Commands,
     dragging_card_q: Query<(Entity, &DraggingCard)>,
-    card_list_q: Query<(&GlobalTransform, &ComputedNode, &ContentContainer)>,
+    content_container_q: Query<(&RelativeCursorPosition, &ContentContainer)>,
 ) {
     let Some(ev) = click_ev.read().next() else {
         return;
@@ -160,7 +160,7 @@ fn handle_drop(
         return;
     };
     let cursor_position = ev.position;
-    if let Ok(drop_card_list) = find_card_belongs(&cursor_position, card_list_q) {
+    if let Ok(drop_card_list) = find_card_belongs(content_container_q) {
         match (dragging_card.card_list_item.clone(), drop_card_list) {
             (CardListItem::Deck, ContentContainer::Selection) => {
                 commands.insert_resource(EditDeckIntent::Remove(dragging_card.card.clone()));
