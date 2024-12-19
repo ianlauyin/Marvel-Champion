@@ -121,7 +121,9 @@ fn handle_button_color(
 ) {
     background_color.0.set_alpha(alpha);
     for &child in children.iter() {
-        let mut text_color = text_color_q.get_mut(child).unwrap();
+        let Ok(mut text_color) = text_color_q.get_mut(child) else {
+            continue;
+        };
         text_color.0.set_alpha(alpha);
     }
 }

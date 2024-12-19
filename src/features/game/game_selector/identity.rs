@@ -1,8 +1,9 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, scene::ron::Number};
 
 use crate::{
     features::{
         cards::Identity,
+        game::state::GameState,
         shared::{DisplayMethod, ListItem, MenuBuilder},
     },
     systems::{clean_up, AppState, Deck},
@@ -17,12 +18,16 @@ const CURRENT_STATE: GameSelectorState = GameSelectorState::Identity;
 impl Plugin for GameSelectorIdentityPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<SelectedPlayers>()
-            .add_systems(OnEnter(CURRENT_STATE), spawn_identity_list)
+            .add_systems(OnEnter(GameState::PreGame), spawn_identity_list)
             .add_systems(
                 Update,
-                handle_identity_button_interaction.run_if(in_state(CURRENT_STATE)),
+                (
+                    handle_identity_button_interaction,
+                    handle_selected_players_changed,
+                )
+                    .run_if(in_state(CURRENT_STATE)),
             )
-            .add_systems(OnExit(CURRENT_STATE), clean_up::<GameIdentityList>);
+            .add_observer(handle_name_tag_added);
     }
 }
 
@@ -77,4 +82,50 @@ fn handle_identity_button_interaction(
             return;
         }
     }
+}
+
+#[derive(Component)]
+struct NumberTag(usize);
+
+fn handle_selected_players_changed(
+    mut commands: Commands,
+    selected_players: Res<SelectedPlayers>,
+    button_q: Query<(Entity, &Children, &GameIdentityButton)>,
+    name_tag_q: Query<Entity, With<NumberTag>>,
+) {
+    if selected_players.is_changed() {
+        for (entity, children, game_identity_button) in button_q.iter() {
+            if let Some(index) = selected_players
+                .0
+                .iter()
+                .position(|selected_player| selected_player.identity == game_identity_button.0)
+            {
+                commands.entity(entity).with_child(NumberTag(index + 1));
+            } else {
+                for child in children.iter() {
+                    let Ok(name_tag_entity) = name_tag_q.get(*child) else {
+                        continue;
+                    };
+                    commands.entity(name_tag_entity).despawn();
+                }
+            }
+        }
+    }
+}
+
+fn handle_name_tag_added(
+    on_add: Trigger<OnAdd, NumberTag>,
+    mut commands: Commands,
+    number_tag_q: Query<&NumberTag>,
+) {
+    let number_tag = number_tag_q.get(on_add.entity()).unwrap();
+    commands
+        .entity(on_add.entity())
+        .insert(Node {
+            position_type: PositionType::Absolute,
+            top: Val::Px(5.),
+            left: Val::Px(5.),
+            ..default()
+        })
+        .with_child(Text::new(number_tag.0.to_string()));
 }
