@@ -21,9 +21,9 @@ pub struct NodeMove {
 const DELTA_AMOUNT: u8 = 10;
 
 impl NodeMove {
-    pub fn new(initial_position: Vec2, final_position: Vec2) -> Self {
+    pub fn from_delta(delta: Vec2) -> Self {
         Self {
-            delta: (final_position - initial_position) / DELTA_AMOUNT as f32,
+            delta: delta / DELTA_AMOUNT as f32,
             current_delta: DELTA_AMOUNT,
         }
     }

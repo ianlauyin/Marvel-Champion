@@ -83,6 +83,12 @@ pub fn find_card_belongs(
 }
 
 pub fn get_selectable_cards(deck_cards: &Vec<Card>) -> Vec<Card> {
+    let mut cards = get_selectable_aspect_cards(deck_cards);
+    remove_full_amount_cards(&mut cards, deck_cards);
+    cards
+}
+
+pub fn get_selectable_aspect_cards(deck_cards: &Vec<Card>) -> Vec<Card> {
     for card in deck_cards {
         let Ok(aspect) = card.get_aspect() else {
             continue;
@@ -93,4 +99,25 @@ pub fn get_selectable_cards(deck_cards: &Vec<Card>) -> Vec<Card> {
         }
     }
     return CardDatas::get_aspect_cards();
+}
+
+pub fn remove_full_amount_cards(selectable_cards: &mut Vec<Card>, deck_cards: &Vec<Card>) {
+    let mut hash_map: HashMap<String, u8> = HashMap::new();
+    for card in deck_cards {
+        let card_id = card.get_id();
+        let count = hash_map.entry(card_id).or_insert(0);
+        *count += 1;
+    }
+    for (card_id, amount) in hash_map.iter() {
+        let Some(index_op) = selectable_cards
+            .iter()
+            .position(|card| card.get_id() == *card_id)
+        else {
+            continue;
+        };
+        let card = selectable_cards.get(index_op).unwrap();
+        if *amount == card.get_card_amount_max().unwrap() {
+            selectable_cards.remove(index_op);
+        };
+    }
 }

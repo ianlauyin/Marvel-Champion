@@ -4,7 +4,7 @@ use crate::{
     features::{
         cards::Identity,
         game::state::GameState,
-        shared::{DisplayMethod, ListItem, MenuBuilder},
+        shared::{DisplayMethod, ListItem, MenuBuilder, Popup},
     },
     systems::{clean_up, AppState, Deck},
 };
@@ -93,11 +93,16 @@ fn handle_identity_button_interaction(
                 .iter()
                 .position(|selected_player| selected_player.identity == button.0);
             if let Some(index) = index_op {
-                println!("Hi");
                 selected_players.0.remove(index);
             } else {
+                println!("{}", selected_players.0.len());
+                if selected_players.0.len() >= 4 {
+                    commands.spawn(Popup::new(
+                        "You can only select up to 4 players.".to_string(),
+                    ));
+                    return;
+                }
                 commands.insert_resource(SelectedIdentity(button.0.clone()));
-                println!("Next ");
                 next_state.set(GameSelectorState::Deck);
             }
             return;

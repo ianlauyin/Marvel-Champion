@@ -44,9 +44,7 @@ pub struct MouseDragEvent {
 }
 
 #[derive(Event)]
-pub struct MouseDropEvent {
-    pub position: Vec2,
-}
+pub struct MouseDropEvent;
 
 const TIME_BOUNDARY: f32 = 0.1;
 
@@ -79,7 +77,6 @@ pub fn listen_mouse_click(
                 mouse_click_writer,
                 mouse_drop_writer,
                 &mut mouse_target,
-                cursor_position,
             );
             return;
         }
@@ -108,12 +105,11 @@ fn handle_released(
     mut mouse_click_writer: EventWriter<MouseShortClickEvent>,
     mut mouse_drop_writer: EventWriter<MouseDropEvent>,
     mouse_target: &mut MouseDragDropClick,
-    position: Vec2,
 ) {
     if mouse_target.stop_watch.elapsed_secs() < TIME_BOUNDARY {
         mouse_click_writer.send(MouseShortClickEvent(entity));
     } else {
-        mouse_drop_writer.send(MouseDropEvent { position });
+        mouse_drop_writer.send(MouseDropEvent);
     }
     mouse_target.stop_watch.pause();
     mouse_target.stop_watch.reset();
