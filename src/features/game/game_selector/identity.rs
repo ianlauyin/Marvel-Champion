@@ -1,4 +1,4 @@
-use bevy::{prelude::*, scene::ron::Number};
+use bevy::{input::common_conditions::input_just_pressed, prelude::*};
 
 use crate::{
     features::{
@@ -21,12 +21,22 @@ impl Plugin for GameSelectorIdentityPlugin {
             .add_systems(OnEnter(GameState::PreGame), spawn_identity_list)
             .add_systems(
                 Update,
-                (
-                    handle_identity_button_interaction,
-                    handle_selected_players_changed,
-                )
-                    .run_if(in_state(CURRENT_STATE)),
+                handle_selected_players_changed.run_if(in_state(CURRENT_STATE)),
             )
+            .add_systems(
+                Update,
+                handle_identity_button_interaction
+                    .run_if(in_state(CURRENT_STATE))
+                    .run_if(input_just_pressed(MouseButton::Left)),
+            )
+            .add_systems(
+                OnTransition {
+                    exited: GameSelectorState::Identity,
+                    entered: GameSelectorState::Villain,
+                },
+                clean_up::<GameIdentityList>,
+            )
+            .add_systems(OnExit(AppState::Game), clean_up::<GameIdentityList>)
             .add_observer(handle_name_tag_added);
     }
 }
@@ -73,12 +83,23 @@ fn spawn_identity_list(commands: Commands, asset_server: Res<AssetServer>) {
 fn handle_identity_button_interaction(
     mut commands: Commands,
     button_q: Query<(&Interaction, &GameIdentityButton)>,
+    mut selected_players: ResMut<SelectedPlayers>,
     mut next_state: ResMut<NextState<GameSelectorState>>,
 ) {
     for (interaction, button) in button_q.iter() {
         if *interaction == Interaction::Pressed {
-            commands.insert_resource(SelectedIdentity(button.0.clone()));
-            next_state.set(GameSelectorState::Deck);
+            let index_op = selected_players
+                .0
+                .iter()
+                .position(|selected_player| selected_player.identity == button.0);
+            if let Some(index) = index_op {
+                println!("Hi");
+                selected_players.0.remove(index);
+            } else {
+                commands.insert_resource(SelectedIdentity(button.0.clone()));
+                println!("Next ");
+                next_state.set(GameSelectorState::Deck);
+            }
             return;
         }
     }
@@ -95,19 +116,18 @@ fn handle_selected_players_changed(
 ) {
     if selected_players.is_changed() {
         for (entity, children, game_identity_button) in button_q.iter() {
+            for child in children.iter() {
+                let Ok(name_tag_entity) = name_tag_q.get(child.clone()) else {
+                    continue;
+                };
+                commands.entity(name_tag_entity).despawn_recursive();
+            }
             if let Some(index) = selected_players
                 .0
                 .iter()
                 .position(|selected_player| selected_player.identity == game_identity_button.0)
             {
                 commands.entity(entity).with_child(NumberTag(index + 1));
-            } else {
-                for child in children.iter() {
-                    let Ok(name_tag_entity) = name_tag_q.get(*child) else {
-                        continue;
-                    };
-                    commands.entity(name_tag_entity).despawn();
-                }
             }
         }
     }
