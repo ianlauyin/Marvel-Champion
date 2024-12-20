@@ -4,7 +4,7 @@ use bevy_pkv::PkvStore;
 use crate::{
     features::{
         cards::Identity,
-        shared::{DisplayMethod, ListItem, MenuBuilder},
+        shared::{ListBuilder, ListItem, MenuBuilder},
     },
     systems::{clean_up, Deck, DecksStorage},
 };
@@ -39,7 +39,7 @@ struct IdentityDeckList;
 struct DeckListButton(Deck);
 
 fn spawn_deck_list(
-    commands: Commands,
+    mut commands: Commands,
     pkv: ResMut<PkvStore>,
     selected_identity: Res<SelectedIdentity>,
 ) {
@@ -48,7 +48,7 @@ fn spawn_deck_list(
         identity: selected_identity.0.clone(),
     };
     let decks = deck_storage.get_decks();
-    let button_map: Vec<(DeckListButton, ListItem)> = decks
+    let list_map: Vec<(DeckListButton, ListItem)> = decks
         .iter()
         .map(|deck| {
             (
@@ -61,11 +61,12 @@ fn spawn_deck_list(
             )
         })
         .collect();
+
+    let content_child = ListBuilder(list_map).spawn(commands.reborrow());
     MenuBuilder {
         component: IdentityDeckList,
         previous_state: GameSelectorState::Identity,
-        list_items: button_map,
-        display_method: DisplayMethod::ButtonList,
+        content_child,
     }
     .spawn(commands);
 }

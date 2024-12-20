@@ -2,10 +2,10 @@ use bevy::prelude::*;
 
 use crate::features::shared::CustomButton;
 
-use super::{ListItem, ScrollingList};
+use super::ScrollingList;
 
 pub struct CardListBuilder<B: Bundle + Clone> {
-    pub button_map: Vec<(B, ListItem)>,
+    pub card_map: Vec<(B, ImageNode)>,
     pub card_size: (Val, Val),
     pub height: Val,
     pub columns: u16,
@@ -38,7 +38,7 @@ impl<B: Bundle + Clone> CardListBuilder<B> {
                     ))
                     .with_children(|list_div| {
                         // Items
-                        for (button_component, button_info) in self.button_map.clone() {
+                        for (button_component, image) in self.card_map.clone() {
                             list_div
                                 .spawn(Node {
                                     display: Display::Flex,
@@ -47,11 +47,9 @@ impl<B: Bundle + Clone> CardListBuilder<B> {
                                     ..default()
                                 })
                                 .with_children(|card_type_node| {
-                                    let ListItem { color, image, .. } = button_info;
                                     card_type_node.spawn((
                                         button_component,
                                         CustomButton {
-                                            color,
                                             image,
                                             size: self.card_size,
                                             with_border: false,

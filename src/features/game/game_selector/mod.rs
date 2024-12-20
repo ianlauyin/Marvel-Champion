@@ -1,4 +1,5 @@
 mod deck;
+mod encounter;
 mod identity;
 mod state;
 
@@ -12,6 +13,7 @@ impl Plugin for GameSelectorPlugin {
             state::GameSelectorStatePlugin,
             identity::GameSelectorIdentityPlugin,
             deck::GameSelectorDeckPlugin,
+            encounter::GameSelectorEncounterPlugin,
         ));
     }
 }

@@ -4,7 +4,7 @@ use crate::{
     features::{
         cards::ModularSet,
         collection::state::CollectionState,
-        shared::{DisplayMethod, ListItem, MenuBuilder},
+        shared::{ListBuilder, ListItem, MenuBuilder},
     },
     systems::{clean_up, LoadAsset},
 };
@@ -27,9 +27,9 @@ impl Plugin for CollectionModularListPlugin {
 #[derive(Component, Clone)]
 struct ModularList;
 
-fn spawn_modular_list(commands: Commands, asset_server: Res<AssetServer>) {
+fn spawn_modular_list(mut commands: Commands, asset_server: Res<AssetServer>) {
     let modular_sets = ModularSet::get_all();
-    let button_map = modular_sets
+    let list_map = modular_sets
         .iter()
         .map(|modular_set| {
             (
@@ -43,11 +43,11 @@ fn spawn_modular_list(commands: Commands, asset_server: Res<AssetServer>) {
             )
         })
         .collect();
+    let content_child = ListBuilder(list_map).spawn(commands.reborrow());
     MenuBuilder {
         component: ModularList,
         previous_state: CollectionState::Menu,
-        list_items: button_map,
-        display_method: DisplayMethod::ButtonList,
+        content_child,
     }
     .spawn(commands);
 }

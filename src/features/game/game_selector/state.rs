@@ -8,7 +8,7 @@ pub enum GameSelectorState {
     #[default]
     Identity,
     Deck,
-    Villain,
+    Encounter,
 }
 
 pub struct GameSelectorStatePlugin;

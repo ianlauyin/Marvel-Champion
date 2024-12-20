@@ -4,7 +4,7 @@ use crate::{
     features::{
         cards::CardDatas,
         collection::state::CollectionState,
-        shared::{CardDetailButton, DisplayMethod, ListItem, MenuBuilder},
+        shared::{CardDetailButton, CardListBuilder, MenuBuilder},
     },
     systems::clean_up,
 };
@@ -29,24 +29,28 @@ impl Plugin for CollectionLeadershipCardListPlugin {
 #[derive(Component, Clone)]
 struct LeadershipCardList;
 
-fn spawn_leadership_cards(commands: Commands, asset_server: Res<AssetServer>) {
-    let list_items = CardDatas::get_leadership_cards()
+fn spawn_leadership_cards(mut commands: Commands, asset_server: Res<AssetServer>) {
+    let card_map = CardDatas::get_leadership_cards()
         .iter()
         .map(|card| {
             (
                 CardDetailButton(card.clone()),
-                ListItem {
-                    image: ImageNode::new(asset_server.load(card.get_image_path())),
-                    ..default()
-                },
+                ImageNode::new(asset_server.load(card.get_image_path())),
             )
         })
         .collect();
+
+    let content_child = CardListBuilder {
+        card_map,
+        card_size: (Val::Px(128.), Val::Px(178.)),
+        height: Val::Percent(90.),
+        columns: 8,
+    }
+    .spawn(commands.reborrow());
     MenuBuilder {
         component: LeadershipCardList,
         previous_state: CollectionState::Menu,
-        list_items,
-        display_method: DisplayMethod::CardList,
+        content_child,
     }
     .spawn(commands);
 }

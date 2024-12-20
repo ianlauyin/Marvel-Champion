@@ -4,7 +4,7 @@ use crate::{
     features::{
         cards::Identity,
         game::state::GameState,
-        shared::{DisplayMethod, ListItem, MenuBuilder, Popup},
+        shared::{ListBuilder, ListItem, MenuBuilder, Popup},
     },
     systems::{clean_up, AppState, Deck},
 };
@@ -32,7 +32,7 @@ impl Plugin for GameSelectorIdentityPlugin {
             .add_systems(
                 OnTransition {
                     exited: GameSelectorState::Identity,
-                    entered: GameSelectorState::Villain,
+                    entered: GameSelectorState::Encounter,
                 },
                 clean_up::<GameIdentityList>,
             )
@@ -55,9 +55,9 @@ struct GameIdentityList;
 #[derive(Component, Clone)]
 struct GameIdentityButton(Identity);
 
-fn spawn_identity_list(commands: Commands, asset_server: Res<AssetServer>) {
+fn spawn_identity_list(mut commands: Commands, asset_server: Res<AssetServer>) {
     let identities = Identity::get_all();
-    let button_map = identities
+    let list_map = identities
         .iter()
         .map(|identity| {
             (
@@ -71,11 +71,12 @@ fn spawn_identity_list(commands: Commands, asset_server: Res<AssetServer>) {
             )
         })
         .collect();
+
+    let content_child = ListBuilder(list_map).spawn(commands.reborrow());
     MenuBuilder {
         component: GameIdentityList,
         previous_state: AppState::MainMenu,
-        list_items: button_map,
-        display_method: DisplayMethod::ButtonList,
+        content_child,
     }
     .spawn(commands);
 }

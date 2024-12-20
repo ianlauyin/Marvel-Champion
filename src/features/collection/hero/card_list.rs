@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use crate::{
     features::{
         cards::Identity,
-        shared::{CardDetailButton, DisplayMethod, ListItem, MenuBuilder},
+        shared::{CardDetailButton, CardListBuilder, MenuBuilder},
     },
     systems::clean_up,
 };
@@ -26,29 +26,33 @@ pub struct CollectionHeroIdentity(pub Identity);
 struct HeroCardList;
 
 fn spawn_hero_cards(
-    commands: Commands,
+    mut commands: Commands,
     asset_server: Res<AssetServer>,
     identity: Res<CollectionHeroIdentity>,
 ) {
-    let list_items = identity
+    let card_map = identity
         .0
         .get_cards()
         .iter()
         .map(|card| {
             (
                 CardDetailButton(card.clone()),
-                ListItem {
-                    image: ImageNode::new(asset_server.load(card.get_image_path())),
-                    ..default()
-                },
+                ImageNode::new(asset_server.load(card.get_image_path())),
             )
         })
         .collect();
+
+    let content_child = CardListBuilder {
+        card_map,
+        card_size: (Val::Px(128.), Val::Px(178.)),
+        height: Val::Percent(90.),
+        columns: 8,
+    }
+    .spawn(commands.reborrow());
     MenuBuilder {
         component: HeroCardList,
         previous_state: CollectionHeroState::List,
-        list_items,
-        display_method: DisplayMethod::CardList,
+        content_child,
     }
     .spawn(commands);
 }

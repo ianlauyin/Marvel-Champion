@@ -1,44 +1,30 @@
 use bevy::{prelude::*, state::state::FreelyMutableState};
 
-use crate::features::shared::{previous_button::PreviousButton, CardListBuilder};
-
-use super::spawn_list;
-
-#[derive(Default, Clone)]
-pub struct ListItem {
-    pub text: String,
-    pub color: Color,
-    pub image: ImageNode,
-}
-
-pub enum DisplayMethod {
-    ButtonList,
-    CardList,
-}
+use crate::features::shared::previous_button::PreviousButton;
 
 /// Reminder: Add PreviousButtonPlugin::<State>::default() in state plugin
-pub struct MenuBuilder<T: Component, S: States + FreelyMutableState, B: Component> {
+pub struct MenuBuilder<T: Component, S: States + FreelyMutableState> {
     pub component: T,
     pub previous_state: S,
-    pub list_items: Vec<(B, ListItem)>,
-    pub display_method: DisplayMethod,
+    pub content_child: Entity,
 }
 
-impl<T: Component + Clone, S: States + FreelyMutableState, B: Component + Clone>
-    MenuBuilder<T, S, B>
-{
+impl<T: Component + Clone, S: States + FreelyMutableState> MenuBuilder<T, S> {
     pub fn spawn(&self, mut commands: Commands) -> Entity {
         let header = spawn_header(commands.reborrow(), self.previous_state.clone());
-        let list = match self.display_method {
-            DisplayMethod::ButtonList => spawn_list(commands.reborrow(), self.list_items.clone()),
-            DisplayMethod::CardList => CardListBuilder {
-                button_map: self.list_items.clone(),
-                card_size: (Val::Px(128.), Val::Px(178.)),
-                height: Val::Percent(90.),
-                columns: 8,
-            }
-            .spawn(commands.reborrow()),
-        };
+        // let list = match self.display_method {
+        //     DisplayMethod::ButtonList => spawn_list(commands.reborrow(), self.list_items.clone()),
+        // DisplayMethod::CardList => CardListBuilder {
+        //     button_map: self.list_items.clone(),
+        //     card_size: (Val::Px(128.), Val::Px(178.)),
+        //     height: Val::Percent(90.),
+        //     columns: 8,
+        // }
+        // .spawn(commands.reborrow()),
+        //     DisplayMethod::TextList => {
+        //         spawn_double_list(commands.reborrow(), self.list_items.clone())
+        //     }
+        // };
         let mut menu_frame = commands.spawn((
             self.component.clone(),
             Node {
@@ -54,7 +40,8 @@ impl<T: Component + Clone, S: States + FreelyMutableState, B: Component + Clone>
             BorderRadius::all(Val::Px(10.)),
             BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
         ));
-        menu_frame.add_children(&[header, list]).id()
+
+        menu_frame.add_children(&[header, self.content_child]).id()
     }
 }
 

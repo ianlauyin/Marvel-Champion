@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use crate::{
     features::{
         cards::CardDatas,
-        shared::{DisplayMethod, ListItem, MenuBuilder},
+        shared::{ListBuilder, ListItem, MenuBuilder},
     },
     systems::{clean_up, AppState, LoadAsset},
 };
@@ -29,8 +29,8 @@ struct CardTypeMenu;
 #[derive(Component, Clone)]
 struct CardTypeButton(CollectionState);
 
-fn spawn_card_type_menu(commands: Commands) {
-    let button_map = vec![
+fn spawn_card_type_menu(mut commands: Commands) {
+    let list_map = vec![
         (
             CardTypeButton(CollectionState::Hero),
             ListItem {
@@ -104,11 +104,11 @@ fn spawn_card_type_menu(commands: Commands) {
             },
         ),
     ];
+    let content_child = ListBuilder(list_map).spawn(commands.reborrow());
     MenuBuilder {
         component: CardTypeMenu,
         previous_state: AppState::MainMenu,
-        list_items: button_map,
-        display_method: DisplayMethod::ButtonList,
+        content_child,
     }
     .spawn(commands);
 }

@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use crate::{
     features::{
         cards::Identity,
-        shared::{DisplayMethod, ListItem, MenuBuilder},
+        shared::{ListBuilder, ListItem, MenuBuilder},
     },
     systems::{clean_up, AppState, LoadAsset},
 };
@@ -31,9 +31,9 @@ struct IdentityList;
 #[derive(Component, Clone)]
 struct IdentityListButton(Identity);
 
-fn spawn_hero_list(commands: Commands, asset_server: Res<AssetServer>) {
+fn spawn_hero_list(mut commands: Commands, asset_server: Res<AssetServer>) {
     let identities = Identity::get_all();
-    let button_map = identities
+    let list_map = identities
         .iter()
         .map(|identity| {
             (
@@ -47,11 +47,11 @@ fn spawn_hero_list(commands: Commands, asset_server: Res<AssetServer>) {
             )
         })
         .collect();
+    let content_child = ListBuilder(list_map).spawn(commands.reborrow());
     MenuBuilder {
         component: IdentityList,
         previous_state: AppState::MainMenu,
-        list_items: button_map,
-        display_method: DisplayMethod::ButtonList,
+        content_child,
     }
     .spawn(commands);
 }

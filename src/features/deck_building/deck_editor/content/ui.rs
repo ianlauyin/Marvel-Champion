@@ -11,7 +11,7 @@ use crate::{
     utils::get_card_amount,
 };
 
-use super::utils::{convert_card_into_button_map, get_aspect_names, get_selectable_cards};
+use super::utils::{convert_card_into_card_map, get_aspect_names, get_selectable_cards};
 
 const CURRENT_STATE: DeckBuildingState = DeckBuildingState::DeckBuilding;
 pub struct DeckEditorContentUIPlugin;
@@ -73,9 +73,9 @@ fn spawn_deck_card_list(
     deck_cards: &Vec<Card>,
     loaded_asset: &Res<LoadedAssetMap>,
 ) -> Entity {
-    let list_items = convert_card_into_button_map(CardListItem::Deck, deck_cards, &loaded_asset);
+    let card_map = convert_card_into_card_map(CardListItem::Deck, deck_cards, &loaded_asset);
     let list = CardListBuilder {
-        button_map: list_items.clone(),
+        card_map,
         card_size: (
             Val::Px(CARD_SIZE.truncate().x),
             Val::Px(CARD_SIZE.truncate().y),
@@ -145,9 +145,9 @@ fn spawn_selection_list(
     loaded_asset: &Res<LoadedAssetMap>,
 ) -> Entity {
     let cards = get_selectable_cards(deck_cards);
-    let list_items = convert_card_into_button_map(CardListItem::Selection, &cards, loaded_asset);
+    let list_items = convert_card_into_card_map(CardListItem::Selection, &cards, loaded_asset);
     let list = CardListBuilder {
-        button_map: list_items,
+        card_map: list_items,
         card_size: (
             Val::Px(CARD_SIZE.truncate().x),
             Val::Px(CARD_SIZE.truncate().y),
@@ -209,7 +209,7 @@ fn handle_container_change(
     belongs: CardListItem,
 ) {
     let deck_list = CardListBuilder {
-        button_map: convert_card_into_button_map(belongs, &cards, loaded_asset),
+        card_map: convert_card_into_card_map(belongs, &cards, loaded_asset),
         card_size: (
             Val::Px(CARD_SIZE.truncate().x),
             Val::Px(CARD_SIZE.truncate().y),

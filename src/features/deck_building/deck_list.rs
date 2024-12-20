@@ -4,7 +4,7 @@ use bevy_pkv::PkvStore;
 use crate::{
     features::{
         cards::{CardDatas, Identity},
-        shared::{DisplayMethod, ListItem, MenuBuilder},
+        shared::{ListBuilder, ListItem, MenuBuilder},
     },
     systems::{clean_up, DecksStorage, LoadAsset},
 };
@@ -35,13 +35,13 @@ struct DeckList;
 #[derive(Component, Clone)]
 struct DeckListButton(EditingDeck);
 
-fn spawn_deck_list(commands: Commands, pkv: ResMut<PkvStore>, identity: Res<EditIdentity>) {
+fn spawn_deck_list(mut commands: Commands, pkv: ResMut<PkvStore>, identity: Res<EditIdentity>) {
     let mut deck_storage = DecksStorage {
         pkv,
         identity: identity.0.clone(),
     };
     let decks = deck_storage.get_decks();
-    let mut button_map: Vec<(DeckListButton, ListItem)> = decks
+    let mut list_map: Vec<(DeckListButton, ListItem)> = decks
         .iter()
         .enumerate()
         .map(|(index, deck)| {
@@ -58,7 +58,7 @@ fn spawn_deck_list(commands: Commands, pkv: ResMut<PkvStore>, identity: Res<Edit
             )
         })
         .collect();
-    button_map.push((
+    list_map.push((
         DeckListButton(EditingDeck::new()),
         ListItem {
             text: "+".to_string(),
@@ -66,11 +66,12 @@ fn spawn_deck_list(commands: Commands, pkv: ResMut<PkvStore>, identity: Res<Edit
             ..default()
         },
     ));
+
+    let content_child = ListBuilder(list_map).spawn(commands.reborrow());
     MenuBuilder {
         component: DeckList,
         previous_state: DeckBuildingState::SelectIdentity,
-        list_items: button_map,
-        display_method: DisplayMethod::ButtonList,
+        content_child,
     }
     .spawn(commands);
 }

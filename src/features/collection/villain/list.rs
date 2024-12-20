@@ -4,7 +4,7 @@ use crate::{
     features::{
         cards::Villain,
         collection::state::CollectionState,
-        shared::{DisplayMethod, ListItem, MenuBuilder},
+        shared::{ListBuilder, ListItem, MenuBuilder},
     },
     systems::{clean_up, LoadAsset},
 };
@@ -27,9 +27,9 @@ impl Plugin for CollectionVillainListPlugin {
 #[derive(Component, Clone)]
 struct VillainList;
 
-fn spawn_villain_list(commands: Commands, asset_server: Res<AssetServer>) {
+fn spawn_villain_list(mut commands: Commands, asset_server: Res<AssetServer>) {
     let villains = Villain::get_all();
-    let button_map = villains
+    let list_map = villains
         .iter()
         .map(|villain| {
             (
@@ -43,11 +43,11 @@ fn spawn_villain_list(commands: Commands, asset_server: Res<AssetServer>) {
             )
         })
         .collect();
+    let content_child = ListBuilder(list_map).spawn(commands.reborrow());
     MenuBuilder {
         component: VillainList,
         previous_state: CollectionState::Menu,
-        list_items: button_map,
-        display_method: DisplayMethod::ButtonList,
+        content_child,
     }
     .spawn(commands);
 }

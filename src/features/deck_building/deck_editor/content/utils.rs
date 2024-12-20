@@ -19,11 +19,11 @@ pub struct DragDropCard {
     card: Card,
 }
 
-pub fn convert_card_into_button_map(
+pub fn convert_card_into_card_map(
     belongs: CardListItem,
     cards: &Vec<Card>,
     loaded_asset: &Res<LoadedAssetMap>,
-) -> Vec<(DragDropCard, ListItem)> {
+) -> Vec<(DragDropCard, ImageNode)> {
     cards
         .iter()
         .map(|card| {
@@ -33,11 +33,7 @@ pub fn convert_card_into_button_map(
                     interaction: MouseDragDropClick::default(),
                     card: card.clone(),
                 },
-                ListItem {
-                    text: "".to_string(),
-                    color: Color::NONE,
-                    image: ImageNode::new(loaded_asset.0.get(&card.get_id()).unwrap().clone()),
-                },
+                ImageNode::new(loaded_asset.0.get(&card.get_id()).unwrap().clone()),
             )
         })
         .collect()
