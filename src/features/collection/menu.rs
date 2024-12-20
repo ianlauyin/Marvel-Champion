@@ -106,6 +106,7 @@ fn spawn_card_type_menu(mut commands: Commands) {
     ];
     let content_child = ListBuilder(list_map).spawn(commands.reborrow());
     MenuBuilder {
+        next_state: None::<AppState>,
         component: CardTypeMenu,
         previous_state: AppState::MainMenu,
         content_child,

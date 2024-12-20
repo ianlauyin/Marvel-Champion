@@ -64,6 +64,7 @@ fn spawn_deck_list(
 
     let content_child = ListBuilder(list_map).spawn(commands.reborrow());
     MenuBuilder {
+        next_state: None::<GameSelectorState>,
         component: IdentityDeckList,
         previous_state: GameSelectorState::Identity,
         content_child,

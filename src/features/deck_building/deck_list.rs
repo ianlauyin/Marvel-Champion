@@ -69,6 +69,7 @@ fn spawn_deck_list(mut commands: Commands, pkv: ResMut<PkvStore>, identity: Res<
 
     let content_child = ListBuilder(list_map).spawn(commands.reborrow());
     MenuBuilder {
+        next_state: None::<DeckBuildingState>,
         component: DeckList,
         previous_state: DeckBuildingState::SelectIdentity,
         content_child,

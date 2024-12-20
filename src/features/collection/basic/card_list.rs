@@ -4,7 +4,7 @@ use crate::{
     features::{
         cards::CardDatas,
         collection::state::CollectionState,
-        shared::{CardDetailButton, CardListBuilder, ListItem, MenuBuilder},
+        shared::{CardDetailButton, CardListBuilder, MenuBuilder},
     },
     systems::clean_up,
 };
@@ -45,6 +45,7 @@ fn spawn_basic_cards(mut commands: Commands, asset_server: Res<AssetServer>) {
     }
     .spawn(commands.reborrow());
     MenuBuilder {
+        next_state: None::<CollectionState>,
         component: BasicCardList,
         previous_state: CollectionState::Menu,
         content_child,

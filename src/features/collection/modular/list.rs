@@ -45,6 +45,7 @@ fn spawn_modular_list(mut commands: Commands, asset_server: Res<AssetServer>) {
         .collect();
     let content_child = ListBuilder(list_map).spawn(commands.reborrow());
     MenuBuilder {
+        next_state: None::<CollectionState>,
         component: ModularList,
         previous_state: CollectionState::Menu,
         content_child,

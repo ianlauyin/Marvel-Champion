@@ -53,6 +53,7 @@ fn spawn_modular_cards(
     }
     .spawn(commands.reborrow());
     MenuBuilder {
+        next_state: None::<CollectionModularState>,
         component: ModularCardList,
         previous_state: CollectionModularState::List,
         content_child,

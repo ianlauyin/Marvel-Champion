@@ -74,6 +74,7 @@ fn spawn_identity_list(mut commands: Commands, asset_server: Res<AssetServer>) {
 
     let content_child = ListBuilder(list_map).spawn(commands.reborrow());
     MenuBuilder {
+        next_state: Some(GameSelectorState::Encounter),
         component: GameIdentityList,
         previous_state: AppState::MainMenu,
         content_child,

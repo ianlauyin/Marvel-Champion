@@ -50,6 +50,7 @@ fn spawn_hero_cards(
     }
     .spawn(commands.reborrow());
     MenuBuilder {
+        next_state: None::<CollectionHeroState>,
         component: HeroCardList,
         previous_state: CollectionHeroState::List,
         content_child,

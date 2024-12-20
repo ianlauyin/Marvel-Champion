@@ -42,6 +42,7 @@ fn spawn_pool_cards(mut commands: Commands, asset_server: Res<AssetServer>) {
     }
     .spawn(commands.reborrow());
     MenuBuilder {
+        next_state: None::<CollectionState>,
         component: PoolCardList,
         previous_state: CollectionState::Menu,
         content_child,

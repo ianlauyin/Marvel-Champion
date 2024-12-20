@@ -49,6 +49,7 @@ fn spawn_hero_list(mut commands: Commands, asset_server: Res<AssetServer>) {
         .collect();
     let content_child = ListBuilder(list_map).spawn(commands.reborrow());
     MenuBuilder {
+        next_state: None::<AppState>,
         component: IdentityList,
         previous_state: AppState::MainMenu,
         content_child,

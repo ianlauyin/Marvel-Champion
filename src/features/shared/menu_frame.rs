@@ -2,29 +2,29 @@ use bevy::{prelude::*, state::state::FreelyMutableState};
 
 use crate::features::shared::previous_button::PreviousButton;
 
+use super::NextButton;
+
 /// Reminder: Add PreviousButtonPlugin::<State>::default() in state plugin
-pub struct MenuBuilder<T: Component, S: States + FreelyMutableState> {
+pub struct MenuBuilder<
+    T: Component,
+    NS: States + FreelyMutableState,
+    S: States + FreelyMutableState,
+> {
+    pub next_state: Option<NS>,
     pub component: T,
     pub previous_state: S,
     pub content_child: Entity,
 }
 
-impl<T: Component + Clone, S: States + FreelyMutableState> MenuBuilder<T, S> {
+impl<T: Component + Clone, S: States + FreelyMutableState, NS: States + FreelyMutableState>
+    MenuBuilder<T, NS, S>
+{
     pub fn spawn(&self, mut commands: Commands) -> Entity {
-        let header = spawn_header(commands.reborrow(), self.previous_state.clone());
-        // let list = match self.display_method {
-        //     DisplayMethod::ButtonList => spawn_list(commands.reborrow(), self.list_items.clone()),
-        // DisplayMethod::CardList => CardListBuilder {
-        //     button_map: self.list_items.clone(),
-        //     card_size: (Val::Px(128.), Val::Px(178.)),
-        //     height: Val::Percent(90.),
-        //     columns: 8,
-        // }
-        // .spawn(commands.reborrow()),
-        //     DisplayMethod::TextList => {
-        //         spawn_double_list(commands.reborrow(), self.list_items.clone())
-        //     }
-        // };
+        let header = spawn_header(
+            commands.reborrow(),
+            self.previous_state.clone(),
+            self.next_state.clone(),
+        );
         let mut menu_frame = commands.spawn((
             self.component.clone(),
             Node {
@@ -45,23 +45,24 @@ impl<T: Component + Clone, S: States + FreelyMutableState> MenuBuilder<T, S> {
     }
 }
 
-fn spawn_header<S: States + FreelyMutableState>(
+fn spawn_header<S: States + FreelyMutableState, NS: States + FreelyMutableState>(
     mut commands: Commands,
     previous_state: S,
+    next_state: Option<NS>,
 ) -> Entity {
     commands
         .spawn(Node {
             height: Val::Percent(10.),
-            padding: UiRect {
-                left: Val::Px(10.),
-                top: Val::Px(10.),
-                bottom: Val::Px(10.),
-                ..default()
-            },
+            display: Display::Flex,
+            justify_content: JustifyContent::SpaceBetween,
+            padding: UiRect::all(Val::Px(10.)),
             ..default()
         })
         .with_children(|header| {
             header.spawn(PreviousButton(previous_state));
+            if let Some(next_state) = next_state {
+                header.spawn(NextButton(next_state));
+            };
         })
         .id()
 }

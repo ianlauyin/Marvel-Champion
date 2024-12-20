@@ -53,6 +53,7 @@ fn spawn_villain_cards(
     }
     .spawn(commands.reborrow());
     MenuBuilder {
+        next_state: None::<CollectionVillainState>,
         component: VillainCardList,
         previous_state: CollectionVillainState::List,
         content_child,
