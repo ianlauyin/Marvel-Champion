@@ -2,7 +2,7 @@ use bevy::prelude::Component;
 
 use super::{data::modular, Card};
 
-#[derive(Component, Clone)]
+#[derive(Component, Clone, Eq, PartialEq, Debug)]
 pub enum ModularSet {
     Standard,
     Expert,

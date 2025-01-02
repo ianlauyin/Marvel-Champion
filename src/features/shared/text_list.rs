@@ -15,6 +15,7 @@ impl<B: Component + Clone> TextListBuilder<B> {
         // Scrolling List Container
         commands
             .spawn(Node {
+                width: Val::Percent(100.),
                 height: Val::Percent(90.),
                 align_self: AlignSelf::Stretch,
                 flex_direction: FlexDirection::Column,
@@ -43,10 +44,13 @@ impl<B: Component + Clone> TextListBuilder<B> {
                                     item_component.clone(),
                                     Node {
                                         padding: UiRect::all(Val::Px(10.)),
+                                        border: UiRect::all(Val::Px(1.)),
                                         ..default()
                                     },
                                     BackgroundColor::from(*color),
-                                    BorderColor::from(Color::BLACK),
+                                    BorderRadius::all(Val::Px(5.)),
+                                    BorderColor::from(Color::NONE),
+                                    Interaction::default(),
                                 ))
                                 .with_child(Text::new(text.clone()));
                         }

@@ -36,6 +36,13 @@ impl Plugin for GameSelectorIdentityPlugin {
                 },
                 clean_up::<GameIdentityList>,
             )
+            .add_systems(
+                OnTransition {
+                    exited: GameSelectorState::Encounter,
+                    entered: GameSelectorState::Identity,
+                },
+                (spawn_identity_list, handle_selected_players_to_number_tag).chain(),
+            )
             .add_systems(OnExit(AppState::Game), clean_up::<GameIdentityList>)
             .add_observer(handle_name_tag_added);
     }
@@ -71,7 +78,6 @@ fn spawn_identity_list(mut commands: Commands, asset_server: Res<AssetServer>) {
             )
         })
         .collect();
-
     let content_child = ListBuilder(list_map).spawn(commands.reborrow());
     MenuBuilder {
         next_state: Some(GameSelectorState::Encounter),
@@ -97,7 +103,6 @@ fn handle_identity_button_interaction(
             if let Some(index) = index_op {
                 selected_players.0.remove(index);
             } else {
-                println!("{}", selected_players.0.len());
                 if selected_players.0.len() >= 4 {
                     commands.spawn(Popup::new(
                         "You can only select up to 4 players.".to_string(),
@@ -116,26 +121,35 @@ fn handle_identity_button_interaction(
 struct NumberTag(usize);
 
 fn handle_selected_players_changed(
-    mut commands: Commands,
+    commands: Commands,
     selected_players: Res<SelectedPlayers>,
     button_q: Query<(Entity, &Children, &GameIdentityButton)>,
     name_tag_q: Query<Entity, With<NumberTag>>,
 ) {
     if selected_players.is_changed() {
-        for (entity, children, game_identity_button) in button_q.iter() {
-            for child in children.iter() {
-                let Ok(name_tag_entity) = name_tag_q.get(child.clone()) else {
-                    continue;
-                };
-                commands.entity(name_tag_entity).despawn_recursive();
-            }
-            if let Some(index) = selected_players
-                .0
-                .iter()
-                .position(|selected_player| selected_player.identity == game_identity_button.0)
-            {
-                commands.entity(entity).with_child(NumberTag(index + 1));
-            }
+        handle_selected_players_to_number_tag(commands, selected_players, button_q, name_tag_q);
+    }
+}
+
+fn handle_selected_players_to_number_tag(
+    mut commands: Commands,
+    selected_players: Res<SelectedPlayers>,
+    button_q: Query<(Entity, &Children, &GameIdentityButton)>,
+    name_tag_q: Query<Entity, With<NumberTag>>,
+) {
+    for (entity, children, game_identity_button) in button_q.iter() {
+        for child in children.iter() {
+            let Ok(name_tag_entity) = name_tag_q.get(child.clone()) else {
+                continue;
+            };
+            commands.entity(name_tag_entity).despawn_recursive();
+        }
+        if let Some(index) = selected_players
+            .0
+            .iter()
+            .position(|selected_player| selected_player.identity == game_identity_button.0)
+        {
+            commands.entity(entity).with_child(NumberTag(index + 1));
         }
     }
 }

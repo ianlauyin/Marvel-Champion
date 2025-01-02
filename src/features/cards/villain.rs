@@ -5,7 +5,7 @@ use super::{
     Card,
 };
 
-#[derive(Component, Clone)]
+#[derive(Component, Clone, Eq, PartialEq)]
 pub enum Villain {
     CoreRhino,
     CoreKlaw,
