@@ -1,17 +1,15 @@
-use std::collections::HashSet;
-
 use bevy::{input::common_conditions::input_just_pressed, prelude::*};
 
 use crate::{
     features::{
         cards::{ModularSet, Villain},
         game::state::GameState,
-        shared::{MenuBuilder, TextListBuilder, TextListItem},
+        shared::{MenuBuilder, NextButton, Popup, TextListBuilder, TextListItem},
     },
     systems::clean_up,
 };
 
-use super::state::GameSelectorState;
+use super::{identity::SelectedPlayers, state::GameSelectorState};
 
 pub struct GameSelectorEncounterPlugin;
 
@@ -19,19 +17,25 @@ const CURRENT_STATE: GameSelectorState = GameSelectorState::Encounter;
 
 impl Plugin for GameSelectorEncounterPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<SelectedEncounterSet>()
-            .add_systems(OnEnter(CURRENT_STATE), spawn_encounter_list)
-            .add_systems(
-                Update,
-                (
-                    handle_villain_item_interaction,
-                    handle_modular_set_item_interaction,
-                )
-                    .run_if(in_state(CURRENT_STATE))
-                    .run_if(input_just_pressed(MouseButton::Left)),
+        app.insert_resource(SelectedEncounterSet {
+            villain: Some(Villain::CoreRhino),
+            modular_set: vec![ModularSet::Standard],
+        })
+        .add_systems(OnEnter(CURRENT_STATE), spawn_encounter_list)
+        .add_systems(
+            Update,
+            (
+                handle_villain_item_interaction,
+                handle_modular_set_item_interaction,
             )
-            .add_systems(Update, handle_ui_change)
-            .add_systems(OnExit(CURRENT_STATE), clean_up::<EncounterList>);
+                .run_if(in_state(CURRENT_STATE))
+                .run_if(input_just_pressed(MouseButton::Left)),
+        )
+        .add_systems(
+            Update,
+            (handle_ui_change, handle_next_state).run_if(in_state(CURRENT_STATE)),
+        )
+        .add_systems(OnExit(CURRENT_STATE), clean_up::<EncounterList>);
     }
 }
 
@@ -57,7 +61,7 @@ fn spawn_encounter_list(mut commands: Commands) {
         .id();
 
     MenuBuilder {
-        next_state: None::<GameState>,
+        next_state: Some(GameState::InGame),
         component: EncounterList,
         previous_state: GameSelectorState::Identity,
         content_child,
@@ -171,4 +175,56 @@ fn handle_ui_change(
             }
         }
     }
+}
+
+fn handle_next_state(
+    mut commands: Commands,
+    next_button_q: Query<(&Interaction, &NextButton<GameState>)>,
+    mut next_state: ResMut<NextState<GameState>>,
+    selected_encounter_set: Res<SelectedEncounterSet>,
+    selected_players: Res<SelectedPlayers>,
+) {
+    let Ok((interaction, next_button)) = next_button_q.get_single() else {
+        warn!("NextButton<GameState> not found");
+        return;
+    };
+    if *interaction == Interaction::Pressed {
+        if let Err(message) = validate_resource(selected_encounter_set, selected_players) {
+            commands.spawn(Popup::new(message));
+            return;
+        }
+        next_state.set(next_button.0.clone());
+    }
+}
+
+fn validate_resource(
+    selected_encounter_set: Res<SelectedEncounterSet>,
+    selected_players: Res<SelectedPlayers>,
+) -> Result<(), String> {
+    if selected_players.0.is_empty() {
+        return Err("You must select at least 1 player.".to_string());
+    }
+    let Some(ref villain) = selected_encounter_set.villain else {
+        return Err("You must select only one villain.".to_string());
+    };
+    if selected_encounter_set.modular_set.is_empty() {
+        return Err("You must select at least 1 modular set.".to_string());
+    }
+    if !selected_encounter_set
+        .modular_set
+        .contains(&ModularSet::Standard)
+    {
+        return Err("You must select the standard modular set.".to_string());
+    }
+    let modular_for_check = selected_encounter_set
+        .modular_set
+        .iter()
+        .filter(|modular_set| ![ModularSet::Standard, ModularSet::Expert].contains(modular_set));
+    if modular_for_check.count() != villain.get_encounter_set_numbers() {
+        return Err(format!(
+            "You must only select {} modular set(s). (Standard and Expert not included)",
+            villain.get_encounter_set_numbers()
+        ));
+    }
+    Ok(())
 }

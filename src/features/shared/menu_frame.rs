@@ -5,6 +5,7 @@ use crate::features::shared::previous_button::PreviousButton;
 use super::NextButton;
 
 /// Reminder: Add PreviousButtonPlugin::<State>::default() in state plugin
+/// Reminder: Add NextButtonPlugin::<State>::default() in state plugin
 pub struct MenuBuilder<
     T: Component,
     NS: States + FreelyMutableState,

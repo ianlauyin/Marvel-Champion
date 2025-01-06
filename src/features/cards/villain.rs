@@ -51,4 +51,10 @@ impl Villain {
             Villain::CoreUltron => core_ultron::get_all(),
         }
     }
+
+    pub fn get_encounter_set_numbers(&self) -> usize {
+        match *self {
+            _ => 1,
+        }
+    }
 }

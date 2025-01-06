@@ -10,18 +10,33 @@ const BUTTON_SIZE: (Val, Val) = (Val::Px(50.), Val::Px(50.));
 #[derive(Component)]
 pub struct NextButton<S: FreelyMutableState>(pub S);
 
-pub struct NextButtonPlugin<S>(PhantomData<S>);
+pub struct NextButtonPlugin<S> {
+    state: PhantomData<S>,
+    with_interaction: bool,
+}
 
-impl<S> Default for NextButtonPlugin<S> {
-    fn default() -> Self {
-        Self(PhantomData)
+impl<S> NextButtonPlugin<S> {
+    pub fn default() -> Self {
+        Self {
+            state: PhantomData,
+            with_interaction: true,
+        }
+    }
+
+    pub fn without_interaction() -> Self {
+        Self {
+            state: PhantomData,
+            with_interaction: false,
+        }
     }
 }
 
 impl<S: FreelyMutableState> Plugin for NextButtonPlugin<S> {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, handle_next_interaction::<S>)
-            .add_observer(handle_next_button_spawn::<S>);
+        app.add_observer(handle_next_button_spawn::<S>);
+        if self.with_interaction {
+            app.add_systems(Update, handle_next_interaction::<S>);
+        }
     }
 }
 
