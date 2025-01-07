@@ -1,5 +1,6 @@
 mod game_selector;
 mod state;
+mod in_game;
 
 use bevy::prelude::*;
 

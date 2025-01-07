@@ -70,9 +70,6 @@ fn spawn_encounter_list(mut commands: Commands) {
 }
 
 #[derive(Component, Clone)]
-struct VillainList;
-
-#[derive(Component, Clone)]
 struct VillainItem(Villain);
 
 fn spawn_villlain_list(mut commands: Commands) -> Entity {
@@ -93,9 +90,6 @@ fn spawn_villlain_list(mut commands: Commands) -> Entity {
 
     TextListBuilder(list_map).spawn(commands.reborrow())
 }
-
-#[derive(Component, Clone)]
-struct ModularSetList;
 
 #[derive(Component, Clone)]
 struct ModularSetItem(ModularSet);
