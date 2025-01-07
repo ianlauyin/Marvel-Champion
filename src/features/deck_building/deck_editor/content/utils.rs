@@ -3,10 +3,7 @@ use std::collections::HashMap;
 use bevy::{prelude::*, ui::RelativeCursorPosition};
 
 use crate::{
-    features::{
-        cards::{Card, CardAspect, CardDatas},
-        shared::ListItem,
-    },
+    features::cards::{Card, CardAspect, CardDatas},
     systems::{LoadedAssetMap, MouseDragDropClick},
 };
 

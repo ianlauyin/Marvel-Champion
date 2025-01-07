@@ -18,8 +18,8 @@ const CURRENT_STATE: GameSelectorState = GameSelectorState::Encounter;
 impl Plugin for GameSelectorEncounterPlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(SelectedEncounterSet {
-            villain: Some(Villain::CoreRhino),
-            modular_set: vec![ModularSet::Standard],
+            villain: Villain::CoreRhino,
+            modular_sets: vec![ModularSet::Standard],
         })
         .add_systems(OnEnter(CURRENT_STATE), spawn_encounter_list)
         .add_systems(
@@ -39,10 +39,10 @@ impl Plugin for GameSelectorEncounterPlugin {
     }
 }
 
-#[derive(Resource, Default)]
+#[derive(Resource)]
 pub struct SelectedEncounterSet {
-    pub villain: Option<Villain>,
-    pub modular_set: Vec<ModularSet>,
+    pub villain: Villain,
+    pub modular_sets: Vec<ModularSet>,
 }
 
 #[derive(Component, Clone)]
@@ -118,7 +118,7 @@ fn handle_villain_item_interaction(
 ) {
     for (interaction, item) in text_q.iter() {
         if *interaction == Interaction::Pressed {
-            selected_encounter_set.villain = Some(item.0.clone());
+            selected_encounter_set.villain = item.0.clone();
         }
     }
 }
@@ -129,13 +129,13 @@ fn handle_modular_set_item_interaction(
 ) {
     for (interaction, item) in text_q.iter() {
         if *interaction == Interaction::Pressed {
-            if selected_encounter_set.modular_set.contains(&item.0) {
+            if selected_encounter_set.modular_sets.contains(&item.0) {
                 selected_encounter_set
-                    .modular_set
+                    .modular_sets
                     .retain(|modular_set| modular_set != &item.0);
                 return;
             }
-            selected_encounter_set.modular_set.push(item.0.clone());
+            selected_encounter_set.modular_sets.push(item.0.clone());
             return;
         }
     }
@@ -148,19 +148,15 @@ fn handle_ui_change(
 ) {
     if selected_encounter_set.is_changed() {
         for (mut villain_border_color, villain_item) in villain_item_q.iter_mut() {
-            if let Some(villain) = &selected_encounter_set.villain {
-                if *villain == villain_item.0 {
-                    villain_border_color.0 = Color::from(Color::WHITE);
-                } else {
-                    villain_border_color.0 = Color::from(Color::NONE);
-                }
+            if selected_encounter_set.villain == villain_item.0 {
+                villain_border_color.0 = Color::from(Color::WHITE);
             } else {
                 villain_border_color.0 = Color::from(Color::NONE);
             }
         }
         for (mut modular_set_border_color, modular_set_item) in modular_set_item_q.iter_mut() {
             if selected_encounter_set
-                .modular_set
+                .modular_sets
                 .contains(&modular_set_item.0)
             {
                 modular_set_border_color.0 = Color::from(Color::WHITE);
@@ -198,26 +194,23 @@ fn validate_resource(
     if selected_players.0.is_empty() {
         return Err("You must select at least 1 player.".to_string());
     }
-    let Some(ref villain) = selected_encounter_set.villain else {
-        return Err("You must select only one villain.".to_string());
-    };
-    if selected_encounter_set.modular_set.is_empty() {
+    if selected_encounter_set.modular_sets.is_empty() {
         return Err("You must select at least 1 modular set.".to_string());
     }
     if !selected_encounter_set
-        .modular_set
+        .modular_sets
         .contains(&ModularSet::Standard)
     {
         return Err("You must select the standard modular set.".to_string());
     }
     let modular_for_check = selected_encounter_set
-        .modular_set
+        .modular_sets
         .iter()
         .filter(|modular_set| ![ModularSet::Standard, ModularSet::Expert].contains(modular_set));
-    if modular_for_check.count() != villain.get_encounter_set_numbers() {
+    if modular_for_check.count() != selected_encounter_set.villain.get_encounter_set_numbers() {
         return Err(format!(
             "You must only select {} modular set(s). (Standard and Expert not included)",
-            villain.get_encounter_set_numbers()
+            selected_encounter_set.villain.get_encounter_set_numbers()
         ));
     }
     Ok(())

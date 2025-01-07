@@ -63,7 +63,7 @@ fn handle_button_interaction(
     for (interaction, villain) in button_q.iter() {
         if *interaction == Interaction::Pressed {
             for card in villain.get_cards() {
-                load_asset.add_card(card, &asset_server);
+                load_asset.add_card(&card, &asset_server);
             }
             commands.insert_resource(CollectionVillainSet(villain.clone()));
             next_state.set(CollectionVillainState::LoadingCards);

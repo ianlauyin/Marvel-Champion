@@ -5,7 +5,7 @@ use bevy::ecs::schedule::SystemConfigs;
 use bevy::prelude::*;
 use bevy::state::state::FreelyMutableState;
 
-use crate::features::cards::Card;
+use crate::features::cards::{Card, CardDatas};
 use crate::ui::LoadingScreenPlugin;
 
 pub struct AssetLoaderSetupPlugin;
@@ -24,9 +24,18 @@ pub struct LoadedAssetMap(pub HashMap<String, Handle<Image>>);
 pub struct LoadAsset(pub Vec<(String, Handle<Image>)>);
 
 impl LoadAsset {
-    pub fn add_card(&mut self, card: Card, asset_server: &Res<AssetServer>) {
+    pub fn add_card(&mut self, card: &Card, asset_server: &Res<AssetServer>) {
         self.0
             .push((card.get_id(), asset_server.load(card.get_image_path())));
+    }
+    pub fn add_card_by_id(
+        &mut self,
+        card_id: &str,
+        asset_server: &Res<AssetServer>,
+        card_datas: &Res<CardDatas>,
+    ) {
+        let card = card_datas.get(card_id);
+        self.add_card(&card, asset_server);
     }
 }
 

@@ -67,7 +67,7 @@ fn handle_button_interaction(
     for (interaction, button) in button_q.iter() {
         if *interaction == Interaction::Pressed {
             for card in button.0.get_cards() {
-                load_asset.add_card(card, &asset_server);
+                load_asset.add_card(&card, &asset_server);
             }
             commands.insert_resource(EditIdentity(button.0.clone()));
             next_state.set(DeckBuildingState::SelectDeck);

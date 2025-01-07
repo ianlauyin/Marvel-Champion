@@ -91,7 +91,7 @@ fn handle_button_interaction(
             let mut editing_deck = button.0.clone();
             let cards = [identity.get_player_cards(), CardDatas::get_aspect_cards()].concat();
             for card in cards {
-                load_asset.add_card(card, &asset_server);
+                load_asset.add_card(&card, &asset_server);
             }
 
             // Add identity_cards when create new deck

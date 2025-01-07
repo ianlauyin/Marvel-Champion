@@ -127,7 +127,7 @@ fn handle_button_reaction(
                 _ => vec![],
             };
             for card in cards {
-                load_asset.add_card(card, &asset_server);
+                load_asset.add_card(&card, &asset_server);
             }
 
             handle_button_click(next_state, card_type_button.clone());

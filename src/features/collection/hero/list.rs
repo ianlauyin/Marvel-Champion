@@ -63,7 +63,7 @@ fn handle_button_interaction(
     for (interaction, identity) in button_q.iter() {
         if *interaction == Interaction::Pressed {
             for card in identity.get_cards() {
-                load_asset.add_card(card, &asset_server);
+                load_asset.add_card(&card, &asset_server);
             }
             commands.insert_resource(CollectionHeroIdentity(identity.clone()));
             next_state.set(CollectionHeroState::LoadingCards);

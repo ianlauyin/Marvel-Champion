@@ -31,5 +31,5 @@ impl Plugin for AppStatePlugin {
 fn load_asset(mut load_asset_res: ResMut<LoadAsset>, asset_server: Res<AssetServer>) {
     load_asset_res
         .0
-        .push(GAME_MAT_ASSET.into_load_asset(asset_server));
+        .push(GAME_MAT_ASSET.into_load_asset(&asset_server));
 }

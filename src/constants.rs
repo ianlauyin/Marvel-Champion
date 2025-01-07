@@ -10,7 +10,7 @@ pub struct AssetConst {
 }
 
 impl AssetConst {
-    pub fn into_load_asset(&self, asset_server: Res<AssetServer>) -> (String, Handle<Image>) {
+    pub fn into_load_asset(&self, asset_server: &Res<AssetServer>) -> (String, Handle<Image>) {
         (self.key.to_string(), asset_server.load(self.path))
     }
 }

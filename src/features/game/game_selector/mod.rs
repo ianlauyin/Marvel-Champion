@@ -17,3 +17,6 @@ impl Plugin for GameSelectorPlugin {
         ));
     }
 }
+
+pub use encounter::SelectedEncounterSet;
+pub use identity::SelectedPlayers;

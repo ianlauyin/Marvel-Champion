@@ -63,7 +63,7 @@ fn handle_button_interaction(
     for (interaction, modular_set) in button_q.iter() {
         if *interaction == Interaction::Pressed {
             for card in modular_set.get_cards() {
-                load_asset.add_card(card, &asset_server);
+                load_asset.add_card(&card, &asset_server);
             }
             commands.insert_resource(CollectionModularSet(modular_set.clone()));
             next_state.set(CollectionModularState::LoadingCards);
