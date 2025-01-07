@@ -9,6 +9,7 @@ use crate::{
         game::game_selector::{SelectedEncounterSet, SelectedPlayers},
     },
     systems::LoadAsset,
+    ui::GamePlayCamera,
 };
 
 use super::state::InGameState;
@@ -49,6 +50,6 @@ fn add_loading_cards(
     }
 }
 
-fn setup_game() {
-    println!("setup state");
+fn setup_game(mut game_play_camera: ResMut<GamePlayCamera>) {
+    game_play_camera.toggle();
 }

@@ -12,5 +12,6 @@ impl Plugin for UIPlugin {
     }
 }
 
+pub use camera::GamePlayCamera;
 pub use loading_screen::LoadingScreenPlugin;
 pub use node_moving::{NodeMove, NodeMoveRemoveEvent};
