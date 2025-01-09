@@ -36,10 +36,7 @@ struct DeckList;
 struct DeckListButton(EditingDeck);
 
 fn spawn_deck_list(mut commands: Commands, pkv: ResMut<PkvStore>, identity: Res<EditIdentity>) {
-    let mut deck_storage = DecksStorage {
-        pkv,
-        identity: identity.0.clone(),
-    };
+    let mut deck_storage = DecksStorage::new(&identity.0, pkv);
     let decks = deck_storage.get_decks();
     let mut list_map: Vec<(DeckListButton, ListItem)> = decks
         .iter()

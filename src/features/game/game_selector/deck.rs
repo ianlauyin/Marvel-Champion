@@ -43,10 +43,7 @@ fn spawn_deck_list(
     pkv: ResMut<PkvStore>,
     selected_identity: Res<SelectedIdentity>,
 ) {
-    let mut deck_storage = DecksStorage {
-        pkv,
-        identity: selected_identity.0.clone(),
-    };
+    let mut deck_storage = DecksStorage::new(&selected_identity.0, pkv);
     let decks = deck_storage.get_decks();
     let list_map: Vec<(DeckListButton, ListItem)> = decks
         .iter()

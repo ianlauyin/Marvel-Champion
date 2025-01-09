@@ -24,10 +24,14 @@ pub struct LoadedAssetMap(pub HashMap<String, Handle<Image>>);
 pub struct LoadAsset(pub Vec<(String, Handle<Image>)>);
 
 impl LoadAsset {
-    pub fn add_card(&mut self, card: &Card, asset_server: &Res<AssetServer>) {
-        self.0
-            .push((card.get_id(), asset_server.load(card.get_image_path())));
+    pub fn add(&mut self, name: String, handle: Handle<Image>) {
+        self.0.push((name, handle));
     }
+
+    pub fn add_card(&mut self, card: &Card, asset_server: &Res<AssetServer>) {
+        self.add(card.get_id(), asset_server.load(card.get_image_path()));
+    }
+
     pub fn add_card_by_id(
         &mut self,
         card_id: &str,

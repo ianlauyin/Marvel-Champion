@@ -155,10 +155,7 @@ fn handle_button_interaction(
 ) {
     for (interaction, button_action) in button_q.iter() {
         if *interaction == Interaction::Pressed {
-            let mut decks_storage = DecksStorage {
-                pkv,
-                identity: edit_identity.0.clone(),
-            };
+            let mut decks_storage = DecksStorage::new(&edit_identity.0, pkv);
             match *button_action {
                 ButtonAction::Save => handle_save(
                     commands,

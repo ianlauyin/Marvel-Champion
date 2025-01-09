@@ -5,11 +5,18 @@ use serde::{Deserialize, Serialize};
 use crate::features::cards::Identity;
 
 pub struct DecksStorage<'a> {
-    pub identity: Identity,
-    pub pkv: ResMut<'a, PkvStore>,
+    identity: Identity,
+    pkv: ResMut<'a, PkvStore>,
 }
 
-impl DecksStorage<'_> {
+impl<'a> DecksStorage<'a> {
+    pub fn new(identity: &Identity, pkv: ResMut<'a, PkvStore>) -> Self {
+        Self {
+            identity: identity.clone(),
+            pkv,
+        }
+    }
+
     pub fn get_decks(&mut self) -> Vec<Deck> {
         if let Ok(decks) = self.pkv.get::<Vec<Deck>>(self.identity.get_key()) {
             decks

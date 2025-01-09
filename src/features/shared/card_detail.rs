@@ -64,14 +64,10 @@ fn handle_card_detail_spawn(
         ))
         .with_children(|container| {
             spawn_escape_button(container);
-            let vertical = match card_detail.0 {
-                Card::MainSchemeA(_) | Card::MainSchemeB(_) | Card::SideScheme(_) => false,
-                _ => true,
-            };
             spawn_content(
                 container,
                 asset_server.load(card_detail.0.get_image_path()),
-                vertical,
+                card_detail.0.is_ui_vertical(),
             );
         });
 }

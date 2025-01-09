@@ -159,4 +159,11 @@ impl Card {
             _ => Err("Opponent card should not be count in deck".to_string()),
         }
     }
+
+    pub fn is_ui_vertical(&self) -> bool {
+        match self {
+            Card::MainSchemeA(_) | Card::MainSchemeB(_) | Card::SideScheme(_) => false,
+            _ => true,
+        }
+    }
 }
