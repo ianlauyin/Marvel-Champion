@@ -8,7 +8,7 @@ use crate::{
         shared::CardListBuilder,
     },
     systems::LoadedAssetMap,
-    utils::get_card_amount,
+    utils::CardUtils,
 };
 
 use super::utils::{convert_card_into_card_map, get_aspect_names, get_selectable_cards};
@@ -34,7 +34,7 @@ pub fn spawn_content(
     let deck_card_list = spawn_deck_card_list(commands.reborrow(), &deck_cards, &loaded_asset);
     let info = spawn_info(
         commands.reborrow(),
-        get_card_amount(&deck_cards),
+        CardUtils::get_card_amount(&deck_cards),
         aspect_names,
     );
     let selection_list = spawn_selection_list(commands.reborrow(), &deck_cards, &loaded_asset);
@@ -234,7 +234,9 @@ fn handle_deck_info_change(
         match deck_info {
             DeckInfo::Amount => {
                 let amount_text = commands
-                    .spawn(TextSpan::new(get_card_amount(deck_cards).to_string()))
+                    .spawn(TextSpan::new(
+                        CardUtils::get_card_amount(deck_cards).to_string(),
+                    ))
                     .id();
                 commands
                     .entity(entity)

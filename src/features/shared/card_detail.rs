@@ -5,7 +5,7 @@ use bevy::{input::common_conditions::input_just_pressed, prelude::*, ui::FocusPo
 use crate::{
     constants::CARD_DETAIL_SIZE,
     features::{cards::Card, shared::CustomButton},
-    utils::get_largest_z_index,
+    utils::UiUtils,
 };
 
 pub struct CardDetailPlugin;
@@ -59,7 +59,7 @@ fn handle_card_detail_spawn(
             BorderColor::from(Color::WHITE),
             BorderRadius::all(Val::Px(10.)),
             BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
-            get_largest_z_index(z_index_q),
+            UiUtils::get_largest_z_index(z_index_q),
             Interaction::default(),
         ))
         .with_children(|container| {

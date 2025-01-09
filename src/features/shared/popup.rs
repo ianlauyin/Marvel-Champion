@@ -2,7 +2,7 @@ use std::time::Duration;
 
 use bevy::prelude::*;
 
-use crate::utils::get_largest_z_index;
+use crate::utils::UiUtils;
 
 pub struct PopupPlugin;
 
@@ -34,7 +34,7 @@ fn handle_popup_spawn(
     popup_q: Query<&Popup>,
     z_index_q: Query<&ZIndex>,
 ) {
-    let z_index = get_largest_z_index(z_index_q);
+    let z_index = UiUtils::get_largest_z_index(z_index_q);
     let popup = popup_q.get(trigger.entity()).unwrap();
     commands
         .entity(trigger.entity())

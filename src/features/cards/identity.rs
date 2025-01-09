@@ -9,7 +9,7 @@ use super::{
     Card,
 };
 
-#[derive(Component, Clone, Serialize, Deserialize, Hash, PartialEq, Eq)]
+#[derive(Component, Clone, Serialize, Deserialize, Hash, PartialEq, Eq, Debug)]
 pub enum Identity {
     CoreSpiderMan,
     CoreCaptainMarvel,
@@ -70,6 +70,15 @@ impl Identity {
         let postfix = ".png";
         let name = self.get_key();
         format!("{prefix}{name}{postfix}")
+    }
+
+    pub fn get_health(&self) -> u8 {
+        for card in self.get_cards() {
+            if let Card::AlterEgo(alter_ego_card) = card {
+                return alter_ego_card.initial_hit_points;
+            }
+        }
+        panic!("No alter ego card found for identity: {:?}", self);
     }
 
     pub fn get_cards(&self) -> Vec<Card> {

@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::utils::{get_card_amount, get_deck_aspect};
+use crate::utils::CardUtils;
 
 use super::{Card, CardAspect, Identity};
 
@@ -70,7 +70,7 @@ impl DeckValidator {
 }
 
 pub fn aspects_rules_validator(deck_cards: &Vec<Card>) -> Result<(), String> {
-    let card_aspects = get_deck_aspect(deck_cards);
+    let card_aspects = CardUtils::get_deck_aspect(deck_cards);
     let filterd_card_aspects: Vec<&CardAspect> = card_aspects
         .iter()
         .filter(|aspect| match aspect {
@@ -85,7 +85,7 @@ pub fn aspects_rules_validator(deck_cards: &Vec<Card>) -> Result<(), String> {
 }
 
 fn deck_cards_amount_validator(deck_cards: &Vec<Card>) -> Result<(), String> {
-    let card_amounts = get_card_amount(deck_cards);
+    let card_amounts = CardUtils::get_card_amount(deck_cards);
     match card_amounts {
         0..=39 => Err("Cannot have cards less than 40".to_string()),
         40..=50 => Ok(()),

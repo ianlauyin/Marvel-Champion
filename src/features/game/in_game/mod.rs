@@ -1,3 +1,4 @@
+mod game_elements;
 mod setup;
 mod state;
 
