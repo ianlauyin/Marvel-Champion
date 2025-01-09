@@ -17,8 +17,6 @@ mod war_machine;
 
 pub fn get_player_cards() -> Vec<Card> {
     vec![
-        hero::get_hero(),
-        alter_ego::get_alter_ego(),
         war_machine::get_war_machine(),
         repulsor_blast::get_repulsor_blast(),
         repulsor_blast::get_repulsor_blast(),
@@ -37,12 +35,17 @@ pub fn get_player_cards() -> Vec<Card> {
     ]
 }
 
+pub fn get_identity_cards() -> Vec<Card> {
+    vec![alter_ego::get_alter_ego(), hero::get_hero()]
+}
+
 pub fn get_obligation() -> Card {
     obligation::get_obligation()
 }
 
 pub fn get_all() -> Vec<Card> {
     [
+        get_identity_cards(),
         get_player_cards(),
         vec![get_obligation()],
         nemesis_set::get_nemesis_set(),

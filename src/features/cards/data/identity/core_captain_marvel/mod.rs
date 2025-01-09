@@ -15,8 +15,6 @@ mod spider_woman;
 
 pub fn get_player_cards() -> Vec<Card> {
     vec![
-        hero::get_hero(),
-        alter_ego::get_alter_ego(),
         spider_woman::get_spider_woman(),
         crisis_interdiction::get_crisis_interdiction(),
         crisis_interdiction::get_crisis_interdiction(),
@@ -35,12 +33,16 @@ pub fn get_player_cards() -> Vec<Card> {
     ]
 }
 
+pub fn get_identity_cards() -> Vec<Card> {
+    vec![alter_ego::get_alter_ego(), hero::get_hero()]
+}
 pub fn get_obligation() -> Card {
     obligation::get_obligation()
 }
 
 pub fn get_all() -> Vec<Card> {
     [
+        get_identity_cards(),
         get_player_cards(),
         vec![get_obligation()],
         nemesis_set::get_nemesis_set(),

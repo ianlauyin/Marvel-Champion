@@ -81,6 +81,16 @@ impl Identity {
         panic!("No alter ego card found for identity: {:?}", self);
     }
 
+    pub fn get_identity_cards(&self) -> Vec<Card> {
+        match *self {
+            Identity::CoreSpiderMan => core_spider_man::get_identity_cards(),
+            Identity::CoreCaptainMarvel => core_captain_marvel::get_identity_cards(),
+            Identity::CoreSheHulk => core_she_hulk::get_identity_cards(),
+            Identity::CoreIronMan => core_iron_man::get_identity_cards(),
+            Identity::CoreBlackPanther => core_black_panther::get_identity_cards(),
+        }
+    }
+
     pub fn get_cards(&self) -> Vec<Card> {
         match *self {
             Identity::CoreSpiderMan => core_spider_man::get_all(),
