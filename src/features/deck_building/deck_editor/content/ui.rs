@@ -3,8 +3,10 @@ use bevy::{prelude::*, ui::RelativeCursorPosition};
 use crate::{
     constants::CARD_SIZE,
     features::{
-        cards::{Card, CardDatas},
-        deck_building::{deck_editor::EditingDeck, state::DeckBuildingState},
+        cards::{Card, CardDatas, Identity},
+        deck_building::{
+            deck_editor::EditingDeck, deck_list::EditIdentity, state::DeckBuildingState,
+        },
         shared::CardListBuilder,
     },
     systems::LoadedAssetMap,
@@ -27,11 +29,13 @@ impl Plugin for DeckEditorContentUIPlugin {
 
 pub fn spawn_content(
     mut commands: Commands,
+    identity: &Identity,
     deck_cards: Vec<Card>,
     loaded_asset: Res<LoadedAssetMap>,
 ) -> Entity {
     let aspect_names = get_aspect_names(&deck_cards);
-    let deck_card_list = spawn_deck_card_list(commands.reborrow(), &deck_cards, &loaded_asset);
+    let deck_card_list =
+        spawn_deck_card_list(commands.reborrow(), identity, &deck_cards, &loaded_asset);
     let info = spawn_info(
         commands.reborrow(),
         CardUtils::get_card_amount(&deck_cards),
@@ -70,10 +74,12 @@ enum DeckInfo {
 
 fn spawn_deck_card_list(
     mut commands: Commands,
+    identity: &Identity,
     deck_cards: &Vec<Card>,
     loaded_asset: &Res<LoadedAssetMap>,
 ) -> Entity {
-    let card_map = convert_card_into_card_map(CardListItem::Deck, deck_cards, &loaded_asset);
+    let cards = vec![identity.get_identity_cards(), deck_cards.clone()].concat();
+    let card_map = convert_card_into_card_map(CardListItem::Deck, cards, &loaded_asset);
     let list = CardListBuilder {
         card_map,
         card_size: (
@@ -145,7 +151,7 @@ fn spawn_selection_list(
     loaded_asset: &Res<LoadedAssetMap>,
 ) -> Entity {
     let cards = get_selectable_cards(deck_cards);
-    let list_items = convert_card_into_card_map(CardListItem::Selection, &cards, loaded_asset);
+    let list_items = convert_card_into_card_map(CardListItem::Selection, cards, loaded_asset);
     let list = CardListBuilder {
         card_map: list_items,
         card_size: (
@@ -172,6 +178,7 @@ fn spawn_selection_list(
 fn handle_editing_deck_changed(
     mut commands: Commands,
     editing_deck: Res<EditingDeck>,
+    edit_identity: Res<EditIdentity>,
     content_container_q: Query<(Entity, &ContentContainer)>,
     deck_info_q: Query<(Entity, &DeckInfo)>,
     loaded_asset: Res<LoadedAssetMap>,
@@ -184,7 +191,7 @@ fn handle_editing_deck_changed(
                 ContentContainer::Deck => handle_container_change(
                     commands.reborrow(),
                     entity,
-                    cards.clone(),
+                    vec![edit_identity.0.get_identity_cards(), cards.clone()].concat(),
                     &loaded_asset,
                     CardListItem::Deck,
                 ),
@@ -209,7 +216,7 @@ fn handle_container_change(
     belongs: CardListItem,
 ) {
     let deck_list = CardListBuilder {
-        card_map: convert_card_into_card_map(belongs, &cards, loaded_asset),
+        card_map: convert_card_into_card_map(belongs, cards, loaded_asset),
         card_size: (
             Val::Px(CARD_SIZE.truncate().x),
             Val::Px(CARD_SIZE.truncate().y),

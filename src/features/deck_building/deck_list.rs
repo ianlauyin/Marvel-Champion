@@ -98,12 +98,11 @@ fn handle_button_interaction(
 
             // Add identity_cards when create new deck
             if editing_deck.index.is_none() {
-                let mut identity_cards_ids =
-                    [identity.get_identity_cards(), identity.get_player_cards()]
-                        .concat()
-                        .iter()
-                        .map(|card| card.get_id())
-                        .collect();
+                let mut identity_cards_ids = identity
+                    .get_player_cards()
+                    .iter()
+                    .map(|card| card.get_id())
+                    .collect();
                 editing_deck.deck.card_ids.append(&mut identity_cards_ids);
             }
 

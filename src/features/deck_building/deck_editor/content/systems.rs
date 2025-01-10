@@ -189,14 +189,18 @@ fn handle_edit_card_intent(
             new_deck_card_ids.push(card.get_id());
         }
         EditDeckIntent::Remove(card) => {
-            let Some(first_index) = new_deck_card_ids
+            if let Some(first_index) = new_deck_card_ids
                 .iter()
                 .position(|deck_card_id| **deck_card_id == card.get_id())
-            else {
-                warn!("Should have at least one card with same id when removing");
-                return;
-            };
-            new_deck_card_ids.remove(first_index);
+            {
+                new_deck_card_ids.remove(first_index);
+            } else {
+                if !card.count_in_deck_amount() {
+                    commands.spawn(Popup::new("You cannot remove Identity Card".to_string()));
+                } else {
+                    warn!("Should have at least one card with same id when removing");
+                }
+            }
         }
     }
     let mut validator = edit_identity.0.get_validator();

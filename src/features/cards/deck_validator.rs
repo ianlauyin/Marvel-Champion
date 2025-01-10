@@ -38,12 +38,7 @@ impl DeckValidator {
     fn validate_identity_cards(&self, deck_cards: &Vec<Card>) -> Result<(), String> {
         let mut hash_map: HashMap<String, u8> = HashMap::new();
 
-        for comparing_card in [
-            self.identity.get_identity_cards(),
-            self.identity.get_player_cards(),
-        ]
-        .concat()
-        {
+        for comparing_card in [self.identity.get_player_cards()].concat() {
             if let Some(amount) = hash_map.get_mut(&comparing_card.get_id()) {
                 *amount += 1;
             } else {

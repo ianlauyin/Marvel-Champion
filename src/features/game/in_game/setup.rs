@@ -10,7 +10,10 @@ use crate::{
     ui::GamePlayCamera,
 };
 
-use super::state::InGameState;
+use super::{
+    game_elements::{FirstPlayer, PlayerNumber},
+    state::InGameState,
+};
 
 pub struct InGameSetupPlugin;
 
@@ -48,6 +51,13 @@ fn add_loading_cards(
     }
 }
 
-fn setup_game(mut game_play_camera: ResMut<GamePlayCamera>) {
+fn setup_game(
+    mut commands: Commands,
+    mut game_play_camera: ResMut<GamePlayCamera>,
+    selected_players: Res<SelectedPlayers>,
+    selected_encounter_set: Res<SelectedEncounterSet>,
+) {
     game_play_camera.toggle();
+    commands.insert_resource(PlayerNumber(selected_players.0.len()));
+    commands.insert_resource(FirstPlayer::new());
 }

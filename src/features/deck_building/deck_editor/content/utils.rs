@@ -18,7 +18,7 @@ pub struct DragDropCard {
 
 pub fn convert_card_into_card_map(
     belongs: CardListItem,
-    cards: &Vec<Card>,
+    cards: Vec<Card>,
     loaded_asset: &Res<LoadedAssetMap>,
 ) -> Vec<(DragDropCard, ImageNode)> {
     cards

@@ -1,5 +1,5 @@
 use crate::{
-    features::cards::CardDatas,
+    features::{cards::CardDatas, deck_building::deck_list::EditIdentity},
     systems::{clean_up, Deck, LoadedAssetMap},
 };
 use bevy::prelude::*;
@@ -41,12 +41,18 @@ struct DeckEditor;
 pub fn spawn_editor(
     mut commands: Commands,
     editing_deck: Res<EditingDeck>,
+    edit_identity: Res<EditIdentity>,
     card_datas: Res<CardDatas>,
     loaded_asset_map: Res<LoadedAssetMap>,
 ) {
     let card_list_items = card_datas.from_ids(&editing_deck.deck.card_ids);
     let header = spawn_header(commands.reborrow(), editing_deck.deck.name.clone());
-    let content = spawn_content(commands.reborrow(), card_list_items, loaded_asset_map);
+    let content = spawn_content(
+        commands.reborrow(),
+        &edit_identity.0,
+        card_list_items,
+        loaded_asset_map,
+    );
     commands
         .spawn((
             DeckEditor,
