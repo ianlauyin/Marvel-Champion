@@ -72,15 +72,6 @@ impl Identity {
         format!("{prefix}{name}{postfix}")
     }
 
-    pub fn get_health(&self) -> u8 {
-        for card in self.get_cards() {
-            if let Card::AlterEgo(alter_ego_card) = card {
-                return alter_ego_card.initial_hit_points;
-            }
-        }
-        panic!("No alter ego card found for identity: {:?}", self);
-    }
-
     pub fn get_identity_cards(&self) -> Vec<Card> {
         match *self {
             Identity::CoreSpiderMan => core_spider_man::get_identity_cards(),
