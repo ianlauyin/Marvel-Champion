@@ -17,8 +17,8 @@ impl<'a> DecksStorage<'a> {
         }
     }
 
-    pub fn get_decks(&mut self) -> Vec<Deck> {
-        if let Ok(decks) = self.pkv.get::<Vec<Deck>>(self.identity.get_key()) {
+    pub fn get_decks(&mut self) -> Vec<StorageDeck> {
+        if let Ok(decks) = self.pkv.get::<Vec<StorageDeck>>(self.identity.get_key()) {
             decks
         } else {
             self.init_identity();
@@ -26,7 +26,7 @@ impl<'a> DecksStorage<'a> {
         }
     }
 
-    pub fn save_deck(&mut self, deck: Deck, index: usize) {
+    pub fn save_deck(&mut self, deck: StorageDeck, index: usize) {
         let mut decks = self.get_decks();
         decks[index] = deck;
         self.pkv
@@ -34,7 +34,7 @@ impl<'a> DecksStorage<'a> {
             .expect("Failed to add deck.");
     }
 
-    pub fn add_deck(&mut self, deck: Deck) {
+    pub fn add_deck(&mut self, deck: StorageDeck) {
         let mut decks = self.get_decks();
         decks.push(deck);
         self.pkv
@@ -52,16 +52,16 @@ impl<'a> DecksStorage<'a> {
 
     fn init_identity(&mut self) {
         self.pkv
-            .set(self.identity.get_key(), &Vec::<Deck>::new())
+            .set(self.identity.get_key(), &Vec::<StorageDeck>::new())
             .expect("Failed to init decks.");
     }
 }
 
 #[derive(Resource, Serialize, Deserialize)]
-struct Decks(Vec<Deck>);
+struct Decks(Vec<StorageDeck>);
 
 #[derive(Serialize, Deserialize, Clone)]
-pub struct Deck {
+pub struct StorageDeck {
     pub name: String,
     pub card_ids: Vec<String>,
 }

@@ -33,8 +33,12 @@ pub fn get_player_cards() -> Vec<Card> {
     ]
 }
 
+pub fn get_hero() -> Vec<Card> {
+    vec![hero::get_hero()]
+}
+
 pub fn get_identity_cards() -> Vec<Card> {
-    vec![alter_ego::get_alter_ego(), hero::get_hero()]
+    [vec![alter_ego::get_alter_ego()], get_hero()].concat()
 }
 
 pub fn get_all() -> Vec<Card> {
@@ -51,4 +55,5 @@ pub fn get_obligation() -> Card {
     obligation::get_obligation()
 }
 
+pub use alter_ego::get_alter_ego;
 pub use nemesis_set::get_nemesis_set;

@@ -6,7 +6,7 @@ use crate::{
         game::state::GameState,
         shared::{ListBuilder, ListItem, MenuBuilder, Popup},
     },
-    systems::{clean_up, AppState, Deck},
+    systems::{clean_up, AppState, StorageDeck},
 };
 
 use super::{deck::SelectedIdentity, state::GameSelectorState};
@@ -53,7 +53,7 @@ pub struct SelectedPlayers(pub Vec<SelectedPlayer>);
 
 pub struct SelectedPlayer {
     pub identity: Identity,
-    pub deck: Deck,
+    pub deck: StorageDeck,
 }
 
 #[derive(Component, Clone)]

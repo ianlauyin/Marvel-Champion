@@ -11,9 +11,9 @@ pub struct Deck {
 }
 
 impl Deck {
-    pub fn new(player_tag: usize, cards: Vec<Card>, commands: Commands) -> Self {
+    pub fn new(player: &Player, cards: Vec<Card>, commands: Commands) -> Self {
         let deck = Self {
-            player: Player::new(player_tag),
+            player: player.clone(),
             cards,
         };
         deck.init(commands);
@@ -25,7 +25,7 @@ impl Deck {
             .spawn((self.clone(), self.player.clone()))
             .with_children(|deck| {
                 for card in self.cards.clone() {
-                    deck.spawn((CardState::InPlay, card));
+                    deck.spawn((CardState::InPlay, card, self.player.clone()));
                 }
             });
     }

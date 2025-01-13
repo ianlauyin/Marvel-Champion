@@ -6,7 +6,7 @@ use crate::{
         cards::Identity,
         shared::{ListBuilder, ListItem, MenuBuilder},
     },
-    systems::{clean_up, Deck, DecksStorage},
+    systems::{clean_up, StorageDeck, DecksStorage},
 };
 
 use super::{
@@ -36,7 +36,7 @@ pub struct SelectedIdentity(pub Identity);
 struct IdentityDeckList;
 
 #[derive(Component, Clone)]
-struct DeckListButton(Deck);
+struct DeckListButton(StorageDeck);
 
 fn spawn_deck_list(
     mut commands: Commands,

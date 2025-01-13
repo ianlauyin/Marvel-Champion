@@ -1,6 +1,6 @@
 use crate::{
     features::{cards::CardDatas, deck_building::deck_list::EditIdentity},
-    systems::{clean_up, Deck, LoadedAssetMap},
+    systems::{clean_up, LoadedAssetMap, StorageDeck},
 };
 use bevy::prelude::*;
 
@@ -9,14 +9,14 @@ use super::{super::state::DeckBuildingState, content::spawn_content, header::spa
 #[derive(Resource, Clone)]
 pub struct EditingDeck {
     pub index: Option<usize>,
-    pub deck: Deck,
+    pub deck: StorageDeck,
 }
 
 impl EditingDeck {
     pub fn new() -> Self {
         Self {
             index: None,
-            deck: Deck {
+            deck: StorageDeck {
                 name: "New Deck".to_string(),
                 card_ids: vec![],
             },

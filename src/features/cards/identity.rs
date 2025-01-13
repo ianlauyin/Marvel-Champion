@@ -72,6 +72,26 @@ impl Identity {
         format!("{prefix}{name}{postfix}")
     }
 
+    pub fn get_alter_ego(&self) -> Card {
+        match *self {
+            Identity::CoreSpiderMan => core_spider_man::get_alter_ego(),
+            Identity::CoreCaptainMarvel => core_captain_marvel::get_alter_ego(),
+            Identity::CoreSheHulk => core_she_hulk::get_alter_ego(),
+            Identity::CoreIronMan => core_iron_man::get_alter_ego(),
+            Identity::CoreBlackPanther => core_black_panther::get_alter_ego(),
+        }
+    }
+
+    pub fn get_hero(&self) -> Vec<Card> {
+        match *self {
+            Identity::CoreSpiderMan => core_spider_man::get_hero(),
+            Identity::CoreCaptainMarvel => core_captain_marvel::get_hero(),
+            Identity::CoreSheHulk => core_she_hulk::get_hero(),
+            Identity::CoreIronMan => core_iron_man::get_hero(),
+            Identity::CoreBlackPanther => core_black_panther::get_hero(),
+        }
+    }
+
     pub fn get_identity_cards(&self) -> Vec<Card> {
         match *self {
             Identity::CoreSpiderMan => core_spider_man::get_identity_cards(),
