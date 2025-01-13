@@ -13,14 +13,21 @@ pub struct PlayerInfo {
 }
 
 impl PlayerInfo {
-    pub fn new(player_tag: usize, identity: &Identity, deck: Vec<Card>) -> Self {
-        Self {
+    pub fn new(
+        commands: Commands,
+        player_tag: usize,
+        identity: &Identity,
+        deck: Vec<Card>,
+    ) -> Self {
+        let player_info = Self {
             player_tag,
             identity: identity.clone(),
             deck,
             hand: vec![],
             discard_piles: vec![],
-        }
+        };
+        player_info.init(commands);
+        player_info
     }
 
     pub fn get() {}
