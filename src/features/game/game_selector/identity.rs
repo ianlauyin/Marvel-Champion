@@ -56,6 +56,15 @@ pub struct SelectedPlayer {
     pub deck: StorageDeck,
 }
 
+impl SelectedPlayers {
+    pub fn into_identities(&self) -> Vec<Identity> {
+        self.0
+            .iter()
+            .map(|player| player.identity.clone())
+            .collect()
+    }
+}
+
 #[derive(Component, Clone)]
 struct GameIdentityList;
 

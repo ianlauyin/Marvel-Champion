@@ -23,17 +23,27 @@ mod ultron_iii;
 mod ultrons_imperative;
 mod upgraded_drones;
 
-pub fn get_all() -> Vec<Card> {
+pub fn get_standard_villain_cards() -> Vec<Card> {
+    vec![ultron_i::get_ultron_i(), ultron_ii::get_ultron_ii()]
+}
+
+pub fn get_expert_villain_cards() -> Vec<Card> {
+    vec![ultron_ii::get_ultron_ii(), ultron_iii::get_ultron_iii()]
+}
+
+pub fn get_main_scheme_cards() -> Vec<Card> {
     vec![
-        ultron_i::get_ultron_i(),
-        ultron_ii::get_ultron_ii(),
-        ultron_iii::get_ultron_iii(),
         the_crimson_cowl_1a::get_the_crimson_cowl_1a(),
         the_crimson_cowl_1b::get_the_crimson_cowl_1b(),
         assault_on_norad_2a::get_assault_on_norad_2a(),
         assault_on_norad_2b::get_assault_on_norad_2b(),
         countdown_to_oblivion_3a::get_countdown_to_oblivion_3a(),
         countdown_to_oblivion_3b::get_countdown_to_oblivion_3b(),
+    ]
+}
+
+pub fn get_encounter_cards() -> Vec<Card> {
+    vec![
         ultron_drones::get_ultron_drones(),
         program_transmitter::get_program_transmitter(),
         upgraded_drones::get_upgraded_drones(),
@@ -54,4 +64,17 @@ pub fn get_all() -> Vec<Card> {
         invasive_ai::get_invasive_ai(),
         ultrons_imperative::get_ultrons_imperative(),
     ]
+}
+
+pub fn get_all() -> Vec<Card> {
+    [
+        vec![
+            ultron_i::get_ultron_i(),
+            ultron_ii::get_ultron_ii(),
+            ultron_iii::get_ultron_iii(),
+        ],
+        get_main_scheme_cards(),
+        get_encounter_cards(),
+    ]
+    .concat()
 }

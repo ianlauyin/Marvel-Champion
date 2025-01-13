@@ -17,13 +17,23 @@ mod stampede;
 mod the_break_in_1a;
 mod the_break_in_1b;
 
-pub fn get_all() -> Vec<Card> {
+pub fn get_standard_villain_cards() -> Vec<Card> {
+    vec![rhino_i::get_rhino_i(), rhino_ii::get_rhino_ii()]
+}
+
+pub fn get_expert_villain_cards() -> Vec<Card> {
+    vec![rhino_ii::get_rhino_ii(), rhino_iii::get_rhino_iii()]
+}
+
+pub fn get_main_scheme_cards() -> Vec<Card> {
     vec![
-        rhino_i::get_rhino_i(),
-        rhino_ii::get_rhino_ii(),
-        rhino_iii::get_rhino_iii(),
         the_break_in_1a::get_the_break_in_1a(),
         the_break_in_1b::get_the_break_in_1b(),
+    ]
+}
+
+pub fn get_encounter_cards() -> Vec<Card> {
+    vec![
         armored_rhino_suit::get_armored_rhino_suit(),
         charge::get_charge(),
         charge::get_charge(),
@@ -42,4 +52,17 @@ pub fn get_all() -> Vec<Card> {
         breakin_and_takin::get_breakin_and_takin(),
         crowd_control::get_crowd_control(),
     ]
+}
+
+pub fn get_all() -> Vec<Card> {
+    [
+        vec![
+            rhino_i::get_rhino_i(),
+            rhino_ii::get_rhino_ii(),
+            rhino_iii::get_rhino_iii(),
+        ],
+        get_main_scheme_cards(),
+        get_encounter_cards(),
+    ]
+    .concat()
 }

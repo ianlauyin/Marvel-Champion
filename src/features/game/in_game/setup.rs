@@ -11,7 +11,7 @@ use crate::{
 };
 
 use super::{
-    game_elements::{FirstPlayer, PlayerNumber},
+    game_elements::{EnemyOperation, PlayerOperation},
     state::InGameState,
 };
 
@@ -54,10 +54,11 @@ fn add_loading_cards(
 fn setup_game(
     mut commands: Commands,
     mut game_play_camera: ResMut<GamePlayCamera>,
+    card_datas: Res<CardDatas>,
     selected_players: Res<SelectedPlayers>,
     selected_encounter_set: Res<SelectedEncounterSet>,
 ) {
     game_play_camera.toggle();
-    commands.insert_resource(PlayerNumber(selected_players.0.len()));
-    commands.insert_resource(FirstPlayer::new());
+    PlayerOperation::init_game(commands.reborrow(), &selected_players, card_datas);
+    EnemyOperation::init_game(commands, &selected_players, &selected_encounter_set);
 }

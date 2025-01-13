@@ -18,15 +18,25 @@ mod underground_distribution_1a;
 mod underground_distribution_1b;
 mod weapon_runner;
 
-pub fn get_all() -> Vec<Card> {
+pub fn get_standard_villain_cards() -> Vec<Card> {
+    vec![klaw_i::get_klaw_i(), klaw_ii::get_klaw_ii()]
+}
+
+pub fn get_expert_villain_cards() -> Vec<Card> {
+    vec![klaw_ii::get_klaw_ii(), klaw_iii::get_klaw_iii()]
+}
+
+pub fn get_main_scheme_cards() -> Vec<Card> {
     vec![
-        klaw_i::get_klaw_i(),
-        klaw_ii::get_klaw_ii(),
-        klaw_iii::get_klaw_iii(),
         underground_distribution_1a::get_underground_distribution_1a(),
         underground_distribution_1b::get_underground_distribution_1b(),
         secret_rendezvous_2a::get_secret_rendezvous_2a(),
         secret_rendezvous_2b::get_secret_rendezvous_2b(),
+    ]
+}
+
+pub fn get_encounter_cards() -> Vec<Card> {
+    vec![
         sonic_converter::get_sonic_converter(),
         solid_sound_body::get_solid_sound_body(),
         armored_guard::get_armored_guard(),
@@ -44,4 +54,17 @@ pub fn get_all() -> Vec<Card> {
         illegal_arms_factory::get_illegal_arms_factory(),
         the_immortal_klaw::get_the_immortal_klaw(),
     ]
+}
+
+pub fn get_all() -> Vec<Card> {
+    [
+        vec![
+            klaw_i::get_klaw_i(),
+            klaw_ii::get_klaw_ii(),
+            klaw_iii::get_klaw_iii(),
+        ],
+        get_main_scheme_cards(),
+        get_encounter_cards(),
+    ]
+    .concat()
 }

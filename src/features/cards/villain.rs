@@ -44,6 +44,38 @@ impl Villain {
         format!("{prefix}{name}{postfix}")
     }
 
+    pub fn get_standard_villain_cards(&self) -> Vec<Card> {
+        match *self {
+            Villain::CoreRhino => core_rhino::get_standard_villain_cards(),
+            Villain::CoreKlaw => core_klaw::get_standard_villain_cards(),
+            Villain::CoreUltron => core_ultron::get_standard_villain_cards(),
+        }
+    }
+
+    pub fn get_expert_villain_cards(&self) -> Vec<Card> {
+        match *self {
+            Villain::CoreRhino => core_rhino::get_expert_villain_cards(),
+            Villain::CoreKlaw => core_klaw::get_expert_villain_cards(),
+            Villain::CoreUltron => core_ultron::get_expert_villain_cards(),
+        }
+    }
+
+    pub fn get_main_scheme_cards(&self) -> Vec<Card> {
+        match *self {
+            Villain::CoreRhino => core_rhino::get_main_scheme_cards(),
+            Villain::CoreKlaw => core_klaw::get_main_scheme_cards(),
+            Villain::CoreUltron => core_ultron::get_main_scheme_cards(),
+        }
+    }
+
+    pub fn get_encounter_cards(&self) -> Vec<Card> {
+        match *self {
+            Villain::CoreRhino => core_rhino::get_encounter_cards(),
+            Villain::CoreKlaw => core_klaw::get_encounter_cards(),
+            Villain::CoreUltron => core_ultron::get_encounter_cards(),
+        }
+    }
+
     pub fn get_cards(&self) -> Vec<Card> {
         match *self {
             Villain::CoreRhino => core_rhino::get_all(),
