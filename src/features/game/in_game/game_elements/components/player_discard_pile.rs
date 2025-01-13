@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 
+// TODO: Add plugin for handling add will trigger CardState change
 #[derive(Component, Clone)]
 pub struct PlayerDiscardPile(usize);
 
