@@ -1,4 +1,4 @@
-use bevy::prelude::World;
+use bevy::prelude::{System, World};
 
 use super::{Card, CardDatas, Identity};
 
