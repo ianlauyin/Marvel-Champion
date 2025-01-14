@@ -6,7 +6,7 @@ pub fn get_weapon_runner() -> Card {
         name: "Weapons Runner",
         description: "Surge. (After this card is revealed, reveal 1 additional encounter card.) Boost: Put Weapons Runner into play engaged with you.",
         abilities: vec![],
-        card_image_path: "embedded://cards/villain/core_klaw/core_121.png",
+        card_image_path: "embedded://cards/scenario/core_klaw/core_121.png",
         card_icons: vec![],
         boost: 0,
         traits: vec![CardTrait::Mercenary],

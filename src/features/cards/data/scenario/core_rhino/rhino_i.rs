@@ -12,6 +12,6 @@ pub fn get_rhino_i() -> Card {
         atk: 2,
         description: "",
         abilities: vec![],
-        card_image_path: "embedded://cards/villain/core_rhino/core_094.png",
+        card_image_path: "embedded://cards/scenario/core_rhino/core_094.png",
     })
 }

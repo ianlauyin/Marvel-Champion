@@ -6,7 +6,7 @@ pub fn get_charge() -> Card {
         name: "Charge",
         description: "Attach to Rhino. Forced Interrupt: When Rhino attacks, the attack gains overkill. (Excess damage to an ally from this attack is dealt to that ally's controller.) At the end of this attack, discard Charge.",
         abilities: vec![],
-        card_image_path: "embedded://cards/villain/core_rhino/core_099.png",
+        card_image_path: "embedded://cards/scenario/core_rhino/core_099.png",
         card_icons: vec![],
         boost: 2,
         traits: vec![],

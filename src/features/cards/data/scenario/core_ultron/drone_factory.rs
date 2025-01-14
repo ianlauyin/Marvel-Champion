@@ -7,7 +7,7 @@ pub fn get_drone_factory() -> Card {
         description: "When Revealed: Each player puts the top card of their deck into play facedown, engaged with them as a Drone minion. Place 1 threat here for each Drone minion in play.",
         abilities: vec![],
         traits: vec![],
-        card_image_path: "embedded://cards/villain/core_ultron/core_148.png",
+        card_image_path: "embedded://cards/scenario/core_ultron/core_148.png",
         boost: 2,
         initial_threat: Count::Constant(4),
         card_icons: vec![CardIcon::Acceleration],

@@ -8,7 +8,7 @@ pub fn get_the_immortal_klaw() -> Card {
             "Klaw gets +10 hit points. (When this scheme is defeated, Klaw loses those hit points.)",
         abilities: vec![],
         traits: vec![],
-        card_image_path: "embedded://cards/villain/core_klaw/core_127.png",
+        card_image_path: "embedded://cards/scenario/core_klaw/core_127.png",
         boost: 0,
         initial_threat: Count::PerPlayer(3),
         card_icons: vec![CardIcon::Acceleration],

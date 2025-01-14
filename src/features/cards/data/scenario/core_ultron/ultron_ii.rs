@@ -12,6 +12,6 @@ pub fn get_ultron_ii() -> Card {
         atk: 2,
         description: "Forced Interrupt: When Ultron attacks you, put the top card of your deck into play facedown, engaged with you as a Drone minion. Until the end of his attack, Ultron gets +1 ATK for each Drone minion engaged with you.",
         abilities: vec![],
-        card_image_path: "embedded://cards/villain/core_ultron/core_135.png",
+        card_image_path: "embedded://cards/scenario/core_ultron/core_135.png",
     })
 }

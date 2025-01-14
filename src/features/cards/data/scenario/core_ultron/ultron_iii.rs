@@ -12,6 +12,6 @@ pub fn get_ultron_iii() -> Card {
         atk: 4,
         description: "Each Drone minion gets +1 ATK and +1 hit point. Ultron cannot take damage while a Drone minion is in play. When Revealed: Search the encounter deck and discard pile for the Ultron's Imperative side scheme and reveal it. Then shuffle the encounter deck.",
         abilities: vec![],
-        card_image_path: "embedded://cards/villain/core_ultron/core_136.png",
+        card_image_path: "embedded://cards/scenario/core_ultron/core_136.png",
     })
 }

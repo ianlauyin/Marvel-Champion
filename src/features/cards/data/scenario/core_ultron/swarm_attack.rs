@@ -7,7 +7,7 @@ pub fn get_swarm_attack() -> Card {
         traits: vec![],
         description: "When Revealed: Each Drone minion engaged with your hero attacks. If no attack was made this way, put the top card of your deck into play facedown, engaged with you as a Drone minion.",
         abilities: vec![],
-        card_image_path: "embedded://cards/villain/core_ultron/core_147.png",
+        card_image_path: "embedded://cards/scenario/core_ultron/core_147.png",
         boost: 1,
         keywords: vec![],
         boost_effect:None,

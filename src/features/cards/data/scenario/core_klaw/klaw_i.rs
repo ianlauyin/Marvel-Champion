@@ -12,6 +12,6 @@ pub fn get_klaw_i() -> Card {
         atk: 0,
         description: " Forced Interrupt: When Klaw attacks, give him 1 additional boost card for this activation.",
         abilities: vec![],
-        card_image_path: "embedded://cards/villain/core_klaw/core_113.png",
+        card_image_path: "embedded://cards/scenario/core_klaw/core_113.png",
     })
 }

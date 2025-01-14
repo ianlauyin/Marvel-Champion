@@ -6,7 +6,7 @@ pub fn get_shocker() -> Card {
         name: "Shocker",
         description: "When Revealed: Deal 1 damage to each hero.",
         abilities: vec![],
-        card_image_path: "embedded://cards/villain/core_rhino/core_103.png",
+        card_image_path: "embedded://cards/scenario/core_rhino/core_103.png",
         card_icons: vec![],
         boost: 2,
         traits: vec![CardTrait::Criminal],

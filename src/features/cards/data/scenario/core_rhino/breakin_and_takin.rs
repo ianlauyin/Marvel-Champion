@@ -7,7 +7,7 @@ pub fn get_breakin_and_takin() -> Card {
         description: "When Revealed: Place an additional 1  threat here.",
         abilities: vec![],
         traits: vec![],
-        card_image_path: "embedded://cards/villain/core_rhino/core_107.png",
+        card_image_path: "embedded://cards/scenario/core_rhino/core_107.png",
         boost: 2,
         initial_threat: Count::Constant(2),
         card_icons: vec![CardIcon::Hazard],

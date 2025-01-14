@@ -7,7 +7,7 @@ pub fn get_crowd_control() -> Card {
         description: "",
         abilities: vec![],
         traits: vec![],
-        card_image_path: "embedded://cards/villain/core_rhino/core_108.png",
+        card_image_path: "embedded://cards/scenario/core_rhino/core_108.png",
         boost: 2,
         initial_threat: Count::PerPlayer(2),
         card_icons: vec![CardIcon::Crisis],

@@ -1,4 +1,4 @@
-use crate::{constants::GAME_MAT_ASSET, systems::AppState};
+use crate::{constants::GAME_MAT_ASSET, systems::AppState, utils::UiUtils};
 use bevy::prelude::*;
 use std::f32::consts::PI;
 
@@ -10,7 +10,7 @@ impl Plugin for GameMatPlugin {
     }
 }
 
-const GAME_MAT_SIZE: Vec3 = Vec3::new(1000., 1000., 50.);
+const GAME_MAT_SIZE: Vec3 = Vec3::new(800., 800., 50.);
 
 fn spawn_game_mat(
     mut commands: Commands,
@@ -27,7 +27,7 @@ fn spawn_game_mat(
         })),
         Transform {
             translation: Vec3::new(0., 0., -25.),
-            rotation: Quat::from_axis_angle(Vec3::new(0., 1., 0.), PI),
+            rotation: Quat::from_rotation_y(UiUtils::angle_to_radian(180.)),
             ..default()
         },
     ));

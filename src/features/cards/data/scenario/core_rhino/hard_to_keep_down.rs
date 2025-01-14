@@ -6,7 +6,7 @@ pub fn get_hard_to_keep_down() -> Card {
         name: "Hard to Keep Down",
         description: "When Revealed: Rhino heals 4 damage. If no damage was healed this way, this card gains surge.",
         abilities: vec![],
-        card_image_path: "embedded://cards/villain/core_rhino/core_104.png",
+        card_image_path: "embedded://cards/scenario/core_rhino/core_104.png",
         boost: 0,
         traits: vec![],
         keywords: vec![],

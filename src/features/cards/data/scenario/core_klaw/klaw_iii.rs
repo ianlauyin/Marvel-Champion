@@ -12,6 +12,6 @@ pub fn get_klaw_iii() -> Card {
         atk: 2,
         description: "Toughness. (This character enters play with a tough status card.) Forced Interrupt: When Klaw attacks, give him 1 additional boost card for this activation.",
         abilities: vec![],
-        card_image_path: "embedded://cards/villain/core_klaw/core_115.png",
+        card_image_path: "embedded://cards/scenario/core_klaw/core_115.png",
     })
 }

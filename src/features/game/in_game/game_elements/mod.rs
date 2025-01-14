@@ -2,6 +2,7 @@ mod components;
 mod enemy_operation;
 mod player_operation;
 mod resources;
+mod shared;
 
 use bevy::app::{App, Plugin};
 pub use enemy_operation::EnemyOperation;
@@ -12,11 +13,6 @@ pub struct GameElementPlugin;
 
 impl Plugin for GameElementPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((
-            components::DeckCardPlugin,
-            components::OutOfPlayAreaPlugin,
-            components::PlayerDiscardPilePlugin,
-            components::EncounterCardPlugin,
-        ));
+        app.add_plugins((components::PlayAreaPlugin, shared::SharedPlugin));
     }
 }

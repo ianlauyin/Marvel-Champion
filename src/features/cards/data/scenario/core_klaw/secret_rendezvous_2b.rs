@@ -6,7 +6,7 @@ pub fn get_secret_rendezvous_2b() -> Card {
         name: "Secret Rendezvous - 2B",
         description: "If this stage is completed, the players lose the game.",
         abilities: vec![],
-        card_image_path: "embedded://cards/villain/core_klaw/core_117b.png",
+        card_image_path: "embedded://cards/scenario/core_klaw/core_117b.png",
         next_stage_id: None,
         target_threat: Count::PerPlayer(8),
         increase_threat: Count::PerPlayer(1),

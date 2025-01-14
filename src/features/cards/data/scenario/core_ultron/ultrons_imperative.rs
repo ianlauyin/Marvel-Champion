@@ -7,7 +7,7 @@ pub fn get_ultrons_imperative() -> Card {
         description: "When Revealed: The first player puts the top 2 cards of their deck into play facedown, engaged with them as Drone minions.",
         abilities: vec![],
         traits: vec![],
-        card_image_path: "embedded://cards/villain/core_ultron/core_150.png",
+        card_image_path: "embedded://cards/scenario/core_ultron/core_150.png",
         boost: 3,
         initial_threat: Count::PerPlayer(2),
         card_icons: vec![CardIcon::Hazard],

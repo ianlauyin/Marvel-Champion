@@ -6,7 +6,7 @@ pub fn get_sandman() -> Card {
         name: "Sandman",
         description: "Toughness. (This character enters play with a tough status card.)",
         abilities: vec![],
-        card_image_path: "embedded://cards/villain/core_rhino/core_102.png",
+        card_image_path: "embedded://cards/scenario/core_rhino/core_102.png",
         card_icons: vec![],
         boost: 2,
         traits: vec![CardTrait::Criminal, CardTrait::Elite],

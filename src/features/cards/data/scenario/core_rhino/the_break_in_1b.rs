@@ -6,7 +6,7 @@ pub fn get_the_break_in_1b() -> Card {
         name: "The Break-In! - 1B",
         description: "If this stage is completed, the players lose the game.",
         abilities: vec![],
-        card_image_path: "embedded://cards/villain/core_rhino/core_097b.png",
+        card_image_path: "embedded://cards/scenario/core_rhino/core_097b.png",
         next_stage_id: None,
         target_threat: Count::PerPlayer(7),
         increase_threat: Count::PerPlayer(1),

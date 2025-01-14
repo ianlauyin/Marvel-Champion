@@ -12,6 +12,6 @@ pub fn get_rhino_ii() -> Card {
         atk: 3,
         description: "When Revealed: Search the encounter deck and discard pile for the Breakin' & Takin' side scheme and reveal it. Shuffle the encounter deck.",
         abilities: vec![],
-        card_image_path: "embedded://cards/villain/core_rhino/core_095.png",
+        card_image_path: "embedded://cards/scenario/core_rhino/core_095.png",
     })
 }

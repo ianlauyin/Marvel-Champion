@@ -6,7 +6,7 @@ pub fn get_solid_sound_body() -> Card {
         name: "Solid-Sound Body",
         description: "Attach to Klaw. Klaw gains retaliate 1. (After this character is attacked, deal 1 damage to the attacking character.) Hero Action: Spend Energy Mental Physical resources -> discard this card.",
         abilities: vec![],
-        card_image_path: "embedded://cards/villain/core_klaw/core_119.png",
+        card_image_path: "embedded://cards/scenario/core_klaw/core_119.png",
         card_icons: vec![],
         boost: 3,
         traits: vec![CardTrait::Condition],

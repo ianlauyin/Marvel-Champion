@@ -19,7 +19,7 @@ impl GamePlayCamera {
     pub fn move_tick(&mut self, camera_transfom: &mut Transform) {
         if let Some(rotate_count) = self.rotate_count {
             let angle = if self.is_play_mode { 0.01 } else { -0.01 };
-            camera_transfom.rotate_around(Vec3::new(0., 100., -100.), Quat::from_rotation_x(angle));
+            camera_transfom.rotate_around(Vec3::new(0., 80., -80.), Quat::from_rotation_x(angle));
             let look_at_point_y = if self.is_play_mode {
                 100 / TOTAL_COUNTER * (TOTAL_COUNTER - rotate_count)
             } else {
@@ -35,7 +35,7 @@ impl GamePlayCamera {
     }
 }
 
-const ORIGINAL_DESITINATION: Vec3 = Vec3::new(0., 0., 1200.);
+const ORIGINAL_DESITINATION: Vec3 = Vec3::new(0., 0., 1000.);
 const ORIGINAL_LOOKING_AT: Vec3 = Vec3::ZERO;
 
 impl Plugin for CameraPlugin {

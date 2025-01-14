@@ -12,6 +12,6 @@ pub fn get_rhino_iii() -> Card {
         atk: 3,
         description: "Toughness. (This character enter play with a tough status card.) When Revealed: Stun each hero.",
         abilities: vec![],
-        card_image_path: "embedded://cards/villain/core_rhino/core_096.png",
+        card_image_path: "embedded://cards/scenario/core_rhino/core_096.png",
     })
 }
