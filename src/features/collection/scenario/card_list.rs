@@ -2,36 +2,39 @@ use bevy::prelude::*;
 
 use crate::{
     features::{
-        cards::Villain,
+        cards::Scenario,
         shared::{CardDetailButton, CardListBuilder, MenuBuilder},
     },
     systems::clean_up,
 };
 
-use super::state::CollectionVillainState;
+use super::state::CollectionScenarioState;
 
-pub struct CollectionVillainCardListPlugin;
+pub struct CollectionScenarioCardListPlugin;
 
-impl Plugin for CollectionVillainCardListPlugin {
+impl Plugin for CollectionScenarioCardListPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(OnEnter(CollectionVillainState::Cards), spawn_villain_cards)
-            .add_systems(
-                OnExit(CollectionVillainState::Cards),
-                clean_up::<VillainCardList>,
-            );
+        app.add_systems(
+            OnEnter(CollectionScenarioState::Cards),
+            spawn_scenario_cards,
+        )
+        .add_systems(
+            OnExit(CollectionScenarioState::Cards),
+            clean_up::<ScenarioCardList>,
+        );
     }
 }
 
 #[derive(Resource)]
-pub struct CollectionVillainSet(pub Villain);
+pub struct CollectionScenarioSet(pub Scenario);
 
 #[derive(Component, Clone)]
-struct VillainCardList;
+struct ScenarioCardList;
 
-fn spawn_villain_cards(
+fn spawn_scenario_cards(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
-    identity: Res<CollectionVillainSet>,
+    identity: Res<CollectionScenarioSet>,
 ) {
     let card_map = identity
         .0
@@ -53,9 +56,9 @@ fn spawn_villain_cards(
     }
     .spawn(commands.reborrow());
     MenuBuilder {
-        next_state: None::<CollectionVillainState>,
-        component: VillainCardList,
-        previous_state: CollectionVillainState::List,
+        next_state: None::<CollectionScenarioState>,
+        component: ScenarioCardList,
+        previous_state: CollectionScenarioState::List,
         content_child,
     }
     .spawn(commands);

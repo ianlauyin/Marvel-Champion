@@ -88,9 +88,9 @@ fn spawn_card_type_menu(mut commands: Commands) {
             },
         ),
         (
-            CardTypeButton(CollectionState::Villain),
+            CardTypeButton(CollectionState::Scenario),
             ListItem {
-                text: "Villain".to_string(),
+                text: "Scenario".to_string(),
                 color: Color::srgb(0.576, 0.576, 0.576),
                 ..default()
             },

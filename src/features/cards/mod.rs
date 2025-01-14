@@ -5,7 +5,7 @@ mod data;
 mod deck_validator;
 mod identity;
 mod modular_set;
-mod villain;
+mod scenario;
 
 pub use builders::*;
 pub use card::Card;
@@ -13,4 +13,4 @@ pub use card_type::*;
 pub use data::{CardDataPlugin, CardDatas};
 pub use identity::*;
 pub use modular_set::*;
-pub use villain::*;
+pub use scenario::*;

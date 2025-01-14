@@ -1,6 +1,6 @@
 use crate::{
     features::{
-        cards::{Card, Identity, ModularSet, Villain},
+        cards::{Card, Identity, ModularSet, Scenario},
         game::game_selector::{SelectedEncounterSet, SelectedPlayers},
     },
     utils::GameUtils,
@@ -18,10 +18,10 @@ impl EnemyOperation {
         selected_players: &Res<SelectedPlayers>,
         selected_encounter_set: &Res<SelectedEncounterSet>,
     ) {
-        let villain = &selected_encounter_set.villain;
+        let scenario = &selected_encounter_set.scenario;
         let modular_sets = &selected_encounter_set.modular_sets;
-        init_main_scheme(commands.reborrow(), villain);
-        init_villain(commands.reborrow(), villain, modular_sets);
+        init_main_scheme(commands.reborrow(), scenario);
+        init_villain(commands.reborrow(), scenario, modular_sets);
         init_encounter_deck(
             commands.reborrow(),
             selected_encounter_set,
@@ -31,11 +31,11 @@ impl EnemyOperation {
     }
 }
 
-fn init_villain(mut commands: Commands, villain: &Villain, modular_sets: &Vec<ModularSet>) {
+fn init_villain(mut commands: Commands, scenario: &Scenario, modular_sets: &Vec<ModularSet>) {
     let villain_cards = if GameUtils::is_expert_mode(modular_sets) {
-        villain.get_expert_villain_cards()
+        scenario.get_expert_villain_cards()
     } else {
-        villain.get_standard_villain_cards()
+        scenario.get_standard_villain_cards()
     };
     let in_play_villain = villain_cards.first().unwrap();
     commands.spawn((in_play_villain.clone(), CardState::InPlay));
@@ -44,8 +44,8 @@ fn init_villain(mut commands: Commands, villain: &Villain, modular_sets: &Vec<Mo
     }
 }
 
-fn init_main_scheme(mut commands: Commands, villain: &Villain) {
-    let main_scheme_cards = villain.get_main_scheme_cards();
+fn init_main_scheme(mut commands: Commands, scenario: &Scenario) {
+    let main_scheme_cards = scenario.get_main_scheme_cards();
     let in_play_main_scheme = main_scheme_cards.first().unwrap();
     commands.spawn((in_play_main_scheme.clone(), CardState::InPlay));
     for out_play_main_scheme in main_scheme_cards.iter().skip(1) {
@@ -65,7 +65,7 @@ fn init_encounter_deck(
     for modular_set in selected_encounter_set.modular_sets.iter() {
         encounter_deck.append(&mut modular_set.get_cards());
     }
-    encounter_deck.append(&mut selected_encounter_set.villain.get_encounter_cards());
+    encounter_deck.append(&mut selected_encounter_set.scenario.get_encounter_cards());
     encounter_deck.shuffle(&mut rand::thread_rng());
     for (index, card) in encounter_deck.iter().enumerate() {
         commands.spawn((card.clone(), EncounterCard::new(index), CardState::OutPlay));

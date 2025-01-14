@@ -13,7 +13,7 @@ pub enum CollectionState {
     Protection,
     Justice,
     Pool,
-    Villain,
+    Scenario,
     Modular,
 }
 

@@ -41,8 +41,8 @@ fn add_loading_cards(
             load_asset.add_card_by_id(card_id, &asset_server, &card_datas);
         }
     }
-    for villain_card in selected_encounter_set.villain.get_cards().iter() {
-        load_asset.add_card(villain_card, &asset_server);
+    for scenario_card in selected_encounter_set.scenario.get_cards().iter() {
+        load_asset.add_card(scenario_card, &asset_server);
     }
     for modular_set in selected_encounter_set.modular_sets.iter() {
         for modular_card in modular_set.get_cards().iter() {

@@ -2,7 +2,7 @@ use bevy::{input::common_conditions::input_just_pressed, prelude::*};
 
 use crate::{
     features::{
-        cards::{ModularSet, Villain},
+        cards::{ModularSet, Scenario},
         game::state::GameState,
         shared::{MenuBuilder, NextButton, Popup, TextListBuilder, TextListItem},
     },
@@ -18,14 +18,14 @@ const CURRENT_STATE: GameSelectorState = GameSelectorState::Encounter;
 impl Plugin for GameSelectorEncounterPlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(SelectedEncounterSet {
-            villain: Villain::CoreRhino,
+            scenario: Scenario::CoreRhino,
             modular_sets: vec![ModularSet::Standard],
         })
         .add_systems(OnEnter(CURRENT_STATE), spawn_encounter_list)
         .add_systems(
             Update,
             (
-                handle_villain_item_interaction,
+                handle_scenario_item_interaction,
                 handle_modular_set_item_interaction,
             )
                 .run_if(in_state(CURRENT_STATE))
@@ -41,7 +41,7 @@ impl Plugin for GameSelectorEncounterPlugin {
 
 #[derive(Resource)]
 pub struct SelectedEncounterSet {
-    pub villain: Villain,
+    pub scenario: Scenario,
     pub modular_sets: Vec<ModularSet>,
 }
 
@@ -49,7 +49,7 @@ pub struct SelectedEncounterSet {
 struct EncounterList;
 
 fn spawn_encounter_list(mut commands: Commands) {
-    let villain_list = spawn_villlain_list(commands.reborrow());
+    let scenario_list = spawn_villlain_list(commands.reborrow());
     let modular_set_list = spawn_modular_list(commands.reborrow());
 
     let content_child = commands
@@ -57,7 +57,7 @@ fn spawn_encounter_list(mut commands: Commands) {
             height: Val::Percent(100.),
             ..default()
         })
-        .add_children(&[villain_list, modular_set_list])
+        .add_children(&[scenario_list, modular_set_list])
         .id();
 
     MenuBuilder {
@@ -70,18 +70,18 @@ fn spawn_encounter_list(mut commands: Commands) {
 }
 
 #[derive(Component, Clone)]
-struct VillainItem(Villain);
+struct VillainItem(Scenario);
 
 fn spawn_villlain_list(mut commands: Commands) -> Entity {
-    let villain = Villain::get_all();
-    let list_map = villain
+    let scenario = Scenario::get_all();
+    let list_map = scenario
         .iter()
-        .map(|villain| {
+        .map(|scenario| {
             (
-                VillainItem(villain.clone()),
+                VillainItem(scenario.clone()),
                 TextListItem {
                     color: Color::NONE,
-                    text: villain.to_string().clone(),
+                    text: scenario.to_string().clone(),
                     ..default()
                 },
             )
@@ -112,13 +112,13 @@ fn spawn_modular_list(mut commands: Commands) -> Entity {
     TextListBuilder(list_map).spawn(commands.reborrow())
 }
 
-fn handle_villain_item_interaction(
+fn handle_scenario_item_interaction(
     text_q: Query<(&Interaction, &VillainItem)>,
     mut selected_encounter_set: ResMut<SelectedEncounterSet>,
 ) {
     for (interaction, item) in text_q.iter() {
         if *interaction == Interaction::Pressed {
-            selected_encounter_set.villain = item.0.clone();
+            selected_encounter_set.scenario = item.0.clone();
         }
     }
 }
@@ -142,16 +142,16 @@ fn handle_modular_set_item_interaction(
 }
 
 fn handle_ui_change(
-    mut villain_item_q: Query<(&mut BorderColor, &VillainItem), Without<ModularSetItem>>,
+    mut scenario_item_q: Query<(&mut BorderColor, &VillainItem), Without<ModularSetItem>>,
     mut modular_set_item_q: Query<(&mut BorderColor, &ModularSetItem), Without<VillainItem>>,
     selected_encounter_set: ResMut<SelectedEncounterSet>,
 ) {
     if selected_encounter_set.is_changed() {
-        for (mut villain_border_color, villain_item) in villain_item_q.iter_mut() {
-            if selected_encounter_set.villain == villain_item.0 {
-                villain_border_color.0 = Color::from(Color::WHITE);
+        for (mut scenario_border_color, scenario_item) in scenario_item_q.iter_mut() {
+            if selected_encounter_set.scenario == scenario_item.0 {
+                scenario_border_color.0 = Color::from(Color::WHITE);
             } else {
-                villain_border_color.0 = Color::from(Color::NONE);
+                scenario_border_color.0 = Color::from(Color::NONE);
             }
         }
         for (mut modular_set_border_color, modular_set_item) in modular_set_item_q.iter_mut() {
@@ -207,10 +207,10 @@ fn validate_resource(
         .modular_sets
         .iter()
         .filter(|modular_set| ![ModularSet::Standard, ModularSet::Expert].contains(modular_set));
-    if modular_for_check.count() != selected_encounter_set.villain.get_encounter_set_numbers() {
+    if modular_for_check.count() != selected_encounter_set.scenario.get_encounter_set_numbers() {
         return Err(format!(
             "You must only select {} modular set(s). (Standard and Expert not included)",
-            selected_encounter_set.villain.get_encounter_set_numbers()
+            selected_encounter_set.scenario.get_encounter_set_numbers()
         ));
     }
     Ok(())
