@@ -92,6 +92,13 @@ impl Identity {
         }
     }
 
+    pub fn get_health(&self) -> u8 {
+        let Card::AlterEgo(alter_ego_card) = self.get_alter_ego() else {
+            return 0;
+        };
+        alter_ego_card.initial_hit_points
+    }
+
     pub fn get_identity_cards(&self) -> Vec<Card> {
         match *self {
             Identity::CoreSpiderMan => core_spider_man::get_identity_cards(),

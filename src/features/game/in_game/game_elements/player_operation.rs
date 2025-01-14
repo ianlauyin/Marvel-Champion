@@ -24,12 +24,7 @@ impl PlayerOperation {
         commands.insert_resource(FirstPlayer::new());
         for (index, player) in selected_players.0.iter().enumerate() {
             let deck_cards = card_datas.from_ids(&player.deck.card_ids);
-            PlayerOperation::new_player(
-                commands.reborrow(),
-                index + 1,
-                &player.identity,
-                deck_cards,
-            );
+            new_player(commands.reborrow(), index + 1, &player.identity, deck_cards);
         }
     }
 
@@ -40,34 +35,34 @@ impl PlayerOperation {
             }
         }
     }
+}
 
-    fn new_player(
-        mut commands: Commands,
-        player_tag: usize,
-        identity: &Identity,
-        deck_cards: Vec<Card>,
-    ) {
-        let player = Player::new(player_tag);
-        Self::init_identity_cards(commands.reborrow(), &player, identity);
-        Self::init_deck(commands, &player, deck_cards);
+fn new_player(
+    mut commands: Commands,
+    player_tag: usize,
+    identity: &Identity,
+    deck_cards: Vec<Card>,
+) {
+    let player = Player::new(player_tag, identity.get_health());
+    init_identity_cards(commands.reborrow(), &player, identity);
+    init_deck(commands, &player, deck_cards);
+}
+
+fn init_identity_cards(mut commands: Commands, player: &Player, identity: &Identity) {
+    commands.spawn((player.clone(), identity.get_alter_ego(), CardState::InPlay));
+    for card in identity.get_hero() {
+        commands.spawn((player.clone(), card.clone(), CardState::OutPlay));
     }
+}
 
-    fn init_identity_cards(mut commands: Commands, player: &Player, identity: &Identity) {
-        commands.spawn((player.clone(), identity.get_alter_ego(), CardState::InPlay));
-        for card in identity.get_hero() {
-            commands.spawn((player.clone(), card.clone(), CardState::OutPlay));
-        }
-    }
-
-    fn init_deck(mut commands: Commands, player: &Player, mut deck_cards: Vec<Card>) {
-        deck_cards.shuffle(&mut rand::thread_rng());
-        for (index, card) in deck_cards.iter().enumerate() {
-            commands.spawn((
-                player.clone(),
-                card.clone(),
-                CardState::OutPlay,
-                DeckCard::new(index),
-            ));
-        }
+fn init_deck(mut commands: Commands, player: &Player, mut deck_cards: Vec<Card>) {
+    deck_cards.shuffle(&mut rand::thread_rng());
+    for (index, card) in deck_cards.iter().enumerate() {
+        commands.spawn((
+            player.clone(),
+            card.clone(),
+            CardState::OutPlay,
+            DeckCard::new(index),
+        ));
     }
 }
