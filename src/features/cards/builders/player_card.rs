@@ -41,6 +41,7 @@ pub struct AlterEgoCard<'a> {
     pub nemesis_side_scheme_id: &'a str,
     pub nemesis_card_id: Vec<&'a str>,
     pub card_image_path: &'a str,
+    pub card_back_image_path: &'a str,
 }
 
 #[derive(Clone)]
@@ -78,6 +79,7 @@ pub struct HeroCard<'a> {
     pub nemesis_side_scheme_id: &'a str,
     pub nemesis_card_id: Vec<&'a str>,
     pub card_image_path: &'a str,
+    pub card_back_image_path: &'a str,
 }
 
 #[derive(Clone)]

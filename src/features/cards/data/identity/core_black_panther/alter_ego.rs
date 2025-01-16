@@ -9,8 +9,8 @@ pub fn get_alter_ego() -> Card {
         description: "Setup: Search your deck for a Black Panther upgrade and add it to your hand. Shuffle your deck.",
         abilities: vec![],
         aspect: CardAspect::IdentitySpecific(CoreBlackPanther),
-        card_image_path:
-            "embedded://cards/identity/core_black_panther/core_040b.png",
+        card_image_path:"embedded://cards/identity/core_black_panther/core_040b.png",
+        card_back_image_path:"embedded://cards/identity/core_black_panther/core_040a.png",
         traits: vec![CardTrait::King, CardTrait::Wakanda],
         flip_target_id: vec!["core_040a"],
         initial_hit_points: 11,

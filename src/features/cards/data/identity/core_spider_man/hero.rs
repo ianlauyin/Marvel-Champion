@@ -16,6 +16,7 @@ pub fn get_hero() -> Card {
         abilities: vec![],
         hand_size: 5,
         card_image_path: "embedded://cards/identity/core_spider_man/core_001a.png",
+        card_back_image_path: "embedded://cards/identity/core_spider_man/core_001b.png",
         nemesis_id: "core_167",
         nemesis_side_scheme_id: "core_166",
         nemesis_card_id: vec!["core_168", "core_169"],

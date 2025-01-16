@@ -7,6 +7,7 @@ pub fn get_assault_on_norad_2b() -> Card {
         description: "Forced Response: After placing threat here during step one of the villain phase, each player must choose to either place 2 threat here or put the top card of their deck into play facedown, engaged with them as a Drone minion.",
         abilities: vec![],
         card_image_path: "embedded://cards/scenario/core_ultron/core_138b.png",
+        card_back_image_path: "embedded://cards/scenario/core_ultron/core_138a.png",
         next_stage_id: Some("core_139a"),
         target_threat: Count::PerPlayer(10),
         increase_threat: Count::PerPlayer(1),

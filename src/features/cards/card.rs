@@ -65,11 +65,10 @@ impl Card {
             | Card::Support(_)
             | Card::Upgrade(_) => PLAYER_CARD_BACK_ASSET.path,
             Card::Villain(_) => VILLAIN_CARD_BACK_ASSET.path,
-            // Hero, AlterEgo, MainScheme should have no card back
-            _ => {
-                warn!("{} should not have a card back", self.get_name());
-                return "".to_string();
-            }
+            Card::Hero(hero_card) => hero_card.card_back_image_path,
+            Card::AlterEgo(alter_ego_card) => alter_ego_card.card_back_image_path,
+            Card::MainSchemeA(main_scheme_a_card) => main_scheme_a_card.card_back_image_path,
+            Card::MainSchemeB(main_scheme_b_card) => main_scheme_b_card.card_back_image_path,
         };
         image_path.to_string()
     }

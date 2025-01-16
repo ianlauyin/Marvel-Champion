@@ -9,6 +9,7 @@ pub fn get_hero() -> Card {
         description: "Response: After you change to this form, deal 2 damage to an enemy.",
         abilities: vec![],
         card_image_path: "embedded://cards/identity/core_she_hulk/core_019a.png",
+        card_back_image_path: "embedded://cards/identity/core_she_hulk/core_019b.png",
         flip_target_id: vec!["core_019b"],
         initial_hit_points: 15,
         keywords: vec![],

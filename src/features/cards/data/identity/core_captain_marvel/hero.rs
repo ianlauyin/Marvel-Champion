@@ -8,6 +8,7 @@ pub fn get_hero() -> Card {
         description:"Action: Spend a Energy resource and heal 1 damage from Captain Marvel -> draw 1 card. (Limit once per round.)",
         abilities: vec![],
         card_image_path: "embedded://cards/identity/core_captain_marvel/core_010a.png",
+        card_back_image_path: "embedded://cards/identity/core_captain_marvel/core_010b.png",
         traits: vec![CardTrait::Avenger,CardTrait::Soldier],
         flip_target_id: vec!["core_010b"],
         initial_hit_points: 12,

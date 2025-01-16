@@ -7,6 +7,7 @@ pub fn get_the_break_in_1a() -> Card {
         description: "Setup: Advance to stage 1B.",
         abilities: vec![],
         card_image_path: "embedded://cards/scenario/core_rhino/core_097a.png",
+        card_back_image_path: "embedded://cards/scenario/core_rhino/core_097b.png",
         next_stage_id: Some("core_097b"),
     })
 }

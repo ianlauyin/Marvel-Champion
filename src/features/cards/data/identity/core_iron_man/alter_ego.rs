@@ -7,8 +7,8 @@ pub fn get_alter_ego() -> Card {
         aspect: CardAspect::IdentitySpecific(CoreIronMan),
         description: "Action: Look at the top 3 cards of your deck. Add 1 to your hand and discard the others. (Limit once per round.)",
         abilities: vec![],
-        card_image_path:
-            "embedded://cards/identity/core_iron_man/core_029b.png",
+        card_image_path:"embedded://cards/identity/core_iron_man/core_029b.png",
+        card_back_image_path:"embedded://cards/identity/core_iron_man/core_029a.png",
         traits: vec![CardTrait::Genius],
         flip_target_id: vec!["core_029a"],
         initial_hit_points: 9,

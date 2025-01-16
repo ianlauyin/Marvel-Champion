@@ -9,6 +9,7 @@ pub fn get_hero() -> Card {
             "You get +1 hand size for each Tech upgrade you control (to a maximum hand size of 7).",
         abilities: vec![],
         card_image_path: "embedded://cards/identity/core_iron_man/core_029a.png",
+        card_back_image_path: "embedded://cards/identity/core_iron_man/core_029b.png",
         traits: vec![CardTrait::Avenger],
         flip_target_id: vec!["core_029b"],
         initial_hit_points: 9,

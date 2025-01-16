@@ -39,6 +39,7 @@ pub struct MainSchemeACard<'a> {
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
     pub card_image_path: &'a str,
+    pub card_back_image_path: &'a str,
 }
 
 #[derive(Clone)]
@@ -53,6 +54,7 @@ pub struct MainSchemeBCard<'a> {
     pub description: &'a str,
     pub abilities: Vec<CardAbility>,
     pub card_image_path: &'a str,
+    pub card_back_image_path: &'a str,
 }
 
 #[derive(Clone)]

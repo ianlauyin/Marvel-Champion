@@ -7,6 +7,7 @@ pub fn get_the_crimson_cowl_1b() -> Card {
         description: "When Revealed: Each player puts the top card of their deck into play facedown, engaged with them as a Drone minion.",
         abilities: vec![],
         card_image_path: "embedded://cards/scenario/core_ultron/core_137b.png",
+        card_back_image_path: "embedded://cards/scenario/core_ultron/core_137a.png",
         next_stage_id: Some("core_138a"),
         target_threat: Count::PerPlayer(3),
         increase_threat: Count::PerPlayer(1),

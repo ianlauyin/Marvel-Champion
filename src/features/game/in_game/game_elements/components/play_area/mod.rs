@@ -3,7 +3,7 @@ mod deck_card;
 mod encounter_card;
 mod out_of_play_area;
 mod player_discard_pile;
-mod villain_area;
+mod villain_main_scheme_area;
 
 use bevy::app::{App, Plugin};
 pub use card_state::{change_card_state_on_added, CardState};
@@ -21,7 +21,7 @@ impl Plugin for PlayAreaPlugin {
             encounter_card::EncounterCardPlugin,
             out_of_play_area::OutOfPlayAreaPlugin,
             player_discard_pile::PlayerDiscardPilePlugin,
-            villain_area::VillainAreaPlugin,
+            villain_main_scheme_area::VillainAreaAndMainSchemePlugin,
         ));
     }
 }

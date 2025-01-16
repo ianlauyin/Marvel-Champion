@@ -7,6 +7,7 @@ pub fn get_the_crimson_cowl_1a() -> Card {
         description: "Setup: Put the Ultron Drones environment into play. Shuffle the encounter deck. Advanced to stage 1B.",
         abilities: vec![],
         card_image_path: "embedded://cards/scenario/core_ultron/core_137a.png",
+        card_back_image_path: "embedded://cards/scenario/core_ultron/core_137b.png",
         next_stage_id: Some("core_137b"),
     })
 }

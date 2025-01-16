@@ -7,6 +7,7 @@ pub fn get_countdown_to_oblivion_3b() -> Card {
         description: "Threat cannot be removed from this scheme. If this stage is completed, the players lose the game",
         abilities: vec![],
         card_image_path: "embedded://cards/scenario/core_ultron/core_139b.png",
+        card_back_image_path: "embedded://cards/scenario/core_ultron/core_139a.png",
         next_stage_id: None,
         target_threat: Count::PerPlayer(5),
         increase_threat: Count::PerPlayer(1),

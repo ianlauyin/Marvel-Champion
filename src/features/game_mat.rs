@@ -1,6 +1,5 @@
 use crate::{constants::GAME_MAT_ASSET, systems::AppState, utils::UiUtils};
 use bevy::prelude::*;
-use std::f32::consts::PI;
 
 pub struct GameMatPlugin;
 

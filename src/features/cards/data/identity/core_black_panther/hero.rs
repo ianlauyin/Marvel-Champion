@@ -10,6 +10,7 @@ pub fn get_hero() -> Card {
         abilities: vec![],
         aspect: CardAspect::IdentitySpecific(CoreBlackPanther),
         card_image_path: "embedded://cards/identity/core_black_panther/core_040a.png",
+        card_back_image_path:"embedded://cards/identity/core_black_panther/core_040b.png",
         traits: vec![CardTrait::Avenger,CardTrait::Wakanda],
         flip_target_id: vec!["core_040b"],
         initial_hit_points: 11,

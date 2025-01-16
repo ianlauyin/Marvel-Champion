@@ -9,6 +9,7 @@ pub fn get_alter_ego() -> Card {
         description: "Interrupt: When threat would be placed on a scheme, prevent 1 of that threat. (Limit once per round.)",
         abilities: vec![],
         card_image_path: "embedded://cards/identity/core_she_hulk/core_019b.png",
+        card_back_image_path: "embedded://cards/identity/core_she_hulk/core_019a.png",
         flip_target_id: vec!["core_019a"],
         initial_hit_points: 15,
         keywords: vec![],

@@ -10,6 +10,7 @@ pub fn get_alter_ego() -> Card {
         description: "Action: Choose a player to draw 1 card. (Limit once per round.)",
         abilities: vec![],
         card_image_path: "embedded://cards/identity/core_captain_marvel/core_010b.png",
+        card_back_image_path: "embedded://cards/identity/core_captain_marvel/core_010a.png",
         traits: vec![CardTrait::SHIELD, CardTrait::Soldier],
         flip_target_id: vec!["core_010a"],
         initial_hit_points: 12,
