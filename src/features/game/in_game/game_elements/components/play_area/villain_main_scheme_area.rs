@@ -19,8 +19,8 @@ impl Plugin for VillainAreaAndMainSchemePlugin {
 }
 
 // TODO: Update
-const VILLAIN_CARD_POSITION: Vec3 = Vec3::new(-100., 100., 0.);
-const MAIN_SCHEME_CARD_POSITION: Vec3 = Vec3::new(0., 0., 0.);
+const VILLAIN_CARD_POSITION: Vec3 = Vec3::new(-200., 200., 0.);
+const MAIN_SCHEME_CARD_POSITION: Vec3 = Vec3::new(0., 200., 0.);
 
 fn handle_villain_and_main_scheme_added(
     mut commands: Commands,

@@ -15,6 +15,6 @@ impl Plugin for SetupPlugin {
             }),
             ..default()
         }))
-        .add_plugins(EmbeddedAssetPlugin::default());
+        .add_plugins((EmbeddedAssetPlugin::default(), MeshPickingPlugin));
     }
 }
