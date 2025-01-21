@@ -6,7 +6,7 @@ use bevy::prelude::*;
 use rand::seq::SliceRandom;
 
 use super::{
-    components::{CardState, DeckCard, Player},
+    components::{Belongs, CardState, Player},
     FirstPlayer, PlayerNumber,
 };
 
@@ -51,18 +51,13 @@ fn new_player(
 fn init_identity_cards(mut commands: Commands, player: &Player, identity: &Identity) {
     commands.spawn((player.clone(), identity.get_alter_ego(), CardState::InPlay));
     for card in identity.get_hero() {
-        commands.spawn((player.clone(), card.clone(), CardState::OutPlay));
+        commands.spawn((player.clone(), card.clone()));
     }
 }
 
 fn init_deck(mut commands: Commands, player: &Player, mut deck_cards: Vec<Card>) {
     deck_cards.shuffle(&mut rand::thread_rng());
     for (index, card) in deck_cards.iter().enumerate() {
-        commands.spawn((
-            player.clone(),
-            card.clone(),
-            CardState::OutPlay,
-            DeckCard::new(index),
-        ));
+        commands.spawn((player.clone(), card.clone(), Belongs::PlayerDeck(index)));
     }
 }

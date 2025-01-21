@@ -13,6 +13,10 @@ pub struct GameElementPlugin;
 
 impl Plugin for GameElementPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((components::PlayAreaPlugin, shared::SharedPlugin));
+        app.add_plugins((
+            components::BelongsPlugin,
+            components::GameUiPlugin,
+            shared::SharedPlugin,
+        ));
     }
 }

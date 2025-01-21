@@ -8,7 +8,7 @@ use crate::{
 use bevy::prelude::*;
 use rand::seq::SliceRandom;
 
-use super::components::{CardState, EncounterCard, OutOfPlayArea};
+use super::components::Belongs;
 
 pub struct EnemyOperation;
 
@@ -37,19 +37,14 @@ fn init_villain(mut commands: Commands, scenario: &Scenario, modular_sets: &Vec<
     } else {
         scenario.get_standard_villain_cards()
     };
-    let in_play_villain = villain_cards.first().unwrap();
-    commands.spawn((in_play_villain.clone(), CardState::InPlay));
-    for out_play_villain in villain_cards.iter().skip(1) {
-        commands.spawn((out_play_villain.clone(), CardState::OutPlay));
+    for (index, villain_card) in villain_cards.iter().enumerate() {
+        commands.spawn((villain_card.clone(), Belongs::Villain(index)));
     }
 }
 
 fn init_main_scheme(mut commands: Commands, scenario: &Scenario) {
-    let main_scheme_cards = scenario.get_main_scheme_cards();
-    let in_play_main_scheme = main_scheme_cards.first().unwrap();
-    commands.spawn((in_play_main_scheme.clone(), CardState::InPlay));
-    for out_play_main_scheme in main_scheme_cards.iter().skip(1) {
-        commands.spawn((out_play_main_scheme.clone(), CardState::OutPlay));
+    for (index, main_scheme_card) in scenario.get_main_scheme_cards().iter().enumerate() {
+        commands.spawn((main_scheme_card.clone(), Belongs::MainScheme(index)));
     }
 }
 
@@ -68,7 +63,7 @@ fn init_encounter_deck(
     encounter_deck.append(&mut selected_encounter_set.scenario.get_encounter_cards());
     encounter_deck.shuffle(&mut rand::thread_rng());
     for (index, card) in encounter_deck.iter().enumerate() {
-        commands.spawn((card.clone(), EncounterCard::new(index), CardState::OutPlay));
+        commands.spawn((card.clone(), Belongs::EncounterDeck(index)));
     }
 }
 
@@ -78,6 +73,6 @@ fn init_nemesis_set(mut commands: Commands, identities: Vec<Identity>) {
         nemesis_set_cards.append(&mut identity.get_nemesis_set());
     }
     for card in nemesis_set_cards {
-        commands.spawn((card.clone(), CardState::OutPlay, OutOfPlayArea));
+        commands.spawn((card.clone(), Belongs::OutOfPlay));
     }
 }
