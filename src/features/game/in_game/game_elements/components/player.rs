@@ -3,7 +3,8 @@ use bevy::{log::warn, prelude::Component};
 /// From 1-4
 #[derive(Component, Clone)]
 pub struct Player {
-    tag: usize,
+    pub tag: usize,
+    pub identity_tag: usize, // 0 for alter ego, others for hero
     max_health: u8,
     current_health: u8,
 }
@@ -15,6 +16,7 @@ impl Player {
         }
         Self {
             tag,
+            identity_tag: 0,
             max_health: health,
             current_health: health,
         }

@@ -49,9 +49,17 @@ fn new_player(
 }
 
 fn init_identity_cards(mut commands: Commands, player: &Player, identity: &Identity) {
-    commands.spawn((player.clone(), identity.get_alter_ego(), CardState::InPlay));
-    for card in identity.get_hero() {
-        commands.spawn((player.clone(), card.clone()));
+    commands.spawn((
+        player.clone(),
+        identity.get_alter_ego(),
+        Belongs::PlayerIdentity(0),
+    ));
+    for (index, card) in identity.get_hero().iter().enumerate() {
+        commands.spawn((
+            player.clone(),
+            card.clone(),
+            Belongs::PlayerIdentity(index + 1),
+        ));
     }
 }
 

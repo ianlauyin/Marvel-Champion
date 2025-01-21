@@ -152,7 +152,6 @@ fn handle_drop(
     if ev.is_empty() {
         return;
     };
-    println!("Drop");
     let Ok((entity, dragging_card)) = dragging_card_q.get_single() else {
         warn!("Should have one dragging card when drop");
         return;

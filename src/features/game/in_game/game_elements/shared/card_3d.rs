@@ -61,10 +61,11 @@ fn on_added(
         .with_z(card_3d.position.z + CARD_SIZE.z / 2.);
 
     let rotation_y_radian = UiUtils::angle_to_radian(if card_3d.face_up { 180. } else { 0. });
-    let is_horizontal_card = matches!(
-        card,
-        Card::MainSchemeA(_) | Card::MainSchemeB(_) | Card::SideScheme(_)
-    );
+    let is_horizontal_card = card_3d.face_up
+        && matches!(
+            card,
+            Card::MainSchemeA(_) | Card::MainSchemeB(_) | Card::SideScheme(_)
+        );
     let rotation_z_radian = UiUtils::angle_to_radian(if is_horizontal_card { -90. } else { 0. });
 
     let mut transform = Transform::from_translation(position);

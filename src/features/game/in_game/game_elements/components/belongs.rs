@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use super::CardState;
+use super::{CardState, Player};
 
 pub struct BelongsPlugin;
 
@@ -12,13 +12,14 @@ impl Plugin for BelongsPlugin {
 
 #[derive(Component, PartialEq, Eq, Clone)]
 pub enum Belongs {
-    Villain(usize),
-    MainScheme(usize),
+    Villain(usize),    // Index
+    MainScheme(usize), // Index
     OutOfPlay,
-    PlayerDeck(usize),
-    PlayerDiscardPile(usize),
-    EncounterDeck(usize),
-    EncounterDiscardPile(usize),
+    PlayerIdentity(usize),       // 0 for alter ego, others for hero
+    PlayerDeck(usize),           // Index
+    PlayerDiscardPile(usize),    // Index
+    EncounterDeck(usize),        // Index
+    EncounterDiscardPile(usize), // Index
 }
 
 pub fn change_card_state_on_belongs_added(
@@ -32,7 +33,9 @@ pub fn change_card_state_on_belongs_added(
         return;
     };
     let target_card_state = match belongs {
-        Belongs::Villain(0) | Belongs::MainScheme(0) => CardState::InPlay,
+        Belongs::Villain(0) | Belongs::MainScheme(0) | Belongs::PlayerIdentity(0) => {
+            CardState::InPlay
+        }
         _ => CardState::OutPlay,
     };
     if let Some(mut card_state) = card_state_op {
