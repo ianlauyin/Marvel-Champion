@@ -23,8 +23,7 @@ const MAIN_SCHEME_CARD_POSITION: Vec2 = Vec2::new(0., 200.);
 const ENCOUNTER_DECK_CARD_POSITION: Vec2 = Vec2::new(100., 200.);
 const OUT_OF_PLAY_CARD_POSITION: Vec2 = Vec2::new(-350., 350.);
 const PLAYER_DECK_CARD_POSITION: Vec2 = Vec2::new(-100., -200.);
-// TODO update Identity card position
-const IDENTITY_CARD_POSITION: Vec2 = Vec2::ZERO;
+const IDENTITY_CARD_POSITION: Vec2 = Vec2::new(-100., -100.);
 
 fn handle_card_added_ui(
     mut commands: Commands,
