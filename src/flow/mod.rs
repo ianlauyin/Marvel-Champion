@@ -1,4 +1,5 @@
 mod loading;
+mod main_menu;
 mod setup;
 mod state;
 
@@ -12,6 +13,7 @@ impl Plugin for FlowPlugin {
             setup::SetupPlugin,
             loading::LoadingPlugin,
             state::StatePlugin,
+            main_menu::MainMenuPlugin,
         ));
     }
 }
