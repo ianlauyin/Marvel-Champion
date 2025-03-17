@@ -1,5 +1,6 @@
 use bevy::{prelude::*, window::WindowResolution};
 use bevy_embedded_assets::EmbeddedAssetPlugin;
+use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use constant::WINDOW_RESOLUTION;
 
 mod component;
