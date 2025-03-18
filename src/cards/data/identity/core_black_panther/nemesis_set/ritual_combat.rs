@@ -1,15 +1,36 @@
-use crate::features::cards::{Card, TreacheryCard};
+use bevy::ecs::world::World;
 
-pub fn get_ritual_combat() -> Card {
-    Card::Treachery(TreacheryCard {
+use crate::{
+    cards::{Belong, IdentitySet},
+    component::{
+        ability::WhenRevealedAbilities,
+        card::{CardBasic, CardBoost},
+    },
+};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_159",
         name: "Ritual Combat",
-        boost: 2,
-        description: "When Revealed: Discard the top card of the encounter deck. Then, choose to either deal X damage to your hero or place X threat on the main scheme. X is 1 more than the number of boost icons on the discarded encounter card.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_black_panther/core_159.png",
-        traits: vec![],
-        keywords:vec![],
-        boost_effect:None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 2,
+        belongs: Belong::IdentitySet(IdentitySet::CoreBlackPanther).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(&mut World)) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(world: &mut World) {
+    world.spawn((
+        get_info(),
+        CardBoost::new(2),
+        WhenRevealedAbilities::single(when_revealed_ability),
+    ));
+}
+
+fn when_revealed_ability(world: &mut World) {
+    println!("when_revealed_ability");
 }

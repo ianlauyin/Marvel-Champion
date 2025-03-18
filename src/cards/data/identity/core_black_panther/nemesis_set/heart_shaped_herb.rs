@@ -1,15 +1,34 @@
-use crate::features::cards::{Card, Keyword, TreacheryCard};
+use bevy::ecs::world::World;
 
-pub fn get_heart_shaped_herb() -> Card {
-    Card::Treachery(TreacheryCard {
+use crate::{
+    cards::{set::IdentitySet, Belong},
+    component::{
+        ability::InstantAbilities,
+        card::{CardBasic, CardBoost, CardKeyword, CardKeywords},
+    },
+};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_158",
         name: "Heart-Shaped Herb",
-        boost: 0,
-        description: "Surge (After this card resolves, reveal 1 additional encounter card) When Revealed: Give the villain and each minion engaged with you a tough status card.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_black_panther/core_158.png",
-        traits: vec![],
-        keywords:vec![Keyword::Surge],
-        boost_effect:None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 3,
+        belongs: Belong::IdentitySet(IdentitySet::CoreBlackPanther).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(&mut World)) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(world: &mut World) {
+    let keywords: CardKeywords = CardKeyword::Surge.into();
+    let instant_abilities = InstantAbilities::single(instant_ability);
+    world.spawn((get_info(), CardBoost::new(0), keywords, instant_abilities));
+}
+
+fn instant_ability(world: &mut World) {
+    println!("instant_ability");
 }

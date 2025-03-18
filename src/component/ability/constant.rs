@@ -1,9 +1,9 @@
 use bevy::prelude::{Component, World};
 
 #[derive(Component)]
-pub struct WhenRevealedAbilities(Vec<fn(&mut World)>);
+pub struct ConstantAbilities(pub Vec<fn(&mut World)>);
 
-impl WhenRevealedAbilities {
+impl ConstantAbilities {
     pub fn single(func: fn(&mut World)) -> Self {
         Self(vec![func])
     }

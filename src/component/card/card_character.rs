@@ -9,3 +9,16 @@ pub struct CardCharacter {
     thw_con_dmg: u8,
     sch: u8,
 }
+
+impl CardCharacter {
+    pub fn minion(hit_points: u8, atk: u8, sch: u8) -> Self {
+        Self {
+            hit_points,
+            atk,
+            sch,
+            atk_con_dmg: 0,
+            thw: 0,
+            thw_con_dmg: 0,
+        }
+    }
+}

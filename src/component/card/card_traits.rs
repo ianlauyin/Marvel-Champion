@@ -1,6 +1,14 @@
 use bevy::ecs::component::Component;
 
 #[derive(Component)]
+pub struct CardTraits(Vec<CardTrait>);
+
+impl CardTraits {
+    pub fn new(traits: Vec<CardTrait>) -> Self {
+        Self(traits)
+    }
+}
+
 pub enum CardTrait {
     // Charater-related
     Avenger,

@@ -1,4 +1,4 @@
 use bevy::prelude::{Component, World};
 
 #[derive(Component)]
-pub struct InterruptAbilities(Vec<fn(&mut World)>);
+pub struct ForcedInterruptAbilities(Vec<fn(&mut World)>);

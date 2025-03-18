@@ -1,9 +1,6 @@
-mod basic_set;
-mod identity_set;
-mod modular_set;
-mod scenario;
+mod belongs;
+mod data;
+mod set;
 
-pub use basic_set::BasicSet;
-pub use identity_set::IdentitySet;
-pub use modular_set::ModularSet;
-pub use scenario::Scenario;
+pub use belongs::{Belong, Belongs};
+pub use set::{BasicSet, IdentitySet, ModularSet, Scenario};

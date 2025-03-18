@@ -1,4 +1,10 @@
 use bevy::prelude::{Component, World};
 
 #[derive(Component)]
-pub struct InstantAbility(fn(&mut World));
+pub struct InstantAbilities(pub Vec<fn(&mut World)>);
+
+impl InstantAbilities {
+    pub fn single(func: fn(&mut World)) -> Self {
+        Self(vec![func])
+    }
+}
