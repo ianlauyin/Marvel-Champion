@@ -9,11 +9,11 @@ pub struct LoadingScreenPlugin;
 
 impl Plugin for LoadingScreenPlugin {
     fn build(&self, app: &mut App) {
-        app.add_observer(spawn_loading_screen);
+        app.add_observer(on_loading_screen_added);
     }
 }
 
-fn spawn_loading_screen(trigger: Trigger<OnAdd, LoadingScreen>, mut commands: Commands) {
+fn on_loading_screen_added(trigger: Trigger<OnAdd, LoadingScreen>, mut commands: Commands) {
     commands
         .entity(trigger.entity())
         .insert((

@@ -1,8 +1,8 @@
 use bevy::{prelude::*, window::WindowResolution};
 use bevy_embedded_assets::EmbeddedAssetPlugin;
-use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use constant::WINDOW_RESOLUTION;
 
+mod cards;
 mod component;
 mod constant;
 mod flow;
@@ -23,7 +23,6 @@ fn main() {
         .add_plugins(EmbeddedAssetPlugin::default())
         .add_plugins((
             flow::FlowPlugin,
-            component::ComponentPlugin,
             ui_component::UiComponentPlugin,
             resource::ResourcePlugin,
             util::UtilPlugin,

@@ -1,7 +1,5 @@
-use bevy::prelude::{App, Plugin};
+mod identity_stats;
 
-pub struct ComponentPlugin;
-
-impl Plugin for ComponentPlugin {
-    fn build(&self, app: &mut App) {}
-}
+pub mod ability;
+pub mod card;
+pub use identity_stats::IdentityStats;
