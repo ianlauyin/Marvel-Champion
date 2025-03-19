@@ -3,4 +3,7 @@ mod data;
 mod set;
 
 pub use belongs::{Belong, Belongs};
-pub use set::{BasicSet, IdentitySet, ModularSet, Scenario};
+use bevy::ecs::system::Commands;
+pub use set::{Aspect, BasicSet, IdentitySet, ModularSet, Scenario};
+
+use crate::component::card::CardBasic;

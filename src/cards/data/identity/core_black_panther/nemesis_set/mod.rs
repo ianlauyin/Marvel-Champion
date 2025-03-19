@@ -1,4 +1,4 @@
-use bevy::ecs::world::World;
+use bevy::ecs::system::Commands;
 
 use crate::component::card::CardBasic;
 
@@ -16,7 +16,7 @@ pub fn get_infos() -> Vec<CardBasic<'static>> {
     ]
 }
 
-pub fn get_cards() -> Vec<(CardBasic<'static>, fn(&mut World))> {
+pub fn get_cards() -> Vec<(CardBasic<'static>, fn(Commands))> {
     vec![
         heart_shaped_herb::get_card(),
         killmonger::get_card(),

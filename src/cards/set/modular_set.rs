@@ -1,7 +1,8 @@
-use bevy::ecs::world::World;
+use bevy::ecs::system::Commands;
 
 use crate::component::card::CardBasic;
 
+#[derive(Clone)]
 pub enum ModularSet {
     BombScare,
     MastersOfEvil,
@@ -11,6 +12,16 @@ pub enum ModularSet {
 }
 
 impl ModularSet {
+    pub fn get_all() -> Vec<Self> {
+        vec![
+            Self::BombScare,
+            Self::MastersOfEvil,
+            Self::UnderAttack,
+            Self::LegionsOfHydra,
+            Self::TheDoomsdayChair,
+        ]
+    }
+
     pub fn to_string(&self) -> String {
         let str = match *self {
             Self::BombScare => "Bomb Scare",
@@ -36,7 +47,7 @@ impl ModularSet {
         todo!()
     }
 
-    pub fn get_cards(&self) -> Vec<(CardBasic, fn(&mut World))> {
+    pub fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands))> {
         todo!()
     }
 }

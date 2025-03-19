@@ -1,13 +1,18 @@
-use bevy::ecs::world::World;
+use bevy::ecs::system::Commands;
 
 use crate::component::card::CardBasic;
 
+#[derive(Clone)]
 pub enum BasicSet {
     Standard,
     Expert,
 }
 
 impl BasicSet {
+    pub fn get_all() -> Vec<Self> {
+        vec![Self::Standard, Self::Expert]
+    }
+
     pub fn to_string(&self) -> String {
         let str = match *self {
             Self::Standard => "Standard",
@@ -27,7 +32,7 @@ impl BasicSet {
         todo!()
     }
 
-    pub fn get_cards(&self) -> Vec<(CardBasic, fn(&mut World))> {
+    pub fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands))> {
         todo!()
     }
 }

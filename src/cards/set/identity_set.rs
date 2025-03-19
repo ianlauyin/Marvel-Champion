@@ -1,7 +1,8 @@
-use bevy::ecs::world::World;
+use bevy::ecs::system::Commands;
 
 use crate::component::card::CardBasic;
 
+#[derive(Clone)]
 pub enum IdentitySet {
     CoreSpiderMan,
     CoreCaptainMarvel,
@@ -11,6 +12,16 @@ pub enum IdentitySet {
 }
 
 impl IdentitySet {
+    pub fn get_all() -> Vec<Self> {
+        vec![
+            Self::CoreSpiderMan,
+            Self::CoreCaptainMarvel,
+            Self::CoreSheHulk,
+            Self::CoreIronMan,
+            Self::CoreBlackPanther,
+        ]
+    }
+
     pub fn to_string(&self) -> String {
         let str = match *self {
             Self::CoreSpiderMan => "Core - Spider Man",
@@ -36,7 +47,7 @@ impl IdentitySet {
         todo!()
     }
 
-    pub fn get_cards(&self) -> Vec<(CardBasic, fn(&mut World))> {
+    pub fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands))> {
         todo!()
     }
 }

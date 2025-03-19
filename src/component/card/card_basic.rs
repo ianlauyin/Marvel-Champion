@@ -1,8 +1,8 @@
-use bevy::{ecs::bundle::Bundle, prelude::Component};
+use bevy::prelude::Component;
 
 use crate::cards::Belongs;
 
-#[derive(Component)]
+#[derive(Component, Clone)]
 pub struct CardBasic<'a> {
     pub id: &'a str,
     pub name: &'a str,

@@ -1,4 +1,4 @@
-use bevy::ecs::world::World;
+use bevy::ecs::{system::Commands, world::World};
 
 use crate::{
     cards::{set::IdentitySet, Belong},
@@ -19,14 +19,14 @@ pub fn get_info() -> CardBasic<'static> {
     }
 }
 
-pub fn get_card() -> (CardBasic<'static>, fn(&mut World)) {
+pub fn get_card() -> (CardBasic<'static>, fn(Commands)) {
     (get_info(), spawn_bundle)
 }
 
-fn spawn_bundle(world: &mut World) {
+fn spawn_bundle(mut commands: Commands) {
     let keywords: CardKeywords = CardKeyword::Surge.into();
     let instant_abilities = InstantAbilities::single(instant_ability);
-    world.spawn((get_info(), CardBoost::new(0), keywords, instant_abilities));
+    commands.spawn((get_info(), CardBoost::new(0), keywords, instant_abilities));
 }
 
 fn instant_ability(world: &mut World) {

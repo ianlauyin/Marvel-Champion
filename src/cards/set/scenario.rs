@@ -1,7 +1,8 @@
-use bevy::ecs::world::World;
+use bevy::ecs::system::Commands;
 
 use crate::component::card::CardBasic;
 
+#[derive(Clone)]
 pub enum Scenario {
     CoreRhino,
     CoreKlaw,
@@ -9,6 +10,10 @@ pub enum Scenario {
 }
 
 impl Scenario {
+    pub fn get_all() -> Vec<Self> {
+        vec![Self::CoreRhino, Self::CoreKlaw, Self::CoreUltron]
+    }
+
     pub fn to_string(&self) -> String {
         let str = match *self {
             Self::CoreRhino => "Core - Rhino",
@@ -30,7 +35,7 @@ impl Scenario {
         todo!()
     }
 
-    pub fn get_cards(&self) -> Vec<(CardBasic, fn(&mut World))> {
+    pub fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands))> {
         todo!()
     }
 }

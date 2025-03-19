@@ -1,10 +1,8 @@
-use bevy::ecs::world::World;
+use crate::cards::{BasicSet, IdentitySet, ModularSet, Scenario};
 
-use crate::{
-    cards::{BasicSet, IdentitySet, ModularSet, Scenario},
-    component::card::CardBasic,
-};
+use super::set::Aspect;
 
+#[derive(Clone)]
 pub struct Belongs {
     main: Belong,
     sub: Vec<Belong>,
@@ -39,13 +37,9 @@ impl Belongs {
     }
 }
 
+#[derive(Clone)]
 pub enum Belong {
-    Basic,
-    Justice,
-    Aggression,
-    Protection,
-    Leadership,
-    Pool,
+    Aspect(Aspect),
     IdentitySet(IdentitySet),
     ModularSet(ModularSet),
     Scenario(Scenario),
@@ -55,12 +49,7 @@ pub enum Belong {
 impl Belong {
     pub fn to_string(&self) -> String {
         match self {
-            Self::Basic => "Basic".to_string(),
-            Self::Justice => "Justice".to_string(),
-            Self::Aggression => "Aggression".to_string(),
-            Self::Protection => "Protection".to_string(),
-            Self::Leadership => "Leadership".to_string(),
-            Self::Pool => "Pool".to_string(),
+            Self::Aspect(aspect) => aspect.to_string(),
             Self::IdentitySet(identity_set) => identity_set.to_string(),
             Self::ModularSet(modular_set) => modular_set.to_string(),
             Self::BasicSet(basic_set) => basic_set.to_string(),
@@ -70,24 +59,11 @@ impl Belong {
 
     pub fn get_key(&self) -> String {
         match self {
-            Self::Basic => "basic".to_string(),
-            Self::Justice => "justice".to_string(),
-            Self::Aggression => "aggression".to_string(),
-            Self::Protection => "protection".to_string(),
-            Self::Leadership => "leadership".to_string(),
-            Self::Pool => "pool".to_string(),
+            Self::Aspect(aspect) => format!("aspect/{}", aspect.get_key()),
             Self::IdentitySet(identity_set) => format!("identity_set/{}", identity_set.get_key()),
             Self::ModularSet(modular_set) => format!("modular_set/{}", modular_set.get_key()),
             Self::BasicSet(basic_set) => format!("basic_set/{}", basic_set.get_key()),
             Self::Scenario(scenario) => format!("scenario/{}", scenario.get_key()),
         }
-    }
-
-    pub fn get_card_infos(&self) -> Vec<CardBasic> {
-        todo!()
-    }
-
-    pub fn get_cards(&self) -> Vec<(CardBasic, fn(&mut World))> {
-        todo!()
     }
 }

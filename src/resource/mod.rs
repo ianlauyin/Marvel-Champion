@@ -1,8 +1,8 @@
 mod asset_loader;
-mod card_datas;
+mod aspect_card_datas;
 
 pub use asset_loader::AssetLoader;
-pub use card_datas::CardDatas;
+pub use aspect_card_datas::AspectCardDatas;
 
 use bevy::prelude::*;
 
@@ -11,6 +11,6 @@ pub struct ResourcePlugin;
 impl Plugin for ResourcePlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(AssetLoader::default())
-            .insert_resource(CardDatas::new());
+            .insert_resource(AspectCardDatas::new());
     }
 }

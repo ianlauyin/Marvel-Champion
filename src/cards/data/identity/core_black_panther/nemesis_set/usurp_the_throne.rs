@@ -1,4 +1,4 @@
-use bevy::ecs::world::World;
+use bevy::ecs::{system::Commands, world::World};
 
 use crate::{
     cards::{Belong, IdentitySet},
@@ -16,12 +16,12 @@ pub fn get_info() -> CardBasic<'static> {
     }
 }
 
-pub fn get_card() -> (CardBasic<'static>, fn(&mut World)) {
+pub fn get_card() -> (CardBasic<'static>, fn(Commands)) {
     (get_info(), spawn_bundle)
 }
 
-fn spawn_bundle(world: &mut World) {
-    world.spawn((
+fn spawn_bundle(mut commands: Commands) {
+    commands.spawn((
         get_info(),
         CardIcons::new(vec![CardIcon::Hazard]),
         CardBoost::new(3),
