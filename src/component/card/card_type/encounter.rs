@@ -2,7 +2,7 @@ use bevy::prelude::Component;
 
 #[derive(Component)]
 pub enum EncounterCardType {
-    Attachment { atk_modifier: u8, sch_modifier: u8 },
+    Attachment,
     Environment,
     Minion,
     Obligation,

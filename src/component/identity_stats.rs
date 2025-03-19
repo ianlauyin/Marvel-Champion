@@ -1,5 +1,7 @@
 use bevy::prelude::Component;
 
+use super::shared::Form;
+
 #[derive(Component)]
 pub struct IdentityStats {
     hit_points: u8,
@@ -8,4 +10,5 @@ pub struct IdentityStats {
     thw: Option<u8>,
     def: Option<u8>,
     rec: Option<u8>,
+    form: Form,
 }

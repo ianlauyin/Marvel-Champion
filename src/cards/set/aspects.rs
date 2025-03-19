@@ -1,5 +1,6 @@
 use bevy::ecs::system::Commands;
 
+use super::super::data::aspect;
 use crate::component::card::CardBasic;
 
 #[derive(Clone)]
@@ -57,11 +58,25 @@ impl Aspect {
         }
     }
 
-    pub fn get_card_infos(&self) -> Vec<CardBasic> {
-        todo!()
+    pub fn get_card_infos(&self) -> Vec<CardBasic<'static>> {
+        match self {
+            Self::Aggression => aspect::aggression::get_infos(),
+            Self::Basic => aspect::basic::get_infos(),
+            Self::Justice => aspect::justice::get_infos(),
+            Self::Leadership => aspect::leadership::get_infos(),
+            Self::Protection => aspect::protection::get_infos(),
+            Self::Pool => aspect::pool::get_infos(),
+        }
     }
 
     pub fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands))> {
-        todo!()
+        match self {
+            Self::Aggression => aspect::aggression::get_cards(),
+            Self::Basic => aspect::basic::get_cards(),
+            Self::Justice => aspect::justice::get_cards(),
+            Self::Leadership => aspect::leadership::get_cards(),
+            Self::Protection => aspect::protection::get_cards(),
+            Self::Pool => aspect::pool::get_cards(),
+        }
     }
 }

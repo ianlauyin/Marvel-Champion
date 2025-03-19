@@ -1,27 +1,22 @@
 use bevy::ecs::component::Component;
 
+use super::CardCounter;
+
 #[derive(Component)]
 pub struct CardKeywords(Vec<CardKeyword>);
 
-impl From<CardKeyword> for CardKeywords {
-    fn from(value: CardKeyword) -> Self {
-        Self(vec![value])
+impl CardKeywords {
+    pub fn single(card_keyword: CardKeyword) -> Self {
+        Self(vec![card_keyword])
     }
 }
 
 pub enum CardKeyword {
     Retaliate(u8),
     Quickstrike,
-    Use(u8, Counter),
+    Use(CardCounter),
     Toughness,
     Surge,
     Guard,
     Permanent,
-}
-
-pub enum Counter {
-    Attack,
-    Web,
-    Medical,
-    Snoop,
 }

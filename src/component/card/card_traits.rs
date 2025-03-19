@@ -4,6 +4,10 @@ use bevy::ecs::component::Component;
 pub struct CardTraits(Vec<CardTrait>);
 
 impl CardTraits {
+    pub fn single(card_trait: CardTrait) -> Self {
+        Self(vec![card_trait])
+    }
+
     pub fn new(traits: Vec<CardTrait>) -> Self {
         Self(traits)
     }

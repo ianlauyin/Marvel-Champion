@@ -1,0 +1,33 @@
+use bevy::ecs::{system::Commands, world::World};
+
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
+        id: "core_052",
+        name: "Chase Them Down",
+        sub_name: None,
+        unique: false,
+        card_amount_max: 3,
+        belongs: Belong::Aspect(Aspect::Aggression).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands)) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) {
+    commands.spawn((
+        get_info(),
+        PlayerCardType::Event,
+        CardCost::constant(0),
+        CardResources::mental(),
+        CardTraits::single(CardTrait::Thwart),
+        ResponseAbilities::single(Ability::new(response)),
+    ));
+}
+
+fn response(world: &mut World) {
+    println!("response");
+}

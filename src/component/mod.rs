@@ -1,5 +1,5 @@
 mod identity_stats;
+mod shared;
 
-pub mod ability;
 pub mod card;
 pub use identity_stats::IdentityStats;
