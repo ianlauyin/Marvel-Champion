@@ -1,17 +1,35 @@
-use crate::features::cards::{Card, Count, MainSchemeBCard};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_underground_distribution_1b() -> Card {
-    Card::MainSchemeB(MainSchemeBCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_116b",
         name: "Underground Distribution - 1B",
-        description: "When Revealed: Discard cards from the encounter deck until a minion is discarded. Put that minion into play engaged with the first player.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/scenario/core_klaw/core_116b.png",
-        card_back_image_path: "embedded://cards/scenario/core_klaw/core_116a.png",
-        next_stage_id: Some("core_117a"),
-        target_threat: Count::PerPlayer(6),
-        increase_threat: Count::PerPlayer(1),
-        initial_threat: Count::Constant(0),
-        card_icons: vec![],
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 1,
+        belongs: Belong::Scenario(Scenario::CoreKlaw).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            ScenarioCardType::MainSchemeB {
+                next_stage_id: Some("core_117a"),
+            },
+            CardScheme::main_scheme(Count::Constant(0), Count::PerPlayer(6), Count::PerPlayer(1)),
+            WhenRevealedAbilities::single(Ability::new(when_revealed_ability)),
+        ))
+        .id()
+}
+
+fn when_revealed_ability(world: &mut World) {
+    println!("when_revealed_ability");
 }

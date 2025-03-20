@@ -1,19 +1,35 @@
-use crate::features::cards::{AttachmentCard, Card, CardTrait, Keyword};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_biomechanical_upgrades() -> Card {
-    Card::Attachment(AttachmentCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_185",
         name: "Biomechanical Upgrades",
-        description:
-            "Surge. Attach to the minion with the highest printed hit points and without another Biomechanical Upgrades attached. Forced Interrupt: When attached minion would be defeated, heal all damage from it instead, then discard this card.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/modular/the_doomsday_chair/core_185.png",
-        boost: 1,
-        traits: vec![CardTrait::Tech],
-        card_icons: vec![],
-        atk_modifier:0,
-        sch_modifier: 0,
-        keywords:vec![Keyword::Surge],
-        boost_effect:None,
-    })
+        sub_name: None,
+        unique: true,
+        card_amount_max: 3,
+        belongs: Belong::ModularSet(ModularSet::TheDoomsdayChair).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::Attachment,
+            CardBoost::new(1),
+            CardTraits::single(CardTrait::Tech),
+            CardKeywords::single(CardKeyword::Surge),
+            ForcedInterruptAbilities::single(Ability::new(forced_interrupt)),
+        ))
+        .id()
+}
+
+fn forced_interrupt(world: &mut World) {
+    println!("forced_interrupt");
 }

@@ -1,21 +1,31 @@
-use crate::features::cards::{Card, CardTrait, Keyword, MinionCard};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_modok() -> Card {
-    Card::Minion(MinionCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_184",
-        name: "MODOK",
-        description:
-            "Retaliate 2. (After this character is attacked, deal 2 damage to the attacking character.)",
-        abilities: vec![],
-        card_image_path: "embedded://cards/modular/the_doomsday_chair/core_184.png",
-        boost: 2,
-        traits: vec![CardTrait::Cyborg,CardTrait::Elite],
-        card_icons: vec![],
+        name: "M.O.D.O.K.",
+        sub_name: None,
         unique: true,
-        initial_hit_points: 8,
-        keywords: vec![Keyword::Retaliate(2)],
-        sch: 2,
-        atk: 2,
-        boost_effect:None,
-    })
+        card_amount_max: 1,
+        belongs: Belong::ModularSet(ModularSet::TheDoomsdayChair).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::Minion,
+            CardBoost::new(2),
+            CardTraits::new(vec![CardTrait::Cyborg, CardTrait::Elite]),
+            CardKeywords::single(CardKeyword::Retaliate(2)),
+            CardCharacter::minion(8, 2, 2),
+        ))
+        .id()
 }

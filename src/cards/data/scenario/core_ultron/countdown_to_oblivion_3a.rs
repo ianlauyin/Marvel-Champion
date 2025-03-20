@@ -1,13 +1,34 @@
-use crate::features::cards::{Card, MainSchemeACard};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_countdown_to_oblivion_3a() -> Card {
-    Card::MainSchemeA(MainSchemeACard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_139a",
         name: "Countdown to Oblivion - 3A",
-        description: "When Revealed: Each player puts the top card of their deck into play facedown, engaged with them as a Drone minion. Advance to stage 3B.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/scenario/core_ultron/core_139a.png",
-        card_back_image_path: "embedded://cards/scenario/core_ultron/core_139b.png",
-        next_stage_id: Some("core_139b"),
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 1,
+        belongs: Belong::Scenario(Scenario::CoreUltron).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            ScenarioCardType::MainSchemeA {
+                next_stage_id: "core_139b",
+            },
+            WhenRevealedAbilities::single(Ability::new(when_revealed_ability)),
+        ))
+        .id()
+}
+
+fn when_revealed_ability(world: &mut World) {
+    println!("when_revealed_ability");
 }

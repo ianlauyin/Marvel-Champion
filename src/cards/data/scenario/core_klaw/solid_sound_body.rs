@@ -1,18 +1,34 @@
-use crate::features::cards::{AttachmentCard, Card, CardTrait};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_solid_sound_body() -> Card {
-    Card::Attachment(AttachmentCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_119",
         name: "Solid-Sound Body",
-        description: "Attach to Klaw. Klaw gains retaliate 1. (After this character is attacked, deal 1 damage to the attacking character.) Hero Action: Spend Energy Mental Physical resources -> discard this card.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/scenario/core_klaw/core_119.png",
-        card_icons: vec![],
-        boost: 3,
-        traits: vec![CardTrait::Condition],
-        atk_modifier: 0,
-        sch_modifier: 0,
-        keywords:vec![],
-        boost_effect:None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 1,
+        belongs: Belong::Scenario(Scenario::CoreKlaw).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::Attachment,
+            CardBoost::new(3),
+            CardTraits::single(CardTrait::Condition),
+            InstantAbilities::single(Ability::hero(instant_ability)),
+        ))
+        .id()
+}
+
+fn instant_ability(world: &mut World) {
+    println!("instant_ability");
 }

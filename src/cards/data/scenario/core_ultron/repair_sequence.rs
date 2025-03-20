@@ -1,15 +1,38 @@
-use crate::features::cards::{Card, TreacheryCard};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_repair_sequence() -> Card {
-    Card::Treachery(TreacheryCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_146",
         name: "Repair Sequence",
-        traits: vec![],
-        description: "When Revealed: Ultron heals 2 damage for each Drone minion engaged with you. If no damage was healed this way, this card gains surge. Boost: Ultron heals 1 damage for each Drone minion engaged with you.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/scenario/core_ultron/core_146.png",
-        boost: 1,
-        keywords: vec![],
-        boost_effect:None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 2,
+        belongs: Belong::Scenario(Scenario::CoreUltron).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::Treachery,
+            CardBoost::new(1),
+            WhenRevealedAbilities::single(Ability::new(when_revealed_ability)),
+            BoostAbilities::single(Ability::new(boost_ability)),
+        ))
+        .id()
+}
+
+fn when_revealed_ability(world: &mut World) {
+    println!("when_revealed_ability");
+}
+
+fn boost_ability(world: &mut World) {
+    println!("boost_ability");
 }

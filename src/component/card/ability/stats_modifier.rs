@@ -2,13 +2,17 @@ use bevy::prelude::Component;
 
 #[derive(Component)]
 pub struct StatsModifier {
-    thw: u8,
+    thw_or_sch: u8,
     atk: u8,
     def: u8,
 }
 
 impl StatsModifier {
-    pub fn new(thw: u8, atk: u8, def: u8) -> Self {
-        Self { thw, atk, def }
+    pub fn new(thw_or_sch: u8, atk: u8, def: u8) -> Self {
+        Self {
+            thw_or_sch,
+            atk,
+            def,
+        }
     }
 }

@@ -1,5 +1,3 @@
-use crate::features::cards::Card;
-
 mod advanced_ultron_drone;
 mod android_efficiency_a;
 mod android_efficiency_b;
@@ -23,58 +21,59 @@ mod ultron_iii;
 mod ultrons_imperative;
 mod upgraded_drones;
 
-pub fn get_standard_villain_cards() -> Vec<Card> {
-    vec![ultron_i::get_ultron_i(), ultron_ii::get_ultron_ii()]
-}
+use crate::component::card::CardBasic;
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_expert_villain_cards() -> Vec<Card> {
-    vec![ultron_ii::get_ultron_ii(), ultron_iii::get_ultron_iii()]
-}
-
-pub fn get_main_scheme_cards() -> Vec<Card> {
+pub fn get_infos() -> Vec<CardBasic<'static>> {
     vec![
-        the_crimson_cowl_1a::get_the_crimson_cowl_1a(),
-        the_crimson_cowl_1b::get_the_crimson_cowl_1b(),
-        assault_on_norad_2a::get_assault_on_norad_2a(),
-        assault_on_norad_2b::get_assault_on_norad_2b(),
-        countdown_to_oblivion_3a::get_countdown_to_oblivion_3a(),
-        countdown_to_oblivion_3b::get_countdown_to_oblivion_3b(),
+        advanced_ultron_drone::get_info(),
+        android_efficiency_a::get_info(),
+        android_efficiency_b::get_info(),
+        android_efficiency_c::get_info(),
+        assault_on_norad_2a::get_info(),
+        assault_on_norad_2b::get_info(),
+        countdown_to_oblivion_3a::get_info(),
+        countdown_to_oblivion_3b::get_info(),
+        drone_factory::get_info(),
+        invasive_ai::get_info(),
+        program_transmitter::get_info(),
+        rage_of_ultron::get_info(),
+        repair_sequence::get_info(),
+        swarm_attack::get_info(),
+        the_crimson_cowl_1a::get_info(),
+        the_crimson_cowl_1b::get_info(),
+        ultron_drones::get_info(),
+        ultron_i::get_info(),
+        ultron_ii::get_info(),
+        ultron_iii::get_info(),
+        ultrons_imperative::get_info(),
+        upgraded_drones::get_info(),
     ]
 }
 
-pub fn get_encounter_cards() -> Vec<Card> {
+pub fn get_cards() -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
     vec![
-        ultron_drones::get_ultron_drones(),
-        program_transmitter::get_program_transmitter(),
-        upgraded_drones::get_upgraded_drones(),
-        upgraded_drones::get_upgraded_drones(),
-        advanced_ultron_drone::get_advanced_ultron_drone(),
-        advanced_ultron_drone::get_advanced_ultron_drone(),
-        advanced_ultron_drone::get_advanced_ultron_drone(),
-        android_efficiency_a::get_android_efficiency_a(),
-        android_efficiency_b::get_android_efficiency_b(),
-        android_efficiency_c::get_android_efficiency_c(),
-        rage_of_ultron::get_rage_of_ultron(),
-        rage_of_ultron::get_rage_of_ultron(),
-        repair_sequence::get_repair_sequence(),
-        repair_sequence::get_repair_sequence(),
-        swarm_attack::get_swarm_attack(),
-        swarm_attack::get_swarm_attack(),
-        drone_factory::get_drone_factory(),
-        invasive_ai::get_invasive_ai(),
-        ultrons_imperative::get_ultrons_imperative(),
+        advanced_ultron_drone::get_card(),
+        android_efficiency_a::get_card(),
+        android_efficiency_b::get_card(),
+        android_efficiency_c::get_card(),
+        assault_on_norad_2a::get_card(),
+        assault_on_norad_2b::get_card(),
+        countdown_to_oblivion_3a::get_card(),
+        countdown_to_oblivion_3b::get_card(),
+        drone_factory::get_card(),
+        invasive_ai::get_card(),
+        program_transmitter::get_card(),
+        rage_of_ultron::get_card(),
+        repair_sequence::get_card(),
+        swarm_attack::get_card(),
+        the_crimson_cowl_1a::get_card(),
+        the_crimson_cowl_1b::get_card(),
+        ultron_drones::get_card(),
+        ultron_i::get_card(),
+        ultron_ii::get_card(),
+        ultron_iii::get_card(),
+        ultrons_imperative::get_card(),
+        upgraded_drones::get_card(),
     ]
-}
-
-pub fn get_all() -> Vec<Card> {
-    [
-        vec![
-            ultron_i::get_ultron_i(),
-            ultron_ii::get_ultron_ii(),
-            ultron_iii::get_ultron_iii(),
-        ],
-        get_main_scheme_cards(),
-        get_encounter_cards(),
-    ]
-    .concat()
 }

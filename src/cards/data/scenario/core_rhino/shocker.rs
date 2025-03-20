@@ -1,20 +1,35 @@
-use crate::features::cards::{Card, CardTrait, MinionCard};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_shocker() -> Card {
-    Card::Minion(MinionCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_103",
         name: "Shocker",
-        description: "When Revealed: Deal 1 damage to each hero.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/scenario/core_rhino/core_103.png",
-        card_icons: vec![],
-        boost: 2,
-        traits: vec![CardTrait::Criminal],
+        sub_name: None,
         unique: true,
-        initial_hit_points: 3,
-        keywords: vec![],
-        sch: 1,
-        atk: 2,
-        boost_effect: None,
-    })
+        card_amount_max: 1,
+        belongs: Belong::Scenario(Scenario::CoreRhino).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::Minion,
+            CardBoost::new(2),
+            CardCharacter::minion(3, 1, 2),
+            CardTraits::single(CardTrait::Criminal),
+            WhenRevealedAbilities::single(Ability::new(when_revealed_ability)),
+        ))
+        .id()
+}
+
+fn when_revealed_ability(world: &mut World) {
+    println!("when_revealed_ability");
 }

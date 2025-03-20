@@ -1,18 +1,39 @@
-use crate::features::cards::{AttachmentCard, Card, CardTrait};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_upgraded_drones() -> Card {
-    Card::Attachment(AttachmentCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_142",
         name: "Upgraded Drones",
-        traits: vec![CardTrait::Condition],
-        card_icons: vec![],
-        description: "Attach to the Ultron Drones environment. Each facedown Drone minion gets +1 ATK and +1 hit point. Hero Action: Spend Energy Mental Physical resources -> discard this card",
-        abilities: vec![],
-        card_image_path: "embedded://cards/scenario/core_ultron/core_142.png",
-        boost: 0,
-        atk_modifier: 0,
-        sch_modifier: 0,
-        keywords:vec![],
-        boost_effect:None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 2,
+        belongs: Belong::Scenario(Scenario::CoreUltron).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::Attachment,
+            CardBoost::new(0),
+            CardTraits::single(CardTrait::Condition),
+            InstantAbilities::single(Ability::hero(instant_ability)),
+            ConstantAbilities::single(Ability::new(constant_ability)),
+        ))
+        .id()
+}
+
+fn instant_ability(world: &mut World) {
+    println!("instant_ability");
+}
+
+fn constant_ability(world: &mut World) {
+    println!("constant_ability");
 }

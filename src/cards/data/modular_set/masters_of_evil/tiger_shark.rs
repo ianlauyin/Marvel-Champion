@@ -1,15 +1,14 @@
-use bevy::ecs::{entity::Entity, system::Commands, world::World};
-
 use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
 pub fn get_info() -> CardBasic<'static> {
     CardBasic {
-        id: "core_134",
-        name: "Ultron (I)",
+        id: "core_131",
+        name: "Tiger Shark",
         sub_name: None,
         unique: true,
         card_amount_max: 1,
-        belongs: Belong::Scenario(Scenario::CoreUltron).into(),
+        belongs: Belong::ModularSet(ModularSet::MastersOfEvil).into(),
     }
 }
 
@@ -21,16 +20,18 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
     commands
         .spawn((
             get_info(),
-            ScenarioCardType::Villain {
-                hit_points: Count::PerPlayer(17),
-                sch: 1,
-                atk: 2,
-                next_villain_id: Some("core_135"),
-            },
-            CardTraits::single(CardTrait::Android),
+            EncounterCardType::Minion,
+            CardBoost::new(0),
+            CardCharacter::minion(6, 1, 3),
+            CardTraits::single(CardTrait::MastersOfEvil),
+            BoostAbilities::single(Ability::new(boost_ability)),
             ForcedResponseAbilities::single(Ability::new(forced_response_ability)),
         ))
         .id()
+}
+
+fn boost_ability(world: &mut World) {
+    println!("boost_ability");
 }
 
 fn forced_response_ability(world: &mut World) {

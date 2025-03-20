@@ -1,20 +1,31 @@
-use crate::features::cards::{Card, CardTrait, Keyword, MinionCard};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_armored_guard() -> Card {
-    Card::Minion(MinionCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_120",
         name: "Armored Guard",
-        description: "Guard. (While this minion is engaged with you, you cannot attack the villain.) Toughness. (This character enters play with a tough status card.)",
-        abilities: vec![],
-        card_image_path: "embedded://cards/scenario/core_klaw/core_120.png",
-        card_icons: vec![],
-        boost: 3,
-        traits: vec![CardTrait::Mercenary],
+        sub_name: None,
         unique: false,
-        initial_hit_points: 3,
-        keywords: vec![Keyword::Guard,Keyword::Toughness],
-        sch: 0,
-        atk: 1,
-        boost_effect:None,
-    })
+        card_amount_max: 3,
+        belongs: Belong::Scenario(Scenario::CoreKlaw).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::Minion,
+            CardBoost::new(1),
+            CardKeywords::new(vec![CardKeyword::Guard, CardKeyword::Toughness]),
+            CardTraits::single(CardTrait::Mercenary),
+            CardCharacter::minion(3, 0, 1),
+        ))
+        .id()
 }

@@ -4,12 +4,12 @@ use crate::{cards::*, component::card::*};
 
 pub fn get_info() -> CardBasic<'static> {
     CardBasic {
-        id: "core_135",
-        name: "Ultron (II)",
+        id: "core_130",
+        name: "Whirlwind",
         sub_name: None,
         unique: true,
         card_amount_max: 1,
-        belongs: Belong::Scenario(Scenario::CoreUltron).into(),
+        belongs: Belong::ModularSet(ModularSet::MastersOfEvil).into(),
     }
 }
 
@@ -21,16 +21,18 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
     commands
         .spawn((
             get_info(),
-            ScenarioCardType::Villain {
-                hit_points: Count::PerPlayer(22),
-                sch: 2,
-                atk: 2,
-                next_villain_id: None,
-            },
-            CardTraits::single(CardTrait::Android),
-            ForcedInterruptAbilities::single(Ability::new(forced_interrupt_ability)),
+            EncounterCardType::Minion,
+            CardBoost::new(0),
+            CardCharacter::minion(6, 1, 2),
+            CardTraits::single(CardTrait::MastersOfEvil),
+            BoostAbilities::single(Ability::new(boost_ability)),
+            ForcedResponseAbilities::single(Ability::new(forced_interrupt_ability)),
         ))
         .id()
+}
+
+fn boost_ability(world: &mut World) {
+    println!("boost_ability");
 }
 
 fn forced_interrupt_ability(world: &mut World) {

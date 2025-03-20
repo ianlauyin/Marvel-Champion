@@ -1,17 +1,33 @@
-use crate::features::cards::{Card, CardTrait, Count, VillainCard};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_rhino_i() -> Card {
-    Card::Villain(VillainCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_094",
         name: "Rhino (I)",
-        initial_hit_points: Count::PerPlayer(14),
-        keywords: vec![],
-        traits: vec![CardTrait::Brute, CardTrait::Criminal],
-        card_icons: vec![],
-        sch: 1,
-        atk: 2,
-        description: "",
-        abilities: vec![],
-        card_image_path: "embedded://cards/scenario/core_rhino/core_094.png",
-    })
+        sub_name: None,
+        unique: true,
+        card_amount_max: 1,
+        belongs: Belong::Scenario(Scenario::CoreRhino).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            ScenarioCardType::Villain {
+                hit_points: Count::PerPlayer(14),
+                sch: 1,
+                atk: 2,
+                next_villain_id: Some("core_095"),
+            },
+            CardTraits::new(vec![CardTrait::Brute, CardTrait::Criminal]),
+        ))
+        .id()
 }

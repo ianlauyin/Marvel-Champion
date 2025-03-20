@@ -1,17 +1,35 @@
-use crate::features::cards::{Card, CardIcon, Count, SideSchemeCard};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_legions_of_hydra() -> Card {
-    Card::SideScheme(SideSchemeCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_180",
         name: "Legions of Hydra",
-        description:
-            "When Revealed: If Madame Hydra is not in play, search the encounter deck and discard pile for Madame Hydra and put her into play engaged with you, then shuffle the encounter deck. Place 2 additional threat here for each Hydra enemy in play.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/modular/legions_of_hydra/core_180.png",
-        boost: 3,
-        traits: vec![],
-        card_icons: vec![CardIcon::Hazard],
-        initial_threat: Count::Constant(3),
-        boost_effect:None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 2,
+        belongs: Belong::ModularSet(ModularSet::LegionsOfHydra).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::SideScheme,
+            CardBoost::new(3),
+            CardIcons::single(CardIcon::Hazard),
+            CardScheme::new(Count::Constant(3)),
+            WhenRevealedAbilities::single(Ability::new(when_revealed_ability)),
+        ))
+        .id()
+}
+
+fn when_revealed_ability(world: &mut World) {
+    println!("when_revealed_ability");
 }

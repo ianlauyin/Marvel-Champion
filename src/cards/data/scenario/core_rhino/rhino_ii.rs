@@ -1,17 +1,38 @@
-use crate::features::cards::{Card, CardTrait, Count, VillainCard};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_rhino_ii() -> Card {
-    Card::Villain(VillainCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_095",
         name: "Rhino (II)",
-        initial_hit_points: Count::PerPlayer(15),
-        keywords: vec![],
-        traits: vec![CardTrait::Brute, CardTrait::Criminal],
-        card_icons: vec![],
-        sch: 1,
-        atk: 3,
-        description: "When Revealed: Search the encounter deck and discard pile for the Breakin' & Takin' side scheme and reveal it. Shuffle the encounter deck.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/scenario/core_rhino/core_095.png",
-    })
+        sub_name: None,
+        unique: true,
+        card_amount_max: 1,
+        belongs: Belong::Scenario(Scenario::CoreRhino).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            ScenarioCardType::Villain {
+                hit_points: Count::PerPlayer(15),
+                sch: 1,
+                atk: 3,
+                next_villain_id: Some("core_096"),
+            },
+            CardTraits::new(vec![CardTrait::Brute, CardTrait::Criminal]),
+            WhenRevealedAbilities::single(Ability::new(when_revealed_ability)),
+        ))
+        .id()
+}
+
+fn when_revealed_ability(world: &mut World) {
+    println!("when_revealed_ability");
 }

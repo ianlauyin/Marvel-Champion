@@ -1,16 +1,35 @@
-use crate::features::cards::{Card, CardIcon, Count, SideSchemeCard};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_breakin_and_takin() -> Card {
-    Card::SideScheme(SideSchemeCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_107",
         name: "Breakin' & Takin'",
-        description: "When Revealed: Place an additional 1  threat here.",
-        abilities: vec![],
-        traits: vec![],
-        card_image_path: "embedded://cards/scenario/core_rhino/core_107.png",
-        boost: 2,
-        initial_threat: Count::Constant(2),
-        card_icons: vec![CardIcon::Hazard],
-        boost_effect: None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 1,
+        belongs: Belong::Scenario(Scenario::CoreRhino).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::SideScheme,
+            CardBoost::new(2),
+            CardIcons::single(CardIcon::Hazard),
+            CardScheme::new(Count::Constant(2)),
+            WhenRevealedAbilities::single(Ability::new(when_revealed_ability)),
+        ))
+        .id()
+}
+
+fn when_revealed_ability(world: &mut World) {
+    println!("when_revealed_ability");
 }

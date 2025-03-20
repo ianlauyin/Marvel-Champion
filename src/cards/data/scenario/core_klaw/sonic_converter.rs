@@ -1,18 +1,40 @@
-use crate::features::cards::{AttachmentCard, Card, CardTrait};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_sonic_converter() -> Card {
-    Card::Attachment(AttachmentCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_118",
         name: "Sonic Converter",
-        description: "Attach to Klaw. Forced Response: After Klaw attacks and damages a character, stun that character. Hero Action: Spend Energy Physical Mental resources -> discard this card",
-        abilities: vec![],
-        card_image_path: "embedded://cards/scenario/core_klaw/core_118.png",
-        card_icons: vec![],
-        boost: 3,
-        traits: vec![CardTrait::Weapon],
-        atk_modifier: 1,
-        sch_modifier: 0,
-        keywords:vec![],
-        boost_effect:None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 1,
+        belongs: Belong::Scenario(Scenario::CoreKlaw).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::Attachment,
+            CardBoost::new(3),
+            CardTraits::single(CardTrait::Weapon),
+            StatsModifier::new(0, 1, 0),
+            ForcedResponseAbilities::single(Ability::new(forced_response_ability)),
+            InstantAbilities::single(Ability::hero(instant_ability)),
+        ))
+        .id()
+}
+
+fn forced_response_ability(world: &mut World) {
+    println!("forced_response_ability");
+}
+
+fn instant_ability(world: &mut World) {
+    println!("instant_ability");
 }

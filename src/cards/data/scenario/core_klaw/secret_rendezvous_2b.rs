@@ -1,17 +1,30 @@
-use crate::features::cards::{Card, Count, MainSchemeBCard};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_secret_rendezvous_2b() -> Card {
-    Card::MainSchemeB(MainSchemeBCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_117b",
         name: "Secret Rendezvous - 2B",
-        description: "If this stage is completed, the players lose the game.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/scenario/core_klaw/core_117b.png",
-        card_back_image_path: "embedded://cards/scenario/core_klaw/core_117a.png",
-        next_stage_id: None,
-        target_threat: Count::PerPlayer(8),
-        increase_threat: Count::PerPlayer(1),
-        initial_threat: Count::Constant(0),
-        card_icons: vec![],
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 1,
+        belongs: Belong::Scenario(Scenario::CoreKlaw).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            ScenarioCardType::MainSchemeB {
+                next_stage_id: None,
+            },
+            CardScheme::main_scheme(Count::Constant(0), Count::PerPlayer(8), Count::PerPlayer(1)),
+        ))
+        .id()
 }

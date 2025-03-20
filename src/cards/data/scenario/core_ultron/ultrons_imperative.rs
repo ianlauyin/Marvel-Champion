@@ -1,16 +1,35 @@
-use crate::features::cards::{Card, CardIcon, Count, SideSchemeCard};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_ultrons_imperative() -> Card {
-    Card::SideScheme(SideSchemeCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_150",
         name: "Ultron's Imperative",
-        description: "When Revealed: The first player puts the top 2 cards of their deck into play facedown, engaged with them as Drone minions.",
-        abilities: vec![],
-        traits: vec![],
-        card_image_path: "embedded://cards/scenario/core_ultron/core_150.png",
-        boost: 3,
-        initial_threat: Count::PerPlayer(2),
-        card_icons: vec![CardIcon::Hazard],
-        boost_effect:None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 1,
+        belongs: Belong::Scenario(Scenario::CoreUltron).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::SideScheme,
+            CardBoost::new(3),
+            CardScheme::new(Count::PerPlayer(2)),
+            CardIcons::single(CardIcon::Hazard),
+            WhenRevealedAbilities::single(Ability::new(when_revealed_ability)),
+        ))
+        .id()
+}
+
+fn when_revealed_ability(world: &mut World) {
+    println!("when_revealed_ability");
 }

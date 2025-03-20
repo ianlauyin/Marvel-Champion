@@ -1,21 +1,35 @@
-use crate::features::cards::{Card, CardTrait, MinionCard};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_hydra_bomber() -> Card {
-    Card::Minion(MinionCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_110",
         name: "Hydra Bomber",
-        description:
-            "When Revealed: Choose to either take 2 damage or place 1 threat on the main scheme.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/modular/bomb_scare/core_110.png",
-        boost: 1,
-        traits: vec![CardTrait::Hydra],
-        card_icons: vec![],
+        sub_name: None,
         unique: false,
-        initial_hit_points: 2,
-        keywords: vec![],
-        sch: 1,
-        atk: 1,
-        boost_effect: None,
-    })
+        card_amount_max: 2,
+        belongs: Belong::ModularSet(ModularSet::BombScare).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::Minion,
+            CardBoost::new(1),
+            CardTraits::single(CardTrait::Hydra),
+            CardCharacter::minion(2, 1, 1),
+            WhenRevealedAbilities::single(Ability::new(when_revealed_ability)),
+        ))
+        .id()
+}
+
+fn when_revealed_ability(world: &mut World) {
+    println!("when_revealed_ability");
 }

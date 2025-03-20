@@ -4,12 +4,12 @@ use crate::{cards::*, component::card::*};
 
 pub fn get_info() -> CardBasic<'static> {
     CardBasic {
-        id: "core_141",
-        name: "Program Transmitter",
+        id: "core_129",
+        name: "Radioactive Man",
         sub_name: None,
-        unique: false,
+        unique: true,
         card_amount_max: 1,
-        belongs: Belong::Scenario(Scenario::CoreUltron).into(),
+        belongs: Belong::ModularSet(ModularSet::MastersOfEvil).into(),
     }
 }
 
@@ -21,19 +21,18 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
     commands
         .spawn((
             get_info(),
-            EncounterCardType::Attachment,
-            CardBoost::new(1),
-            CardTraits::new(vec![CardTrait::Item, CardTrait::Tech]),
-            CardScheme::new(Count::Constant(0)),
-            InstantAbilities::single(Ability::hero(instant_ability)),
-            StatsModifier::new(1, 0, 0),
+            EncounterCardType::Minion,
+            CardBoost::new(0),
+            CardTraits::new(vec![CardTrait::Elite, CardTrait::MastersOfEvil]),
+            CardCharacter::minion(7, 1, 1),
+            BoostAbilities::single(Ability::new(boost_ability)),
             ForcedResponseAbilities::single(Ability::new(forced_response_ability)),
         ))
         .id()
 }
 
-fn instant_ability(world: &mut World) {
-    println!("instant_ability");
+fn boost_ability(world: &mut World) {
+    println!("boost_ability");
 }
 
 fn forced_response_ability(world: &mut World) {

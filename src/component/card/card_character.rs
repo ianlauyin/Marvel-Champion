@@ -2,6 +2,7 @@ use bevy::prelude::Component;
 
 #[derive(Component)]
 pub struct CardCharacter {
+    max_hit_points: u8,
     hit_points: u8,
     atk: u8,
     atk_con_dmg: u8,
@@ -13,6 +14,7 @@ pub struct CardCharacter {
 impl CardCharacter {
     pub fn ally(hit_points: u8, thw: u8, thw_con_dmg: u8, atk: u8, atk_con_dmg: u8) -> Self {
         Self {
+            max_hit_points: hit_points,
             hit_points,
             atk,
             atk_con_dmg,
@@ -24,6 +26,7 @@ impl CardCharacter {
 
     pub fn minion(hit_points: u8, sch: u8, atk: u8) -> Self {
         Self {
+            max_hit_points: hit_points,
             hit_points,
             atk,
             sch,

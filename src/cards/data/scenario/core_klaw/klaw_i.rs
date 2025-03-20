@@ -1,17 +1,38 @@
-use crate::features::cards::{Card, CardTrait, Count, VillainCard};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_klaw_i() -> Card {
-    Card::Villain(VillainCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_113",
         name: "Klaw (I)",
-        initial_hit_points: Count::PerPlayer(12),
-        keywords: vec![],
-        traits: vec![CardTrait::MasterOfEvil],
-        card_icons: vec![],
-        sch: 2,
-        atk: 0,
-        description: " Forced Interrupt: When Klaw attacks, give him 1 additional boost card for this activation.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/scenario/core_klaw/core_113.png",
-    })
+        sub_name: None,
+        unique: true,
+        card_amount_max: 1,
+        belongs: Belong::Scenario(Scenario::CoreKlaw).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            ScenarioCardType::Villain {
+                hit_points: Count::PerPlayer(12),
+                sch: 2,
+                atk: 0,
+                next_villain_id: Some("core_114"),
+            },
+            CardTraits::single(CardTrait::MastersOfEvil),
+            ForcedInterruptAbilities::single(Ability::new(forced_interrupt_ability)),
+        ))
+        .id()
+}
+
+fn forced_interrupt_ability(world: &mut World) {
+    println!("forced_interrupt_ability");
 }

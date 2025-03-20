@@ -4,12 +4,12 @@ use crate::{cards::*, component::card::*};
 
 pub fn get_info() -> CardBasic<'static> {
     CardBasic {
-        id: "core_102",
-        name: "Sandman",
+        id: "core_133",
+        name: "Masters of Mayhem",
         sub_name: None,
-        unique: true,
-        card_amount_max: 1,
-        belongs: Belong::Scenario(Scenario::CoreRhino).into(),
+        unique: false,
+        card_amount_max: 2,
+        belongs: Belong::ModularSet(ModularSet::MastersOfEvil).into(),
     }
 }
 
@@ -21,11 +21,13 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
     commands
         .spawn((
             get_info(),
-            EncounterCardType::Minion,
+            EncounterCardType::Treachery,
             CardBoost::new(2),
-            CardCharacter::minion(4, 2, 3),
-            CardTraits::new(vec![CardTrait::Criminal, CardTrait::Elite]),
-            CardKeywords::single(CardKeyword::Toughness),
+            WhenRevealedAbilities::single(Ability::new(when_revealed_ability)),
         ))
         .id()
+}
+
+fn when_revealed_ability(world: &mut World) {
+    println!("when_revealed_ability");
 }

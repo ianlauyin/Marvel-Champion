@@ -1,15 +1,33 @@
-use crate::features::cards::{Card, TreacheryCard};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_rage_of_ultron() -> Card {
-    Card::Treachery(TreacheryCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_145",
         name: "Rage of Ultron",
-        traits: vec![],
-        description: "When Revealed (Alter-Ego): Ultron schemes. Discard the top card of your deck for each threat placed this way. When Revealed (Hero): Ultron attacks you. Discard the top card of your deck for each damage dealt by this attack.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/scenario/core_ultron/core_145.png",
-        boost: 2,
-        keywords: vec![],
-        boost_effect:None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 2,
+        belongs: Belong::Scenario(Scenario::CoreUltron).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::Treachery,
+            CardBoost::new(2),
+            WhenRevealedAbilities::single(Ability::new(when_revealed_ability)),
+        ))
+        .id()
+}
+
+fn when_revealed_ability(world: &mut World) {
+    println!("when_revealed_ability");
 }

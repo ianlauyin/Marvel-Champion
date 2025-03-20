@@ -1,17 +1,35 @@
-use crate::features::cards::{Card, Count, MainSchemeBCard};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_the_crimson_cowl_1b() -> Card {
-    Card::MainSchemeB(MainSchemeBCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_137b",
         name: "The Crimson Cowl - 1B",
-        description: "When Revealed: Each player puts the top card of their deck into play facedown, engaged with them as a Drone minion.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/scenario/core_ultron/core_137b.png",
-        card_back_image_path: "embedded://cards/scenario/core_ultron/core_137a.png",
-        next_stage_id: Some("core_138a"),
-        target_threat: Count::PerPlayer(3),
-        increase_threat: Count::PerPlayer(1),
-        initial_threat: Count::Constant(0),
-        card_icons: vec![],
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 1,
+        belongs: Belong::Scenario(Scenario::CoreUltron).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            ScenarioCardType::MainSchemeB {
+                next_stage_id: Some("core_138a"),
+            },
+            CardScheme::main_scheme(Count::Constant(0), Count::PerPlayer(3), Count::PerPlayer(1)),
+            WhenRevealedAbilities::single(Ability::new(when_revealed_ability)),
+        ))
+        .id()
+}
+
+fn when_revealed_ability(world: &mut World) {
+    println!("when_revealed_ability");
 }

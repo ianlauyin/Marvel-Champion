@@ -1,16 +1,30 @@
-use crate::features::cards::{Card, CardIcon, Count, SideSchemeCard};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_crowd_control() -> Card {
-    Card::SideScheme(SideSchemeCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_108",
         name: "Crowd Control",
-        description: "",
-        abilities: vec![],
-        traits: vec![],
-        card_image_path: "embedded://cards/scenario/core_rhino/core_108.png",
-        boost: 2,
-        initial_threat: Count::PerPlayer(2),
-        card_icons: vec![CardIcon::Crisis],
-        boost_effect: None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 1,
+        belongs: Belong::Scenario(Scenario::CoreRhino).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::SideScheme,
+            CardBoost::new(2),
+            CardScheme::new(Count::PerPlayer(2)),
+            CardIcons::single(CardIcon::Crisis),
+        ))
+        .id()
 }

@@ -1,21 +1,36 @@
-use crate::features::cards::{Card, CardTrait, Keyword, MinionCard};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_hydra_soldier() -> Card {
-    Card::Minion(MinionCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_182",
         name: "Hydra Soldier",
-        description:
-            "Guard. (While this minion is engaged with you, you cannot attack the villain.) When Defeated: Deal the engaged player an encounter card.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/modular/legions_of_hydra/core_182.png",
-        boost: 1,
-        traits: vec![CardTrait::Hydra],
-        card_icons: vec![],
+        sub_name: None,
         unique: false,
-        initial_hit_points: 4,
-        keywords: vec![Keyword::Guard],
-        sch: 1,
-        atk: 2,
-        boost_effect:None,
-    })
+        card_amount_max: 3,
+        belongs: Belong::ModularSet(ModularSet::LegionsOfHydra).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::Minion,
+            CardBoost::new(1),
+            CardKeywords::single(CardKeyword::Guard),
+            CardTraits::single(CardTrait::Hydra),
+            CardCharacter::minion(4, 1, 2),
+            WhenDefeatedAbilities::single(Ability::new(when_defeated_ability)),
+        ))
+        .id()
+}
+
+fn when_defeated_ability(world: &mut World) {
+    println!("when_defeated_ability");
 }

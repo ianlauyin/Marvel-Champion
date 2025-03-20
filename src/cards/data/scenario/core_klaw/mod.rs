@@ -1,5 +1,3 @@
-use crate::features::cards::Card;
-
 mod armored_guard;
 mod defence_network;
 mod illegal_arms_factory;
@@ -18,53 +16,49 @@ mod underground_distribution_1a;
 mod underground_distribution_1b;
 mod weapon_runner;
 
-pub fn get_standard_villain_cards() -> Vec<Card> {
-    vec![klaw_i::get_klaw_i(), klaw_ii::get_klaw_ii()]
-}
+use crate::component::card::CardBasic;
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_expert_villain_cards() -> Vec<Card> {
-    vec![klaw_ii::get_klaw_ii(), klaw_iii::get_klaw_iii()]
-}
-
-pub fn get_main_scheme_cards() -> Vec<Card> {
+pub fn get_infos() -> Vec<CardBasic<'static>> {
     vec![
-        underground_distribution_1a::get_underground_distribution_1a(),
-        underground_distribution_1b::get_underground_distribution_1b(),
-        secret_rendezvous_2a::get_secret_rendezvous_2a(),
-        secret_rendezvous_2b::get_secret_rendezvous_2b(),
+        armored_guard::get_info(),
+        defence_network::get_info(),
+        illegal_arms_factory::get_info(),
+        klaw_i::get_info(),
+        klaw_ii::get_info(),
+        klaw_iii::get_info(),
+        klaws_vengenace::get_info(),
+        secret_rendezvous_2a::get_info(),
+        secret_rendezvous_2b::get_info(),
+        solid_sound_body::get_info(),
+        sonic_boom::get_info(),
+        sonic_converter::get_info(),
+        sound_manipulation::get_info(),
+        the_immortal_klaw::get_info(),
+        underground_distribution_1a::get_info(),
+        underground_distribution_1b::get_info(),
+        weapon_runner::get_info(),
     ]
 }
 
-pub fn get_encounter_cards() -> Vec<Card> {
+pub fn get_cards() -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
     vec![
-        sonic_converter::get_sonic_converter(),
-        solid_sound_body::get_solid_sound_body(),
-        armored_guard::get_armored_guard(),
-        armored_guard::get_armored_guard(),
-        armored_guard::get_armored_guard(),
-        weapon_runner::get_weapon_runner(),
-        weapon_runner::get_weapon_runner(),
-        klaws_vengenace::get_klaws_vengenace(),
-        klaws_vengenace::get_klaws_vengenace(),
-        sonic_boom::get_sonic_boom(),
-        sonic_boom::get_sonic_boom(),
-        sound_manipulation::get_sound_manipulation(),
-        sound_manipulation::get_sound_manipulation(),
-        defence_network::get_defence_network(),
-        illegal_arms_factory::get_illegal_arms_factory(),
-        the_immortal_klaw::get_the_immortal_klaw(),
+        armored_guard::get_card(),
+        defence_network::get_card(),
+        illegal_arms_factory::get_card(),
+        klaw_i::get_card(),
+        klaw_ii::get_card(),
+        klaw_iii::get_card(),
+        klaws_vengenace::get_card(),
+        secret_rendezvous_2a::get_card(),
+        secret_rendezvous_2b::get_card(),
+        solid_sound_body::get_card(),
+        sonic_boom::get_card(),
+        sonic_converter::get_card(),
+        sound_manipulation::get_card(),
+        the_immortal_klaw::get_card(),
+        underground_distribution_1a::get_card(),
+        underground_distribution_1b::get_card(),
+        weapon_runner::get_card(),
     ]
-}
-
-pub fn get_all() -> Vec<Card> {
-    [
-        vec![
-            klaw_i::get_klaw_i(),
-            klaw_ii::get_klaw_ii(),
-            klaw_iii::get_klaw_iii(),
-        ],
-        get_main_scheme_cards(),
-        get_encounter_cards(),
-    ]
-    .concat()
 }

@@ -9,6 +9,10 @@ impl CardKeywords {
     pub fn single(card_keyword: CardKeyword) -> Self {
         Self(vec![card_keyword])
     }
+
+    pub fn new(card_keywords: Vec<CardKeyword>) -> Self {
+        Self(card_keywords)
+    }
 }
 
 pub enum CardKeyword {

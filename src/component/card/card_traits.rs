@@ -36,7 +36,7 @@ pub enum CardTrait {
     Spy,
     Soldier,
     Mercenary,
-    MasterOfEvil,
+    MastersOfEvil,
     // Event-related
     Aerial,
     Attack,

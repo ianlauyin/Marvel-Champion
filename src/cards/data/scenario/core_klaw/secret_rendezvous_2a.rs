@@ -1,13 +1,34 @@
-use crate::features::cards::{Card, MainSchemeACard};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_secret_rendezvous_2a() -> Card {
-    Card::MainSchemeA(MainSchemeACard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_117a",
         name: "Secret Rendezvous - 2A",
-        description: "When Revealed: Discard cards from the encounter deck until a minion is discarded. Put that minion into play engaged with the first player. Advance to stage 2B",
-        abilities: vec![],
-        card_image_path: "embedded://cards/scenario/core_klaw/core_117a.png",
-        card_back_image_path: "embedded://cards/scenario/core_klaw/core_117b.png",
-        next_stage_id: Some("core_117b"),
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 1,
+        belongs: Belong::Scenario(Scenario::CoreKlaw).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            ScenarioCardType::MainSchemeA {
+                next_stage_id: "core_117b",
+            },
+            WhenRevealedAbilities::single(Ability::new(when_revealed_ability)),
+        ))
+        .id()
+}
+
+fn when_revealed_ability(world: &mut World) {
+    println!("when_revealed_ability");
 }

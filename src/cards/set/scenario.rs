@@ -1,5 +1,6 @@
 use bevy::ecs::{entity::Entity, system::Commands};
 
+use crate::cards::data::scenario;
 use crate::component::card::CardBasic;
 
 #[derive(Clone)]
@@ -32,10 +33,18 @@ impl Scenario {
     }
 
     pub fn get_card_infos(&self) -> Vec<CardBasic> {
-        todo!()
+        match *self {
+            Self::CoreRhino => scenario::core_rhino::get_infos(),
+            Self::CoreKlaw => scenario::core_klaw::get_infos(),
+            Self::CoreUltron => scenario::core_ultron::get_infos(),
+        }
     }
 
     pub fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
-        todo!()
+        match *self {
+            Self::CoreRhino => scenario::core_rhino::get_cards(),
+            Self::CoreKlaw => scenario::core_klaw::get_cards(),
+            Self::CoreUltron => scenario::core_ultron::get_cards(),
+        }
     }
 }

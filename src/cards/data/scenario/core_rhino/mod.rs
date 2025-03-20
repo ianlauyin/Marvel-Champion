@@ -1,5 +1,3 @@
-use crate::features::cards::Card;
-
 mod armored_rhino_suit;
 mod breakin_and_takin;
 mod charge;
@@ -17,52 +15,47 @@ mod stampede;
 mod the_break_in_1a;
 mod the_break_in_1b;
 
-pub fn get_standard_villain_cards() -> Vec<Card> {
-    vec![rhino_i::get_rhino_i(), rhino_ii::get_rhino_ii()]
-}
+use crate::component::card::CardBasic;
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_expert_villain_cards() -> Vec<Card> {
-    vec![rhino_ii::get_rhino_ii(), rhino_iii::get_rhino_iii()]
-}
-
-pub fn get_main_scheme_cards() -> Vec<Card> {
+pub fn get_infos() -> Vec<CardBasic<'static>> {
     vec![
-        the_break_in_1a::get_the_break_in_1a(),
-        the_break_in_1b::get_the_break_in_1b(),
+        armored_rhino_suit::get_info(),
+        breakin_and_takin::get_info(),
+        charge::get_info(),
+        crowd_control::get_info(),
+        enhanced_ivory_horn::get_info(),
+        hard_to_keep_down::get_info(),
+        hydra_mercenary::get_info(),
+        im_tough::get_info(),
+        rhino_i::get_info(),
+        rhino_ii::get_info(),
+        rhino_iii::get_info(),
+        sandman::get_info(),
+        shocker::get_info(),
+        stampede::get_info(),
+        the_break_in_1a::get_info(),
+        the_break_in_1b::get_info(),
     ]
 }
 
-pub fn get_encounter_cards() -> Vec<Card> {
+pub fn get_cards() -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
     vec![
-        armored_rhino_suit::get_armored_rhino_suit(),
-        charge::get_charge(),
-        charge::get_charge(),
-        enhanced_ivory_horn::get_enhanced_ivory_horn(),
-        hydra_mercenary::get_hydra_mercenary(),
-        hydra_mercenary::get_hydra_mercenary(),
-        sandman::get_sandman(),
-        shocker::get_shocker(),
-        hard_to_keep_down::get_hard_to_keep_down(),
-        hard_to_keep_down::get_hard_to_keep_down(),
-        im_tough::get_im_tough(),
-        im_tough::get_im_tough(),
-        stampede::get_stampede(),
-        stampede::get_stampede(),
-        stampede::get_stampede(),
-        breakin_and_takin::get_breakin_and_takin(),
-        crowd_control::get_crowd_control(),
+        armored_rhino_suit::get_card(),
+        breakin_and_takin::get_card(),
+        charge::get_card(),
+        crowd_control::get_card(),
+        enhanced_ivory_horn::get_card(),
+        hard_to_keep_down::get_card(),
+        hydra_mercenary::get_card(),
+        im_tough::get_card(),
+        rhino_i::get_card(),
+        rhino_ii::get_card(),
+        rhino_iii::get_card(),
+        sandman::get_card(),
+        shocker::get_card(),
+        stampede::get_card(),
+        the_break_in_1a::get_card(),
+        the_break_in_1b::get_card(),
     ]
-}
-
-pub fn get_all() -> Vec<Card> {
-    [
-        vec![
-            rhino_i::get_rhino_i(),
-            rhino_ii::get_rhino_ii(),
-            rhino_iii::get_rhino_iii(),
-        ],
-        get_main_scheme_cards(),
-        get_encounter_cards(),
-    ]
-    .concat()
 }

@@ -1,19 +1,38 @@
-use crate::features::cards::{AttachmentCard, Card, CardTrait};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_vibranium_armor() -> Card {
-    Card::Attachment(AttachmentCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_152",
         name: "Vibranium Armor",
-        description:
-            "Attach to the villain. Forced Response: After the villain take damage, give it a tough status card. Hero Action: Exhaust your hero and spend 2 Physical resources -> discard this card.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/modular/under_attack/core_152.png",
-        boost: 1,
-        traits: vec![CardTrait::Armor],
-        card_icons: vec![],
-        atk_modifier: 0,
-        sch_modifier: 0,
-        keywords:vec![],
-        boost_effect:None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 1,
+        belongs: Belong::ModularSet(ModularSet::UnderAttack).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::Attachment,
+            CardBoost::new(1),
+            CardTraits::single(CardTrait::Armor),
+            ForcedResponseAbilities::single(Ability::new(forced_response)),
+            InstantAbilities::single(Ability::hero(instant_ability)),
+        ))
+        .id()
+}
+
+fn forced_response(world: &mut World) {
+    println!("forced_response");
+}
+
+fn instant_ability(world: &mut World) {
+    println!("instant_ability");
 }

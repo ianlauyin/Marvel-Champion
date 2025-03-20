@@ -1,16 +1,35 @@
-use crate::features::cards::{Card, CardIcon, Count, SideSchemeCard};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_illegal_arms_factory() -> Card {
-    Card::SideScheme(SideSchemeCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_126",
         name: "Illegal Arms Factory",
-        description: "When Revealed: Place an additional 1 per player threat here.",
-        abilities: vec![],
-        traits: vec![],
-        card_image_path: "embedded://cards/scenario/core_klaw/core_126.png",
-        boost: 2,
-        initial_threat: Count::Constant(3),
-        card_icons: vec![CardIcon::Hazard],
-        boost_effect: None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 1,
+        belongs: Belong::Scenario(Scenario::CoreKlaw).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::SideScheme,
+            CardBoost::new(2),
+            CardScheme::new(Count::Constant(3)),
+            CardIcons::single(CardIcon::Hazard),
+            WhenRevealedAbilities::single(Ability::new(when_revealed_ability)),
+        ))
+        .id()
+}
+
+fn when_revealed_ability(world: &mut World) {
+    println!("when_revealed_ability");
 }

@@ -1,13 +1,29 @@
-use crate::features::cards::{Card, MainSchemeACard};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_the_break_in_1a() -> Card {
-    Card::MainSchemeA(MainSchemeACard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_097a",
         name: "The Break-In! - 1A",
-        description: "Setup: Advance to stage 1B.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/scenario/core_rhino/core_097a.png",
-        card_back_image_path: "embedded://cards/scenario/core_rhino/core_097b.png",
-        next_stage_id: Some("core_097b"),
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 1,
+        belongs: Belong::Scenario(Scenario::CoreRhino).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            ScenarioCardType::MainSchemeA {
+                next_stage_id: "core_097b",
+            },
+        ))
+        .id()
 }

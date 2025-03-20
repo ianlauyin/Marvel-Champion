@@ -1,10 +1,9 @@
-use bevy::ecs::{entity::Entity, system::Commands};
-
-use crate::component::card::CardBasic;
-
 mod exhaustion;
 mod masterplan;
 mod under_fire;
+
+use crate::component::card::CardBasic;
+use bevy::ecs::{entity::Entity, system::Commands};
 
 pub fn get_infos() -> Vec<CardBasic<'static>> {
     vec![

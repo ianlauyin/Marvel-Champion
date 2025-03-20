@@ -1,5 +1,6 @@
 use bevy::ecs::{entity::Entity, system::Commands};
 
+use crate::cards::data::modular_set;
 use crate::component::card::CardBasic;
 
 #[derive(Clone)]
@@ -36,7 +37,7 @@ impl ModularSet {
     pub fn get_key(&self) -> String {
         match *self {
             Self::BombScare => "bomb_scare".to_string(),
-            Self::MastersOfEvil => "master_of_evil".to_string(),
+            Self::MastersOfEvil => "masters_of_evil".to_string(),
             Self::UnderAttack => "under_attack".to_string(),
             Self::LegionsOfHydra => "legions_of_hydra".to_string(),
             Self::TheDoomsdayChair => "the_doomsday_chair".to_string(),
@@ -44,10 +45,22 @@ impl ModularSet {
     }
 
     pub fn get_card_infos(&self) -> Vec<CardBasic> {
-        todo!()
+        match *self {
+            Self::BombScare => modular_set::bomb_scare::get_infos(),
+            Self::MastersOfEvil => modular_set::masters_of_evil::get_infos(),
+            Self::UnderAttack => modular_set::under_attack::get_infos(),
+            Self::LegionsOfHydra => modular_set::legions_of_hydra::get_infos(),
+            Self::TheDoomsdayChair => modular_set::the_doomsday_chair::get_infos(),
+        }
     }
 
     pub fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
-        todo!()
+        match *self {
+            Self::BombScare => modular_set::bomb_scare::get_cards(),
+            Self::MastersOfEvil => modular_set::masters_of_evil::get_cards(),
+            Self::UnderAttack => modular_set::under_attack::get_cards(),
+            Self::LegionsOfHydra => modular_set::legions_of_hydra::get_cards(),
+            Self::TheDoomsdayChair => modular_set::the_doomsday_chair::get_cards(),
+        }
     }
 }

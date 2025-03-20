@@ -1,17 +1,30 @@
-use crate::features::cards::{Card, Count, MainSchemeBCard};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_the_break_in_1b() -> Card {
-    Card::MainSchemeB(MainSchemeBCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_097b",
         name: "The Break-In! - 1B",
-        description: "If this stage is completed, the players lose the game.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/scenario/core_rhino/core_097b.png",
-        card_back_image_path: "embedded://cards/scenario/core_rhino/core_097a.png",
-        next_stage_id: None,
-        target_threat: Count::PerPlayer(7),
-        increase_threat: Count::PerPlayer(1),
-        initial_threat: Count::Constant(0),
-        card_icons: vec![],
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 1,
+        belongs: Belong::Scenario(Scenario::CoreRhino).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            ScenarioCardType::MainSchemeB {
+                next_stage_id: None,
+            },
+            CardScheme::main_scheme(Count::Constant(0), Count::PerPlayer(7), Count::PerPlayer(1)),
+        ))
+        .id()
 }

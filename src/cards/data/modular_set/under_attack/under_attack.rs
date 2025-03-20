@@ -1,17 +1,35 @@
-use crate::features::cards::{Card, CardIcon, Count, SideSchemeCard};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_under_attack() -> Card {
-    Card::SideScheme(SideSchemeCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_151",
         name: "Under Attack",
-        description:
-            "When Revealed: Each player chooses to either place 2 threat here or deal 3 damage to their hero.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/modular/under_attack/core_151.png",
-        boost: 3,
-        traits: vec![],
-        card_icons: vec![CardIcon::Crisis],
-        initial_threat: Count::Constant(3),
-        boost_effect:None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 1,
+        belongs: Belong::ModularSet(ModularSet::UnderAttack).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::SideScheme,
+            CardBoost::new(3),
+            CardScheme::new(Count::Constant(3)),
+            CardIcons::single(CardIcon::Crisis),
+            WhenRevealedAbilities::single(Ability::new(when_revealed)),
+        ))
+        .id()
+}
+
+fn when_revealed(world: &mut World) {
+    println!("when_revealed");
 }

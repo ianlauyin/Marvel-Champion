@@ -1,17 +1,35 @@
-use crate::features::cards::{Card, CardIcon, Count, SideSchemeCard};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_the_doomsday_chair() -> Card {
-    Card::SideScheme(SideSchemeCard {
+use crate::{cards::*, component::card::*};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_183",
         name: "The Doomsday Chair",
-        description:
-            "When Revealed: If MODOK is not in play, search the encounter deck and discard pile for MODOK and put him into play engaged with you, then shuffle the encounter deck.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/modular/the_doomsday_chair/core_183.png",
-        boost: 3,
-        traits: vec![],
-        card_icons: vec![CardIcon::Acceleration],
-        initial_threat: Count::Constant(8),
-        boost_effect:None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 2,
+        belongs: Belong::ModularSet(ModularSet::TheDoomsdayChair).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::SideScheme,
+            CardBoost::new(3),
+            CardScheme::new(Count::Constant(8)),
+            CardIcons::single(CardIcon::Acceleration),
+            WhenRevealedAbilities::single(Ability::new(when_revealed)),
+        ))
+        .id()
+}
+
+fn when_revealed(world: &mut World) {
+    println!("when_revealed");
 }
