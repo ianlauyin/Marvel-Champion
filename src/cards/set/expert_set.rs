@@ -1,21 +1,20 @@
-use bevy::ecs::system::Commands;
+use bevy::ecs::{entity::Entity, system::Commands};
 
+use crate::cards::data::expert_set;
 use crate::component::card::CardBasic;
 
 #[derive(Clone)]
-pub enum BasicSet {
-    Standard,
+pub enum ExpertSet {
     Expert,
 }
 
-impl BasicSet {
+impl ExpertSet {
     pub fn get_all() -> Vec<Self> {
-        vec![Self::Standard, Self::Expert]
+        vec![Self::Expert]
     }
 
     pub fn to_string(&self) -> String {
         let str = match *self {
-            Self::Standard => "Standard",
             Self::Expert => "Expert",
         };
         str.to_string()
@@ -23,16 +22,19 @@ impl BasicSet {
 
     pub fn get_key(&self) -> String {
         match *self {
-            Self::Standard => "standard".to_string(),
             Self::Expert => "expert".to_string(),
         }
     }
 
     pub fn get_card_infos(&self) -> Vec<CardBasic> {
-        todo!()
+        match *self {
+            Self::Expert => expert_set::expert::get_infos(),
+        }
     }
 
-    pub fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands))> {
-        todo!()
+    pub fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
+        match *self {
+            Self::Expert => expert_set::expert::get_cards(),
+        }
     }
 }

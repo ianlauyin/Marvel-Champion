@@ -1,4 +1,5 @@
-use bevy::ecs::system::Commands;
+use bevy::ecs::{entity::Entity, system::Commands};
+
 
 use crate::{cards::*, component::card::*};
 
@@ -13,11 +14,11 @@ pub fn get_info() -> CardBasic<'static> {
     }
 }
 
-pub fn get_card() -> (CardBasic<'static>, fn(Commands)) {
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
     (get_info(), spawn_bundle)
 }
 
-fn spawn_bundle(mut commands: Commands) {
+fn spawn_bundle(mut commands: Commands) -> Entity {
     commands.spawn((
         get_info(),
         PlayerCardType::Ally,
@@ -26,5 +27,5 @@ fn spawn_bundle(mut commands: Commands) {
         CardKeywords::single(CardKeyword::Toughness),
         CardTraits::single(CardTrait::Defender),
         CardCharacter::ally(5, 1, 1, 2, 1),
-    ));
+    )).id()
 }

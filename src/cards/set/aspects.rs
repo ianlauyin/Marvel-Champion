@@ -1,4 +1,4 @@
-use bevy::ecs::system::Commands;
+use bevy::ecs::{entity::Entity, system::Commands};
 
 use super::super::data::aspect;
 use crate::component::card::CardBasic;
@@ -25,7 +25,7 @@ impl Aspect {
         ]
     }
 
-    pub fn get_all_cards() -> Vec<(CardBasic<'static>, fn(Commands))> {
+    pub fn get_all_cards() -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
         let mut cards = Vec::new();
         for aspect in Self::get_all() {
             for card in aspect.get_cards() {
@@ -69,7 +69,7 @@ impl Aspect {
         }
     }
 
-    pub fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands))> {
+    pub fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
         match self {
             Self::Aggression => aspect::aggression::get_cards(),
             Self::Basic => aspect::basic::get_cards(),

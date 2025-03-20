@@ -1,6 +1,6 @@
-use crate::cards::{BasicSet, IdentitySet, ModularSet, Scenario};
+use crate::cards::{IdentitySet, ModularSet, Scenario, StandardSet};
 
-use super::set::Aspect;
+use super::set::{Aspect, ExpertSet};
 
 #[derive(Clone)]
 pub struct Belongs {
@@ -43,7 +43,8 @@ pub enum Belong {
     IdentitySet(IdentitySet),
     ModularSet(ModularSet),
     Scenario(Scenario),
-    BasicSet(BasicSet),
+    StandardSet(StandardSet),
+    ExpertSet(ExpertSet),
 }
 
 impl Belong {
@@ -52,7 +53,8 @@ impl Belong {
             Self::Aspect(aspect) => aspect.to_string(),
             Self::IdentitySet(identity_set) => identity_set.to_string(),
             Self::ModularSet(modular_set) => modular_set.to_string(),
-            Self::BasicSet(basic_set) => basic_set.to_string(),
+            Self::StandardSet(standard_set) => standard_set.to_string(),
+            Self::ExpertSet(expert_set) => expert_set.to_string(),
             Self::Scenario(scenario) => scenario.to_string(),
         }
     }
@@ -62,7 +64,8 @@ impl Belong {
             Self::Aspect(aspect) => format!("aspect/{}", aspect.get_key()),
             Self::IdentitySet(identity_set) => format!("identity_set/{}", identity_set.get_key()),
             Self::ModularSet(modular_set) => format!("modular_set/{}", modular_set.get_key()),
-            Self::BasicSet(basic_set) => format!("basic_set/{}", basic_set.get_key()),
+            Self::StandardSet(standard_set) => format!("standard_set/{}", standard_set.get_key()),
+            Self::ExpertSet(expert_set) => format!("expert_set/{}", expert_set.get_key()),
             Self::Scenario(scenario) => format!("scenario/{}", scenario.get_key()),
         }
     }

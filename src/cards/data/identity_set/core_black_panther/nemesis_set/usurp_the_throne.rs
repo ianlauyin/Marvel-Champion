@@ -18,7 +18,7 @@ pub fn get_info() -> CardBasic<'static> {
     }
 }
 
-pub fn get_card() -> (CardBasic<'static>, fn(Commands)) {
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
     (get_info(), spawn_bundle)
 }
 

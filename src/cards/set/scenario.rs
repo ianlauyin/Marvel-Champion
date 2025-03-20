@@ -1,4 +1,4 @@
-use bevy::ecs::system::Commands;
+use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::component::card::CardBasic;
 
@@ -35,7 +35,7 @@ impl Scenario {
         todo!()
     }
 
-    pub fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands))> {
+    pub fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
         todo!()
     }
 }

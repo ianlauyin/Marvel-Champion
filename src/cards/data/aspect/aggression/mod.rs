@@ -8,7 +8,7 @@ mod tigra;
 mod uppercut;
 
 use crate::component::card::CardBasic;
-use bevy::ecs::system::Commands;
+use bevy::ecs::{entity::Entity, system::Commands};
 
 pub fn get_infos() -> Vec<CardBasic<'static>> {
     vec![
@@ -23,7 +23,7 @@ pub fn get_infos() -> Vec<CardBasic<'static>> {
     ]
 }
 
-pub fn get_cards() -> Vec<(CardBasic<'static>, fn(Commands))> {
+pub fn get_cards() -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
     vec![
         chase_them_down::get_card(),
         combat_training::get_card(),

@@ -8,7 +8,7 @@ mod med_team;
 mod the_power_of_protection;
 
 use crate::component::card::CardBasic;
-use bevy::ecs::system::Commands;
+use bevy::ecs::{entity::Entity, system::Commands};
 
 pub fn get_infos() -> Vec<CardBasic<'static>> {
     vec![
@@ -23,7 +23,7 @@ pub fn get_infos() -> Vec<CardBasic<'static>> {
     ]
 }
 
-pub fn get_cards() -> Vec<(CardBasic<'static>, fn(Commands))> {
+pub fn get_cards() -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
     vec![
         armored_vest::get_card(),
         black_widow::get_card(),

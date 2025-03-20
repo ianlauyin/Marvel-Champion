@@ -1,12 +1,15 @@
 use bevy::{
-    ecs::{system::Commands, system::Resource},
+    ecs::{
+        entity::Entity,
+        system::{Commands, Resource},
+    },
     utils::HashMap,
 };
 
 use crate::{cards::Aspect, component::card::CardBasic};
 
 #[derive(Resource)]
-pub struct AspectCardDatas<'a>(HashMap<String, (CardBasic<'a>, fn(Commands))>);
+pub struct AspectCardDatas<'a>(HashMap<String, (CardBasic<'a>, fn(Commands) -> Entity)>);
 
 impl<'a> AspectCardDatas<'a> {
     pub fn new() -> Self {

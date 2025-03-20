@@ -16,7 +16,7 @@ pub fn get_infos() -> Vec<CardBasic<'static>> {
     ]
 }
 
-pub fn get_cards() -> Vec<(CardBasic<'static>, fn(Commands))> {
+pub fn get_cards() -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
     vec![
         heart_shaped_herb::get_card(),
         killmonger::get_card(),

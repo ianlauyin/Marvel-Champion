@@ -1,4 +1,4 @@
-use bevy::ecs::{system::Commands, world::World};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
 use crate::{cards::*, component::card::*};
 
@@ -13,11 +13,11 @@ pub fn get_info() -> CardBasic<'static> {
     }
 }
 
-pub fn get_card() -> (CardBasic<'static>, fn(Commands)) {
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
     (get_info(), spawn_bundle)
 }
 
-fn spawn_bundle(mut commands: Commands) {
+fn spawn_bundle(mut commands: Commands) -> Entity {
     commands.spawn((
         get_info(),
         PlayerCardType::Ally,
@@ -27,7 +27,7 @@ fn spawn_bundle(mut commands: Commands) {
         CardCharacter::ally(3, 1, 1, 1, 1),
         CardCounter::Arrow(4),
         ResponseAbilities::single(Ability::new(response_ability)),
-    ));
+    )).id()
 }
 
 fn response_ability(world: &mut World) {
