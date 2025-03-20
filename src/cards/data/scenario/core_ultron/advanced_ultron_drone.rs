@@ -26,7 +26,7 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
             CardKeywords::single(CardKeyword::Guard),
             ForcedInterruptAbilities::single(Ability::new(forced_interrupt_ability)),
             CardBoost::new(2),
-            CardCharacter::minion(4, 1, 1),
+            CardCharacter::minion(Count::Constant(4), 1, 1),
         ))
         .id()
 }

@@ -1,17 +1,27 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, Identity::CoreBlackPanther, ResourceCard,
-};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_vibranium() -> Card {
-    Card::Resource(ResourceCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_044",
         name: "Vibranium",
-        description: "",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_black_panther/core_044.png",
-        traits: vec![],
-        aspect: CardAspect::IdentitySpecific(CoreBlackPanther),
-        res: vec![CardResource::Wild, CardResource::Wild],
+        sub_name: None,
+        unique: false,
         card_amount_max: 3,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreBlackPanther).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Resource,
+            CardResources::new(vec![CardResource::Wild, CardResource::Wild]),
+        ))
+        .id()
 }

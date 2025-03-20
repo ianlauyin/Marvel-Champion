@@ -23,7 +23,7 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
             get_info(),
             EncounterCardType::Minion,
             CardBoost::new(1),
-            CardCharacter::minion(3, 0, 1),
+            CardCharacter::minion(Count::Constant(3), 0, 1),
             CardKeywords::single(CardKeyword::Guard),
             CardTraits::single(CardTrait::Hydra),
         ))

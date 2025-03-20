@@ -1,19 +1,33 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, EventCard, Identity::CoreBlackPanther,
-};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_ancestral_knowledge() -> Card {
-    Card::Event(EventCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_042",
         name: "Ancestral Knowledge",
-        description:"Alter-Ego Action: Choose up to 3 different cards in your discard pile and shuffle them into your deck.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_black_panther/core_042.png",
-        traits: vec![],
-        keywords: vec![],
-        aspect: CardAspect::IdentitySpecific(CoreBlackPanther),
-        cost: 1,
-        res: vec![CardResource::Mental],
+        sub_name: None,
+        unique: false,
         card_amount_max: 1,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreBlackPanther).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Event,
+            CardCost::constant(1),
+            CardResources::mental(),
+            InstantAbilities::single(Ability::alter_ego(instant_ability)),
+        ))
+        .id()
+}
+
+fn instant_ability(world: &mut World) {
+    println!("instant_ability");
 }

@@ -1,27 +1,35 @@
-use crate::features::cards::{
-    AllyCard, Card, CardAspect, CardResource, CardTrait, Identity::CoreBlackPanther,
-};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_shuri() -> Card {
-    Card::Ally(AllyCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_041",
         name: "Shuri",
-        description:"Response: After Shuri enters play, search your deck for an upgrade and add it to your hand. Shuffle your deck.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_black_panther/core_041.png",
-        traits: vec![CardTrait::Genius,CardTrait::Wakanda],
-        initial_hit_points: 3,
-        keywords: vec![],
-        card_icons: vec![],
-        thw: 1,
-        atk: 1,
-        sub_name: "Shuri",
-        aspect: CardAspect::IdentitySpecific(CoreBlackPanther),
+        sub_name: Some("Shuri"),
         unique: true,
-        cost: 2,
-        res: vec![CardResource::Physical],
-        thw_con_dmg: 1,
-        atk_con_dmg: 1,
         card_amount_max: 1,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreBlackPanther).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Ally,
+            CardCost::constant(2),
+            CardResources::physical(),
+            CardCharacter::ally(3, 1, 1, 1, 1),
+            CardTraits::new(vec![CardTrait::Genius, CardTrait::Wakanda]),
+            ResponseAbilities::single(Ability::new(response_ability)),
+        ))
+        .id()
+}
+
+fn response_ability(world: &mut World) {
+    println!("response_ability");
 }

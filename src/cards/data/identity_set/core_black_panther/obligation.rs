@@ -1,16 +1,32 @@
-use crate::features::cards::{Card, Identity, ObligationCard};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_obligation() -> Card {
-    Card::Obligation(ObligationCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_155",
         name: "Affairs of State",
-        belong: Identity::CoreBlackPanther,
-        instant_effect: true,
-        boost: 2,
-        card_icons: vec![],
-        description: "Give to the T'Challa player. You may flip to alter-ego form. Choose: Exhaust T'Challa → remove Affairs of State from the game. Choose and discard a Black Panther upgrade you control. Discard this obligation.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_black_panther/core_155.png",
-        boost_effect:None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 1,
+        belongs: Belong::IdentitySet(IdentitySet::CoreBlackPanther).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::Obligation,
+            CardBoost::new(2),
+            InstantAbilities::single(Ability::new(instant_ability)),
+        ))
+        .id()
+}
+
+fn instant_ability(world: &mut World) {
+    println!("instant_ability");
 }

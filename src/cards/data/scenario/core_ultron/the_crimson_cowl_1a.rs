@@ -24,11 +24,11 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
             ScenarioCardType::MainSchemeA {
                 next_stage_id: "core_137b",
             },
-            WhenRevealedAbilities::single(Ability::new(when_revealed_ability)),
+            SetupAbilities::single(Ability::new(setup_ability)),
         ))
         .id()
 }
 
-fn when_revealed_ability(world: &mut World) {
-    println!("when_revealed_ability");
+fn setup_ability(world: &mut World) {
+    println!("setup_ability");
 }

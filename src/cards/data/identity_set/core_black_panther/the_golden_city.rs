@@ -1,21 +1,34 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, CardTrait, Identity::CoreBlackPanther, SupportCard,
-};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_the_golden_city() -> Card {
-    Card::Support(SupportCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_045",
         name: "The Golden City",
-        description: "Alter-Ego Action: Exhaust The Golden City -> draw 2 cards",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_black_panther/core_045.png",
-        traits: vec![CardTrait::Location, CardTrait::Wakanda],
-        aspect: CardAspect::IdentitySpecific(CoreBlackPanther),
-        res: vec![CardResource::Energy],
-        card_amount_max: 1,
+        sub_name: None,
         unique: true,
-        cost: 2,
-        card_icons: vec![],
-        keywords: vec![],
-    })
+        card_amount_max: 1,
+        belongs: Belong::IdentitySet(IdentitySet::CoreBlackPanther).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Support,
+            CardCost::constant(2),
+            CardResources::energy(),
+            CardTraits::new(vec![CardTrait::Location, CardTrait::Wakanda]),
+            InstantAbilities::single(Ability::alter_ego(instant_ability)),
+        ))
+        .id()
+}
+
+fn instant_ability(world: &mut World) {
+    println!("instant_ability");
 }

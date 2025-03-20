@@ -24,7 +24,7 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
             EncounterCardType::Minion,
             CardBoost::new(0),
             CardTraits::single(CardTrait::MastersOfEvil),
-            CardCharacter::minion(5, 1, 3),
+            CardCharacter::minion(Count::Constant(5), 1, 3),
             ConstantAbilities::single(Ability::new(constant_ability)),
             BoostAbilities::single(Ability::new(boost_ability)),
         ))

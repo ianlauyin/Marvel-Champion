@@ -22,7 +22,7 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
             get_info(),
             EncounterCardType::Minion,
             CardBoost::new(0),
-            CardCharacter::minion(6, 1, 3),
+            CardCharacter::minion(Count::Constant(6), 1, 3),
             CardTraits::single(CardTrait::MastersOfEvil),
             BoostAbilities::single(Ability::new(boost_ability)),
             ForcedResponseAbilities::single(Ability::new(forced_response_ability)),

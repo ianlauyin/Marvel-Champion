@@ -24,7 +24,7 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
             EncounterCardType::Minion,
             CardBoost::new(1),
             CardTraits::single(CardTrait::Hydra),
-            CardCharacter::minion(2, 1, 1),
+            CardCharacter::minion(Count::Constant(2), 1, 1),
             WhenRevealedAbilities::single(Ability::new(when_revealed_ability)),
         ))
         .id()

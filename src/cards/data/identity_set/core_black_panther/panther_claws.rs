@@ -1,21 +1,34 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, CardTrait, Identity::CoreBlackPanther, UpgradeCard,
-};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_panther_claws() -> Card {
-    Card::Upgrade(UpgradeCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_047",
         name: "Panther Claws",
-        description: "Special (attack): Deal 2 damage to an enemy (4 damage instead if this is the final step of this sequence).",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_black_panther/core_047.png",
-        traits: vec![CardTrait::BlackPanther, CardTrait::Weapon],
-        aspect: CardAspect::IdentitySpecific(CoreBlackPanther),
-        res: vec![CardResource::Energy],
-        card_amount_max: 1,
+        sub_name: None,
         unique: false,
-        cost: 2,
-        card_icons: vec![],
-        keywords: vec![],
-    })
+        card_amount_max: 1,
+        belongs: Belong::IdentitySet(IdentitySet::CoreBlackPanther).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Upgrade,
+            CardCost::constant(2),
+            CardResources::energy(),
+            CardTraits::new(vec![CardTrait::Weapon, CardTrait::BlackPanther]),
+            InstantAbilities::single(Ability::new(instant_ability)),
+        ))
+        .id()
+}
+
+fn instant_ability(world: &mut World) {
+    println!("instant_ability");
 }

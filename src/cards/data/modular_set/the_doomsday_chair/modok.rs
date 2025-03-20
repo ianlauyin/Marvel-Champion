@@ -25,7 +25,7 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
             CardBoost::new(2),
             CardTraits::new(vec![CardTrait::Cyborg, CardTrait::Elite]),
             CardKeywords::single(CardKeyword::Retaliate(2)),
-            CardCharacter::minion(8, 2, 2),
+            CardCharacter::minion(Count::Constant(8), 2, 2),
         ))
         .id()
 }

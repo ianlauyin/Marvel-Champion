@@ -1,19 +1,34 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, CardTrait, EventCard, Identity::CoreBlackPanther,
-};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_wakanda_forever_a() -> Card {
-    Card::Event(EventCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_043a",
         name: "Wakanda Forever!",
-        description:"Hero Action: Resolve the \"Special\" ability on each Black Panther upgrade you control in any order. (Resolving each ability is a step in a sequence.)",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_black_panther/core_043a.png",
-        traits: vec![CardTrait::Tactic],
-        keywords: vec![],
-        aspect: CardAspect::IdentitySpecific(CoreBlackPanther),
-        cost: 1,
-        res: vec![CardResource::Energy],
+        sub_name: None,
+        unique: false,
         card_amount_max: 1,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreBlackPanther).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Event,
+            CardCost::constant(1),
+            CardResources::energy(),
+            CardTraits::single(CardTrait::Tactic),
+            InstantAbilities::single(Ability::hero(instant_ability)),
+        ))
+        .id()
+}
+
+fn instant_ability(world: &mut World) {
+    println!("instant_ability");
 }

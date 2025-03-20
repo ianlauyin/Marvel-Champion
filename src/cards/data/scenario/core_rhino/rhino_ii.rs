@@ -22,11 +22,9 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
         .spawn((
             get_info(),
             ScenarioCardType::Villain {
-                hit_points: Count::PerPlayer(15),
-                sch: 1,
-                atk: 3,
                 next_villain_id: Some("core_096"),
             },
+            CardCharacter::villain(Count::PerPlayer(15), 1, 3),
             CardTraits::new(vec![CardTrait::Brute, CardTrait::Criminal]),
             WhenRevealedAbilities::single(Ability::new(when_revealed_ability)),
         ))

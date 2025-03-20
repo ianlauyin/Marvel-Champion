@@ -43,6 +43,27 @@ impl IdentitySet {
         }
     }
 
+    pub fn get_nemesis_id(&self) -> String {
+        match *self {
+            Self::CoreBlackPanther => "core_157".to_string(),
+            _ => "".to_string(),
+        }
+    }
+
+    pub fn get_nemesis_scheme_id(&self) -> String {
+        match *self {
+            Self::CoreBlackPanther => "core_156".to_string(),
+            _ => "".to_string(),
+        }
+    }
+
+    pub fn get_nemesis_cards_ids(&self) -> Vec<String> {
+        match *self {
+            Self::CoreBlackPanther => vec!["core_158".to_string(), "core_159".to_string()],
+            _ => vec![],
+        }
+    }
+
     pub fn get_card_infos(&self) -> Vec<CardBasic> {
         todo!()
     }

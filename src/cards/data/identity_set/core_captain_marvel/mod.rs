@@ -1,5 +1,3 @@
-use crate::features::cards::Card;
-
 mod alpha_flight_station;
 mod alter_ego;
 mod captain_marvels_helmet;
@@ -13,47 +11,13 @@ mod obligation;
 mod photonic_blast;
 mod spider_woman;
 
-pub fn get_player_cards() -> Vec<Card> {
-    vec![
-        spider_woman::get_spider_woman(),
-        crisis_interdiction::get_crisis_interdiction(),
-        crisis_interdiction::get_crisis_interdiction(),
-        crisis_interdiction::get_crisis_interdiction(),
-        photonic_blast::get_photonic_blast(),
-        photonic_blast::get_photonic_blast(),
-        photonic_blast::get_photonic_blast(),
-        energy_absorption::get_energy_absorption(),
-        energy_absorption::get_energy_absorption(),
-        alpha_flight_station::get_alpha_flight_station(),
-        captain_marvels_helmet::get_captain_marvels_helmet(),
-        cosmic_flight::get_cosmic_flight(),
-        cosmic_flight::get_cosmic_flight(),
-        energy_channel::get_energy_channel(),
-        energy_channel::get_energy_channel(),
-    ]
+use crate::component::card::CardBasic;
+use bevy::ecs::{entity::Entity, system::Commands};
+
+pub fn get_infos() -> Vec<CardBasic<'static>> {
+    vec![]
 }
 
-pub fn get_hero() -> Vec<Card> {
-    vec![hero::get_hero()]
+pub fn get_cards() -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
+    vec![]
 }
-
-pub fn get_identity_cards() -> Vec<Card> {
-    [vec![alter_ego::get_alter_ego()], get_hero()].concat()
-}
-
-pub fn get_obligation() -> Card {
-    obligation::get_obligation()
-}
-
-pub fn get_all() -> Vec<Card> {
-    [
-        get_identity_cards(),
-        get_player_cards(),
-        vec![get_obligation()],
-        nemesis_set::get_nemesis_set(),
-    ]
-    .concat()
-}
-
-pub use alter_ego::get_alter_ego;
-pub use nemesis_set::get_nemesis_set;

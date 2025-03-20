@@ -1,25 +1,36 @@
-use crate::features::cards::{
-    AlterEgoCard, Card, CardAspect, CardTrait, Identity::CoreBlackPanther,
-};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands, world::World};
 
-pub fn get_alter_ego() -> Card {
-    Card::AlterEgo(AlterEgoCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_040b",
         name: "T'Challa",
-        description: "Setup: Search your deck for a Black Panther upgrade and add it to your hand. Shuffle your deck.",
-        abilities: vec![],
-        aspect: CardAspect::IdentitySpecific(CoreBlackPanther),
-        card_image_path:"embedded://cards/identity/core_black_panther/core_040b.png",
-        card_back_image_path:"embedded://cards/identity/core_black_panther/core_040a.png",
-        traits: vec![CardTrait::King, CardTrait::Wakanda],
-        flip_target_id: vec!["core_040a"],
-        initial_hit_points: 11,
-        keywords: vec![],
-        card_icons: vec![],
-        hand_size: 6,
-        nemesis_id: "core_157",
-        nemesis_side_scheme_id: "core_156",
-        nemesis_card_id:vec!["core_158","core_159"],
-        rec: 4,
-    })
+        sub_name: Some("Black Panther"),
+        unique: true,
+        card_amount_max: 1,
+        belongs: Belong::IdentitySet(IdentitySet::CoreBlackPanther).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            IdentityCardType::AlterEgo {
+                hand_size: 6,
+                flip_target_id: vec!["core_040a"],
+            },
+            CardCharacter::alter_ego(11, 4),
+            CardTraits::new(vec![CardTrait::King, CardTrait::Wakanda]),
+            SetupAbilities::single(Ability::new(setup_ability)),
+        ))
+        .id()
+}
+
+fn setup_ability(world: &mut World) {
+    println!("setup_ability");
 }
