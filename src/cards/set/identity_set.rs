@@ -23,54 +23,53 @@ impl IdentitySet {
         ]
     }
 
-    pub fn to_string(&self) -> String {
-        let str = match *self {
+    pub fn to_str(&self) -> &str {
+        match *self {
             Self::CoreSpiderMan => "Core - Spider Man",
             Self::CoreCaptainMarvel => "Core - Captain Marvel",
             Self::CoreSheHulk => "Core - She Hulk",
             Self::CoreIronMan => "Core - Iron Man",
             Self::CoreBlackPanther => "Core - Black Panther",
-        };
-        str.to_string()
-    }
-
-    pub fn get_key(&self) -> String {
-        match *self {
-            Self::CoreSpiderMan => "core_spider_man".to_string(),
-            Self::CoreCaptainMarvel => "core_captain_marvel".to_string(),
-            Self::CoreSheHulk => "core_she_hulk".to_string(),
-            Self::CoreIronMan => "core_iron_man".to_string(),
-            Self::CoreBlackPanther => "core_black_panther".to_string(),
         }
     }
 
-    pub fn get_nemesis_scheme_id(&self) -> String {
+    pub fn get_key(&self) -> &str {
         match *self {
-            Self::CoreBlackPanther => "core_156".to_string(),
-            Self::CoreCaptainMarvel => "core_176".to_string(),
-            Self::CoreIronMan => "core_171".to_string(),
-            Self::CoreSheHulk => "core_161".to_string(),
-            Self::CoreSpiderMan => "core_166".to_string(),
+            Self::CoreSpiderMan => "core_spider_man",
+            Self::CoreCaptainMarvel => "core_captain_marvel",
+            Self::CoreSheHulk => "core_she_hulk",
+            Self::CoreIronMan => "core_iron_man",
+            Self::CoreBlackPanther => "core_black_panther",
         }
     }
 
-    pub fn get_nemesis_id(&self) -> String {
+    pub fn get_nemesis_scheme_id(&self) -> &str {
         match *self {
-            Self::CoreBlackPanther => "core_157".to_string(),
-            Self::CoreCaptainMarvel => "core_177".to_string(),
-            Self::CoreIronMan => "core_172".to_string(),
-            Self::CoreSheHulk => "core_162".to_string(),
-            Self::CoreSpiderMan => "core_167".to_string(),
+            Self::CoreBlackPanther => "core_156",
+            Self::CoreCaptainMarvel => "core_176",
+            Self::CoreIronMan => "core_171",
+            Self::CoreSheHulk => "core_161",
+            Self::CoreSpiderMan => "core_166",
         }
     }
 
-    pub fn get_nemesis_cards_ids(&self) -> Vec<String> {
+    pub fn get_nemesis_id(&self) -> &str {
         match *self {
-            Self::CoreBlackPanther => vec!["core_158".to_string(), "core_159".to_string()],
-            Self::CoreCaptainMarvel => vec!["core_178".to_string(), "core_179".to_string()],
-            Self::CoreIronMan => vec!["core_173".to_string(), "core_174".to_string()],
-            Self::CoreSheHulk => vec!["core_163".to_string(), "core_164".to_string()],
-            Self::CoreSpiderMan => vec!["core_168".to_string(), "core_169".to_string()],
+            Self::CoreBlackPanther => "core_157",
+            Self::CoreCaptainMarvel => "core_177",
+            Self::CoreIronMan => "core_172",
+            Self::CoreSheHulk => "core_162",
+            Self::CoreSpiderMan => "core_167",
+        }
+    }
+
+    pub fn get_nemesis_cards_ids(&self) -> Vec<&str> {
+        match *self {
+            Self::CoreBlackPanther => vec!["core_158", "core_159"],
+            Self::CoreCaptainMarvel => vec!["core_178", "core_179"],
+            Self::CoreIronMan => vec!["core_173", "core_174"],
+            Self::CoreSheHulk => vec!["core_163", "core_164"],
+            Self::CoreSpiderMan => vec!["core_168", "core_169"],
         }
     }
 

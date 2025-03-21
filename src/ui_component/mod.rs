@@ -5,7 +5,7 @@ mod main_container;
 mod node_moving;
 mod scrolling_list;
 
-pub use container_header::ContainerHeader;
+pub use container_header::{ContainerHeader, ContainerHeaderEvent};
 pub use custom_button::CustomButton;
 pub use loading_screen::LoadingScreen;
 pub use main_container::MainContainer;

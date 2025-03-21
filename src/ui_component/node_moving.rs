@@ -25,12 +25,14 @@ pub struct NodeMovingPlugin;
 
 impl Plugin for NodeMovingPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(FixedUpdate, handle_movement);
+        app.add_event::<NodeMoveRemoveEvent>()
+            .add_systems(FixedUpdate, handle_movement);
     }
 }
 
 fn handle_movement(
     mut commands: Commands,
+    mut node_move_remove_event: EventWriter<NodeMoveRemoveEvent>,
     mut move_components_q: Query<(Entity, &mut NodeMove, &mut Node)>,
 ) {
     for (entity, mut move_to, mut node) in move_components_q.iter_mut() {
@@ -40,7 +42,7 @@ fn handle_movement(
         };
         if move_to.current_delta == 0 {
             commands.entity(entity).remove::<NodeMove>();
-            commands.trigger(NodeMoveRemoveEvent(entity));
+            node_move_remove_event.send(NodeMoveRemoveEvent(entity));
             continue;
         };
         node.left = Val::Px(x + move_to.delta.x);

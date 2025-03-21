@@ -13,16 +13,15 @@ impl ExpertSet {
         vec![Self::Expert]
     }
 
-    pub fn to_string(&self) -> String {
-        let str = match *self {
+    pub fn to_str(&self) -> &str {
+        match *self {
             Self::Expert => "Expert",
-        };
-        str.to_string()
+        }
     }
 
-    pub fn get_key(&self) -> String {
+    pub fn get_key(&self) -> &str {
         match *self {
-            Self::Expert => "expert".to_string(),
+            Self::Expert => "expert",
         }
     }
 

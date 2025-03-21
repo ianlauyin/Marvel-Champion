@@ -15,20 +15,19 @@ impl Scenario {
         vec![Self::CoreRhino, Self::CoreKlaw, Self::CoreUltron]
     }
 
-    pub fn to_string(&self) -> String {
-        let str = match *self {
+    pub fn to_str(&self) -> &str {
+        match *self {
             Self::CoreRhino => "Core - Rhino",
             Self::CoreKlaw => "Core - Klaw",
             Self::CoreUltron => "Core - Ultron",
-        };
-        str.to_string()
+        }
     }
 
-    pub fn get_key(&self) -> String {
+    pub fn get_key(&self) -> &str {
         match *self {
-            Self::CoreRhino => "core_rhino".to_string(),
-            Self::CoreKlaw => "core_klaw".to_string(),
-            Self::CoreUltron => "core_ultron".to_string(),
+            Self::CoreRhino => "core_rhino",
+            Self::CoreKlaw => "core_klaw",
+            Self::CoreUltron => "core_ultron",
         }
     }
 

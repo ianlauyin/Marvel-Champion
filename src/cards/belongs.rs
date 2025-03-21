@@ -48,14 +48,14 @@ pub enum Belong {
 }
 
 impl Belong {
-    pub fn to_string(&self) -> String {
+    pub fn to_string(&self) -> &str {
         match self {
-            Self::Aspect(aspect) => aspect.to_string(),
-            Self::IdentitySet(identity_set) => identity_set.to_string(),
-            Self::ModularSet(modular_set) => modular_set.to_string(),
-            Self::StandardSet(standard_set) => standard_set.to_string(),
-            Self::ExpertSet(expert_set) => expert_set.to_string(),
-            Self::Scenario(scenario) => scenario.to_string(),
+            Self::Aspect(aspect) => aspect.to_str(),
+            Self::IdentitySet(identity_set) => identity_set.to_str(),
+            Self::ModularSet(modular_set) => modular_set.to_str(),
+            Self::StandardSet(standard_set) => standard_set.to_str(),
+            Self::ExpertSet(expert_set) => expert_set.to_str(),
+            Self::Scenario(scenario) => scenario.to_str(),
         }
     }
 

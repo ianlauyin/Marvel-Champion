@@ -22,14 +22,14 @@ impl CollectionMenuButton {
         ]
     }
 
-    pub fn get_text(&self) -> String {
+    pub fn get_text(&self) -> &str {
         match self {
-            Self::Aspect => "Aspect".to_string(),
-            Self::IdentitySet => "Identity Set".to_string(),
-            Self::ModularSet => "Modular Set".to_string(),
-            Self::Scenario => "Scenario".to_string(),
-            Self::StandardSet => "Standard Set".to_string(),
-            Self::ExpertSet => "Expert Set".to_string(),
+            Self::Aspect => "Aspect",
+            Self::IdentitySet => "Identity Set",
+            Self::ModularSet => "Modular Set",
+            Self::Scenario => "Scenario",
+            Self::StandardSet => "Standard Set",
+            Self::ExpertSet => "Expert Set",
         }
     }
 }

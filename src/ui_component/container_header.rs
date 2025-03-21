@@ -2,15 +2,33 @@ use bevy::prelude::*;
 
 use crate::ui_component::CustomButton;
 
+#[derive(Event)]
+pub enum ContainerHeaderEvent {
+    LeadingButtonPressed,
+}
+
 #[derive(Component)]
 pub struct ContainerHeader {
-    leading_button_text: String,
+    leading_button: ContainerHeaderButton,
 }
 
 impl ContainerHeader {
-    pub fn with_leading_button(text: String) -> Self {
+    pub fn with_leading_button(text: &str) -> Self {
         Self {
-            leading_button_text: text,
+            leading_button: ContainerHeaderButton::Leading(text.to_string()),
+        }
+    }
+}
+
+#[derive(Component, Clone)]
+pub enum ContainerHeaderButton {
+    Leading(String),
+}
+
+impl ContainerHeaderButton {
+    pub fn get_text(&self) -> &str {
+        match self {
+            ContainerHeaderButton::Leading(text) => text,
         }
     }
 }
@@ -19,7 +37,9 @@ pub struct ContainerHeaderPlugin;
 
 impl Plugin for ContainerHeaderPlugin {
     fn build(&self, app: &mut App) {
-        app.add_observer(on_container_header_added);
+        app.add_event::<ContainerHeaderEvent>()
+            .add_observer(on_container_header_added)
+            .add_systems(Update, listen_container_header_pressed);
     }
 }
 
@@ -40,8 +60,23 @@ fn on_container_header_added(
             ..default()
         })
         .with_children(|parent| {
-            parent.spawn(CustomButton::square(
-                container_header.leading_button_text.clone(),
+            parent.spawn((
+                CustomButton::square(container_header.leading_button.get_text()),
+                container_header.leading_button.clone(),
             ));
         });
+}
+
+fn listen_container_header_pressed(
+    mut event_writer: EventWriter<ContainerHeaderEvent>,
+    mut button_q: Query<(&Interaction, &ContainerHeaderButton)>,
+) {
+    for (interaction, button) in button_q.iter_mut() {
+        if *interaction == Interaction::Pressed {
+            let event = match button {
+                ContainerHeaderButton::Leading(_) => ContainerHeaderEvent::LeadingButtonPressed,
+            };
+            event_writer.send(event);
+        }
+    }
 }

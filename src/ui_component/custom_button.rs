@@ -22,9 +22,9 @@ pub struct CustomButton {
 }
 
 impl CustomButton {
-    pub fn menu_text(text: String) -> Self {
+    pub fn menu_text(text: &str) -> Self {
         Self {
-            text,
+            text: text.to_string(),
             text_color: Color::WHITE,
             color: Color::srgb(0.576, 0.576, 0.576),
             with_border: true,
@@ -43,9 +43,9 @@ impl CustomButton {
         }
     }
 
-    pub fn square(text: String) -> Self {
+    pub fn square(text: &str) -> Self {
         Self {
-            text,
+            text: text.to_string(),
             text_color: Color::WHITE,
             color: Color::srgb(0.173, 0.173, 0.173),
             with_border: false,

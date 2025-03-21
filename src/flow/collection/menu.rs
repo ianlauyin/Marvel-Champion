@@ -2,7 +2,9 @@ use bevy::prelude::*;
 
 use crate::{
     flow::state::AppState,
-    ui_component::{ContainerHeader, CustomButton, MainContainer, ScrollingList},
+    ui_component::{
+        ContainerHeader, ContainerHeaderEvent, CustomButton, MainContainer, ScrollingList,
+    },
     util::ComponentUtil,
 };
 
@@ -13,6 +15,10 @@ pub struct CollectionMenuPlugin;
 impl Plugin for CollectionMenuPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(OnEnter(AppState::Collection), spawn_menu)
+            .add_systems(
+                Update,
+                handle_header_button_click.run_if(in_state(AppState::Collection)),
+            )
             .add_systems(
                 OnExit(AppState::Collection),
                 ComponentUtil::cleanup_all::<CollectionMenu>,
@@ -27,7 +33,7 @@ fn spawn_menu(mut commands: Commands) {
     commands
         .spawn((MainContainer, CollectionMenu))
         .with_children(|parent| {
-            parent.spawn(ContainerHeader::with_leading_button("<".to_string()));
+            parent.spawn(ContainerHeader::with_leading_button("<"));
             parent
                 .spawn(Node {
                     align_self: AlignSelf::Stretch,
@@ -47,4 +53,16 @@ fn spawn_menu(mut commands: Commands) {
                         });
                 });
         });
+}
+
+fn handle_header_button_click(
+    mut event_reader: EventReader<ContainerHeaderEvent>,
+    mut next_state: ResMut<NextState<AppState>>,
+) {
+    for event in event_reader.read() {
+        match event {
+            ContainerHeaderEvent::LeadingButtonPressed => next_state.set(AppState::MainMenu),
+            _ => {}
+        }
+    }
 }

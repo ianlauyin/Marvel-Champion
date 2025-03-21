@@ -13,16 +13,15 @@ impl StandardSet {
         vec![Self::Standard]
     }
 
-    pub fn to_string(&self) -> String {
-        let str = match *self {
+    pub fn to_str(&self) -> &str {
+        match *self {
             Self::Standard => "Standard",
-        };
-        str.to_string()
+        }
     }
 
-    pub fn get_key(&self) -> String {
+    pub fn get_key(&self) -> &str {
         match *self {
-            Self::Standard => "standard".to_string(),
+            Self::Standard => "standard",
         }
     }
 

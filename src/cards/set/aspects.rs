@@ -35,26 +35,25 @@ impl Aspect {
         cards
     }
 
-    pub fn to_string(&self) -> String {
-        let str = match *self {
+    pub fn to_str(&self) -> &str {
+        match *self {
             Self::Basic => "Basic",
             Self::Justice => "Justice",
             Self::Aggression => "Aggression",
             Self::Protection => "Protection",
             Self::Leadership => "Leadership",
             Self::Pool => "Pool",
-        };
-        str.to_string()
+        }
     }
 
-    pub fn get_key(&self) -> String {
+    pub fn get_key(&self) -> &str {
         match *self {
-            Self::Basic => "basic".to_string(),
-            Self::Justice => "justice".to_string(),
-            Self::Aggression => "aggression".to_string(),
-            Self::Protection => "protection".to_string(),
-            Self::Leadership => "leadership".to_string(),
-            Self::Pool => "pool".to_string(),
+            Self::Basic => "basic",
+            Self::Justice => "justice",
+            Self::Aggression => "aggression",
+            Self::Protection => "protection",
+            Self::Leadership => "leadership",
+            Self::Pool => "pool",
         }
     }
 
