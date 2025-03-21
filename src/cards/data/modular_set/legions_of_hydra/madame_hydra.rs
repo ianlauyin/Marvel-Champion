@@ -1,4 +1,4 @@
-use bevy::ecs::{entity::Entity, system::Commands, world::World};
+use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::{cards::*, component::card::*};
 
@@ -22,19 +22,9 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
         .spawn((
             get_info(),
             EncounterCardType::Minion,
-            CardBoost::new(2),
+            CardBoost::amount(2),
             CardTraits::single(CardTrait::Hydra),
             CardCharacter::minion(Count::Constant(6), 2, 2),
-            ConstantAbilities::single(Ability::new(constant_ability)),
-            ForcedResponseAbilities::single(Ability::new(forced_response_ability)),
         ))
         .id()
-}
-
-fn constant_ability(world: &mut World) {
-    println!("constant_ability");
-}
-
-fn forced_response_ability(world: &mut World) {
-    println!("forced_response_ability");
 }

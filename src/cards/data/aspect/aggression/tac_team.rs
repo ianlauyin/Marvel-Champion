@@ -1,4 +1,4 @@
-use bevy::ecs::{entity::Entity, system::Commands, world::World};
+use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::{cards::*, component::card::*};
 
@@ -26,11 +26,6 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
             CardResources::energy(),
             CardKeywords::single(CardKeyword::Use(CardCounter::Attack(3))),
             CardTraits::single(CardTrait::SHIELD),
-            InstantAbilities::single(Ability::new(instant_ability)),
         ))
         .id()
-}
-
-fn instant_ability(world: &mut World) {
-    println!("instant_ability");
 }

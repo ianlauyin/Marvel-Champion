@@ -1,19 +1,29 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, CardTrait, EventCard, Identity::CoreSpiderMan,
-};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_backflip() -> Card {
-    Card::Event(EventCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_003",
         name: "Backflip",
-        aspect: CardAspect::IdentitySpecific(CoreSpiderMan),
-        cost: 0,
-        res: vec![CardResource::Physical],
-        traits: vec![CardTrait::Defense,CardTrait::Skill],
-        keywords: vec![],
-        description: "Interrupt (defense): When you would take any amount of damage from an attack, prevent all of that damage.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_spider_man/core_003.png",
+        sub_name: None,
+        unique: false,
         card_amount_max: 2,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreSpiderMan).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Event,
+            CardCost::constant(0),
+            CardResources::physical(),
+            CardTraits::new(vec![CardTrait::Defense, CardTrait::Skill]),
+        ))
+        .id()
 }

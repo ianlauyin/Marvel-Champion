@@ -1,11 +1,5 @@
+use crate::{cards::*, component::card::*};
 use bevy::ecs::{entity::Entity, system::Commands};
-
-use crate::{
-    cards::{Belong, IdentitySet},
-    component::card::{
-        CardBasic, CardBoost, CardIcon, CardIcons, CardScheme, Count, EncounterCardType,
-    },
-};
 
 pub fn get_info() -> CardBasic<'static> {
     CardBasic {
@@ -27,8 +21,8 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
         .spawn((
             get_info(),
             EncounterCardType::SideScheme,
-            CardIcons::single(CardIcon::Hazard),
-            CardBoost::new(3),
+            CardIcons::hazard(),
+            CardBoost::amount(3),
             CardScheme::new(Count::PerPlayer(3)),
         ))
         .id()

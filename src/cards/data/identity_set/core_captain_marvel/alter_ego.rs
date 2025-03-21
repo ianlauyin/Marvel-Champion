@@ -1,25 +1,31 @@
-use crate::features::cards::{
-    AlterEgoCard, Card, CardAspect, CardTrait, Identity::CoreCaptainMarvel,
-};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_alter_ego() -> Card {
-    Card::AlterEgo(AlterEgoCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_010b",
         name: "Carol Danvers",
-        aspect: CardAspect::IdentitySpecific(CoreCaptainMarvel),
-        description: "Action: Choose a player to draw 1 card. (Limit once per round.)",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_captain_marvel/core_010b.png",
-        card_back_image_path: "embedded://cards/identity/core_captain_marvel/core_010a.png",
-        traits: vec![CardTrait::SHIELD, CardTrait::Soldier],
-        flip_target_id: vec!["core_010a"],
-        initial_hit_points: 12,
-        keywords: vec![],
-        card_icons: vec![],
-        hand_size: 6,
-        nemesis_id: "core_177",
-        nemesis_side_scheme_id: "core_176",
-        nemesis_card_id: vec!["core_178", "core_179"],
-        rec: 4,
-    })
+        sub_name: Some("Captain Marvel"),
+        unique: true,
+        card_amount_max: 1,
+        belongs: Belong::IdentitySet(IdentitySet::CoreCaptainMarvel).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            IdentityCardType::AlterEgo {
+                flip_target_id: vec!["core_010a"],
+                hand_size: 6,
+            },
+            CardCharacter::alter_ego(12, 4),
+            CardTraits::new(vec![CardTrait::SHIELD, CardTrait::Soldier]),
+        ))
+        .id()
 }

@@ -1,15 +1,23 @@
-use crate::features::cards::{Card, TreacheryCard};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_yon_roggs_treason() -> Card {
-    Card::Treachery(TreacheryCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_179",
         name: "Yon-Rogg's Treason",
-        boost: 1,
-        description:"When Revealed: Discard each Energy resource from your hand. If you discarded no cards this way, this card gains surge.",
-        abilities: vec![],
-        keywords: vec![],
-        card_image_path: "embedded://cards/identity/core_captain_marvel/core_179.png",
-        traits: vec![],
-        boost_effect:None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 1,
+        belongs: Belong::IdentitySet(IdentitySet::CoreCaptainMarvel).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((get_info(), EncounterCardType::Treachery, CardBoost::amount(1)))
+        .id()
 }

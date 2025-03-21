@@ -1,26 +1,32 @@
-use crate::features::cards::{Card, CardAspect, CardTrait, HeroCard, Identity::CoreIronMan};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_hero() -> Card {
-    Card::Hero(HeroCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_029a",
         name: "Iron Man",
-        aspect: CardAspect::IdentitySpecific(CoreIronMan),
-        description:
-            "You get +1 hand size for each Tech upgrade you control (to a maximum hand size of 7).",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_iron_man/core_029a.png",
-        card_back_image_path: "embedded://cards/identity/core_iron_man/core_029b.png",
-        traits: vec![CardTrait::Avenger],
-        flip_target_id: vec!["core_029b"],
-        initial_hit_points: 9,
-        keywords: vec![],
-        card_icons: vec![],
-        thw: 2,
-        atk: 1,
-        def: 1,
-        hand_size: 1,
-        nemesis_id: "core_172",
-        nemesis_side_scheme_id: "core_171",
-        nemesis_card_id: vec!["core_173", "core_174"],
-    })
+        sub_name: Some("Tony Stark"),
+        unique: true,
+        card_amount_max: 1,
+        belongs: Belong::IdentitySet(IdentitySet::CoreIronMan).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            IdentityCardType::Hero {
+                flip_target_id: vec!["core_029b"],
+                hand_size: 1,
+            },
+            CardBoost::amount(0),
+            CardTraits::single(CardTrait::Avenger),
+            CardCharacter::hero(9, 2, 1, 1),
+        ))
+        .id()
 }

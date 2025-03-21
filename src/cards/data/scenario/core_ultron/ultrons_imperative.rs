@@ -1,4 +1,4 @@
-use bevy::ecs::{entity::Entity, system::Commands, world::World};
+use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::{cards::*, component::card::*};
 
@@ -22,14 +22,9 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
         .spawn((
             get_info(),
             EncounterCardType::SideScheme,
-            CardBoost::new(3),
+            CardBoost::amount(3),
             CardScheme::new(Count::PerPlayer(2)),
-            CardIcons::single(CardIcon::Hazard),
-            WhenRevealedAbilities::single(Ability::new(when_revealed_ability)),
+            CardIcons::hazard(),
         ))
         .id()
-}
-
-fn when_revealed_ability(world: &mut World) {
-    println!("when_revealed_ability");
 }

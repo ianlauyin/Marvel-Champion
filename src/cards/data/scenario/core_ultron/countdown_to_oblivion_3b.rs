@@ -1,4 +1,4 @@
-use bevy::ecs::{entity::Entity, system::Commands, world::World};
+use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::{cards::*, component::card::*};
 
@@ -25,11 +25,6 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
                 next_stage_id: None,
             },
             CardScheme::main_scheme(Count::Constant(0), Count::PerPlayer(5), Count::PerPlayer(1)),
-            ConstantAbilities::single(Ability::new(constant_ability)),
         ))
         .id()
-}
-
-fn constant_ability(world: &mut World) {
-    println!("constant_ability");
 }

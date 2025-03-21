@@ -1,5 +1,5 @@
 use crate::{cards::*, component::card::*};
-use bevy::ecs::{entity::Entity, system::Commands, world::World};
+use bevy::ecs::{entity::Entity, system::Commands};
 
 pub fn get_info() -> CardBasic<'static> {
     CardBasic {
@@ -25,11 +25,6 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
             CardResources::physical(),
             CardCharacter::ally(3, 1, 1, 1, 1),
             CardTraits::new(vec![CardTrait::Genius, CardTrait::Wakanda]),
-            ResponseAbilities::single(Ability::new(response_ability)),
         ))
         .id()
-}
-
-fn response_ability(world: &mut World) {
-    println!("response_ability");
 }

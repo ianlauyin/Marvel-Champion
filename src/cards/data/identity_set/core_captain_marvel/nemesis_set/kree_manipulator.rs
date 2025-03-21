@@ -1,15 +1,28 @@
-use crate::features::cards::{Card, Keyword, TreacheryCard};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_kree_manipulator() -> Card {
-    Card::Treachery(TreacheryCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_178",
         name: "Kree Manipulator",
-        boost: 0,
-        description:"Surge. (After this card resolves, reveal 1 additional encounter card.) When Revealed: Place 1 threat on the main scheme.",
-        abilities: vec![],
-        keywords: vec![Keyword::Surge],
-        card_image_path: "embedded://cards/identity/core_captain_marvel/core_178.png",
-        traits: vec![],
-        boost_effect:None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 2,
+        belongs: Belong::IdentitySet(IdentitySet::CoreCaptainMarvel).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::Treachery,
+            CardKeywords::single(CardKeyword::Surge),
+            CardBoost::amount(0),
+        ))
+        .id()
 }

@@ -1,21 +1,30 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, CardTrait, Counter, Identity::CoreSpiderMan, Keyword,
-    UpgradeCard,
-};
-pub fn get_web_shooter() -> Card {
-    Card::Upgrade(UpgradeCard {
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_008",
         name: "Web-Shooter",
-        aspect: CardAspect::IdentitySpecific(CoreSpiderMan),
+        sub_name: None,
         unique: false,
-        cost: 1,
-        res: vec![CardResource::Physical],
-        card_icons: vec![],
-        traits: vec![CardTrait::Item,CardTrait::Tech],
-        keywords: vec![Keyword::Use(3, Counter::Web)],
-        description: "Uses (3 web counters). (Enters play with 3 counters. When those are gone, discard this card) Hero Resource: Exhaust Web-Shooter and remove 1 web counter from it -> generate a wild resource.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_spider_man/core_008.png",
         card_amount_max: 2,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreSpiderMan).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Upgrade,
+            CardCost::constant(1),
+            CardResources::physical(),
+            CardTraits::new(vec![CardTrait::Item, CardTrait::Tech]),
+            CardKeywords::single(CardKeyword::Use(CardCounter::Web(3))),
+        ))
+        .id()
 }

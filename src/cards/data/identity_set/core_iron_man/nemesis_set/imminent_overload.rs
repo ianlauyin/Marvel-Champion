@@ -1,16 +1,29 @@
-use crate::features::cards::{Card, CardIcon, Count, SideSchemeCard};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_imminent_overload() -> Card {
-    Card::SideScheme(SideSchemeCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_171",
         name: "Imminent Overload",
-        boost: 3,
-        traits: vec![],
-        card_icons: vec![CardIcon::Acceleration],
-        description: "When Revealed: Place an additional 1 per person threat here.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_iron_man/core_171.png",
-        initial_threat: Count::Constant(3),
-        boost_effect: None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 1,
+        belongs: Belong::IdentitySet(IdentitySet::CoreIronMan).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::SideScheme,
+            CardBoost::amount(3),
+            CardIcons::acceleration(),
+            CardScheme::new(Count::Constant(3)),
+        ))
+        .id()
 }

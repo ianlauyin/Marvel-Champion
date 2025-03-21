@@ -1,22 +1,29 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, CardTrait, Identity::CoreIronMan, SupportCard,
-};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_stark_tower() -> Card {
-    Card::Support(SupportCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_034",
         name: "Stark Tower",
-        description:
-            "Alter-Ego Action: Exhaust Stark Tower -> choose a player. That player returns the topmost Tech upgrade in their discard pile to their hand.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_iron_man/core_034.png",
-        traits: vec![CardTrait::Location],
-        keywords: vec![],
-        card_icons: vec![],
-        aspect: CardAspect::IdentitySpecific(CoreIronMan),
+        sub_name: None,
         unique: true,
-        cost: 2,
-        res: vec![CardResource::Mental],
         card_amount_max: 1,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreIronMan).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Support,
+            CardCost::constant(2),
+            CardResources::mental(),
+            CardTraits::single(CardTrait::Location),
+        ))
+        .id()
 }

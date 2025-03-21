@@ -1,4 +1,4 @@
-use bevy::ecs::{entity::Entity, system::Commands, world::World};
+use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::{cards::*, component::card::*};
 
@@ -24,11 +24,6 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
             ScenarioCardType::MainSchemeA {
                 next_stage_id: "core_137b",
             },
-            SetupAbilities::single(Ability::new(setup_ability)),
         ))
         .id()
-}
-
-fn setup_ability(world: &mut World) {
-    println!("setup_ability");
 }

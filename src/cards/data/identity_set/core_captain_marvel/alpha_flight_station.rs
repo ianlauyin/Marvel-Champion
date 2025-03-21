@@ -1,20 +1,29 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, CardTrait, Identity::CoreCaptainMarvel, SupportCard,
-};
-pub fn get_alpha_flight_station() -> Card {
-    Card::Support(SupportCard {
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_015",
         name: "Alpha Flight Station",
-        aspect: CardAspect::IdentitySpecific(CoreCaptainMarvel),
+        sub_name: None,
         unique: true,
-        cost:1,
-        res: vec![CardResource::Mental],
-        keywords: vec![],
-        traits: vec![CardTrait::Location, CardTrait::SHIELD],
-        card_icons: vec![],
-        description: "Action: Exhaust Alpha Flight Station, choose and discard 1 card from your hand -> draw 1 card (draw 2 cards instead if you are Carol Danvers).",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_captain_marvel/core_015.png",
         card_amount_max: 1,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreCaptainMarvel).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Support,
+            CardCost::constant(1),
+            CardResources::mental(),
+            CardTraits::new(vec![CardTrait::Location, CardTrait::SHIELD]),
+        ))
+        .id()
 }

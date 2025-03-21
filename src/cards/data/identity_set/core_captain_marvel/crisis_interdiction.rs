@@ -1,18 +1,30 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, CardTrait, EventCard, Identity::CoreCaptainMarvel,
-};
-pub fn get_crisis_interdiction() -> Card {
-    Card::Event(EventCard {
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_012",
         name: "Crisis Interdiction",
-        aspect: CardAspect::IdentitySpecific(CoreCaptainMarvel),
-        cost: 2,
-        res: vec![CardResource::Energy],
-        keywords: vec![],
-        traits: vec![CardTrait::Thwart],
-        description: "Hero Action (thwart): Remove 2 threat from a scheme. Then, if you have the Aerial trait, remove 2 threat from a different scheme.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_captain_marvel/core_012.png",
+        sub_name: None,
+        unique: false,
         card_amount_max: 3,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreCaptainMarvel).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Event,
+            CardCost::constant(2),
+            CardResources::energy(),
+            CardTraits::single(CardTrait::Thwart),
+            CardFormLimit::hero(),
+        ))
+        .id()
 }

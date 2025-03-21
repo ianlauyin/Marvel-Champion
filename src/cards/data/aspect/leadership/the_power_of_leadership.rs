@@ -1,4 +1,4 @@
-use bevy::ecs::{entity::Entity, system::Commands, world::World};
+use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::{cards::*, component::card::*};
 
@@ -18,14 +18,7 @@ pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
 }
 
 fn spawn_bundle(mut commands: Commands) -> Entity {
-    commands.spawn((
-        get_info(),
-        PlayerCardType::Resource,
-        CardResources::wild(),
-        ResourceModifier::single(Ability::new(resource_modifier)),
-    )).id()
-}
-
-fn resource_modifier(world: &mut World) {
-    println!("resource_modifier");
+    commands
+        .spawn((get_info(), PlayerCardType::Resource, CardResources::wild()))
+        .id()
 }

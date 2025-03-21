@@ -1,5 +1,5 @@
 use crate::{cards::*, component::card::*};
-use bevy::ecs::{entity::Entity, system::Commands, world::World};
+use bevy::ecs::{entity::Entity, system::Commands};
 
 pub fn get_info() -> CardBasic<'static> {
     CardBasic {
@@ -23,11 +23,7 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
             PlayerCardType::Event,
             CardCost::constant(1),
             CardResources::mental(),
-            InstantAbilities::single(Ability::alter_ego(instant_ability)),
+            CardFormLimit::alter_ego(),
         ))
         .id()
-}
-
-fn instant_ability(world: &mut World) {
-    println!("instant_ability");
 }

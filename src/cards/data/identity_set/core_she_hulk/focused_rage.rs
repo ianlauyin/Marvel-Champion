@@ -1,21 +1,29 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, CardTrait, Identity::CoreSheHulk, UpgradeCard,
-};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_focused_rage() -> Card {
-    Card::Upgrade(UpgradeCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_027",
         name: "Focused Rage",
-        card_icons: vec![],
-        description: "Hero Action: Exhaust Focused Rage and take 1 damage -> draw 1 card.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_she_hulk/core_027.png",
-        keywords: vec![],
-        traits: vec![CardTrait::Skill],
-        aspect: CardAspect::IdentitySpecific(CoreSheHulk),
+        sub_name: None,
         unique: false,
-        cost: 3,
-        res: vec![CardResource::Energy],
         card_amount_max: 2,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreSheHulk).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Upgrade,
+            CardCost::constant(3),
+            CardTraits::single(CardTrait::Skill),
+            CardResources::energy(),
+        ))
+        .id()
 }

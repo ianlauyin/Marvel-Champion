@@ -1,6 +1,5 @@
-use bevy::ecs::{entity::Entity, system::Commands, world::World};
-
 use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
 pub fn get_info() -> CardBasic<'static> {
     CardBasic {
@@ -21,7 +20,7 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
     commands
         .spawn((
             get_info(),
-            CardBoost::new(2),
+            CardBoost::amount(2),
             EncounterCardType::Minion,
             CardTraits::new(vec![
                 CardTrait::Assassin,
@@ -29,11 +28,6 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
                 CardTrait::Mercenary,
             ]),
             CardCharacter::minion(Count::Constant(5), 2, 2),
-            ConstantAbilities::single(Ability::new(constant_ability)),
         ))
         .id()
-}
-
-fn constant_ability(world: &mut World) {
-    println!("constant_ability");
 }

@@ -1,20 +1,32 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, Identity::CoreCaptainMarvel, ResourceCard,
-};
-pub fn get_energy_absorption() -> Card {
-    Card::Resource(ResourceCard {
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_014",
         name: "Energy Absorption",
-        aspect: CardAspect::IdentitySpecific(CoreCaptainMarvel),
-        res: vec![
-            CardResource::Energy,
-            CardResource::Energy,
-            CardResource::Energy,
-        ],
-        traits: vec![],
-        description: "",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_captain_marvel/core_014.png",
+        sub_name: None,
+        unique: false,
         card_amount_max: 2,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreCaptainMarvel).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Resource,
+            CardCost::constant(2),
+            CardResources::new(vec![
+                CardResource::Energy,
+                CardResource::Energy,
+                CardResource::Energy,
+            ]),
+        ))
+        .id()
 }

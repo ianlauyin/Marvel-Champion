@@ -1,19 +1,30 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, CardTrait, EventCard, Identity::CoreSheHulk,
-};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_ground_stomp() -> Card {
-    Card::Event(EventCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_022",
         name: "Ground Stomp",
-        description: "Hero Action: Deal 1 damage to each enemy.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_she_hulk/core_022.png",
-        keywords: vec![],
-        traits: vec![CardTrait::Superpower],
-        aspect: CardAspect::IdentitySpecific(CoreSheHulk),
-        cost: 2,
-        res: vec![CardResource::Mental],
+        sub_name: None,
+        unique: false,
         card_amount_max: 2,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreSheHulk).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Event,
+            CardCost::constant(2),
+            CardTraits::single(CardTrait::Superpower),
+            CardResources::mental(),
+            CardFormLimit::hero(),
+        ))
+        .id()
 }

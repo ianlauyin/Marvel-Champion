@@ -1,16 +1,27 @@
-use crate::features::cards::{Card, TreacheryCard};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_sweeping_swoop() -> Card {
-    Card::Treachery(TreacheryCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_168",
         name: "Sweeping Swoop",
-        traits: vec![],
-        boost: 0,
-        keywords: vec![],
-        description:
-            "When Revealed: Stun your hero. If Vulture is in play, this card gains surge. Boost: If this activation deals damage to a friendly character, stun that character.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_spider_man/core_168.png",
-        boost_effect:None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 2,
+        belongs: Belong::IdentitySet(IdentitySet::CoreSpiderMan).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::Treachery,
+            CardCost::constant(0),
+        ))
+        .id()
 }

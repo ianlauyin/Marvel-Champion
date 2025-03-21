@@ -22,9 +22,9 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
         .spawn((
             get_info(),
             EncounterCardType::SideScheme,
-            CardBoost::new(2),
+            CardBoost::amount(2),
             CardScheme::new(Count::PerPlayer(2)),
-            CardIcons::single(CardIcon::Crisis),
+            CardIcons::crisis(),
         ))
         .id()
 }

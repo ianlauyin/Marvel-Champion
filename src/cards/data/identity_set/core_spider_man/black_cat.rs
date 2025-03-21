@@ -1,26 +1,30 @@
-use crate::features::cards::{
-    AllyCard, Card, CardAspect, CardResource, CardTrait, Identity::CoreSpiderMan,
-};
-pub fn get_black_cat() -> Card {
-    Card::Ally(AllyCard {
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_002",
         name: "Black Cat",
-        sub_name: "Felicia Hardy",
-        aspect: CardAspect::IdentitySpecific(CoreSpiderMan),
+        sub_name: Some("Felicia Hardy"),
         unique: true,
-        cost: 2,
-        res: vec![CardResource::Energy],
-        initial_hit_points: 2,
-        keywords: vec![],
-        traits: vec![CardTrait::HeroForHire],
-        card_icons: vec![],
-        thw: 1,
-        thw_con_dmg:1,
-        atk: 1,
-        atk_con_dmg: 0,
-        description: "Forced Response: After you play Black Cat, discard the top 2 cards of your deck. Add each card with a printed mental resource discarded this way to your hand.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_spider_man/core_002.png",
         card_amount_max: 1,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreSpiderMan).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Ally,
+            CardCost::constant(2),
+            CardResources::energy(),
+            CardCharacter::ally(2, 1, 1, 1, 0),
+            CardTraits::single(CardTrait::HeroForHire),
+        ))
+        .id()
 }

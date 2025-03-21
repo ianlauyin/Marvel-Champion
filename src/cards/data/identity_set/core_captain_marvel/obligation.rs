@@ -1,16 +1,27 @@
-use crate::features::cards::{Card, Identity, ObligationCard};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_obligation() -> Card {
-    Card::Obligation(ObligationCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_175",
         name: "Family Emergency",
-        belong: Identity::CoreCaptainMarvel,
-        instant_effect: true,
-        boost: 2,
-        card_icons: vec![],
-        description: "Give to the Carol Danvers player. You may flip to alter-ego form. Choose: Exhaust Carol Danvers -> remove Family Emergency from the game. You are stunned. This card gains surge. Discard this obligation.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_captain_marvel/core_175.png",
-        boost_effect:None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 1,
+        belongs: Belong::IdentitySet(IdentitySet::CoreCaptainMarvel).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::Obligation,
+            CardBoost::amount(2),
+        ))
+        .id()
 }

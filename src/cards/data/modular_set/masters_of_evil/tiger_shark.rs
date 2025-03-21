@@ -1,5 +1,5 @@
 use crate::{cards::*, component::card::*};
-use bevy::ecs::{entity::Entity, system::Commands, world::World};
+use bevy::ecs::{entity::Entity, system::Commands};
 
 pub fn get_info() -> CardBasic<'static> {
     CardBasic {
@@ -21,19 +21,9 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
         .spawn((
             get_info(),
             EncounterCardType::Minion,
-            CardBoost::new(0),
+            CardBoost::amount(0),
             CardCharacter::minion(Count::Constant(6), 1, 3),
             CardTraits::single(CardTrait::MastersOfEvil),
-            BoostAbilities::single(Ability::new(boost_ability)),
-            ForcedResponseAbilities::single(Ability::new(forced_response_ability)),
         ))
         .id()
-}
-
-fn boost_ability(world: &mut World) {
-    println!("boost_ability");
-}
-
-fn forced_response_ability(world: &mut World) {
-    println!("forced_response_ability");
 }

@@ -1,4 +1,4 @@
-use bevy::ecs::{entity::Entity, system::Commands, world::World};
+use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::{cards::*, component::card::*};
 
@@ -18,15 +18,12 @@ pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
 }
 
 fn spawn_bundle(mut commands: Commands) -> Entity {
-    commands.spawn((
-        get_info(),
-        PlayerCardType::Support,
-        CardCost::constant(1),
-        CardResources::energy(),
-        ConstantAbilities::single(Ability::new(constant_ability)),
-    )).id()
-}
-
-fn constant_ability(world: &mut World) {
-    println!("constant_ability");
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Support,
+            CardCost::constant(1),
+            CardResources::energy(),
+        ))
+        .id()
 }

@@ -1,21 +1,29 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, CardTrait, Identity::CoreIronMan, UpgradeCard,
-};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_arc_reactor() -> Card {
-    Card::Upgrade(UpgradeCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_035",
         name: "Arc Reactor",
-        description: "Hero Action: Exhaust Arc Reactor -> ready Iron Man.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_iron_man/core_035.png",
-        traits: vec![CardTrait::Item, CardTrait::Tech],
-        keywords: vec![],
-        card_icons: vec![],
-        aspect: CardAspect::IdentitySpecific(CoreIronMan),
+        sub_name: None,
         unique: true,
-        cost: 2,
-        res: vec![CardResource::Energy],
         card_amount_max: 1,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreIronMan).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Upgrade,
+            CardCost::constant(2),
+            CardTraits::new(vec![CardTrait::Item, CardTrait::Tech]),
+            CardResources::energy(),
+        ))
+        .id()
 }

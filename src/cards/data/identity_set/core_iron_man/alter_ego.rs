@@ -1,23 +1,31 @@
-use crate::features::cards::{AlterEgoCard, Card, CardAspect, CardTrait, Identity::CoreIronMan};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_alter_ego() -> Card {
-    Card::AlterEgo(AlterEgoCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_029b",
         name: "Tony Stark",
-        aspect: CardAspect::IdentitySpecific(CoreIronMan),
-        description: "Action: Look at the top 3 cards of your deck. Add 1 to your hand and discard the others. (Limit once per round.)",
-        abilities: vec![],
-        card_image_path:"embedded://cards/identity/core_iron_man/core_029b.png",
-        card_back_image_path:"embedded://cards/identity/core_iron_man/core_029a.png",
-        traits: vec![CardTrait::Genius],
-        flip_target_id: vec!["core_029a"],
-        initial_hit_points: 9,
-        keywords: vec![],
-        card_icons: vec![],
-        hand_size: 6,
-        nemesis_id: "core_172",
-        nemesis_side_scheme_id: "core_171",
-        nemesis_card_id: vec!["core_173", "core_174"],
-        rec: 3,
-    })
+        sub_name: Some("Iron Man"),
+        unique: true,
+        card_amount_max: 1,
+        belongs: Belong::IdentitySet(IdentitySet::CoreIronMan).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            IdentityCardType::AlterEgo {
+                flip_target_id: vec!["core_029a"],
+                hand_size: 6,
+            },
+            CardCharacter::alter_ego(9, 3),
+            CardTraits::single(CardTrait::Genius),
+        ))
+        .id()
 }

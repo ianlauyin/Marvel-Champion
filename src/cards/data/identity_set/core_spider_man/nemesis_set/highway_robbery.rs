@@ -3,12 +3,12 @@ use bevy::ecs::{entity::Entity, system::Commands};
 
 pub fn get_info() -> CardBasic<'static> {
     CardBasic {
-        id: "core_173",
-        name: "Electric Whip Attack",
+        id: "core_166",
+        name: "Highway Robbery",
         sub_name: None,
         unique: false,
-        card_amount_max: 2,
-        belongs: Belong::IdentitySet(IdentitySet::CoreIronMan).into(),
+        card_amount_max: 1,
+        belongs: Belong::IdentitySet(IdentitySet::CoreSpiderMan).into(),
     }
 }
 
@@ -18,6 +18,12 @@ pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
 
 fn spawn_bundle(mut commands: Commands) -> Entity {
     commands
-        .spawn((get_info(), EncounterCardType::Treachery, CardBoost::amount(0)))
+        .spawn((
+            get_info(),
+            EncounterCardType::SideScheme,
+            CardBoost::amount(3),
+            CardScheme::new(Count::PerPlayer(3)),
+            CardIcons::acceleration(),
+        ))
         .id()
 }

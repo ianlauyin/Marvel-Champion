@@ -1,4 +1,4 @@
-use bevy::ecs::{entity::Entity, system::Commands, world::World};
+use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::{cards::*, component::card::*};
 
@@ -22,14 +22,9 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
         .spawn((
             get_info(),
             EncounterCardType::Attachment,
-            CardBoost::new(1),
+            CardBoost::amount(1),
             CardTraits::single(CardTrait::Tech),
             CardKeywords::single(CardKeyword::Surge),
-            ForcedInterruptAbilities::single(Ability::new(forced_interrupt)),
         ))
         .id()
-}
-
-fn forced_interrupt(world: &mut World) {
-    println!("forced_interrupt");
 }

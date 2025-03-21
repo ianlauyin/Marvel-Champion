@@ -1,8 +1,8 @@
-mod asset_loader;
 mod aspect_card_datas;
+mod asset_loader;
 
-pub use asset_loader::AssetLoader;
 pub use aspect_card_datas::AspectCardDatas;
+pub use asset_loader::AssetLoader;
 
 use bevy::prelude::*;
 

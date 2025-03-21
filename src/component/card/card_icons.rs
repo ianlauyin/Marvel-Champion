@@ -4,8 +4,20 @@ use bevy::prelude::Component;
 pub struct CardIcons(Vec<CardIcon>);
 
 impl CardIcons {
-    pub fn single(icon: CardIcon) -> Self {
-        Self(vec![icon])
+    pub fn acceleration() -> Self {
+        Self(vec![CardIcon::Acceleration])
+    }
+
+    pub fn amplify() -> Self {
+        Self(vec![CardIcon::Amplify])
+    }
+
+    pub fn crisis() -> Self {
+        Self(vec![CardIcon::Crisis])
+    }
+
+    pub fn hazard() -> Self {
+        Self(vec![CardIcon::Hazard])
     }
 
     pub fn new(icons: Vec<CardIcon>) -> Self {

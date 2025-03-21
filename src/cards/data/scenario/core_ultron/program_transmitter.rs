@@ -1,4 +1,4 @@
-use bevy::ecs::{entity::Entity, system::Commands, world::World};
+use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::{cards::*, component::card::*};
 
@@ -22,20 +22,9 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
         .spawn((
             get_info(),
             EncounterCardType::Attachment,
-            CardBoost::new(1),
+            CardBoost::amount(1),
             CardTraits::new(vec![CardTrait::Item, CardTrait::Tech]),
             CardScheme::new(Count::Constant(0)),
-            InstantAbilities::single(Ability::hero(instant_ability)),
-            StatsModifier::new(1, 0, 0),
-            ForcedResponseAbilities::single(Ability::new(forced_response_ability)),
         ))
         .id()
-}
-
-fn instant_ability(world: &mut World) {
-    println!("instant_ability");
-}
-
-fn forced_response_ability(world: &mut World) {
-    println!("forced_response_ability");
 }

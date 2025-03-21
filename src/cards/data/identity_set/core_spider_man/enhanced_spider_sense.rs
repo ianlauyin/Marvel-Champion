@@ -1,18 +1,30 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, CardTrait, EventCard, Identity::CoreSpiderMan,
-};
-pub fn get_enhanced_spider_sense() -> Card {
-    Card::Event(EventCard {
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_004",
         name: "Enhanced Spider-Sense",
-        aspect: CardAspect::IdentitySpecific(CoreSpiderMan),
-        cost: 1,
-        res: vec![CardResource::Mental],
-        traits: vec![CardTrait::Superpower],
-        keywords: vec![],
-        description: "Hero Interrupt: When a treachery card is revealed from the encounter deck, cancel its \"When Revealed\" effects.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_spider_man/core_004.png",
+        sub_name: None,
+        unique: false,
         card_amount_max: 2,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreSpiderMan).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Event,
+            CardCost::constant(1),
+            CardResources::mental(),
+            CardTraits::single(CardTrait::Superpower),
+            CardFormLimit::hero(),
+        ))
+        .id()
 }

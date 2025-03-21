@@ -1,17 +1,28 @@
-use crate::features::cards::{Card, CardAspect, CardResource, EventCard, Identity::CoreSheHulk};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_split_personality() -> Card {
-    Card::Event(EventCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_025",
         name: "Split Personality",
-        description: "Action: Change your form (flip your identity card). Then, draw up to your printed hand size.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_she_hulk/core_025.png",
-        keywords: vec![],
-        traits: vec![],
-        aspect: CardAspect::IdentitySpecific(CoreSheHulk),
-        cost: 3,
-        res: vec![CardResource::Energy],
+        sub_name: None,
+        unique: false,
         card_amount_max: 1,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreSheHulk).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Event,
+            CardCost::constant(3),
+            CardResources::energy(),
+        ))
+        .id()
 }

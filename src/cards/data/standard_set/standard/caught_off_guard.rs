@@ -1,4 +1,4 @@
-use bevy::ecs::{entity::Entity, system::Commands, world::World};
+use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::{cards::*, component::card::*};
 
@@ -19,15 +19,6 @@ pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
 
 fn spawn_bundle(mut commands: Commands) -> Entity {
     commands
-        .spawn((
-            get_info(),
-            EncounterCardType::Treachery,
-            CardBoost::new(1),
-            WhenRevealedAbilities::single(Ability::new(when_revealed_ability)),
-        ))
+        .spawn((get_info(), EncounterCardType::Treachery, CardBoost::amount(1)))
         .id()
-}
-
-fn when_revealed_ability(world: &mut World) {
-    println!("when_revealed_ability");
 }

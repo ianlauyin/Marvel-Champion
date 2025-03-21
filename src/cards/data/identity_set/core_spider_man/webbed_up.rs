@@ -1,20 +1,30 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, CardTrait, Identity::CoreSpiderMan, UpgradeCard,
-};
-pub fn get_webbed_up() -> Card {
-    Card::Upgrade(UpgradeCard {
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_009",
         name: "Webbed Up",
-        aspect: CardAspect::IdentitySpecific(CoreSpiderMan),
+        sub_name: None,
         unique: false,
-        cost: 4,
-        res: vec![CardResource::Physical],
-        card_icons: vec![],
-        traits: vec![CardTrait::Condition],
-        keywords: vec![],
-        description: "Hero form only. Attach to an enemy. Max 1 per enemy. Forced Interrupt: When attached enemy would attack, discard Webbed Up instead. Then, stun that enemy.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_spider_man/core_009.png",
         card_amount_max: 2,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreSpiderMan).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Upgrade,
+            CardCost::constant(4),
+            CardResources::physical(),
+            CardTraits::single(CardTrait::Condition),
+            CardFormLimit::hero(),
+        ))
+        .id()
 }

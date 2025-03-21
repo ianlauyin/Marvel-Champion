@@ -1,20 +1,30 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, CardTrait, EventCard, Identity::CoreIronMan,
-};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_supersonic_punch() -> Card {
-    Card::Event(EventCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_032",
         name: "Supersonic Punch",
-        description:
-            "Hero Action (attack): Deal 4 damage to an enemy (8 damage instead if you have the Aerial trait).",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_iron_man/core_032.png",
-        traits: vec![CardTrait::Attack],
-        keywords: vec![],
-        aspect: CardAspect::IdentitySpecific(CoreIronMan),
-        cost: 2,
-        res: vec![CardResource::Energy],
+        sub_name: None,
+        unique: false,
         card_amount_max: 2,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreIronMan).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Event,
+            CardCost::constant(2),
+            CardResources::energy(),
+            CardTraits::single(CardTrait::Attack),
+            CardFormLimit::hero(),
+        ))
+        .id()
 }

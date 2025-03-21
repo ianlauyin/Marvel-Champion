@@ -3,12 +3,12 @@ use bevy::ecs::{entity::Entity, system::Commands};
 
 pub fn get_info() -> CardBasic<'static> {
     CardBasic {
-        id: "core_021",
-        name: "Gamma Slam",
+        id: "core_167",
+        name: "Vulture",
         sub_name: None,
-        unique: false,
+        unique: true,
         card_amount_max: 1,
-        belongs: Belong::IdentitySet(IdentitySet::CoreSheHulk).into(),
+        belongs: Belong::IdentitySet(IdentitySet::CoreSpiderMan).into(),
     }
 }
 
@@ -20,11 +20,11 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
     commands
         .spawn((
             get_info(),
-            PlayerCardType::Event,
-            CardCost::constant(4),
-            CardTraits::new(vec![CardTrait::Attack, CardTrait::Superpower]),
-            CardResources::mental(),
-            CardFormLimit::hero(),
+            EncounterCardType::Minion,
+            CardBoost::amount(2),
+            CardCharacter::minion(Count::Constant(4), 1, 3),
+            CardTraits::single(CardTrait::Criminal),
+            CardKeywords::single(CardKeyword::Quickstrike),
         ))
         .id()
 }

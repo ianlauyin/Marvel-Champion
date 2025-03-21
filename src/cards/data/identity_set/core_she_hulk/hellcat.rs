@@ -1,27 +1,30 @@
-use crate::features::cards::{
-    AllyCard, Card, CardAspect, CardResource, CardTrait, Identity::CoreSheHulk,
-};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_hellcat() -> Card {
-    Card::Ally(AllyCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_020",
         name: "Hellcat",
-        card_icons: vec![],
-        description: "Action: Return Hellcat to your hand.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_she_hulk/core_020.png",
-        initial_hit_points: 3,
-        keywords: vec![],
-        traits: vec![CardTrait::Avenger],
-        thw: 2,
-        atk: 1,
-        sub_name: "Patsy Walker",
-        aspect: CardAspect::IdentitySpecific(CoreSheHulk),
+        sub_name: Some("Patsy Walker"),
         unique: true,
-        cost: 3,
-        res: vec![CardResource::Wild],
-        thw_con_dmg: 2,
-        atk_con_dmg: 1,
         card_amount_max: 1,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreSheHulk).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Ally,
+            CardTraits::single(CardTrait::Avenger),
+            CardCharacter::ally(3, 2, 1, 1, 1),
+            CardResources::wild(),
+            CardCost::constant(3),
+        ))
+        .id()
 }

@@ -1,4 +1,4 @@
-use bevy::ecs::{entity::Entity, system::Commands, world::World};
+use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::{cards::*, component::card::*};
 
@@ -26,11 +26,6 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
             CardResources::mental(),
             CardTraits::new(vec![CardTrait::Avenger]),
             CardCharacter::ally(3, 1, 1, 2, 1),
-            ResponseAbilities::single(Ability::new(response_ability)),
         ))
         .id()
-}
-
-fn response_ability(world: &mut World) {
-    println!("response_ability");
 }

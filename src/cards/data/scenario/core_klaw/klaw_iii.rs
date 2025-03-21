@@ -1,4 +1,4 @@
-use bevy::ecs::{entity::Entity, system::Commands, world::World};
+use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::{cards::*, component::card::*};
 
@@ -27,11 +27,6 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
             CardCharacter::villain(Count::PerPlayer(22), 3, 2),
             CardTraits::single(CardTrait::MastersOfEvil),
             CardKeywords::single(CardKeyword::Toughness),
-            ForcedInterruptAbilities::single(Ability::new(forced_interrupt_ability)),
         ))
         .id()
-}
-
-fn forced_interrupt_ability(world: &mut World) {
-    println!("forced_interrupt_ability");
 }

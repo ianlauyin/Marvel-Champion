@@ -1,4 +1,4 @@
-use bevy::ecs::{entity::Entity, system::Commands, world::World};
+use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::{cards::*, component::card::*};
 
@@ -24,11 +24,6 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
             ScenarioCardType::MainSchemeA {
                 next_stage_id: "core_139b",
             },
-            WhenRevealedAbilities::single(Ability::new(when_revealed_ability)),
         ))
         .id()
-}
-
-fn when_revealed_ability(world: &mut World) {
-    println!("when_revealed_ability");
 }

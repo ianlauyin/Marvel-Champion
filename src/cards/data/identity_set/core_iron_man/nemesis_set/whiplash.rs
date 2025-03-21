@@ -1,20 +1,30 @@
-use crate::features::cards::{Card, CardTrait, Keyword, MinionCard};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_whiplash() -> Card {
-    Card::Minion(MinionCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_172",
         name: "Whiplash",
-        boost: 2,
-        card_icons: vec![],
-        description: "Retaliate 1 (After this character is attacked, deal 1 damage to the attacking character.)",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_iron_man/core_172.png",
+        sub_name: None,
         unique: true,
-        initial_hit_points: 4,
-        keywords: vec![Keyword::Retaliate(1)],
-        traits: vec![CardTrait::Criminal],
-        sch: 2,
-        atk: 3,
-        boost_effect:None,
-    })
+        card_amount_max: 1,
+        belongs: Belong::IdentitySet(IdentitySet::CoreIronMan).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::Minion,
+            CardBoost::amount(2),
+            CardKeywords::single(CardKeyword::Retaliate(1)),
+            CardCharacter::minion(Count::Constant(4), 3, 2),
+            CardTraits::single(CardTrait::Criminal),
+        ))
+        .id()
 }

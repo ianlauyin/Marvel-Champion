@@ -25,7 +25,6 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
             CardCost::constant(2),
             CardResources::physical(),
             CardTraits::single(CardTrait::Skill),
-            StatsModifier::new(0, 1, 0),
         ))
         .id()
 }

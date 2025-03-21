@@ -1,4 +1,4 @@
-use bevy::ecs::{entity::Entity, system::Commands, world::World};
+use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::{cards::*, component::card::*};
 
@@ -22,15 +22,10 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
         .spawn((
             get_info(),
             EncounterCardType::Minion,
-            CardBoost::new(1),
+            CardBoost::amount(1),
             CardKeywords::single(CardKeyword::Guard),
             CardTraits::single(CardTrait::Hydra),
             CardCharacter::minion(Count::Constant(4), 1, 2),
-            WhenDefeatedAbilities::single(Ability::new(when_defeated_ability)),
         ))
         .id()
-}
-
-fn when_defeated_ability(world: &mut World) {
-    println!("when_defeated_ability");
 }

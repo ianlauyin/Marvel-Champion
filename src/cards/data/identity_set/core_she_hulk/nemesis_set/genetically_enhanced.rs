@@ -1,18 +1,28 @@
-use crate::features::cards::{AttachmentCard, Card, CardTrait};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_genetically_enhanced() -> Card {
-    Card::Attachment(AttachmentCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_163",
         name: "Genetically Enhanced",
-        boost: 1,
-        card_icons: vec![],
-        description: "Attach to the minion with the highest printed hit points. If there are no minions in play, this card gains surge. Attached minion gets +3 hit points.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_she_hulk/core_163.png",
-        traits: vec![CardTrait::Condition],
-        atk_modifier: 0,
-        sch_modifier: 0,
-        keywords:vec![],
-        boost_effect:None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 1,
+        belongs: Belong::IdentitySet(IdentitySet::CoreSheHulk).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::Attachment,
+            CardBoost::amount(1),
+            CardTraits::single(CardTrait::Condition),
+        ))
+        .id()
 }

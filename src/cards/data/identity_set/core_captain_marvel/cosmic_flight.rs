@@ -1,20 +1,30 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, CardTrait, Identity::CoreCaptainMarvel, UpgradeCard,
-};
-pub fn get_cosmic_flight() -> Card {
-    Card::Upgrade(UpgradeCard {
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_017",
         name: "Cosmic Flight",
+        sub_name: None,
         unique: false,
-        aspect: CardAspect::IdentitySpecific(CoreCaptainMarvel),
-        cost: 2,
-        res: vec![CardResource::Energy],
-        traits: vec![CardTrait::Superpower],
-        keywords: vec![],
-        card_icons: vec![],
-        description: "Captain Marvel gains the Aerial trait. Hero Interrupt (defense): When Captain Marvel would take damage, discard Cosmic Flight -> prevent 3 of that damage.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_captain_marvel/core_017.png",
         card_amount_max: 2,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreCaptainMarvel).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Upgrade,
+            CardCost::constant(2),
+            CardResources::energy(),
+            CardTraits::single(CardTrait::Superpower),
+            CardFormLimit::hero(),
+        ))
+        .id()
 }

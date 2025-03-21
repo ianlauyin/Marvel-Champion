@@ -1,15 +1,27 @@
-use crate::features::cards::{Card, TreacheryCard};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_vultures_plans() -> Card {
-    Card::Treachery(TreacheryCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_169",
         name: "The Vulture's Plans",
-        traits: vec![],
-        boost: 2,
-        keywords: vec![],
-        description: "When Revealed: Discard 1 card at random from each player's hand. Place 1 threat on the main scheme for each different resource type discarded this way.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_spider_man/core_169.png",
-        boost_effect:None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 1,
+        belongs: Belong::IdentitySet(IdentitySet::CoreSpiderMan).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::Treachery,
+            CardBoost::amount(2),
+        ))
+        .id()
 }

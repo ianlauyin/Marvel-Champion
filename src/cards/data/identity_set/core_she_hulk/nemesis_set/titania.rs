@@ -1,20 +1,29 @@
-use crate::features::cards::{Card, CardTrait, MinionCard};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_titania() -> Card {
-    Card::Minion(MinionCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_162",
         name: "Titania",
-        boost: 2,
-        card_icons: vec![],
-        description: "X is equal to Titania's remaining hit points.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_she_hulk/core_162.png",
+        sub_name: None,
         unique: true,
-        initial_hit_points: 6,
-        keywords: vec![],
-        traits: vec![CardTrait::Brute, CardTrait::Elite],
-        sch: 1,
-        atk: 0,
-        boost_effect: None,
-    })
+        card_amount_max: 1,
+        belongs: Belong::IdentitySet(IdentitySet::CoreSheHulk).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::Minion,
+            CardBoost::amount(2),
+            CardCharacter::minion(Count::Constant(6), 1, 0),
+            CardTraits::new(vec![CardTrait::Brute, CardTrait::Elite]),
+        ))
+        .id()
 }

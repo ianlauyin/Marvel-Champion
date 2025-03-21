@@ -1,21 +1,29 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, CardTrait, Identity::CoreIronMan, UpgradeCard,
-};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_rocket_boots() -> Card {
-    Card::Upgrade(UpgradeCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_039",
         name: "Rocket Boots",
-        description: "You get +1 hit point. Hero Action: Exhaust Rocket Boots and spend a  resource -> gain the Aerial trait until the end of the phase.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_iron_man/core_039.png",
-        traits: vec![CardTrait::Armor, CardTrait::Tech],
-        keywords: vec![],
-        card_icons: vec![],
-        aspect: CardAspect::IdentitySpecific(CoreIronMan),
+        sub_name: None,
         unique: false,
-        cost: 1,
-        res: vec![CardResource::Mental],
         card_amount_max: 2,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreIronMan).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Upgrade,
+            CardCost::constant(1),
+            CardTraits::new(vec![CardTrait::Armor, CardTrait::Tech]),
+            CardResources::mental(),
+        ))
+        .id()
 }

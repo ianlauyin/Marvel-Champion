@@ -1,19 +1,29 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, CardTrait, EventCard, Identity::CoreSheHulk,
-};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_one_two_punch() -> Card {
-    Card::Event(EventCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_024",
         name: "One-Two Punch",
-        description: "Response: After you make a basic attack (using your ATK), ready She-Hulk.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_she_hulk/core_024.png",
-        keywords: vec![],
-        traits: vec![CardTrait::Skill],
-        aspect: CardAspect::IdentitySpecific(CoreSheHulk),
-        cost: 1,
-        res: vec![CardResource::Physical],
+        sub_name: None,
+        unique: false,
         card_amount_max: 3,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreSheHulk).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Event,
+            CardCost::constant(1),
+            CardTraits::single(CardTrait::Skill),
+            CardResources::physical(),
+        ))
+        .id()
 }

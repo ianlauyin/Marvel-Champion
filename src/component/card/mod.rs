@@ -1,4 +1,3 @@
-mod ability;
 mod card_basic;
 mod card_boost;
 mod card_character;
@@ -13,7 +12,6 @@ mod card_traits;
 mod card_type;
 mod shared;
 
-pub use ability::*;
 pub use card_basic::CardBasic;
 pub use card_boost::CardBoost;
 pub use card_character::CardCharacter;

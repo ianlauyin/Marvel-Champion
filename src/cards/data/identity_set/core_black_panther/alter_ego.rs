@@ -1,5 +1,5 @@
 use crate::{cards::*, component::card::*};
-use bevy::ecs::{entity::Entity, system::Commands, world::World};
+use bevy::ecs::{entity::Entity, system::Commands};
 
 pub fn get_info() -> CardBasic<'static> {
     CardBasic {
@@ -26,11 +26,6 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
             },
             CardCharacter::alter_ego(11, 4),
             CardTraits::new(vec![CardTrait::King, CardTrait::Wakanda]),
-            SetupAbilities::single(Ability::new(setup_ability)),
         ))
         .id()
-}
-
-fn setup_ability(world: &mut World) {
-    println!("setup_ability");
 }

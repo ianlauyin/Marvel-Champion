@@ -1,16 +1,27 @@
-use crate::features::cards::{Card, Identity, ObligationCard};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_obligation() -> Card {
-    Card::Obligation(ObligationCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_170",
         name: "Business Problems",
-        belong: Identity::CoreIronMan,
-        instant_effect: true,
-        boost: 2,
-        card_icons: vec![],
-        description: "Give to the Tony Stark player. You may flip to alter-ego form. Choose: Exhaust Tony Stark -> remove Business Problems from the game. Exhaust each upgrade you control. Discard this obligation.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_iron_man/core_170.png",
-        boost_effect:None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 1,
+        belongs: Belong::IdentitySet(IdentitySet::CoreIronMan).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::Obligation,
+            CardBoost::amount(2),
+        ))
+        .id()
 }

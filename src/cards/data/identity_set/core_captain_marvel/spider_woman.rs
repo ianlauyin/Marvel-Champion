@@ -1,26 +1,30 @@
-use crate::features::cards::{
-    AllyCard, Card, CardAspect, CardResource, CardTrait, Identity::CoreCaptainMarvel,
-};
-pub fn get_spider_woman() -> Card {
-    Card::Ally(AllyCard {
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_011",
         name: "Spider-Woman",
-        sub_name: "Jessica Drew",
-        aspect: CardAspect::IdentitySpecific(CoreCaptainMarvel),
+        sub_name: Some("Jessica Drew"),
         unique: true,
-        cost: 3,
-        res: vec![CardResource::Wild],
-        initial_hit_points: 2,
-        keywords: vec![],
-        traits: vec![CardTrait::Avenger, CardTrait::Spy],
-        card_icons: vec![],
-        thw: 2,
-        thw_con_dmg: 1,
-        atk: 2,
-        atk_con_dmg: 1,
-        description: "Response: After Spider-Woman enters play, confuse the villain.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_captain_marvel/core_011.png",
         card_amount_max: 1,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreCaptainMarvel).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Ally,
+            CardCost::constant(3),
+            CardResources::wild(),
+            CardCharacter::ally(2, 2, 1, 2, 1),
+            CardTraits::new(vec![CardTrait::Avenger, CardTrait::Spy]),
+        ))
+        .id()
 }

@@ -1,6 +1,5 @@
 use bevy::ecs::{entity::Entity, system::Commands};
 
-
 use crate::{cards::*, component::card::*};
 
 pub fn get_info() -> CardBasic<'static> {
@@ -19,12 +18,13 @@ pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
 }
 
 fn spawn_bundle(mut commands: Commands) -> Entity {
-    commands.spawn((
-        get_info(),
-        PlayerCardType::Upgrade,
-        CardCost::constant(1),
-        CardResources::mental(),
-        CardTraits::single(CardTrait::Armor),
-        StatsModifier::new(0, 0, 1),
-    )).id()
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Upgrade,
+            CardCost::constant(1),
+            CardResources::mental(),
+            CardTraits::single(CardTrait::Armor),
+        ))
+        .id()
 }

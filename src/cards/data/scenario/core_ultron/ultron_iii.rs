@@ -1,4 +1,4 @@
-use bevy::ecs::{entity::Entity, system::Commands, world::World};
+use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::{cards::*, component::card::*};
 
@@ -26,16 +26,6 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
             },
             CardCharacter::villain(Count::PerPlayer(27), 2, 4),
             CardTraits::single(CardTrait::Android),
-            WhenRevealedAbilities::single(Ability::new(when_revealed_ability)),
-            ConstantAbilities::single(Ability::new(constant_ability)),
         ))
         .id()
-}
-
-fn when_revealed_ability(world: &mut World) {
-    println!("when_revealed_ability");
-}
-
-fn constant_ability(world: &mut World) {
-    println!("constant_ability");
 }

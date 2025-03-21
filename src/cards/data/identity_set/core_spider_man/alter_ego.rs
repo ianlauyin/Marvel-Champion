@@ -1,23 +1,31 @@
-use crate::features::cards::{AlterEgoCard, Card, CardAspect, CardTrait, Identity::CoreSpiderMan};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_alter_ego() -> Card {
-    Card::AlterEgo(AlterEgoCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_001b",
         name: "Peter Parker",
-        aspect: CardAspect::IdentitySpecific(CoreSpiderMan),
-        flip_target_id: vec!["core_001a"],
-        initial_hit_points: 10,
-        keywords: vec![],
-        traits: vec![CardTrait::Genius],
-        card_icons: vec![],
-        rec: 3,
-        description: "Resource: Generate a mental resource. (Limit once per round.)",
-        abilities: vec![],
-        hand_size: 6,
-        card_image_path: "embedded://cards/identity/core_spider_man/core_001b.png",
-        card_back_image_path: "embedded://cards/identity/core_spider_man/core_001a.png",
-        nemesis_id: "core_167",
-        nemesis_side_scheme_id: "core_166",
-        nemesis_card_id: vec!["core_168", "core_169"],
-    })
+        sub_name: Some("Spider-Man"),
+        unique: true,
+        card_amount_max: 1,
+        belongs: Belong::IdentitySet(IdentitySet::CoreSpiderMan).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            IdentityCardType::AlterEgo {
+                flip_target_id: vec!["core_001a"],
+                hand_size: 6,
+            },
+            CardTraits::single(CardTrait::Genius),
+            CardCharacter::alter_ego(10, 3),
+        ))
+        .id()
 }

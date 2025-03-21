@@ -1,22 +1,29 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, CardTrait, Identity::CoreIronMan, SupportCard,
-};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_pepper_potts() -> Card {
-    Card::Support(SupportCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_033",
         name: "Pepper Potts",
-        description:
-            "Resource: Exhaust Pepper Potts -> generate the resources of the top card in your discard pile.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_iron_man/core_033.png",
-        traits: vec![CardTrait::Persona],
-        keywords: vec![],
-        card_icons: vec![],
-        aspect: CardAspect::IdentitySpecific(CoreIronMan),
+        sub_name: None,
         unique: true,
-        cost: 3,
-        res: vec![CardResource::Physical],
         card_amount_max: 1,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreIronMan).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Support,
+            CardCost::constant(3),
+            CardResources::physical(),
+            CardTraits::single(CardTrait::Persona),
+        ))
+        .id()
 }

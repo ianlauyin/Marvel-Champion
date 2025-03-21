@@ -1,16 +1,29 @@
-use crate::features::cards::{Card, CardIcon, Count, SideSchemeCard};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_personal_challenge() -> Card {
-    Card::SideScheme(SideSchemeCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_161",
         name: "Personal Challenge",
-        boost: 3,
-        traits: vec![],
-        card_icons: vec![CardIcon::Crisis],
-        description: "When Revealed: Place an additional 1  threat here.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_she_hulk/core_161.png",
-        initial_threat: Count::Constant(3),
-        boost_effect: None,
-    })
+        sub_name: None,
+        unique: false,
+        card_amount_max: 1,
+        belongs: Belong::IdentitySet(IdentitySet::CoreSheHulk).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            EncounterCardType::SideScheme,
+            CardBoost::amount(3),
+            CardScheme::new(Count::Constant(3)),
+            CardIcons::crisis(),
+        ))
+        .id()
 }

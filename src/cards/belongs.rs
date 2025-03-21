@@ -69,5 +69,4 @@ impl Belong {
             Self::Scenario(scenario) => format!("scenario/{}", scenario.get_key()),
         }
     }
-    
 }

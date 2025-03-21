@@ -1,4 +1,4 @@
-use bevy::ecs::{entity::Entity, system::Commands, world::World};
+use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::{cards::*, component::card::*};
 
@@ -29,11 +29,6 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
                 Count::PerPlayer(10),
                 Count::PerPlayer(1),
             ),
-            ForcedResponseAbilities::single(Ability::new(forced_response_ability)),
         ))
         .id()
-}
-
-fn forced_response_ability(world: &mut World) {
-    println!("forced_response_ability");
 }

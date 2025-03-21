@@ -1,25 +1,31 @@
-use crate::features::cards::{Card, CardAspect, CardTrait, HeroCard, Identity::CoreCaptainMarvel};
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
 
-pub fn get_hero() -> Card {
-    Card::Hero(HeroCard {
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_010a",
         name: "Captain Marvel",
-        aspect: CardAspect::IdentitySpecific(CoreCaptainMarvel),
-        description:"Action: Spend a Energy resource and heal 1 damage from Captain Marvel -> draw 1 card. (Limit once per round.)",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_captain_marvel/core_010a.png",
-        card_back_image_path: "embedded://cards/identity/core_captain_marvel/core_010b.png",
-        traits: vec![CardTrait::Avenger,CardTrait::Soldier],
-        flip_target_id: vec!["core_010b"],
-        initial_hit_points: 12,
-        keywords: vec![],
-        card_icons: vec![],
-        thw: 2,
-        atk: 2,
-        def: 1,
-        hand_size: 5,
-        nemesis_id: "core_177",
-        nemesis_side_scheme_id: "core_176",
-        nemesis_card_id:vec!["core_178","core_179"],
-    })
+        sub_name: Some("Hero"),
+        unique: true,
+        card_amount_max: 1,
+        belongs: Belong::IdentitySet(IdentitySet::CoreCaptainMarvel).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            IdentityCardType::Hero {
+                flip_target_id: vec!["core_010b"],
+                hand_size: 5,
+            },
+            CardCharacter::hero(12, 2, 2, 1),
+            CardTraits::new(vec![CardTrait::Avenger, CardTrait::Soldier]),
+        ))
+        .id()
 }

@@ -1,4 +1,4 @@
-use bevy::ecs::{entity::Entity, system::Commands, world::World};
+use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::{cards::*, component::card::*};
 
@@ -22,7 +22,7 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
         .spawn((
             get_info(),
             EncounterCardType::Minion,
-            CardBoost::new(2),
+            CardBoost::amount(2),
             CardCharacter::minion(Count::Constant(4), 2, 3),
             CardTraits::new(vec![CardTrait::Criminal, CardTrait::Elite]),
             CardKeywords::single(CardKeyword::Toughness),

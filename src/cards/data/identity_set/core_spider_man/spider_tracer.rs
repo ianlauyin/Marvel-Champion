@@ -1,20 +1,29 @@
-use crate::features::cards::{
-    Card, CardAspect, CardResource, CardTrait, Identity::CoreSpiderMan, UpgradeCard,
-};
-pub fn get_spider_tracer() -> Card {
-    Card::Upgrade(UpgradeCard {
+use crate::{cards::*, component::card::*};
+use bevy::ecs::{entity::Entity, system::Commands};
+
+pub fn get_info() -> CardBasic<'static> {
+    CardBasic {
         id: "core_007",
         name: "Spider-Tracer",
-        aspect: CardAspect::IdentitySpecific(CoreSpiderMan),
+        sub_name: None,
         unique: false,
-        cost: 1,
-        res: vec![CardResource::Energy],
-        card_icons: vec![],
-        traits: vec![CardTrait::Item,CardTrait::Tech],
-        keywords: vec![],
-        description: "Attach to a minion. Forced Interrupt: When attached minion is defeated, remove 3 threat from a scheme.",
-        abilities: vec![],
-        card_image_path: "embedded://cards/identity/core_spider_man/core_007.png",
         card_amount_max: 2,
-    })
+        belongs: Belong::IdentitySet(IdentitySet::CoreSpiderMan).into(),
+    }
+}
+
+pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
+    (get_info(), spawn_bundle)
+}
+
+fn spawn_bundle(mut commands: Commands) -> Entity {
+    commands
+        .spawn((
+            get_info(),
+            PlayerCardType::Upgrade,
+            CardCost::constant(1),
+            CardResources::energy(),
+            CardTraits::new(vec![CardTrait::Item, CardTrait::Tech]),
+        ))
+        .id()
 }
