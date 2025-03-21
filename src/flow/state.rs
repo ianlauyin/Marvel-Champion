@@ -9,11 +9,3 @@ pub enum AppState {
     DeckBuilding,
     Collection,
 }
-
-pub struct StatePlugin;
-
-impl Plugin for StatePlugin {
-    fn build(&self, app: &mut App) {
-        app.init_state::<AppState>();
-    }
-}

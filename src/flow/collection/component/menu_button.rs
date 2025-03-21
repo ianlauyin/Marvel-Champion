@@ -1,5 +1,7 @@
 use bevy::prelude::Component;
 
+use crate::flow::collection::state::CollectionState;
+
 #[derive(Component)]
 pub enum CollectionMenuButton {
     Aspect,
@@ -30,6 +32,17 @@ impl CollectionMenuButton {
             Self::Scenario => "Scenario",
             Self::StandardSet => "Standard Set",
             Self::ExpertSet => "Expert Set",
+        }
+    }
+
+    pub fn get_state(&self) -> CollectionState {
+        match self {
+            Self::Aspect => CollectionState::Aspect,
+            Self::IdentitySet => CollectionState::IdentitySet,
+            Self::ModularSet => CollectionState::ModularSet,
+            Self::Scenario => CollectionState::Scenario,
+            Self::StandardSet => CollectionState::StandardSet,
+            Self::ExpertSet => CollectionState::ExpertSet,
         }
     }
 }
