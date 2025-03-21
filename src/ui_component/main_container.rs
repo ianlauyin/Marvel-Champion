@@ -16,6 +16,7 @@ fn on_main_container_added(trigger: Trigger<OnAdd, MainContainer>, mut commands:
         Node {
             width: Val::Percent(90.),
             height: Val::Percent(90.),
+            padding: UiRect::all(Val::Px(10.)),
             align_self: AlignSelf::Center,
             justify_self: JustifySelf::Center,
             display: Display::Flex,

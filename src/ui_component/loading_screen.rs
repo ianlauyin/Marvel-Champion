@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, ui::FocusPolicy};
 
 use crate::constant::WINDOW_RESOLUTION;
 
@@ -26,6 +26,7 @@ fn on_loading_screen_added(trigger: Trigger<OnAdd, LoadingScreen>, mut commands:
                 ..default()
             },
             BackgroundColor::from(Color::BLACK.with_alpha(0.8)),
+            FocusPolicy::Block,
         ))
         .with_child(Text::new("Loading..."));
 }

@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 
 use crate::{
-    ui_component::{MainContainer, MenuButton},
+    ui_component::{CustomButton, MainContainer},
     util::ComponentUtil,
 };
 
@@ -36,14 +36,7 @@ const BUTTON_MAP: [(MainMenuButton, &str); 3] = [
 fn spawn_main_menu(mut commands: Commands) {
     commands.spawn(MainContainer).with_children(|main_menu| {
         for (button_component, text) in BUTTON_MAP {
-            main_menu.spawn((
-                button_component,
-                MenuButton {
-                    text: text.to_string(),
-                    color: Color::srgb(0.576, 0.576, 0.576),
-                    ..default()
-                },
-            ));
+            main_menu.spawn((button_component, CustomButton::menu_text(text.to_string())));
         }
     });
 }

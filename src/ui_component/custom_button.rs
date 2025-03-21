@@ -12,60 +12,77 @@ impl Plugin for MenuButtonPlugin {
 }
 
 #[derive(Component)]
-pub struct MenuButton {
-    pub text: String,
-    pub text_color: Color,
-    pub color: Color,
-    pub size: (Val, Val),
-    pub with_border: bool,
-    pub image: ImageNode,
-    pub border_radius: BorderRadius,
-    pub node: Node,
+pub struct CustomButton {
+    text: String,
+    text_color: Color,
+    color: Color,
+    with_border: bool,
+    image: ImageNode,
+    node: Node,
 }
 
-impl Default for MenuButton {
-    fn default() -> Self {
+impl CustomButton {
+    pub fn menu_text(text: String) -> Self {
         Self {
+            text,
             text_color: Color::WHITE,
-            text: String::default(),
-            color: Color::NONE,
-            size: (Val::Px(300.), Val::Px(100.)),
+            color: Color::srgb(0.576, 0.576, 0.576),
             with_border: true,
             image: ImageNode::default(),
-            border_radius: BorderRadius::all(Val::Px(10.)),
-            node: Node::default(),
+            node: Node {
+                width: Val::Px(300.),
+                height: Val::Px(100.),
+                border: UiRect::all(Val::Px(2.)),
+                display: Display::Flex,
+                justify_content: JustifyContent::Center,
+                align_items: AlignItems::Center,
+                justify_self: JustifySelf::Center,
+                align_self: AlignSelf::Center,
+                ..default()
+            },
+        }
+    }
+
+    pub fn square(text: String) -> Self {
+        Self {
+            text,
+            text_color: Color::WHITE,
+            color: Color::srgb(0.173, 0.173, 0.173),
+            with_border: false,
+            image: ImageNode::default(),
+            node: Node {
+                width: Val::Px(50.),
+                height: Val::Px(50.),
+                border: UiRect::all(Val::Px(2.)),
+                display: Display::Flex,
+                justify_content: JustifyContent::Center,
+                align_items: AlignItems::Center,
+                justify_self: JustifySelf::Center,
+                align_self: AlignSelf::Center,
+                ..default()
+            },
         }
     }
 }
 
 fn handle_button_added(
-    on_add: Trigger<OnAdd, MenuButton>,
+    on_add: Trigger<OnAdd, CustomButton>,
     mut commands: Commands,
-    custom_button_q: Query<&MenuButton>,
+    custom_button_q: Query<&CustomButton>,
 ) {
     let custom_button = custom_button_q.get(on_add.entity()).unwrap();
-    let mut node = custom_button.node.clone();
-    node.width = custom_button.size.0;
-    node.height = custom_button.size.1;
-    node.border = UiRect::all(Val::Px(2.));
-    node.display = Display::Flex;
-    node.justify_content = JustifyContent::Center;
-    node.align_items = AlignItems::Center;
-    node.justify_self = JustifySelf::Center;
-    node.align_self = AlignSelf::Center;
-
     commands
         .entity(on_add.entity())
         .insert((
             Button,
-            node.clone(),
+            custom_button.node.clone(),
             custom_button.image.clone(),
             BorderColor(if custom_button.with_border {
                 Color::srgb(0.725, 0.725, 0.725)
             } else {
                 Color::NONE
             }),
-            custom_button.border_radius,
+            BorderRadius::all(Val::Px(10.)),
             BackgroundColor::from(custom_button.color),
         ))
         .with_child((
@@ -76,7 +93,7 @@ fn handle_button_added(
 
 fn handle_button_ui(
     mut commands: Commands,
-    mut button_q: Query<(&mut BackgroundColor, &Interaction, &Children), With<MenuButton>>,
+    mut button_q: Query<(&mut BackgroundColor, &Interaction, &Children), With<CustomButton>>,
     mut text_color_q: Query<&mut TextColor>,
     mut window_q: Query<Entity, With<Window>>,
 ) {
