@@ -3,6 +3,8 @@ use bevy::ecs::{entity::Entity, system::Commands};
 use crate::cards::data::identity_set;
 use crate::component::card::CardBasic;
 
+use super::set_trait::SetTrait;
+
 #[derive(Clone)]
 pub enum IdentitySet {
     CoreSpiderMan,
@@ -21,26 +23,6 @@ impl IdentitySet {
             Self::CoreIronMan,
             Self::CoreBlackPanther,
         ]
-    }
-
-    pub fn to_str(&self) -> &str {
-        match *self {
-            Self::CoreSpiderMan => "Core - Spider Man",
-            Self::CoreCaptainMarvel => "Core - Captain Marvel",
-            Self::CoreSheHulk => "Core - She Hulk",
-            Self::CoreIronMan => "Core - Iron Man",
-            Self::CoreBlackPanther => "Core - Black Panther",
-        }
-    }
-
-    pub fn get_key(&self) -> &str {
-        match *self {
-            Self::CoreSpiderMan => "core_spider_man",
-            Self::CoreCaptainMarvel => "core_captain_marvel",
-            Self::CoreSheHulk => "core_she_hulk",
-            Self::CoreIronMan => "core_iron_man",
-            Self::CoreBlackPanther => "core_black_panther",
-        }
     }
 
     pub fn get_nemesis_scheme_id(&self) -> &str {
@@ -72,8 +54,30 @@ impl IdentitySet {
             Self::CoreSpiderMan => vec!["core_168", "core_169"],
         }
     }
+}
 
-    pub fn get_card_infos(&self) -> Vec<CardBasic> {
+impl SetTrait for IdentitySet {
+    fn to_str(&self) -> &str {
+        match *self {
+            Self::CoreSpiderMan => "Core - Spider Man",
+            Self::CoreCaptainMarvel => "Core - Captain Marvel",
+            Self::CoreSheHulk => "Core - She Hulk",
+            Self::CoreIronMan => "Core - Iron Man",
+            Self::CoreBlackPanther => "Core - Black Panther",
+        }
+    }
+
+    fn get_key(&self) -> &str {
+        match *self {
+            Self::CoreSpiderMan => "core_spider_man",
+            Self::CoreCaptainMarvel => "core_captain_marvel",
+            Self::CoreSheHulk => "core_she_hulk",
+            Self::CoreIronMan => "core_iron_man",
+            Self::CoreBlackPanther => "core_black_panther",
+        }
+    }
+
+    fn get_card_infos(&self) -> Vec<CardBasic> {
         match *self {
             Self::CoreSpiderMan => identity_set::core_spider_man::get_infos(),
             Self::CoreCaptainMarvel => identity_set::core_captain_marvel::get_infos(),
@@ -83,7 +87,7 @@ impl IdentitySet {
         }
     }
 
-    pub fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
+    fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
         match *self {
             Self::CoreSpiderMan => identity_set::core_spider_man::get_cards(),
             Self::CoreCaptainMarvel => identity_set::core_captain_marvel::get_cards(),
@@ -91,5 +95,8 @@ impl IdentitySet {
             Self::CoreIronMan => identity_set::core_iron_man::get_cards(),
             Self::CoreBlackPanther => identity_set::core_black_panther::get_cards(),
         }
+    }
+    fn get_thumbnail_key(&self) -> Option<String> {
+        Some(format!("identity_set/{}", self.get_key()))
     }
 }

@@ -3,6 +3,8 @@ use bevy::ecs::{entity::Entity, system::Commands};
 use crate::cards::data::standard_set;
 use crate::component::card::CardBasic;
 
+use super::set_trait::SetTrait;
+
 #[derive(Clone)]
 pub enum StandardSet {
     Standard,
@@ -12,28 +14,34 @@ impl StandardSet {
     pub fn get_all() -> Vec<Self> {
         vec![Self::Standard]
     }
+}
 
-    pub fn to_str(&self) -> &str {
+impl SetTrait for StandardSet {
+    fn to_str(&self) -> &str {
         match *self {
             Self::Standard => "Standard",
         }
     }
 
-    pub fn get_key(&self) -> &str {
+    fn get_key(&self) -> &str {
         match *self {
             Self::Standard => "standard",
         }
     }
 
-    pub fn get_card_infos(&self) -> Vec<CardBasic> {
+    fn get_card_infos(&self) -> Vec<CardBasic> {
         match *self {
             Self::Standard => standard_set::standard::get_infos(),
         }
     }
 
-    pub fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
+    fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
         match *self {
             Self::Standard => standard_set::standard::get_cards(),
         }
+    }
+
+    fn get_thumbnail_key(&self) -> Option<String> {
+        Some(format!("standard_set/{}", self.get_key()))
     }
 }

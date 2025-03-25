@@ -3,6 +3,8 @@ use bevy::ecs::{entity::Entity, system::Commands};
 use crate::cards::data::modular_set;
 use crate::component::card::CardBasic;
 
+use super::set_trait::SetTrait;
+
 #[derive(Clone)]
 pub enum ModularSet {
     BombScare,
@@ -22,8 +24,10 @@ impl ModularSet {
             Self::TheDoomsdayChair,
         ]
     }
+}
 
-    pub fn to_str(&self) -> &str {
+impl SetTrait for ModularSet {
+    fn to_str(&self) -> &str {
         match *self {
             Self::BombScare => "Bomb Scare",
             Self::MastersOfEvil => "Masters of Evil",
@@ -33,7 +37,7 @@ impl ModularSet {
         }
     }
 
-    pub fn get_key(&self) -> &str {
+    fn get_key(&self) -> &str {
         match *self {
             Self::BombScare => "bomb_scare",
             Self::MastersOfEvil => "masters_of_evil",
@@ -43,7 +47,7 @@ impl ModularSet {
         }
     }
 
-    pub fn get_card_infos(&self) -> Vec<CardBasic> {
+    fn get_card_infos(&self) -> Vec<CardBasic> {
         match *self {
             Self::BombScare => modular_set::bomb_scare::get_infos(),
             Self::MastersOfEvil => modular_set::masters_of_evil::get_infos(),
@@ -53,7 +57,7 @@ impl ModularSet {
         }
     }
 
-    pub fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
+    fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
         match *self {
             Self::BombScare => modular_set::bomb_scare::get_cards(),
             Self::MastersOfEvil => modular_set::masters_of_evil::get_cards(),
@@ -61,5 +65,9 @@ impl ModularSet {
             Self::LegionsOfHydra => modular_set::legions_of_hydra::get_cards(),
             Self::TheDoomsdayChair => modular_set::the_doomsday_chair::get_cards(),
         }
+    }
+
+    fn get_thumbnail_key(&self) -> Option<String> {
+        Some(format!("modular_set/{}", self.get_key()))
     }
 }

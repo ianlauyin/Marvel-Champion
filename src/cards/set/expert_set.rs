@@ -3,6 +3,8 @@ use bevy::ecs::{entity::Entity, system::Commands};
 use crate::cards::data::expert_set;
 use crate::component::card::CardBasic;
 
+use super::set_trait::SetTrait;
+
 #[derive(Clone)]
 pub enum ExpertSet {
     Expert,
@@ -12,28 +14,34 @@ impl ExpertSet {
     pub fn get_all() -> Vec<Self> {
         vec![Self::Expert]
     }
+}
 
-    pub fn to_str(&self) -> &str {
+impl SetTrait for ExpertSet {
+    fn to_str(&self) -> &str {
         match *self {
             Self::Expert => "Expert",
         }
     }
 
-    pub fn get_key(&self) -> &str {
+    fn get_key(&self) -> &str {
         match *self {
             Self::Expert => "expert",
         }
     }
 
-    pub fn get_card_infos(&self) -> Vec<CardBasic> {
+    fn get_card_infos(&self) -> Vec<CardBasic> {
         match *self {
             Self::Expert => expert_set::expert::get_infos(),
         }
     }
 
-    pub fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
+    fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
         match *self {
             Self::Expert => expert_set::expert::get_cards(),
         }
+    }
+
+    fn get_thumbnail_key(&self) -> Option<String> {
+        Some(format!("expert_set/{}", self.get_key()))
     }
 }

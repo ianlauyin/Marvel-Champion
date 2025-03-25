@@ -1,6 +1,6 @@
 use bevy::ecs::{entity::Entity, system::Commands};
 
-use super::super::data::aspect;
+use super::{super::data::aspect, set_trait::SetTrait};
 use crate::component::card::CardBasic;
 
 #[derive(Clone)]
@@ -34,8 +34,10 @@ impl Aspect {
         }
         cards
     }
+}
 
-    pub fn to_str(&self) -> &str {
+impl SetTrait for Aspect {
+    fn to_str(&self) -> &str {
         match *self {
             Self::Basic => "Basic",
             Self::Justice => "Justice",
@@ -46,7 +48,7 @@ impl Aspect {
         }
     }
 
-    pub fn get_key(&self) -> &str {
+    fn get_key(&self) -> &str {
         match *self {
             Self::Basic => "basic",
             Self::Justice => "justice",
@@ -57,7 +59,7 @@ impl Aspect {
         }
     }
 
-    pub fn get_card_infos(&self) -> Vec<CardBasic<'static>> {
+    fn get_card_infos(&self) -> Vec<CardBasic<'static>> {
         match self {
             Self::Aggression => aspect::aggression::get_infos(),
             Self::Basic => aspect::basic::get_infos(),
@@ -68,7 +70,7 @@ impl Aspect {
         }
     }
 
-    pub fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
+    fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
         match self {
             Self::Aggression => aspect::aggression::get_cards(),
             Self::Basic => aspect::basic::get_cards(),
@@ -77,5 +79,9 @@ impl Aspect {
             Self::Protection => aspect::protection::get_cards(),
             Self::Pool => aspect::pool::get_cards(),
         }
+    }
+
+    fn get_thumbnail_key(&self) -> Option<String> {
+        None
     }
 }

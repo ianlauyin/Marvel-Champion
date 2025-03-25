@@ -1,6 +1,6 @@
 use crate::cards::{IdentitySet, ModularSet, Scenario, StandardSet};
 
-use super::set::{Aspect, ExpertSet};
+use super::set::{Aspect, ExpertSet, SetTrait};
 
 #[derive(Clone)]
 pub struct Belongs {

@@ -9,6 +9,6 @@ pub struct CollectionPlugin;
 impl Plugin for CollectionPlugin {
     fn build(&self, app: &mut App) {
         app.add_sub_state::<state::CollectionState>()
-            .add_plugins((menu::CollectionMenuPlugin));
+            .add_plugins(menu::CollectionMenuPlugin);
     }
 }

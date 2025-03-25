@@ -6,10 +6,14 @@ use bevy::prelude::*;
 pub struct AssetLoader(HashMap<String, Handle<Image>>);
 
 impl AssetLoader {
-    pub fn load_and_check(&mut self, keys: Vec<&str>, asset_server: &Res<AssetServer>) -> bool {
+    pub fn get(&self, key: &str) -> Option<&Handle<Image>> {
+        self.0.get(key)
+    }
+
+    pub fn load_and_check(&mut self, keys: Vec<String>, asset_server: &Res<AssetServer>) -> bool {
         let mut is_all_loaded = true;
         for key in keys {
-            if let Some(handle) = self.get(key) {
+            if let Some(handle) = self.get(&key) {
                 if !asset_server.is_loaded(handle.id()) {
                     is_all_loaded = false;
                 }
@@ -20,12 +24,8 @@ impl AssetLoader {
         is_all_loaded
     }
 
-    pub fn get(&self, key: &str) -> Option<&Handle<Image>> {
-        self.0.get(key)
-    }
-
-    fn init(&mut self, key: &str, asset_server: &Res<AssetServer>) {
+    fn init(&mut self, key: String, asset_server: &Res<AssetServer>) {
         let handle = asset_server.load(format!("embedded://{key}.png",));
-        self.0.insert(key.to_string(), handle.clone());
+        self.0.insert(key, handle.clone());
     }
 }
