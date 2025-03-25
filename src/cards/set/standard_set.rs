@@ -17,6 +17,13 @@ impl StandardSet {
 }
 
 impl SetTrait for StandardSet {
+    fn get_boxed_all() -> Vec<Box<dyn SetTrait>> {
+        Self::get_all()
+            .into_iter()
+            .map(|set| Box::new(set) as Box<dyn SetTrait>)
+            .collect()
+    }
+
     fn to_str(&self) -> &str {
         match *self {
             Self::Standard => "Standard",

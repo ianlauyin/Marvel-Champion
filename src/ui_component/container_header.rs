@@ -4,7 +4,7 @@ use crate::ui_component::CustomButton;
 
 #[derive(Event)]
 pub enum ContainerHeaderEvent {
-    LeadingButtonPressed,
+    LeadingButtonPressed(Entity),
 }
 
 #[derive(Component)]
@@ -69,12 +69,14 @@ fn on_container_header_added(
 
 fn listen_container_header_pressed(
     mut event_writer: EventWriter<ContainerHeaderEvent>,
-    mut button_q: Query<(&Interaction, &ContainerHeaderButton)>,
+    mut button_q: Query<(&Interaction, &ContainerHeaderButton, &Parent)>,
 ) {
-    for (interaction, button) in button_q.iter_mut() {
+    for (interaction, button, parent) in button_q.iter_mut() {
         if *interaction == Interaction::Pressed {
             let event = match button {
-                ContainerHeaderButton::Leading(_) => ContainerHeaderEvent::LeadingButtonPressed,
+                ContainerHeaderButton::Leading(_) => {
+                    ContainerHeaderEvent::LeadingButtonPressed(parent.get())
+                }
             };
             event_writer.send(event);
         }

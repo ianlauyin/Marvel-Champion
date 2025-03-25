@@ -15,26 +15,15 @@ const ASSETS_PATHS: LazyLock<Vec<String>> = LazyLock::new(|| {
         "cards/card_backs/villain_card_back".to_string(),
     ];
 
-    let mut set_vec: Vec<Box<dyn SetTrait>> = vec![];
-    for aspect in Aspect::get_all() {
-        set_vec.push(Box::new(aspect));
-    }
-    for set in ExpertSet::get_all() {
-        set_vec.push(Box::new(set));
-    }
-    for set in IdentitySet::get_all() {
-        set_vec.push(Box::new(set));
-    }
-    for set in ModularSet::get_all() {
-        set_vec.push(Box::new(set));
-    }
-    for set in Scenario::get_all() {
-        set_vec.push(Box::new(set));
-    }
-    for set in StandardSet::get_all() {
-        set_vec.push(Box::new(set));
-    }
-    for set in set_vec {
+    let mut set_vec = Vec::new();
+    set_vec.extend(Aspect::get_boxed_all());
+    set_vec.extend(ExpertSet::get_boxed_all());
+    set_vec.extend(IdentitySet::get_boxed_all());
+    set_vec.extend(ModularSet::get_boxed_all());
+    set_vec.extend(Scenario::get_boxed_all());
+    set_vec.extend(StandardSet::get_boxed_all());
+
+    for set in &set_vec {
         if let Some(thumbnail_path) = set.get_thumbnail_key() {
             paths.push(thumbnail_path);
         }

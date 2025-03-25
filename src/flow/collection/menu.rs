@@ -8,9 +8,9 @@ use crate::{
     util::ComponentUtil,
 };
 
-use super::{component::CollectionMenuButton, state::CollectionState};
+use super::component::CollectionMenuButton;
 
-const CURRENT_STATE: CollectionState = CollectionState::MainMenu;
+const CURRENT_STATE: AppState = AppState::Collection;
 
 pub struct CollectionMenuPlugin;
 
@@ -19,7 +19,7 @@ impl Plugin for CollectionMenuPlugin {
         app.add_systems(OnEnter(CURRENT_STATE), spawn_menu)
             .add_systems(
                 Update,
-                (handle_header_button_click, listen_to_button_click)
+                (handle_header_button_click, handle_menu_button_click)
                     .run_if(in_state(CURRENT_STATE)),
             )
             .add_systems(
@@ -60,22 +60,25 @@ fn spawn_menu(mut commands: Commands) {
 
 fn handle_header_button_click(
     mut event_reader: EventReader<ContainerHeaderEvent>,
+    menu_q: Query<&Children, With<CollectionMenu>>,
     mut next_state: ResMut<NextState<AppState>>,
 ) {
     for event in event_reader.read() {
+        let menu_children = menu_q.single();
         match event {
-            ContainerHeaderEvent::LeadingButtonPressed => next_state.set(AppState::MainMenu),
+            ContainerHeaderEvent::LeadingButtonPressed(entity) => {
+                if menu_children.contains(entity) {
+                    next_state.set(AppState::MainMenu);
+                }
+            }
         }
     }
 }
 
-fn listen_to_button_click(
-    button_q: Query<(&Interaction, &CollectionMenuButton)>,
-    mut next_state: ResMut<NextState<CollectionState>>,
+fn handle_menu_button_click(
+    button_q: Query<(&Interaction, &CollectionMenuButton), Changed<Interaction>>,
 ) {
     for (interaction, button) in button_q.iter() {
-        if *interaction == Interaction::Pressed {
-            next_state.set(button.get_state());
-        }
+        if *interaction == Interaction::Pressed {}
     }
 }
