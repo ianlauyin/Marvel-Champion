@@ -10,6 +10,8 @@ use crate::{
     util::UiUtils,
 };
 
+use super::{card_list::CardList, SubMenuButton};
+
 #[derive(Component)]
 pub enum SubMenu {
     Aspect,
@@ -39,7 +41,8 @@ impl Plugin for SubMenuPlugin {
     fn build(&self, app: &mut App) {
         app.add_observer(on_sub_menu_added).add_systems(
             Update,
-            handle_header_button_click.run_if(in_state(AppState::Collection)),
+            (handle_sub_menu_button_click, handle_header_button_click)
+                .run_if(in_state(AppState::Collection)),
         );
     }
 }
@@ -68,7 +71,7 @@ fn on_sub_menu_added(
                 })
                 .with_children(|content| {
                     content
-                        .spawn(ScrollingList::grid(1, 50.))
+                        .spawn(ScrollingList::grid(3, 50.))
                         .with_children(|scrolling_list| {
                             for set in sub_menu.get_sets() {
                                 let mut button = CustomButton::menu(set.to_str());
@@ -80,7 +83,7 @@ fn on_sub_menu_added(
                                         button.with_image(image.clone());
                                     }
                                 }
-                                scrolling_list.spawn(button);
+                                scrolling_list.spawn((SubMenuButton::new(set), button));
                             }
                         });
                 });
@@ -101,6 +104,17 @@ fn handle_header_button_click(
                     }
                 }
             }
+        }
+    }
+}
+
+fn handle_sub_menu_button_click(
+    mut commands: Commands,
+    sub_menu_button_q: Query<(&Interaction, &SubMenuButton)>,
+) {
+    for (interaction, sub_menu_button) in sub_menu_button_q.iter() {
+        if *interaction == Interaction::Pressed {
+            return;
         }
     }
 }

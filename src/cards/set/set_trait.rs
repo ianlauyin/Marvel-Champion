@@ -5,7 +5,7 @@ use bevy::{
 
 use crate::component::card::CardBasic;
 
-pub trait SetTrait {
+pub trait SetTrait: Sync + Send {
     fn get_boxed_all() -> Vec<Box<dyn SetTrait>>
     where
         Self: Sized;
