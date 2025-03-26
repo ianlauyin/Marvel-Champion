@@ -1,6 +1,7 @@
 mod component_util;
 // mod decks_storage_util;
 // mod deck_validator;
+mod devtool;
 mod mouse_control_util;
 mod ui_util;
 
@@ -12,6 +13,9 @@ pub struct UtilPlugin;
 
 impl bevy::app::Plugin for UtilPlugin {
     fn build(&self, app: &mut bevy::app::App) {
-        app.add_plugins(mouse_control_util::MouseControlUtilPlugin);
+        app.add_plugins((
+            mouse_control_util::MouseControlUtilPlugin,
+            devtool::DevtoolPlugin,
+        ));
     }
 }

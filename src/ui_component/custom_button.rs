@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy::window::SystemCursorIcon;
+use bevy::window::{PrimaryWindow, SystemCursorIcon};
 use bevy::winit::cursor::CursorIcon;
 
 pub struct MenuButtonPlugin;
@@ -22,7 +22,7 @@ pub struct CustomButton {
 }
 
 impl CustomButton {
-    pub fn menu_text(text: &str) -> Self {
+    pub fn menu(text: &str) -> Self {
         Self {
             text: text.to_string(),
             text_color: Color::WHITE,
@@ -95,12 +95,11 @@ fn handle_button_ui(
     mut commands: Commands,
     mut button_q: Query<(&mut BackgroundColor, &Interaction, &Children), With<CustomButton>>,
     mut text_color_q: Query<&mut TextColor>,
-    mut window_q: Query<Entity, With<Window>>,
+    mut window: Single<Entity, With<PrimaryWindow>>,
 ) {
     if button_q.is_empty() {
         return;
     }
-    let window = window_q.get_single_mut().unwrap();
     let mut cursor_icon = CursorIcon::default();
 
     for (background_color, interaction, children) in button_q.iter_mut() {
@@ -119,7 +118,7 @@ fn handle_button_ui(
         }
     }
 
-    commands.entity(window).insert(cursor_icon);
+    commands.entity(window.into_inner()).insert(cursor_icon);
 }
 
 fn handle_button_color(

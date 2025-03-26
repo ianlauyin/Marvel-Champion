@@ -35,7 +35,7 @@ impl CollectionMenuButton {
         }
     }
 
-    pub fn get_component(&self) -> SubMenu {
+    pub fn get_sub_menu(&self) -> SubMenu {
         match self {
             Self::Aspect => SubMenu::Aspect,
             Self::IdentitySet => SubMenu::IdentitySet,

@@ -2,9 +2,7 @@ use bevy::prelude::*;
 
 use crate::{
     flow::state::AppState,
-    ui_component::{
-        ContainerHeader, ContainerHeaderEvent, CustomButton, MainContainer, ScrollingList,
-    },
+    ui_component::{ContainerHeader, ContainerHeaderEvent, CustomButton, MainContainer},
     util::ComponentUtil,
 };
 
@@ -39,21 +37,18 @@ fn spawn_menu(mut commands: Commands) {
             parent.spawn(ContainerHeader::with_leading_button("<"));
             parent
                 .spawn(Node {
-                    align_self: AlignSelf::Stretch,
-                    margin: UiRect::all(Val::Px(180.)),
-                    justify_content: JustifyContent::Center,
-                    overflow: Overflow::scroll_y(),
+                    margin: UiRect::all(Val::Px(100.)),
+                    flex_grow: 1.,
+                    display: Display::Grid,
+                    column_gap: Val::Px(50.),
+                    row_gap: Val::Px(50.),
+                    grid_template_columns: vec![RepeatedGridTrack::auto(3)],
                     ..default()
                 })
                 .with_children(|content| {
-                    content
-                        .spawn(ScrollingList::grid(3, 50.))
-                        .with_children(|scrolling_list| {
-                            for button in CollectionMenuButton::get_all() {
-                                scrolling_list
-                                    .spawn((CustomButton::menu_text(button.get_text()), button));
-                            }
-                        });
+                    for button in CollectionMenuButton::get_all() {
+                        content.spawn((CustomButton::menu(button.get_text()), button));
+                    }
                 });
         });
 }
@@ -77,8 +72,11 @@ fn handle_header_button_click(
 
 fn handle_menu_button_click(
     button_q: Query<(&Interaction, &CollectionMenuButton), Changed<Interaction>>,
+    mut commands: Commands,
 ) {
     for (interaction, button) in button_q.iter() {
-        if *interaction == Interaction::Pressed {}
+        if *interaction == Interaction::Pressed {
+            commands.spawn(button.get_sub_menu());
+        }
     }
 }

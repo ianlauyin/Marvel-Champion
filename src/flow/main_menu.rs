@@ -36,7 +36,7 @@ const BUTTON_MAP: [(MainMenuButton, &str); 3] = [
 fn spawn_main_menu(mut commands: Commands) {
     commands.spawn(MainContainer).with_children(|main_menu| {
         for (button_component, text) in BUTTON_MAP {
-            main_menu.spawn((button_component, CustomButton::menu_text(text)));
+            main_menu.spawn((button_component, CustomButton::menu(text)));
         }
     });
 }

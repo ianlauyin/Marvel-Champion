@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, ui::FocusPolicy};
 
 #[derive(Component)]
 pub struct MainContainer;
@@ -27,5 +27,6 @@ fn on_main_container_added(trigger: Trigger<OnAdd, MainContainer>, mut commands:
         },
         BorderRadius::all(Val::Px(10.)),
         BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
+        FocusPolicy::Block,
     ));
 }

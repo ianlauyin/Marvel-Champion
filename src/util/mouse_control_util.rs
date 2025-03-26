@@ -1,4 +1,4 @@
-use bevy::{prelude::*, time::Stopwatch};
+use bevy::{prelude::*, time::Stopwatch, window::PrimaryWindow};
 
 #[derive(Component, Clone)]
 #[require(Interaction)]
@@ -44,9 +44,8 @@ pub fn listen_mouse_click(
     commands: Commands,
     time: Res<Time>,
     mut mouse_target_q: Query<(Entity, &Interaction, &mut MouseControl)>,
-    window_q: Query<&Window>,
+    window: Single<&Window, With<PrimaryWindow>>,
 ) {
-    let window = window_q.get_single().unwrap();
     let Some(cursor_position) = window.cursor_position() else {
         return;
     };

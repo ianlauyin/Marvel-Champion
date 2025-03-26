@@ -53,10 +53,12 @@ fn on_container_header_added(
         .entity(trigger.entity())
         .insert(Node {
             width: Val::Percent(100.),
-            padding: UiRect::horizontal(Val::Px(5.)),
+            height: Val::Px(100.),
+            margin: UiRect::horizontal(Val::Px(5.)),
             display: Display::Flex,
             align_items: AlignItems::Center,
             justify_content: JustifyContent::SpaceBetween,
+            align_self: AlignSelf::FlexStart,
             ..default()
         })
         .with_children(|parent| {
