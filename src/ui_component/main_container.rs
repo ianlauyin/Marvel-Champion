@@ -26,7 +26,7 @@ fn on_main_container_added(trigger: Trigger<OnAdd, MainContainer>, mut commands:
             ..default()
         },
         BorderRadius::all(Val::Px(10.)),
-        BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
+        BackgroundColor::from(Color::BLACK.with_alpha(0.9999)),
         FocusPolicy::Block,
     ));
 }

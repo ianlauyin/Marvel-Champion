@@ -1,3 +1,4 @@
+use bevy::color::Color;
 use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::cards::data::identity_set;
@@ -103,7 +104,12 @@ impl SetTrait for IdentitySet {
             Self::CoreBlackPanther => identity_set::core_black_panther::get_cards(),
         }
     }
+
     fn get_thumbnail_key(&self) -> Option<String> {
         Some(format!("identity_set/{}", self.get_key()))
+    }
+
+    fn get_color(&self) -> Option<Color> {
+        None
     }
 }

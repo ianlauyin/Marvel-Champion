@@ -28,8 +28,8 @@ struct DevtoolWindow;
 
 const DEFAULT_SIZE: (f32, f32) = (320., 600.);
 
-fn spawn_devtool_window(world: &mut World) {
-    world.spawn((
+fn spawn_devtool_window(mut commands: Commands) {
+    commands.spawn((
         DevtoolWindow,
         Window {
             title: "Devtool".to_string(),

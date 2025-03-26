@@ -13,7 +13,7 @@ impl ScrollingList {
     pub fn grid(column: u16, spacing: f32) -> Self {
         Self {
             node: Node {
-                align_self: AlignSelf::Stretch,
+                width: Val::Percent(100.),
                 overflow: Overflow::scroll_y(),
                 display: Display::Grid,
                 column_gap: Val::Px(spacing),

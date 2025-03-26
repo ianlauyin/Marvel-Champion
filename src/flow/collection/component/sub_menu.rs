@@ -3,9 +3,11 @@ use bevy::prelude::*;
 use crate::{
     cards::*,
     flow::state::AppState,
+    resource::AssetLoader,
     ui_component::{
         ContainerHeader, ContainerHeaderEvent, CustomButton, MainContainer, ScrollingList,
     },
+    util::UiUtils,
 };
 
 #[derive(Component)]
@@ -46,16 +48,18 @@ fn on_sub_menu_added(
     trigger: Trigger<OnAdd, SubMenu>,
     mut commands: Commands,
     sub_menu_q: Query<&mut SubMenu>,
+    asset_loader: Res<AssetLoader>,
+    z_index_q: Query<&ZIndex>,
 ) {
     let sub_menu = sub_menu_q.get(trigger.entity()).unwrap();
     commands
         .entity(trigger.entity())
-        .insert(MainContainer)
+        .insert((MainContainer, UiUtils::get_largest_z_index(z_index_q)))
         .with_children(|container| {
             container.spawn(ContainerHeader::with_leading_button("X"));
             container
                 .spawn(Node {
-                    align_self: AlignSelf::Stretch,
+                    width: Val::Percent(100.),
                     justify_self: JustifySelf::Start,
                     flex_grow: 1.,
                     justify_content: JustifyContent::Center,
@@ -64,10 +68,19 @@ fn on_sub_menu_added(
                 })
                 .with_children(|content| {
                     content
-                        .spawn(ScrollingList::grid(3, 50.))
+                        .spawn(ScrollingList::grid(1, 50.))
                         .with_children(|scrolling_list| {
                             for set in sub_menu.get_sets() {
-                                scrolling_list.spawn(CustomButton::menu(set.to_str()));
+                                let mut button = CustomButton::menu(set.to_str());
+                                if let Some(color) = set.get_color() {
+                                    button.with_color(color);
+                                }
+                                if let Some(key) = set.get_thumbnail_key() {
+                                    if let Some(image) = asset_loader.get(&key) {
+                                        button.with_image(image.clone());
+                                    }
+                                }
+                                scrolling_list.spawn(button);
                             }
                         });
                 });

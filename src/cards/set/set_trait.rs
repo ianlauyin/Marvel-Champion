@@ -1,4 +1,7 @@
-use bevy::ecs::{entity::Entity, system::Commands};
+use bevy::{
+    color::Color,
+    ecs::{entity::Entity, system::Commands},
+};
 
 use crate::component::card::CardBasic;
 
@@ -11,4 +14,5 @@ pub trait SetTrait {
     fn to_str(&self) -> &str;
     fn get_key(&self) -> &str;
     fn get_thumbnail_key(&self) -> Option<String>;
+    fn get_color(&self) -> Option<Color>;
 }

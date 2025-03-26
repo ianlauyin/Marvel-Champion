@@ -1,4 +1,7 @@
-use bevy::ecs::{entity::Entity, system::Commands};
+use bevy::{
+    color::Color,
+    ecs::{entity::Entity, system::Commands},
+};
 
 use super::{super::data::aspect, set_trait::SetTrait};
 use crate::component::card::CardBasic;
@@ -90,5 +93,16 @@ impl SetTrait for Aspect {
 
     fn get_thumbnail_key(&self) -> Option<String> {
         None
+    }
+
+    fn get_color(&self) -> Option<Color> {
+        match *self {
+            Self::Basic => None,
+            Self::Justice => Some(Color::srgb(0.871, 0.941, 0.086)),
+            Self::Aggression => Some(Color::srgb(0.741, 0.192, 0.192)),
+            Self::Protection => Some(Color::srgb(0.075, 0.773, 0.075)),
+            Self::Leadership => Some(Color::srgb(0.125, 0.769, 0.882)),
+            Self::Pool => Some(Color::srgb(0.89, 0.149, 0.816)),
+        }
     }
 }

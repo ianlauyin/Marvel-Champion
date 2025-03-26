@@ -1,3 +1,4 @@
+use bevy::color::Color;
 use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::cards::data::scenario;
@@ -60,5 +61,9 @@ impl SetTrait for Scenario {
 
     fn get_thumbnail_key(&self) -> Option<String> {
         Some(format!("scenario/{}", self.get_key()))
+    }
+
+    fn get_color(&self) -> Option<Color> {
+        None
     }
 }

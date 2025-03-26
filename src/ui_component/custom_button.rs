@@ -63,6 +63,16 @@ impl CustomButton {
             },
         }
     }
+
+    pub fn with_image(&mut self, image: Handle<Image>) -> &mut Self {
+        self.image = ImageNode::new(image).with_color(Color::srgb(0.365, 0.365, 0.365));
+        self
+    }
+
+    pub fn with_color(&mut self, color: Color) -> &mut Self {
+        self.color = color;
+        self
+    }
 }
 
 fn handle_button_added(
@@ -95,7 +105,7 @@ fn handle_button_ui(
     mut commands: Commands,
     mut button_q: Query<(&mut BackgroundColor, &Interaction, &Children), With<CustomButton>>,
     mut text_color_q: Query<&mut TextColor>,
-    mut window: Single<Entity, With<PrimaryWindow>>,
+    window: Single<Entity, With<PrimaryWindow>>,
 ) {
     if button_q.is_empty() {
         return;

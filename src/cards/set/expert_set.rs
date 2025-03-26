@@ -1,3 +1,4 @@
+use bevy::color::Color;
 use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::cards::data::expert_set;
@@ -50,5 +51,9 @@ impl SetTrait for ExpertSet {
 
     fn get_thumbnail_key(&self) -> Option<String> {
         Some(format!("expert_set/{}", self.get_key()))
+    }
+
+    fn get_color(&self) -> Option<Color> {
+        None
     }
 }
