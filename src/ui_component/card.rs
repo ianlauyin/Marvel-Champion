@@ -1,20 +1,24 @@
 use bevy::prelude::*;
 
+use crate::util::UiUtils;
+
 #[derive(Component)]
 pub struct Card {
     image: Handle<Image>,
     size: Vec2,
+    is_vertical: bool,
 }
 
-pub const CARD_SIZE_SMALL: Vec2 = Vec2::new(64., 89.);
-pub const CARD_SIZE_MEDIUM: Vec2 = Vec2::new(128., 178.);
-pub const CARD_SIZE_LARGE: Vec2 = Vec2::new(362., 503.);
+const CARD_SIZE_SMALL: Vec2 = Vec2::new(64., 89.);
+const CARD_SIZE_MEDIUM: Vec2 = Vec2::new(128., 178.);
+const CARD_SIZE_LARGE: Vec2 = Vec2::new(362., 503.);
 
 impl Card {
     pub fn small(image: Handle<Image>) -> Self {
         Self {
             image,
             size: CARD_SIZE_SMALL,
+            is_vertical: true,
         }
     }
 
@@ -22,13 +26,15 @@ impl Card {
         Self {
             image,
             size: CARD_SIZE_MEDIUM,
+            is_vertical: true,
         }
     }
 
-    pub fn large(image: Handle<Image>) -> Self {
+    pub fn large(image: Handle<Image>, is_vertical: bool) -> Self {
         Self {
             image,
             size: CARD_SIZE_LARGE,
+            is_vertical,
         }
     }
 }
@@ -45,10 +51,20 @@ fn on_card_added(trigger: Trigger<OnAdd, Card>, mut commands: Commands, card_q: 
     commands.entity(trigger.entity()).insert((
         ImageNode::new(card.image.clone()),
         Node {
+            align_self: AlignSelf::Center,
+            justify_self: JustifySelf::Center,
             width: Val::Px(card.size.x),
             height: Val::Px(card.size.y),
             ..default()
         },
-        BorderRadius::all(Val::Px(6.)),
+        Transform::from_rotation(Quat::from_axis_angle(
+            Vec3::Z,
+            if card.is_vertical {
+                0.
+            } else {
+                UiUtils::angle_to_radian(90.)
+            },
+        )),
+        BorderRadius::all(Val::Percent(5.)),
     ));
 }

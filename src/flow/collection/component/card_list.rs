@@ -3,7 +3,9 @@ use bevy::prelude::*;
 use crate::{
     component::card::CardBasic,
     resource::AssetLoader,
-    ui_component::{Card, ContainerHeader, ContainerHeaderEvent, MainContainer, ScrollingList},
+    ui_component::{
+        Card, CardDetailButton, ContainerHeader, ContainerHeaderEvent, MainContainer, ScrollingList,
+    },
 };
 
 #[derive(Component)]
@@ -56,8 +58,9 @@ fn on_card_list_added(
                                         align_items: AlignItems::Center,
                                         ..default()
                                     })
-                                    .with_child(Card::medium(
-                                        asset_loader.get(&card.get_key()).clone(),
+                                    .with_child((
+                                        Card::medium(asset_loader.get(&card.get_key()).clone()),
+                                        CardDetailButton::new(card.get_key(), card.is_vertical),
                                     ));
                             }
                         });

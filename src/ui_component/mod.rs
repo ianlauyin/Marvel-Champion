@@ -8,7 +8,7 @@ mod node_moving;
 mod scrolling_list;
 
 pub use card::Card;
-// pub use card_detail::CardDetailButton;
+pub use card_detail::CardDetailButton;
 pub use container_header::{ContainerHeader, ContainerHeaderEvent};
 pub use custom_button::CustomButton;
 pub use loading_screen::LoadingScreen;
@@ -30,7 +30,7 @@ impl Plugin for UiComponentPlugin {
             custom_button::MenuButtonPlugin,
             scrolling_list::ScrollingListPlugin,
             card::CardPlugin,
-            // card_detail::CardDetailPlugin,
+            card_detail::CardDetailPlugin,
         ));
     }
 }

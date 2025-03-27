@@ -18,8 +18,4 @@ impl CardBasic<'_> {
         let belong_key = self.belongs.get_key();
         format!("cards/{belong_key}/{}", self.id)
     }
-
-    pub fn is_vertical(&self) -> bool {
-        self.is_vertical
-    }
 }
