@@ -9,6 +9,7 @@ pub fn get_info() -> CardBasic<'static> {
         unique: false,
         card_amount_max: 2,
         belongs: Belong::IdentitySet(IdentitySet::CoreIronMan).into(),
+        is_vertical: true,
     }
 }
 
@@ -18,6 +19,10 @@ pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
 
 fn spawn_bundle(mut commands: Commands) -> Entity {
     commands
-        .spawn((get_info(), EncounterCardType::Treachery, CardBoost::amount(0)))
+        .spawn((
+            get_info(),
+            EncounterCardType::Treachery,
+            CardBoost::amount(0),
+        ))
         .id()
 }

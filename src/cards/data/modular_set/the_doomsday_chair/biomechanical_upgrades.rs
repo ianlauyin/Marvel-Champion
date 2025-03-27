@@ -10,6 +10,7 @@ pub fn get_info() -> CardBasic<'static> {
         unique: true,
         card_amount_max: 3,
         belongs: Belong::ModularSet(ModularSet::TheDoomsdayChair).into(),
+        is_vertical: true,
     }
 }
 

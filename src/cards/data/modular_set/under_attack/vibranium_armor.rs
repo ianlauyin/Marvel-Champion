@@ -9,6 +9,7 @@ pub fn get_info() -> CardBasic<'static> {
         unique: false,
         card_amount_max: 1,
         belongs: Belong::ModularSet(ModularSet::UnderAttack).into(),
+        is_vertical: true,
     }
 }
 

@@ -10,6 +10,7 @@ pub fn get_info() -> CardBasic<'static> {
         unique: false,
         card_amount_max: 1,
         belongs: Belong::ModularSet(ModularSet::BombScare).into(),
+        is_vertical: false,
     }
 }
 
@@ -21,7 +22,7 @@ fn spawn_bundle(mut commands: Commands) -> Entity {
     commands
         .spawn((
             get_info(),
-            EncounterCardType::Treachery,
+            EncounterCardType::SideScheme,
             CardBoost::amount(2),
             CardIcons::acceleration(),
             CardScheme::new(Count::Constant(2)),

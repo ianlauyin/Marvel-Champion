@@ -9,6 +9,7 @@ pub fn get_info() -> CardBasic<'static> {
         unique: false,
         card_amount_max: 2,
         belongs: Belong::IdentitySet(IdentitySet::CoreSpiderMan).into(),
+        is_vertical: true,
     }
 }
 

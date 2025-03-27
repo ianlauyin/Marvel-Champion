@@ -10,6 +10,7 @@ pub fn get_info() -> CardBasic<'static> {
         unique: false,
         card_amount_max: 2,
         belongs: Belong::Aspect(Aspect::Protection).into(),
+        is_vertical: true,
     }
 }
 

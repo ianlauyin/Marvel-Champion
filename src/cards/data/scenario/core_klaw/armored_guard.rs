@@ -10,6 +10,7 @@ pub fn get_info() -> CardBasic<'static> {
         unique: false,
         card_amount_max: 3,
         belongs: Belong::Scenario(Scenario::CoreKlaw).into(),
+        is_vertical: true,
     }
 }
 

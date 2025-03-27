@@ -10,6 +10,7 @@ pub struct CardBasic<'a> {
     pub unique: bool,
     pub card_amount_max: u8,
     pub belongs: Belongs,
+    pub is_vertical: bool,
 }
 
 impl CardBasic<'_> {
@@ -17,9 +18,8 @@ impl CardBasic<'_> {
         let belong_key = self.belongs.get_key();
         format!("cards/{belong_key}/{}", self.id)
     }
-}
 
-#[derive(Clone)]
-pub struct Card {
-    // ... existing code ...
+    pub fn is_vertical(&self) -> bool {
+        self.is_vertical
+    }
 }

@@ -9,6 +9,7 @@ pub fn get_info() -> CardBasic<'static> {
         unique: false,
         card_amount_max: 1,
         belongs: Belong::IdentitySet(IdentitySet::CoreBlackPanther).into(),
+        is_vertical: true,
     }
 }
 
@@ -18,6 +19,10 @@ pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
 
 fn spawn_bundle(mut commands: Commands) -> Entity {
     commands
-        .spawn((get_info(), EncounterCardType::Obligation, CardBoost::amount(2)))
+        .spawn((
+            get_info(),
+            EncounterCardType::Obligation,
+            CardBoost::amount(2),
+        ))
         .id()
 }
