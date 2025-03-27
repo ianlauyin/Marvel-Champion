@@ -1,24 +1,24 @@
+use crate::cards::{IdentitySet, SetTrait};
 use bevy::prelude::*;
 use bevy_pkv::PkvStore;
-use serde::{Deserialize, Serialize};
 
-use crate::features::cards::Identity;
+use super::Deck;
 
-pub struct DecksStorage<'a> {
-    identity: Identity,
+pub struct DecksStorageUtil<'a> {
+    identity: IdentitySet,
     pkv: ResMut<'a, PkvStore>,
 }
 
-impl<'a> DecksStorage<'a> {
-    pub fn new(identity: &Identity, pkv: ResMut<'a, PkvStore>) -> Self {
+impl<'a> DecksStorageUtil<'a> {
+    pub fn init(identity: &IdentitySet, pkv: ResMut<'a, PkvStore>) -> Self {
         Self {
             identity: identity.clone(),
             pkv,
         }
     }
 
-    pub fn get_decks(&mut self) -> Vec<StorageDeck> {
-        if let Ok(decks) = self.pkv.get::<Vec<StorageDeck>>(self.identity.get_key()) {
+    pub fn get_decks(&mut self) -> Vec<Deck> {
+        if let Ok(decks) = self.pkv.get::<Vec<Deck>>(self.identity.get_key()) {
             decks
         } else {
             self.init_identity();
@@ -26,44 +26,38 @@ impl<'a> DecksStorage<'a> {
         }
     }
 
-    pub fn save_deck(&mut self, deck: StorageDeck, index: usize) {
+    pub fn save_deck(&mut self, deck: Deck) {
         let mut decks = self.get_decks();
-        decks[index] = deck;
+        if let Some(index) = decks
+            .iter()
+            .position(|existing_deck| existing_deck.id == deck.id)
+        {
+            decks[index] = deck;
+        } else {
+            decks.push(deck);
+        }
         self.pkv
             .set(self.identity.get_key(), &decks)
             .expect("Failed to add deck.");
     }
 
-    pub fn add_deck(&mut self, deck: StorageDeck) {
+    pub fn remove_deck(&mut self, id: String) {
         let mut decks = self.get_decks();
-        decks.push(deck);
-        self.pkv
-            .set(self.identity.get_key(), &decks)
-            .expect("Failed to add deck.");
-    }
-
-    pub fn remove_deck(&mut self, index: usize) {
-        let mut decks = self.get_decks();
+        let Some(index) = decks.iter().position(|deck| deck.id == id) else {
+            warn!("Deck not found id: {}", id);
+            return;
+        };
         decks.remove(index);
         self.pkv
             .set(self.identity.get_key(), &decks)
-            .expect("Failed to add deck.");
+            .expect("Failed to remove deck.");
     }
 
     fn init_identity(&mut self) {
         self.pkv
-            .set(self.identity.get_key(), &Vec::<StorageDeck>::new())
+            .set(self.identity.get_key(), &Vec::<Deck>::new())
             .expect("Failed to init decks.");
     }
-}
-
-#[derive(Resource, Serialize, Deserialize)]
-struct Decks(Vec<StorageDeck>);
-
-#[derive(Serialize, Deserialize, Clone)]
-pub struct StorageDeck {
-    pub name: String,
-    pub card_ids: Vec<String>,
 }
 
 pub struct DecksStoragePlugin;

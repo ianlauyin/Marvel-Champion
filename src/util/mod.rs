@@ -1,12 +1,13 @@
+mod deck;
 mod system_util;
-// mod decks_storage_util;
 // mod deck_validator;
 mod devtool;
 mod mouse_control_util;
 mod ui_util;
 
-pub use system_util::SystemUtil;
+pub use deck::{Deck, DecksStorageUtil};
 pub use mouse_control_util::{MouseControl, MouseControlEvent};
+pub use system_util::SystemUtil;
 pub use ui_util::UiUtils;
 
 pub struct UtilPlugin;
@@ -16,6 +17,7 @@ impl bevy::app::Plugin for UtilPlugin {
         app.add_plugins((
             mouse_control_util::MouseControlUtilPlugin,
             devtool::DevtoolPlugin,
+            deck::DeckPlugin,
         ));
     }
 }

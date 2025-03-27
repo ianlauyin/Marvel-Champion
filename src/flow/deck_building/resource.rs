@@ -1,13 +1,16 @@
 use bevy::prelude::*;
 
-use crate::{cards::IdentitySet, flow::state::AppState};
+use crate::{cards::IdentitySet, flow::state::AppState, util::Deck};
 
-#[derive(Resource)]
-pub struct SelectedIdentity(Option<IdentitySet>);
+#[derive(Resource, Default)]
+pub struct DeckBuildingResource {
+    pub identity: Option<IdentitySet>,
+    pub deck: Option<Deck>,
+}
 
-impl SelectedIdentity {
-    pub fn set(&mut self, identity: IdentitySet) {
-        self.0 = Some(identity);
+impl DeckBuildingResource {
+    pub fn set_identity(&mut self, identity: IdentitySet) {
+        self.identity = Some(identity);
     }
 }
 
@@ -23,9 +26,9 @@ impl Plugin for DeckBuildingResourcePlugin {
 }
 
 fn init_resources(mut commands: Commands) {
-    commands.insert_resource(SelectedIdentity(None));
+    commands.insert_resource(DeckBuildingResource::default());
 }
 
 fn cleanup_resources(mut commands: Commands) {
-    commands.remove_resource::<SelectedIdentity>();
+    commands.remove_resource::<DeckBuildingResource>();
 }
