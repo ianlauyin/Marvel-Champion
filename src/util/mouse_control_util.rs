@@ -33,8 +33,7 @@ pub struct MouseControlUtilPlugin;
 
 impl Plugin for MouseControlUtilPlugin {
     fn build(&self, app: &mut App) {
-        app.add_event::<MouseControlEvent>()
-            .add_systems(Update, listen_mouse_click);
+        app.add_systems(Update, listen_mouse_click);
     }
 }
 

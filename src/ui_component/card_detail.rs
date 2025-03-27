@@ -1,11 +1,15 @@
-use bevy::{input::common_conditions::input_just_pressed, prelude::*, ui::FocusPolicy};
+use bevy::{prelude::*, ui::FocusPolicy};
 
-use crate::{constant::WINDOW_RESOLUTION, resource::AssetLoader, util::UiUtils};
+use crate::{
+    constant::WINDOW_RESOLUTION,
+    resource::AssetLoader,
+    util::{MouseControl, MouseControlEvent, UiUtils},
+};
 
 use super::{Card, ContainerHeader, ContainerHeaderEvent};
 
 #[derive(Component)]
-#[require(Interaction)]
+#[require(MouseControl)]
 pub struct CardDetailButton {
     image_key: String,
     is_vertical: bool,
@@ -24,10 +28,7 @@ pub struct CardDetailPlugin;
 impl Plugin for CardDetailPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Update, (handle_header_button_click, on_drag))
-            .add_systems(
-                Update,
-                listen_card_detail_button_click.run_if(input_just_pressed(MouseButton::Left)),
-            );
+            .add_observer(listen_card_detail_button_click);
     }
 }
 
@@ -36,23 +37,26 @@ impl Plugin for CardDetailPlugin {
 struct CardDetail;
 
 fn listen_card_detail_button_click(
-    card_detail_button_q: Query<(&Interaction, &CardDetailButton)>,
+    trigger: Trigger<MouseControlEvent>,
+    card_detail_button_q: Query<&CardDetailButton>,
     commands: Commands,
     asset_loader: Res<AssetLoader>,
     z_index_q: Query<&ZIndex>,
 ) {
-    for (interaction, card_detail_button) in card_detail_button_q.iter() {
-        if *interaction == Interaction::Pressed {
-            spawn_card_detail(
-                commands,
-                Card::large(
-                    asset_loader.get(&card_detail_button.image_key).clone(),
-                    card_detail_button.is_vertical,
-                ),
-                UiUtils::get_largest_z_index(z_index_q),
-            );
-            return;
+    match trigger.event() {
+        MouseControlEvent::ShortClick(entity) => {
+            if let Ok(card_detail_button) = card_detail_button_q.get(*entity) {
+                spawn_card_detail(
+                    commands,
+                    Card::large(
+                        asset_loader.get(&card_detail_button.image_key).clone(),
+                        card_detail_button.is_vertical,
+                    ),
+                    UiUtils::get_largest_z_index(z_index_q),
+                );
+            }
         }
+        _ => {}
     }
 }
 
