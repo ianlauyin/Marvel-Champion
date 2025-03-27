@@ -13,10 +13,10 @@ impl ScrollingList {
     pub fn grid(column: u16, spacing: f32) -> Self {
         Self {
             node: Node {
+                align_self: AlignSelf::Stretch,
                 width: Val::Percent(100.),
                 overflow: Overflow::scroll_y(),
                 display: Display::Grid,
-                column_gap: Val::Px(spacing),
                 row_gap: Val::Px(spacing),
                 grid_template_columns: vec![RepeatedGridTrack::auto(column)],
                 ..default()
@@ -48,16 +48,30 @@ fn on_scrolling_list_added(
 fn on_scrolling_list_children_changed(
     mut commands: Commands,
     scrolling_list_children_q: Query<&Children, (With<ScrollingList>, Changed<Children>)>,
+    children_q: Query<&Children>,
 ) {
     for children in scrolling_list_children_q.iter() {
-        for child in children.iter() {
-            commands.entity(*child).insert(PickingBehavior {
-                is_hoverable: true,
-                should_block_lower: false,
-            });
+        add_picking_behavior(commands.reborrow(), children, &children_q);
+    }
+}
+
+fn add_picking_behavior(
+    mut commands: Commands,
+    children: &Children,
+    children_q: &Query<&Children>,
+) {
+    for child in children.iter() {
+        commands.entity(*child).insert(PickingBehavior {
+            is_hoverable: true,
+            should_block_lower: false,
+        });
+
+        if let Ok(grandchildren) = children_q.get(*child) {
+            add_picking_behavior(commands.reborrow(), grandchildren, children_q);
         }
     }
 }
+
 const LINE_HEIGHT: f32 = 21.;
 fn on_scroll(
     mut mouse_wheel_events: EventReader<MouseWheel>,

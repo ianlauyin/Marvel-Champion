@@ -64,14 +64,12 @@ impl CustomButton {
         }
     }
 
-    pub fn with_image(&mut self, image: Handle<Image>) -> &mut Self {
+    pub fn set_image(&mut self, image: Handle<Image>) {
         self.image = ImageNode::new(image).with_color(Color::srgb(0.365, 0.365, 0.365));
-        self
     }
 
-    pub fn with_color(&mut self, color: Color) -> &mut Self {
+    pub fn set_color(&mut self, color: Color) {
         self.color = color;
-        self
     }
 }
 

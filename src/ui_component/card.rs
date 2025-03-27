@@ -7,6 +7,7 @@ pub struct Card {
 }
 
 pub const CARD_SIZE_SMALL: Vec2 = Vec2::new(64., 89.);
+pub const CARD_SIZE_MEDIUM: Vec2 = Vec2::new(128., 178.);
 pub const CARD_SIZE_LARGE: Vec2 = Vec2::new(362., 503.);
 
 impl Card {
@@ -14,6 +15,13 @@ impl Card {
         Self {
             image,
             size: CARD_SIZE_SMALL,
+        }
+    }
+
+    pub fn medium(image: Handle<Image>) -> Self {
+        Self {
+            image,
+            size: CARD_SIZE_MEDIUM,
         }
     }
 
@@ -41,5 +49,6 @@ fn on_card_added(trigger: Trigger<OnAdd, Card>, mut commands: Commands, card_q: 
             height: Val::Px(card.size.y),
             ..default()
         },
+        BorderRadius::all(Val::Px(6.)),
     ));
 }

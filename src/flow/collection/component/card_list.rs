@@ -4,19 +4,14 @@ use crate::{
     component::card::CardBasic,
     resource::AssetLoader,
     ui_component::{Card, ContainerHeader, ContainerHeaderEvent, MainContainer, ScrollingList},
-    util::UiUtils,
 };
 
 #[derive(Component)]
-pub struct CardList(Vec<CardBasic<'static>>);
+pub struct CollectionCardList(Vec<CardBasic<'static>>);
 
-impl CardList {
+impl CollectionCardList {
     pub fn new(cards: Vec<CardBasic<'static>>) -> Self {
         Self(cards)
-    }
-
-    fn get_cards(&self) -> &Vec<CardBasic<'static>> {
-        &self.0
     }
 }
 
@@ -30,22 +25,20 @@ impl Plugin for CardListPlugin {
 }
 
 fn on_card_list_added(
-    trigger: Trigger<OnAdd, CardList>,
+    trigger: Trigger<OnAdd, CollectionCardList>,
     mut commands: Commands,
-    card_list_q: Query<&CardList>,
-    z_index_q: Query<&ZIndex>,
+    card_list_q: Query<&CollectionCardList>,
     asset_loader: Res<AssetLoader>,
 ) {
     let card_list = card_list_q.get(trigger.entity()).unwrap();
     commands
         .entity(trigger.entity())
-        .insert((MainContainer, UiUtils::get_largest_z_index(z_index_q)))
+        .insert(MainContainer::new())
         .with_children(|container| {
             container.spawn(ContainerHeader::with_leading_button("X"));
             container
                 .spawn(Node {
                     width: Val::Percent(100.),
-                    justify_self: JustifySelf::Start,
                     flex_grow: 1.,
                     justify_content: JustifyContent::Center,
                     overflow: Overflow::scroll_y(),
@@ -53,11 +46,19 @@ fn on_card_list_added(
                 })
                 .with_children(|content| {
                     content
-                        .spawn(ScrollingList::grid(7, 10.))
+                        .spawn(ScrollingList::grid(8, 20.))
                         .with_children(|scrolling_list| {
-                            for card in card_list.get_cards() {
+                            for card in card_list.0.clone() {
                                 scrolling_list
-                                    .spawn(Card::small(asset_loader.get(&card.get_key()).clone()));
+                                    .spawn(Node {
+                                        display: Display::Flex,
+                                        justify_content: JustifyContent::Center,
+                                        align_items: AlignItems::Center,
+                                        ..default()
+                                    })
+                                    .with_child(Card::medium(
+                                        asset_loader.get(&card.get_key()).clone(),
+                                    ));
                             }
                         });
                 });
@@ -67,7 +68,7 @@ fn on_card_list_added(
 fn handle_header_button_click(
     mut event_reader: EventReader<ContainerHeaderEvent>,
     mut commands: Commands,
-    menu_q: Query<(Entity, &Children), With<CardList>>,
+    menu_q: Query<(Entity, &Children), With<CollectionCardList>>,
 ) {
     for event in event_reader.read() {
         for (entity, card_list_children) in menu_q.iter() {

@@ -32,7 +32,7 @@ struct CollectionMenu;
 
 fn spawn_menu(mut commands: Commands) {
     commands
-        .spawn((MainContainer, CollectionMenu))
+        .spawn((MainContainer::new(), CollectionMenu))
         .with_children(|parent| {
             parent.spawn(ContainerHeader::with_leading_button("<"));
             parent
