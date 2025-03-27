@@ -1,4 +1,5 @@
 mod collection;
+mod deck_building;
 mod loading;
 mod main_menu;
 mod setup;
@@ -15,6 +16,7 @@ impl Plugin for FlowPlugin {
             loading::LoadingPlugin,
             main_menu::MainMenuPlugin,
             collection::CollectionPlugin,
+            deck_building::DeckBuildingPlugin,
         ));
     }
 }

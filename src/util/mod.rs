@@ -1,11 +1,11 @@
-mod component_util;
+mod system_util;
 // mod decks_storage_util;
 // mod deck_validator;
 mod devtool;
 mod mouse_control_util;
 mod ui_util;
 
-pub use component_util::ComponentUtil;
+pub use system_util::SystemUtil;
 pub use mouse_control_util::{MouseControl, MouseControlEvent};
 pub use ui_util::UiUtils;
 

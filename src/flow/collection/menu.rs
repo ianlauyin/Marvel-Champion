@@ -3,12 +3,10 @@ use bevy::prelude::*;
 use crate::{
     flow::state::AppState,
     ui_component::{ContainerHeader, ContainerHeaderEvent, CustomButton, MainContainer},
-    util::ComponentUtil,
+    util::SystemUtil,
 };
 
-use super::component::CollectionMenuButton;
-
-const CURRENT_STATE: AppState = AppState::Collection;
+use super::{component::CollectionMenuButton, CURRENT_STATE};
 
 pub struct CollectionMenuPlugin;
 
@@ -22,7 +20,7 @@ impl Plugin for CollectionMenuPlugin {
             )
             .add_systems(
                 OnExit(CURRENT_STATE),
-                ComponentUtil::cleanup_all::<CollectionMenu>,
+                SystemUtil::cleanup_all::<CollectionMenu>,
             );
     }
 }
@@ -75,9 +73,7 @@ fn handle_menu_button_click(
     button_q: Query<(&Interaction, &CollectionMenuButton), Changed<Interaction>>,
     mut commands: Commands,
 ) {
-    for (interaction, button) in button_q.iter() {
-        if *interaction == Interaction::Pressed {
-            commands.spawn(button.get_sub_menu());
-        }
-    }
+    SystemUtil::handle_button_click(button_q, |button| {
+        commands.spawn(button.get_sub_menu());
+    });
 }

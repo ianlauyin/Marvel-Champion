@@ -6,8 +6,10 @@ use crate::{
     ui_component::{
         ContainerHeader, ContainerHeaderEvent, CustomButton, MainContainer, ScrollingList,
     },
+    util::SystemUtil,
 };
 
+use super::super::CURRENT_STATE;
 use super::{card_list::CollectionCardList, SubMenuButton};
 
 #[derive(Component)]
@@ -39,7 +41,8 @@ impl Plugin for SubMenuPlugin {
     fn build(&self, app: &mut App) {
         app.add_observer(on_sub_menu_added).add_systems(
             Update,
-            (handle_sub_menu_button_click, handle_header_button_click),
+            (handle_sub_menu_button_click, handle_header_button_click)
+                .run_if(in_state(CURRENT_STATE)),
         );
     }
 }
@@ -104,15 +107,10 @@ fn handle_header_button_click(
 
 fn handle_sub_menu_button_click(
     mut commands: Commands,
-    sub_menu_button_q: Query<(&Interaction, &SubMenuButton)>,
-    keys: Res<ButtonInput<MouseButton>>,
+    sub_menu_button_q: Query<(&Interaction, &SubMenuButton), Changed<Interaction>>,
 ) {
-    if keys.just_pressed(MouseButton::Left) {
-        for (interaction, sub_menu_button) in sub_menu_button_q.iter() {
-            if *interaction == Interaction::Pressed {
-                commands.spawn(CollectionCardList::new(sub_menu_button.get_cards_info()));
-                return;
-            }
-        }
-    }
+    SystemUtil::handle_button_click(sub_menu_button_q, |sub_menu_button| {
+        commands.spawn(CollectionCardList::new(sub_menu_button.get_cards_info()));
+        return;
+    });
 }

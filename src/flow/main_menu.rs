@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::{
     ui_component::{CustomButton, MainContainer},
-    util::ComponentUtil,
+    util::SystemUtil,
 };
 
 use super::state::AppState;
@@ -19,7 +19,7 @@ impl Plugin for MainMenuPlugin {
             )
             .add_systems(
                 OnExit(CURRENT_STATE),
-                ComponentUtil::cleanup_all::<MainContainer>,
+                SystemUtil::cleanup_all::<MainContainer>,
             );
     }
 }
@@ -45,12 +45,9 @@ fn spawn_main_menu(mut commands: Commands) {
 
 fn handle_button_reaction(
     mut next_state: ResMut<NextState<AppState>>,
-    mut main_menu_button_q: Query<(&Interaction, &MainMenuButton)>,
+    main_menu_button_q: Query<(&Interaction, &MainMenuButton), Changed<Interaction>>,
 ) {
-    for (interaction, main_menu_button) in main_menu_button_q.iter_mut() {
-        if *interaction == Interaction::Pressed {
-            next_state.set(main_menu_button.0.clone());
-            return;
-        }
-    }
+    SystemUtil::handle_button_click(main_menu_button_q, |main_menu_button| {
+        next_state.set(main_menu_button.0.clone());
+    });
 }

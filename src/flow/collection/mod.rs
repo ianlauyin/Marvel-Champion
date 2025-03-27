@@ -3,6 +3,10 @@ mod menu;
 
 use bevy::prelude::*;
 
+use super::state::AppState;
+
+const CURRENT_STATE: AppState = AppState::Collection;
+
 pub struct CollectionPlugin;
 
 impl Plugin for CollectionPlugin {

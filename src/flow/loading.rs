@@ -2,7 +2,7 @@ use std::sync::LazyLock;
 
 use bevy::prelude::*;
 
-use crate::{cards::*, resource::AssetLoader, ui_component::LoadingScreen, util::ComponentUtil};
+use crate::{cards::*, resource::AssetLoader, ui_component::LoadingScreen, util::SystemUtil};
 
 use super::state::AppState;
 
@@ -43,7 +43,7 @@ impl Plugin for LoadingPlugin {
             .add_systems(Update, check_assets.run_if(in_state(CURRENT_STATE)))
             .add_systems(
                 OnExit(CURRENT_STATE),
-                ComponentUtil::cleanup_all::<LoadingScreen>,
+                SystemUtil::cleanup_all::<LoadingScreen>,
             );
     }
 }
