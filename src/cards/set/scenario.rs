@@ -43,7 +43,7 @@ impl SetTrait for Scenario {
         }
     }
 
-    fn get_card_infos(&self) -> Vec<CardBasic> {
+    fn get_card_infos(&self) -> Vec<CardBasic<'static>> {
         match *self {
             Self::CoreRhino => scenario::core_rhino::get_infos(),
             Self::CoreKlaw => scenario::core_klaw::get_infos(),

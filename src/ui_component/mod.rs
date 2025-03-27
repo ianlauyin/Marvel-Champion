@@ -1,3 +1,4 @@
+mod card;
 mod container_header;
 mod custom_button;
 mod loading_screen;
@@ -5,6 +6,7 @@ mod main_container;
 mod node_moving;
 mod scrolling_list;
 
+pub use card::Card;
 pub use container_header::{ContainerHeader, ContainerHeaderEvent};
 pub use custom_button::CustomButton;
 pub use loading_screen::LoadingScreen;
@@ -25,6 +27,7 @@ impl Plugin for UiComponentPlugin {
             node_moving::NodeMovingPlugin,
             custom_button::MenuButtonPlugin,
             scrolling_list::ScrollingListPlugin,
+            card::CardPlugin,
         ));
     }
 }

@@ -85,7 +85,7 @@ impl SetTrait for IdentitySet {
         }
     }
 
-    fn get_card_infos(&self) -> Vec<CardBasic> {
+    fn get_card_infos(&self) -> Vec<CardBasic<'static>> {
         match *self {
             Self::CoreSpiderMan => identity_set::core_spider_man::get_infos(),
             Self::CoreCaptainMarvel => identity_set::core_captain_marvel::get_infos(),

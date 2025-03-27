@@ -79,9 +79,7 @@ fn on_sub_menu_added(
                                     button.with_color(color);
                                 }
                                 if let Some(key) = set.get_thumbnail_key() {
-                                    if let Some(image) = asset_loader.get(&key) {
-                                        button.with_image(image.clone());
-                                    }
+                                    button.with_image(asset_loader.get(&key).clone());
                                 }
                                 scrolling_list.spawn((SubMenuButton::new(set), button));
                             }
@@ -114,6 +112,7 @@ fn handle_sub_menu_button_click(
 ) {
     for (interaction, sub_menu_button) in sub_menu_button_q.iter() {
         if *interaction == Interaction::Pressed {
+            commands.spawn(CardList::new(sub_menu_button.get_cards_info()));
             return;
         }
     }

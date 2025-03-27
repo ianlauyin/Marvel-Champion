@@ -18,3 +18,8 @@ impl CardBasic<'_> {
         format!("cards/{belong_key}/{}", self.id)
     }
 }
+
+#[derive(Clone)]
+pub struct Card {
+    // ... existing code ...
+}

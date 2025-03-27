@@ -37,7 +37,7 @@ impl SetTrait for ExpertSet {
         }
     }
 
-    fn get_card_infos(&self) -> Vec<CardBasic> {
+    fn get_card_infos(&self) -> Vec<CardBasic<'static>> {
         match *self {
             Self::Expert => expert_set::expert::get_infos(),
         }

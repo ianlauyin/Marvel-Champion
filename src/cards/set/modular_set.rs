@@ -55,7 +55,7 @@ impl SetTrait for ModularSet {
         }
     }
 
-    fn get_card_infos(&self) -> Vec<CardBasic> {
+    fn get_card_infos(&self) -> Vec<CardBasic<'static>> {
         match *self {
             Self::BombScare => modular_set::bomb_scare::get_infos(),
             Self::MastersOfEvil => modular_set::masters_of_evil::get_infos(),

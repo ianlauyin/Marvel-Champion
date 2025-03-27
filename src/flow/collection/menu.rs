@@ -59,11 +59,12 @@ fn handle_header_button_click(
     mut next_state: ResMut<NextState<AppState>>,
 ) {
     for event in event_reader.read() {
-        let menu_children = menu_q.single();
-        match event {
-            ContainerHeaderEvent::LeadingButtonPressed(entity) => {
-                if menu_children.contains(entity) {
-                    next_state.set(AppState::MainMenu);
+        for headers in menu_q.iter() {
+            match event {
+                ContainerHeaderEvent::LeadingButtonPressed(header_entity) => {
+                    if headers.contains(header_entity) {
+                        next_state.set(AppState::MainMenu);
+                    }
                 }
             }
         }

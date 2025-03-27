@@ -9,7 +9,7 @@ pub trait SetTrait: Sync + Send {
     fn get_boxed_all() -> Vec<Box<dyn SetTrait>>
     where
         Self: Sized;
-    fn get_card_infos(&self) -> Vec<CardBasic>;
+    fn get_card_infos(&self) -> Vec<CardBasic<'static>>;
     fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)>;
     fn to_str(&self) -> &str;
     fn get_key(&self) -> &str;
