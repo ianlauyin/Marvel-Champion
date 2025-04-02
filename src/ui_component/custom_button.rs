@@ -22,37 +22,40 @@ pub struct CustomButton {
 }
 
 impl CustomButton {
-    pub fn menu(text: &str) -> Self {
+    pub fn large(text: &str) -> Self {
+        let mut base = Self::base();
+        base.text = text.to_string();
+        base.node.width = Val::Px(300.);
+        base.node.height = Val::Px(100.);
+        base
+    }
+
+    pub fn medium(text: &str) -> Self {
+        let mut base = Self::base();
+        base.text = text.to_string();
+        base.node.width = Val::Px(150.);
+        base.node.height = Val::Px(50.);
+        base
+    }
+
+    pub fn square(text: &str) -> Self {
+        let mut base = Self::base();
+        base.text = text.to_string();
+        base.node.width = Val::Px(50.);
+        base.node.height = Val::Px(50.);
+        base.with_border = false;
+        base.color = Color::srgb(0.173, 0.173, 0.173);
+        base
+    }
+
+    fn base() -> Self {
         Self {
-            text: text.to_string(),
+            text: "".to_string(),
             text_color: Color::WHITE,
             color: Color::srgb(0.576, 0.576, 0.576),
             with_border: true,
             image: ImageNode::default(),
             node: Node {
-                width: Val::Px(300.),
-                height: Val::Px(100.),
-                border: UiRect::all(Val::Px(2.)),
-                display: Display::Flex,
-                justify_content: JustifyContent::Center,
-                align_items: AlignItems::Center,
-                justify_self: JustifySelf::Center,
-                align_self: AlignSelf::Center,
-                ..default()
-            },
-        }
-    }
-
-    pub fn square(text: &str) -> Self {
-        Self {
-            text: text.to_string(),
-            text_color: Color::WHITE,
-            color: Color::srgb(0.173, 0.173, 0.173),
-            with_border: false,
-            image: ImageNode::default(),
-            node: Node {
-                width: Val::Px(50.),
-                height: Val::Px(50.),
                 border: UiRect::all(Val::Px(2.)),
                 display: Display::Flex,
                 justify_content: JustifyContent::Center,

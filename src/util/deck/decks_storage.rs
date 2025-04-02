@@ -27,13 +27,16 @@ impl<'a> DecksStorageUtil<'a> {
     }
 
     pub fn save_deck(&mut self, deck: Deck) {
+        // TODO: Check if this deck valid.
         let mut decks = self.get_decks();
         if let Some(index) = decks
             .iter()
             .position(|existing_deck| existing_deck.id == deck.id)
         {
+            // Existing Deck
             decks[index] = deck;
         } else {
+            // New Deck
             decks.push(deck);
         }
         self.pkv
@@ -41,7 +44,7 @@ impl<'a> DecksStorageUtil<'a> {
             .expect("Failed to add deck.");
     }
 
-    pub fn remove_deck(&mut self, id: String) {
+    pub fn remove_deck(&mut self, id: &str) {
         let mut decks = self.get_decks();
         let Some(index) = decks.iter().position(|deck| deck.id == id) else {
             warn!("Deck not found id: {}", id);

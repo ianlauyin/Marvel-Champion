@@ -1,5 +1,6 @@
 use bevy::{prelude::*, window::WindowResolution};
 use bevy_embedded_assets::EmbeddedAssetPlugin;
+use bevy_simple_text_input::TextInputPlugin;
 use constant::WINDOW_RESOLUTION;
 
 mod cards;
@@ -20,6 +21,7 @@ fn main() {
             }),
             ..default()
         }))
+        .add_plugins(TextInputPlugin)
         .add_plugins(EmbeddedAssetPlugin::default())
         .add_plugins((
             flow::FlowPlugin,

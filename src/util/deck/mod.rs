@@ -21,6 +21,18 @@ impl Deck {
             card_ids: vec![],
         }
     }
+
+    pub fn get_name(&self) -> &str {
+        &self.name
+    }
+
+    pub fn set_name(&mut self, name: &str) {
+        self.name = name.to_string();
+    }
+
+    pub fn get_id(&self) -> &str {
+        &self.id
+    }
 }
 
 pub struct DeckPlugin;

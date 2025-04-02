@@ -61,7 +61,10 @@ fn add_picking_behavior(
     children_q: &Query<&Children>,
 ) {
     for child in children.iter() {
-        commands.entity(*child).insert(PickingBehavior {
+        let Some(mut entity_commands) = commands.get_entity(*child) else {
+            continue;
+        };
+        entity_commands.insert(PickingBehavior {
             is_hoverable: true,
             should_block_lower: false,
         });

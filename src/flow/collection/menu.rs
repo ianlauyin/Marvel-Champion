@@ -45,7 +45,7 @@ fn spawn_menu(mut commands: Commands) {
                 })
                 .with_children(|content| {
                     for button in CollectionMenuButton::get_all() {
-                        content.spawn((CustomButton::menu(button.get_text()), button));
+                        content.spawn((CustomButton::large(button.get_text()), button));
                     }
                 });
         });

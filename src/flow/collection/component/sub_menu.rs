@@ -73,7 +73,7 @@ fn on_sub_menu_added(
                         .spawn(ScrollingList::grid(3, 50.))
                         .with_children(|scrolling_list| {
                             for set in sub_menu.get_sets() {
-                                let mut button = CustomButton::menu(set.to_str());
+                                let mut button = CustomButton::large(set.to_str());
                                 if let Some(color) = set.get_color() {
                                     button.set_color(color);
                                 }

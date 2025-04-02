@@ -4,13 +4,50 @@ use crate::{cards::IdentitySet, flow::state::AppState, util::Deck};
 
 #[derive(Resource, Default)]
 pub struct DeckBuildingResource {
-    pub identity: Option<IdentitySet>,
-    pub deck: Option<Deck>,
+    identity: Option<IdentitySet>,
+    deck: Option<Deck>,
+}
+
+#[derive(PartialEq)]
+pub enum DeckBuildingState {
+    HeroMenu,
+    DeckMenu,
+    DeckEditor,
 }
 
 impl DeckBuildingResource {
+    pub fn get_state(&self) -> DeckBuildingState {
+        if self.identity.is_none() {
+            DeckBuildingState::HeroMenu
+        } else if self.deck.is_none() {
+            DeckBuildingState::DeckMenu
+        } else {
+            DeckBuildingState::DeckEditor
+        }
+    }
+
     pub fn set_identity(&mut self, identity: IdentitySet) {
         self.identity = Some(identity);
+    }
+
+    pub fn clear_identity(&mut self) {
+        self.identity = None;
+    }
+
+    pub fn get_identity(&self) -> Option<IdentitySet> {
+        self.identity.clone()
+    }
+
+    pub fn get_deck(&self) -> Option<Deck> {
+        self.deck.clone()
+    }
+
+    pub fn set_deck(&mut self, deck: Deck) {
+        self.deck = Some(deck);
+    }
+
+    pub fn clear_deck(&mut self) {
+        self.deck = None;
     }
 }
 
