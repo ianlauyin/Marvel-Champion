@@ -3,7 +3,10 @@ use bevy_pkv::PkvStore;
 use bevy_simple_text_input::{TextInput, TextInputInactive, TextInputSubmitEvent, TextInputValue};
 
 use crate::{
-    flow::{deck_building::resource::DeckBuildingResource, state::AppState},
+    flow::{
+        deck_building::resource::{DeckBuildingResource, DeckBuildingState},
+        state::AppState,
+    },
     ui_component::CustomButton,
     util::DecksStorageUtil,
 };
@@ -29,6 +32,8 @@ impl Plugin for DeckEditorHeaderPlugin {
 #[derive(Component)]
 pub struct DeckEditorHeader;
 
+#[derive(Component)]
+struct TextInputContainer;
 #[derive(Component)]
 #[require(Interaction)]
 enum HeaderButton {
@@ -82,6 +87,7 @@ fn spawn_title(parent: &mut ChildBuilder, name: &str) {
             BorderColor::from(Color::WHITE),
             BorderRadius::all(Val::Px(5.)),
             Interaction::default(),
+            TextInputContainer,
         ))
         .with_child((
             TextInput,
@@ -90,10 +96,18 @@ fn spawn_title(parent: &mut ChildBuilder, name: &str) {
         ));
 }
 
-fn handle_title_interaction(mut text_input_q: Query<(&Interaction, &mut TextInputInactive)>) {
-    let (interaction, mut inactive) = text_input_q.get_single_mut().unwrap();
-    if *interaction == Interaction::Pressed {
-        inactive.0 = false;
+fn handle_title_interaction(
+    text_input_container_q: Query<(&Interaction, &Children), With<TextInputContainer>>,
+    mut text_input_q: Query<&mut TextInputInactive>,
+) {
+    for (interaction, children) in text_input_container_q.iter() {
+        if *interaction == Interaction::Pressed {
+            for child in children.iter() {
+                if let Ok(mut inactive) = text_input_q.get_mut(*child) {
+                    inactive.0 = false;
+                }
+            }
+        }
     }
 }
 
@@ -131,6 +145,9 @@ fn handle_header_button_click(
     mut res: ResMut<DeckBuildingResource>,
     pkv: ResMut<PkvStore>,
 ) {
+    if res.get_state() != DeckBuildingState::DeckEditor {
+        return;
+    }
     for (interaction, header_button) in header_button_q.iter() {
         if interaction == &Interaction::Pressed {
             let mut deck = res.get_deck().unwrap();

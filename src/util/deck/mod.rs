@@ -17,7 +17,7 @@ impl Deck {
     pub fn new() -> Self {
         Self {
             id: Uuid::new_v4().to_string(),
-            name: "".to_string(),
+            name: "New Deck".to_string(),
             card_ids: vec![],
         }
     }
