@@ -3,16 +3,20 @@ use bevy::prelude::*;
 use crate::{
     cards::{Aspect, SetTrait},
     component::card::CardBasic,
-    flow::deck_building::resource::DeckBuildingResource,
+    flow::{deck_building::resource::DeckBuildingResource, state::AppState},
     resource::{AspectCardDatas, AssetLoader},
     ui_component::{Card, CardDetailButton, ScrollingList},
-    util::DeckUtil,
+    util::{DeckUtil, MouseControl},
 };
 pub struct DeckEditorContentPlugin;
 
 impl Plugin for DeckEditorContentPlugin {
     fn build(&self, app: &mut App) {
-        app.add_observer(on_content_added);
+        app.add_systems(
+            Update,
+            on_deck_info_changed.run_if(in_state(AppState::DeckBuilding)),
+        )
+        .add_observer(on_content_added);
     }
 }
 
@@ -37,24 +41,16 @@ fn on_content_added(
             ..default()
         })
         .with_children(|parent| {
-            let (identity_cards, other_cards) =
-                DeckUtil::get_cards_pair(res.get_identity().unwrap());
-            let aspect_card_ids = res.get_deck().unwrap().get_card_ids();
-            let aspect_cards = aspect_card_datas.get_batch_info_by_id(&aspect_card_ids);
-            spawn_deck(parent, &other_cards, &aspect_cards, &asset_loader);
-
-            let current_aspect = DeckUtil::get_current_aspect(&aspect_cards);
-            let deck_card_counts = aspect_cards.len() + other_cards.len();
+            let deck_info = DeckInfo::new(res, aspect_card_datas);
+            spawn_deck(parent, &deck_info.deck_cards, &asset_loader);
             spawn_info(
                 parent,
-                identity_cards,
-                current_aspect,
-                deck_card_counts,
+                deck_info.identity_cards,
+                deck_info.current_aspect,
+                deck_info.card_count,
                 &asset_loader,
             );
-
-            let avaiable_cards = DeckUtil::get_available_cards(&aspect_card_ids);
-            spawn_collection(parent, avaiable_cards, &asset_loader);
+            spawn_collection(parent, deck_info.avaiable_cards, &asset_loader);
         });
 }
 
@@ -66,10 +62,63 @@ enum DeckContent {
     CollectionScrollingList,
 }
 
+fn on_deck_info_changed(
+    mut commands: Commands,
+    res: Res<DeckBuildingResource>,
+    mut content_q: Query<(
+        Entity,
+        &DeckContent,
+        Option<&mut Text>,
+        Option<&mut TextColor>,
+    )>,
+    aspect_card_datas: Res<AspectCardDatas>,
+    asset_loader: Res<AssetLoader>,
+) {
+    if res.is_changed() {
+        if res.get_deck().is_some() {
+            let deck_info = DeckInfo::new(res, aspect_card_datas);
+            for (entity, content, text_op, text_color_op) in content_q.iter_mut() {
+                match content {
+                    DeckContent::CurrentAspect => {
+                        let (new_text, new_color) =
+                            get_aspect_name_and_color(&deck_info.current_aspect);
+                        text_op.unwrap().0 = new_text;
+                        text_color_op.unwrap().0 = new_color;
+                    }
+                    DeckContent::CardCount => {
+                        text_op.unwrap().0 = deck_info.card_count.to_string();
+                    }
+                    DeckContent::DeckScrollingList => {
+                        commands.entity(entity).despawn_descendants().with_children(
+                            |deck_scrolling_list| {
+                                spawn_card_list(
+                                    deck_scrolling_list,
+                                    &deck_info.deck_cards,
+                                    &asset_loader,
+                                );
+                            },
+                        );
+                    }
+                    DeckContent::CollectionScrollingList => {
+                        commands.entity(entity).despawn_descendants().with_children(
+                            |collection_scrolling_list| {
+                                spawn_card_list(
+                                    collection_scrolling_list,
+                                    &deck_info.avaiable_cards,
+                                    &asset_loader,
+                                );
+                            },
+                        );
+                    }
+                }
+            }
+        }
+    }
+}
+
 fn spawn_deck(
     parent: &mut ChildBuilder,
-    player_cards: &Vec<CardBasic>,
-    aspect_cards: &Vec<CardBasic>,
+    deck_cards: &Vec<CardBasic<'static>>,
     asset_loader: &Res<AssetLoader>,
 ) {
     parent
@@ -94,19 +143,14 @@ fn spawn_deck(
             current
                 .spawn((ScrollingList::grid(6, 10.), DeckContent::DeckScrollingList))
                 .with_children(|scrolling_list| {
-                    let cards: Vec<CardBasic> = player_cards
-                        .iter()
-                        .chain(aspect_cards.iter())
-                        .cloned()
-                        .collect();
-                    spawn_card_list(scrolling_list, cards, asset_loader);
+                    spawn_card_list(scrolling_list, &deck_cards, asset_loader);
                 });
         });
 }
 
 fn spawn_info(
     parent: &mut ChildBuilder,
-    identity_cards: Vec<CardBasic>,
+    identity_cards: Vec<CardBasic<'static>>,
     current_aspect: Option<Aspect>,
     selectable_card_count: usize,
     asset_loader: &Res<AssetLoader>,
@@ -163,7 +207,8 @@ fn spawn_info(
                                         })
                                         .with_child((
                                             Card::small(asset_loader.get(&card.get_key()).clone()),
-                                            CardDetailButton::new(card.get_key(), card.is_vertical),
+                                            CardDetailButton,
+                                            card.clone(),
                                         ));
                                 }
                             });
@@ -177,7 +222,7 @@ fn spawn_info(
                     })
                     .with_children(|aspect_info| {
                         aspect_info.spawn(Text::new("Current Aspect:"));
-                        let (aspect_name, color) = get_aspect_name_and_color(current_aspect);
+                        let (aspect_name, color) = get_aspect_name_and_color(&current_aspect);
                         aspect_info.spawn((
                             Text::new(aspect_name),
                             TextColor(color),
@@ -192,7 +237,7 @@ fn spawn_info(
                         ..default()
                     })
                     .with_children(|card_count_info| {
-                        card_count_info.spawn(Text::new("Selectable Card Count:"));
+                        card_count_info.spawn(Text::new("Card Count:"));
                         card_count_info.spawn((
                             Text::new(selectable_card_count.to_string()),
                             DeckContent::CardCount,
@@ -204,7 +249,7 @@ fn spawn_info(
 
 fn spawn_collection(
     parent: &mut ChildBuilder,
-    available_cards: Vec<CardBasic>,
+    available_cards: Vec<CardBasic<'static>>,
     asset_loader: &Res<AssetLoader>,
 ) {
     parent
@@ -233,14 +278,14 @@ fn spawn_collection(
                     DeckContent::CollectionScrollingList,
                 ))
                 .with_children(|scrolling_list| {
-                    spawn_card_list(scrolling_list, available_cards, asset_loader);
+                    spawn_card_list(scrolling_list, &available_cards, asset_loader);
                 });
         });
 }
 
 fn spawn_card_list(
     parent: &mut ChildBuilder,
-    cards: Vec<CardBasic>,
+    cards: &Vec<CardBasic<'static>>,
     asset_loader: &Res<AssetLoader>,
 ) {
     for card in cards {
@@ -251,11 +296,15 @@ fn spawn_card_list(
                 align_items: AlignItems::Center,
                 ..default()
             })
-            .with_child((Card::small(asset_loader.get(&card.get_key()).clone()),));
+            .with_child((
+                Card::small(asset_loader.get(&card.get_key()).clone()),
+                card.clone(),
+                MouseControl::default(),
+            ));
     }
 }
 
-fn get_aspect_name_and_color(aspect: Option<Aspect>) -> (String, Color) {
+fn get_aspect_name_and_color(aspect: &Option<Aspect>) -> (String, Color) {
     if let Some(aspect) = aspect {
         (
             aspect.to_str().to_string(),
@@ -263,5 +312,35 @@ fn get_aspect_name_and_color(aspect: Option<Aspect>) -> (String, Color) {
         )
     } else {
         ("No Aspect".to_string(), Color::WHITE)
+    }
+}
+
+struct DeckInfo {
+    identity_cards: Vec<CardBasic<'static>>,
+    deck_cards: Vec<CardBasic<'static>>,
+    current_aspect: Option<Aspect>,
+    card_count: usize,
+    avaiable_cards: Vec<CardBasic<'static>>,
+}
+
+impl DeckInfo {
+    pub fn new(res: Res<DeckBuildingResource>, aspect_card_datas: Res<AspectCardDatas>) -> Self {
+        let (identity_cards, player_cards) = DeckUtil::get_cards_pair(res.get_identity().unwrap());
+        let aspect_card_ids = res.get_deck().unwrap().get_card_ids();
+        let aspect_cards = aspect_card_datas.get_batch_info_by_id(&aspect_card_ids);
+        let current_aspect = DeckUtil::get_current_aspect(&aspect_cards);
+        let deck_card_counts = aspect_cards.len() + 15;
+        let avaiable_cards = DeckUtil::get_available_cards(&aspect_card_ids);
+        Self {
+            identity_cards,
+            current_aspect,
+            card_count: deck_card_counts,
+            avaiable_cards,
+            deck_cards: player_cards
+                .iter()
+                .chain(aspect_cards.iter())
+                .cloned()
+                .collect(),
+        }
     }
 }

@@ -8,6 +8,15 @@ pub struct Belongs {
     sub: Vec<Belong>,
 }
 
+impl Default for Belongs {
+    fn default() -> Self {
+        Self {
+            main: Belong::Aspect(Aspect::Basic),
+            sub: vec![],
+        }
+    }
+}
+
 impl From<Belong> for Belongs {
     fn from(belong: Belong) -> Self {
         Self {

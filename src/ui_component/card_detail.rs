@@ -1,21 +1,25 @@
 use bevy::{prelude::*, ui::FocusPolicy};
 
-use crate::{
-    constant::WINDOW_RESOLUTION,
-    resource::AssetLoader,
-    util::{MouseControl, MouseControlEvent, UiUtils},
-};
+use crate::{constant::WINDOW_RESOLUTION, resource::AssetLoader, util::UiUtils};
 
 use super::{Card, ContainerHeader, ContainerHeaderEvent};
+pub struct CardDetailPlugin;
+
+impl Plugin for CardDetailPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(Update, (handle_header_button_click, on_drag))
+            .add_observer(on_card_detail_added);
+    }
+}
 
 #[derive(Component)]
-#[require(MouseControl)]
-pub struct CardDetailButton {
+#[require(Interaction)]
+pub struct CardDetail {
     image_key: String,
     is_vertical: bool,
 }
 
-impl CardDetailButton {
+impl CardDetail {
     pub fn new(image_key: String, is_vertical: bool) -> Self {
         Self {
             image_key,
@@ -23,48 +27,19 @@ impl CardDetailButton {
         }
     }
 }
-pub struct CardDetailPlugin;
 
-impl Plugin for CardDetailPlugin {
-    fn build(&self, app: &mut App) {
-        app.add_systems(Update, (handle_header_button_click, on_drag))
-            .add_observer(listen_card_detail_button_click);
-    }
-}
-
-#[derive(Component)]
-#[require(Interaction)]
-struct CardDetail;
-
-fn listen_card_detail_button_click(
-    trigger: Trigger<MouseControlEvent>,
-    card_detail_button_q: Query<&CardDetailButton>,
-    commands: Commands,
+fn on_card_detail_added(
+    trigger: Trigger<OnAdd, CardDetail>,
+    card_detail_q: Query<&CardDetail>,
+    mut commands: Commands,
     asset_loader: Res<AssetLoader>,
     z_index_q: Query<&ZIndex>,
 ) {
-    match trigger.event() {
-        MouseControlEvent::ShortClick(entity) => {
-            if let Ok(card_detail_button) = card_detail_button_q.get(*entity) {
-                spawn_card_detail(
-                    commands,
-                    Card::large(
-                        asset_loader.get(&card_detail_button.image_key).clone(),
-                        card_detail_button.is_vertical,
-                    ),
-                    UiUtils::get_largest_z_index(z_index_q),
-                );
-            }
-        }
-        _ => {}
-    }
-}
-
-fn spawn_card_detail(mut commands: Commands, card: Card, z_index: ZIndex) {
+    let card_detail = card_detail_q.get(trigger.entity()).unwrap();
     commands
-        .spawn((
-            CardDetail,
-            z_index,
+        .entity(trigger.entity())
+        .insert((
+            UiUtils::get_largest_z_index(z_index_q),
             Node {
                 width: Val::Px(600.),
                 height: Val::Px(600.),
@@ -83,17 +58,20 @@ fn spawn_card_detail(mut commands: Commands, card: Card, z_index: ZIndex) {
         ))
         .with_children(|container| {
             container.spawn(ContainerHeader::with_leading_button("X"));
-            container.spawn(card);
+            container.spawn(Card::large(
+                asset_loader.get(&card_detail.image_key).clone(),
+                card_detail.is_vertical,
+            ));
         });
 }
 
 fn handle_header_button_click(
     mut event_reader: EventReader<ContainerHeaderEvent>,
     mut commands: Commands,
-    menu_q: Query<(Entity, &Children), With<CardDetail>>,
+    card_detail_q: Query<(Entity, &Children), With<CardDetail>>,
 ) {
     for event in event_reader.read() {
-        for (entity, card_detail_children) in menu_q.iter() {
+        for (entity, card_detail_children) in card_detail_q.iter() {
             match event {
                 ContainerHeaderEvent::LeadingButtonPressed(header_entity) => {
                     if card_detail_children.contains(header_entity) {

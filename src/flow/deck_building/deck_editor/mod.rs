@@ -1,4 +1,5 @@
 mod content;
+mod content_system;
 mod editor;
 mod header;
 
@@ -12,6 +13,7 @@ impl Plugin for DeckEditorPlugin {
             header::DeckEditorHeaderPlugin,
             editor::DeckEditorPlugin,
             content::DeckEditorContentPlugin,
+            content_system::DeckEditorContentSystemPlugin,
         ));
     }
 }

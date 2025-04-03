@@ -51,7 +51,8 @@ fn on_card_list_added(
                             })
                             .with_child((
                                 Card::medium(asset_loader.get(&card.get_key()).clone()),
-                                CardDetailButton::new(card.get_key(), card.is_vertical),
+                                CardDetailButton,
+                                card.clone(),
                             ));
                     }
                 });
