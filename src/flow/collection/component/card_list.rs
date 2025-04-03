@@ -39,31 +39,21 @@ fn on_card_list_added(
         .with_children(|container| {
             container.spawn(ContainerHeader::with_leading_button("X"));
             container
-                .spawn(Node {
-                    width: Val::Percent(100.),
-                    flex_grow: 1.,
-                    justify_content: JustifyContent::Center,
-                    overflow: Overflow::scroll_y(),
-                    ..default()
-                })
-                .with_children(|content| {
-                    content
-                        .spawn(ScrollingList::grid(8, 20.))
-                        .with_children(|scrolling_list| {
-                            for card in card_list.0.clone() {
-                                scrolling_list
-                                    .spawn(Node {
-                                        display: Display::Flex,
-                                        justify_content: JustifyContent::Center,
-                                        align_items: AlignItems::Center,
-                                        ..default()
-                                    })
-                                    .with_child((
-                                        Card::medium(asset_loader.get(&card.get_key()).clone()),
-                                        CardDetailButton::new(card.get_key(), card.is_vertical),
-                                    ));
-                            }
-                        });
+                .spawn(ScrollingList::grid(8, 20.))
+                .with_children(|scrolling_list| {
+                    for card in card_list.0.clone() {
+                        scrolling_list
+                            .spawn(Node {
+                                display: Display::Flex,
+                                justify_content: JustifyContent::Center,
+                                align_items: AlignItems::Center,
+                                ..default()
+                            })
+                            .with_child((
+                                Card::medium(asset_loader.get(&card.get_key()).clone()),
+                                CardDetailButton::new(card.get_key(), card.is_vertical),
+                            ));
+                    }
                 });
         });
 }

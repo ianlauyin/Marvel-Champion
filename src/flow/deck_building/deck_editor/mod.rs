@@ -1,3 +1,4 @@
+mod content;
 mod editor;
 mod header;
 
@@ -7,6 +8,10 @@ pub struct DeckEditorPlugin;
 
 impl Plugin for DeckEditorPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((header::DeckEditorHeaderPlugin, editor::DeckEditorPlugin));
+        app.add_plugins((
+            header::DeckEditorHeaderPlugin,
+            editor::DeckEditorPlugin,
+            content::DeckEditorContentPlugin,
+        ));
     }
 }

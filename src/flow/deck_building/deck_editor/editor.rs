@@ -3,8 +3,7 @@ use bevy::prelude::*;
 use crate::{flow::state::AppState, ui_component::MainContainer, util::SystemUtil};
 
 use super::{
-    super::resource::{DeckBuildingResource, DeckBuildingState},
-    header::DeckEditorHeader,
+    super::resource::{DeckBuildingResource, DeckBuildingState}, content::DeckEditorContent, header::DeckEditorHeader
 };
 
 pub struct DeckEditorPlugin;
@@ -27,6 +26,7 @@ fn spawn_deck_editor(mut commands: Commands, res: Res<DeckBuildingResource>) {
             .spawn((MainContainer::new(), DeckEditor))
             .with_children(|parent| {
                 parent.spawn(DeckEditorHeader);
+                parent.spawn(DeckEditorContent);
             });
     }
 }

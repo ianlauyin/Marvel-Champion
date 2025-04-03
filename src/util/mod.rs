@@ -1,11 +1,10 @@
 mod deck;
-mod system_util;
-// mod deck_validator;
 mod devtool;
 mod mouse_control_util;
+mod system_util;
 mod ui_util;
 
-pub use deck::{Deck, DecksStorageUtil};
+pub use deck::{Deck, DeckUtil, DecksStorageUtil};
 pub use mouse_control_util::{MouseControl, MouseControlEvent};
 pub use system_util::SystemUtil;
 pub use ui_util::UiUtils;

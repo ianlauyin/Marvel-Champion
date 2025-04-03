@@ -35,6 +35,18 @@ impl Belongs {
     pub fn get_key(&self) -> String {
         self.main.get_key()
     }
+
+    pub fn get_aspect(&self) -> Option<Aspect> {
+        if let Belong::Aspect(aspect) = &self.main {
+            return Some(aspect.clone());
+        }
+        for sub in &self.sub {
+            if let Belong::Aspect(aspect) = sub {
+                return Some(aspect.clone());
+            }
+        }
+        None
+    }
 }
 
 #[derive(Clone)]

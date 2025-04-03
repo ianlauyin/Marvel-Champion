@@ -42,31 +42,20 @@ fn spawn_deck_menu(mut commands: Commands, res: Res<DeckBuildingResource>, pkv: 
             .with_children(|container| {
                 container.spawn(ContainerHeader::with_leading_button("<"));
                 container
-                    .spawn(Node {
-                        width: Val::Percent(100.),
-                        align_self: AlignSelf::Stretch,
-                        justify_self: JustifySelf::Start,
-                        justify_content: JustifyContent::Center,
-                        overflow: Overflow::scroll_y(),
-                        ..default()
-                    })
-                    .with_children(|content| {
-                        content.spawn(ScrollingList::grid(3, 50.)).with_children(
-                            |scrolling_list| {
-                                let Some(identity) = res.get_identity() else {
-                                    warn!("No identity found in deck building resource");
-                                    return;
-                                };
-                                for deck in get_decks(identity, pkv) {
-                                    scrolling_list.spawn((
-                                        CustomButton::large(deck.get_name()),
-                                        DeckMenuButton(deck),
-                                    ));
-                                }
-                                scrolling_list
-                                    .spawn((CustomButton::large("+"), DeckMenuButton(Deck::new())));
-                            },
-                        );
+                    .spawn(ScrollingList::grid(3, 50.))
+                    .with_children(|scrolling_list| {
+                        let Some(identity) = res.get_identity() else {
+                            warn!("No identity found in deck building resource");
+                            return;
+                        };
+                        for deck in get_decks(identity, pkv) {
+                            scrolling_list.spawn((
+                                CustomButton::large(deck.get_name()),
+                                DeckMenuButton(deck),
+                            ));
+                        }
+                        scrolling_list
+                            .spawn((CustomButton::large("+"), DeckMenuButton(Deck::new())));
                     });
             });
     }

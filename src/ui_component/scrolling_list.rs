@@ -14,6 +14,8 @@ impl ScrollingList {
         Self {
             node: Node {
                 align_self: AlignSelf::Stretch,
+                border: UiRect::all(Val::Px(1.)),
+                padding: UiRect::all(Val::Px(5.)),
                 width: Val::Percent(100.),
                 overflow: Overflow::scroll_y(),
                 display: Display::Grid,

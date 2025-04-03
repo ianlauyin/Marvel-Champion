@@ -60,29 +60,18 @@ fn on_sub_menu_added(
         .with_children(|container| {
             container.spawn(ContainerHeader::with_leading_button("X"));
             container
-                .spawn(Node {
-                    width: Val::Percent(100.),
-                    align_self: AlignSelf::Stretch,
-                    justify_self: JustifySelf::Start,
-                    justify_content: JustifyContent::Center,
-                    overflow: Overflow::scroll_y(),
-                    ..default()
-                })
-                .with_children(|content| {
-                    content
-                        .spawn(ScrollingList::grid(3, 50.))
-                        .with_children(|scrolling_list| {
-                            for set in sub_menu.get_sets() {
-                                let mut button = CustomButton::large(set.to_str());
-                                if let Some(color) = set.get_color() {
-                                    button.set_color(color);
-                                }
-                                if let Some(key) = set.get_thumbnail_key() {
-                                    button.set_image(asset_loader.get(&key).clone());
-                                }
-                                scrolling_list.spawn((SubMenuButton::new(set), button));
-                            }
-                        });
+                .spawn(ScrollingList::grid(3, 50.))
+                .with_children(|scrolling_list| {
+                    for set in sub_menu.get_sets() {
+                        let mut button = CustomButton::large(set.to_str());
+                        if let Some(color) = set.get_color() {
+                            button.set_color(color);
+                        }
+                        if let Some(key) = set.get_thumbnail_key() {
+                            button.set_image(asset_loader.get(&key).clone());
+                        }
+                        scrolling_list.spawn((SubMenuButton::new(set), button));
+                    }
                 });
         });
 }

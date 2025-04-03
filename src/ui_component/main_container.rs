@@ -17,9 +17,11 @@ impl MainContainer {
                 align_self: AlignSelf::Center,
                 justify_self: JustifySelf::Center,
                 display: Display::Flex,
+                column_gap: Val::Px(20.),
                 flex_direction: FlexDirection::Column,
                 justify_content: JustifyContent::Start,
                 align_items: AlignItems::Center,
+                overflow: Overflow::scroll_y(),
                 ..default()
             },
         }

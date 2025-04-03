@@ -26,6 +26,16 @@ impl IdentitySet {
         ]
     }
 
+    pub fn get_identity_card_ids(&self) -> Vec<&str> {
+        match *self {
+            Self::CoreBlackPanther => vec!["core_040a", "core_040b"],
+            Self::CoreCaptainMarvel => vec!["core_010a", "core_010b"],
+            Self::CoreIronMan => vec!["core_029a", "core_029b"],
+            Self::CoreSheHulk => vec!["core_019a", "core_019b"],
+            Self::CoreSpiderMan => vec!["core_001a", "core_001b"],
+        }
+    }
+
     pub fn get_nemesis_scheme_id(&self) -> &str {
         match *self {
             Self::CoreBlackPanther => "core_156",

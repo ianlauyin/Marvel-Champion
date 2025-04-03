@@ -46,27 +46,15 @@ fn spawn_hero_menu(
             .with_children(|container| {
                 container.spawn(ContainerHeader::with_leading_button("<"));
                 container
-                    .spawn(Node {
-                        width: Val::Percent(100.),
-                        align_self: AlignSelf::Stretch,
-                        justify_self: JustifySelf::Start,
-                        justify_content: JustifyContent::Center,
-                        overflow: Overflow::scroll_y(),
-                        ..default()
-                    })
-                    .with_children(|content| {
-                        content.spawn(ScrollingList::grid(3, 50.)).with_children(
-                            |scrolling_list| {
-                                for identity in IdentitySet::get_all() {
-                                    let mut button = CustomButton::large(identity.to_str());
-                                    if let Some(key) = identity.get_thumbnail_key() {
-                                        button.set_image(asset_loader.get(&key).clone());
-                                    }
-                                    scrolling_list
-                                        .spawn((HeroMenuButton(identity.clone()), button));
-                                }
-                            },
-                        );
+                    .spawn(ScrollingList::grid(3, 50.))
+                    .with_children(|scrolling_list| {
+                        for identity in IdentitySet::get_all() {
+                            let mut button = CustomButton::large(identity.to_str());
+                            if let Some(key) = identity.get_thumbnail_key() {
+                                button.set_image(asset_loader.get(&key).clone());
+                            }
+                            scrolling_list.spawn((HeroMenuButton(identity.clone()), button));
+                        }
                     });
             });
     }
