@@ -1,7 +1,7 @@
 use bevy::utils::HashMap;
 
 use crate::{
-    cards::{Aspect, Belongs, IdentitySet, SetTrait},
+    cards::{Aspect, IdentitySet, SetTrait},
     component::card::CardBasic,
 };
 
@@ -14,11 +14,14 @@ impl DeckUtil {
         let mut identity_cards = vec![];
         let mut other_cards = vec![];
         let identity_card_ids = identity_set.get_identity_card_ids();
+        let non_player_card_ids = identity_set.get_non_player_cards_ids();
         for card in identity_set.get_card_infos().iter() {
             if identity_card_ids.contains(&card.id) {
                 identity_cards.push(card.clone());
-            } else {
-                other_cards.push(card.clone());
+            } else if !non_player_card_ids.contains(&card.id) {
+                for _ in 0..card.card_amount_max {
+                    other_cards.push(card.clone());
+                }
             }
         }
         (identity_cards, other_cards)
@@ -27,7 +30,9 @@ impl DeckUtil {
     pub fn get_current_aspect(aspect_cards: &Vec<CardBasic<'static>>) -> Option<Aspect> {
         for card in aspect_cards {
             if let Some(aspect) = card.belongs.get_aspect() {
-                return Some(aspect);
+                if aspect != Aspect::Basic {
+                    return Some(aspect);
+                }
             }
         }
         None

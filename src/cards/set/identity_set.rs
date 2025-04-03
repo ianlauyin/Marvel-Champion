@@ -36,6 +36,24 @@ impl IdentitySet {
         }
     }
 
+    pub fn get_non_player_cards_ids(&self) -> Vec<&str> {
+        let mut nemesis_cards_ids = self.get_nemesis_encounter_ids();
+        nemesis_cards_ids.push(self.get_nemesis_scheme_id());
+        nemesis_cards_ids.push(self.get_nemesis_id());
+        nemesis_cards_ids.push(self.get_obligation_card_id());
+        nemesis_cards_ids
+    }
+
+    pub fn get_obligation_card_id(&self) -> &str {
+        match *self {
+            Self::CoreBlackPanther => "core_155",
+            Self::CoreCaptainMarvel => "core_175",
+            Self::CoreIronMan => "core_170",
+            Self::CoreSheHulk => "core_160",
+            Self::CoreSpiderMan => "core_165",
+        }
+    }
+
     pub fn get_nemesis_scheme_id(&self) -> &str {
         match *self {
             Self::CoreBlackPanther => "core_156",
@@ -56,7 +74,7 @@ impl IdentitySet {
         }
     }
 
-    pub fn get_nemesis_cards_ids(&self) -> Vec<&str> {
+    pub fn get_nemesis_encounter_ids(&self) -> Vec<&str> {
         match *self {
             Self::CoreBlackPanther => vec!["core_158", "core_159"],
             Self::CoreCaptainMarvel => vec!["core_178", "core_179"],

@@ -1,12 +1,11 @@
 use bevy::prelude::*;
-use serde::de;
 
 use crate::{
-    cards::Aspect,
+    cards::{Aspect, SetTrait},
     component::card::CardBasic,
     flow::deck_building::resource::DeckBuildingResource,
     resource::{AspectCardDatas, AssetLoader},
-    ui_component::{Card, ScrollingList},
+    ui_component::{Card, CardDetailButton, ScrollingList},
     util::DeckUtil,
 };
 pub struct DeckEditorContentPlugin;
@@ -31,6 +30,7 @@ fn on_content_added(
         .entity(trigger.entity())
         .insert(Node {
             display: Display::Flex,
+            column_gap: Val::Px(5.),
             width: Val::Percent(100.),
             padding: UiRect::all(Val::Px(10.)),
             overflow: Overflow::scroll_y(),
@@ -47,7 +47,7 @@ fn on_content_added(
             let deck_card_counts = aspect_cards.len() + other_cards.len();
             spawn_info(
                 parent,
-                &identity_cards,
+                identity_cards,
                 current_aspect,
                 deck_card_counts,
                 &asset_loader,
@@ -60,9 +60,10 @@ fn on_content_added(
 
 #[derive(Component)]
 enum DeckContent {
-    Deck,
-    Info,
-    Collection,
+    DeckScrollingList,
+    CurrentAspect,
+    CardCount,
+    CollectionScrollingList,
 }
 
 fn spawn_deck(
@@ -72,57 +73,132 @@ fn spawn_deck(
     asset_loader: &Res<AssetLoader>,
 ) {
     parent
-        .spawn((
-            DeckContent::Deck,
-            Node {
-                display: Display::Flex,
-                flex_direction: FlexDirection::Column,
-                width: Val::Percent(45.),
-                row_gap: Val::Px(10.),
-                overflow: Overflow::scroll_y(),
-                ..default()
-            },
-        ))
+        .spawn(Node {
+            display: Display::Flex,
+            flex_direction: FlexDirection::Column,
+            width: Val::Percent(40.),
+            row_gap: Val::Px(10.),
+            overflow: Overflow::scroll_y(),
+            ..default()
+        })
         .with_children(|current| {
-            current.spawn(Text::new("Deck:"));
             current
                 .spawn((
-                    ScrollingList::grid(7, 10.),
                     BorderColor(Color::WHITE),
-                    BorderRadius::all(Val::Px(5.)),
+                    Node {
+                        border: UiRect::bottom(Val::Px(1.)),
+                        ..default()
+                    },
                 ))
+                .with_child(Text::new("Deck:"));
+            current
+                .spawn((ScrollingList::grid(6, 10.), DeckContent::DeckScrollingList))
                 .with_children(|scrolling_list| {
-                    for card in player_cards.iter().chain(aspect_cards.iter()) {
-                        scrolling_list
-                            .spawn(Node {
-                                display: Display::Flex,
-                                justify_content: JustifyContent::Center,
-                                align_items: AlignItems::Center,
-                                ..default()
-                            })
-                            .with_child(Card::small(asset_loader.get(&card.get_key()).clone()));
-                    }
+                    let cards: Vec<CardBasic> = player_cards
+                        .iter()
+                        .chain(aspect_cards.iter())
+                        .cloned()
+                        .collect();
+                    spawn_card_list(scrolling_list, cards, asset_loader);
                 });
         });
 }
 
 fn spawn_info(
     parent: &mut ChildBuilder,
-    identity_cards: &Vec<CardBasic>,
+    identity_cards: Vec<CardBasic>,
     current_aspect: Option<Aspect>,
     selectable_card_count: usize,
     asset_loader: &Res<AssetLoader>,
 ) {
     parent
-        .spawn((
-            DeckContent::Info,
-            Node {
-                width: Val::Percent(10.),
-                ..default()
-            },
-        ))
+        .spawn((Node {
+            display: Display::Flex,
+            flex_direction: FlexDirection::Column,
+            width: Val::Percent(20.),
+            padding: UiRect::horizontal(Val::Px(5.)),
+            ..default()
+        },))
         .with_children(|info| {
-            info.spawn(Text::new("Info:"));
+            info.spawn((
+                BorderColor(Color::WHITE),
+                Node {
+                    width: Val::Percent(100.),
+                    border: UiRect::bottom(Val::Px(1.)),
+                    ..default()
+                },
+            ))
+            .with_child(Text::new("Info:"));
+
+            info.spawn(Node {
+                height: Val::Percent(100.),
+                display: Display::Flex,
+                flex_direction: FlexDirection::Column,
+                justify_content: JustifyContent::SpaceAround,
+                ..default()
+            })
+            .with_children(|info_content| {
+                info_content
+                    .spawn(Node {
+                        display: Display::Flex,
+                        flex_direction: FlexDirection::Column,
+                        ..default()
+                    })
+                    .with_children(|identity_info| {
+                        identity_info.spawn(Text::new("Identity Cards:"));
+                        identity_info
+                            .spawn(Node {
+                                display: Display::Flex,
+                                column_gap: Val::Px(5.),
+                                ..default()
+                            })
+                            .with_children(|identity_card_container| {
+                                for card in identity_cards {
+                                    identity_card_container
+                                        .spawn(Node {
+                                            display: Display::Flex,
+                                            justify_content: JustifyContent::Center,
+                                            align_items: AlignItems::Center,
+                                            ..default()
+                                        })
+                                        .with_child((
+                                            Card::small(asset_loader.get(&card.get_key()).clone()),
+                                            CardDetailButton::new(card.get_key(), card.is_vertical),
+                                        ));
+                                }
+                            });
+                    });
+
+                info_content
+                    .spawn(Node {
+                        display: Display::Flex,
+                        flex_direction: FlexDirection::Column,
+                        ..default()
+                    })
+                    .with_children(|aspect_info| {
+                        aspect_info.spawn(Text::new("Current Aspect:"));
+                        let (aspect_name, color) = get_aspect_name_and_color(current_aspect);
+                        aspect_info.spawn((
+                            Text::new(aspect_name),
+                            TextColor(color),
+                            DeckContent::CurrentAspect,
+                        ));
+                    });
+
+                info_content
+                    .spawn(Node {
+                        display: Display::Flex,
+                        flex_direction: FlexDirection::Column,
+                        ..default()
+                    })
+                    .with_children(|card_count_info| {
+                        card_count_info.spawn(Text::new("Selectable Card Count:"));
+                        card_count_info.spawn((
+                            Text::new(selectable_card_count.to_string()),
+                            DeckContent::CardCount,
+                        ));
+                    });
+            });
         });
 }
 
@@ -132,36 +208,60 @@ fn spawn_collection(
     asset_loader: &Res<AssetLoader>,
 ) {
     parent
-        .spawn((
-            DeckContent::Collection,
-            Node {
-                display: Display::Flex,
-                flex_direction: FlexDirection::Column,
-                width: Val::Percent(45.),
-                row_gap: Val::Px(10.),
-                overflow: Overflow::scroll_y(),
-                ..default()
-            },
-        ))
+        .spawn(Node {
+            display: Display::Flex,
+            flex_direction: FlexDirection::Column,
+            justify_content: JustifyContent::FlexStart,
+            width: Val::Percent(40.),
+            row_gap: Val::Px(10.),
+            overflow: Overflow::scroll_y(),
+            ..default()
+        })
         .with_children(|available| {
-            available.spawn(Text::new("Collection:"));
             available
                 .spawn((
-                    ScrollingList::grid(7, 10.),
                     BorderColor(Color::WHITE),
-                    BorderRadius::all(Val::Px(5.)),
+                    Node {
+                        border: UiRect::bottom(Val::Px(1.)),
+                        ..default()
+                    },
+                ))
+                .with_child(Text::new("Collection:"));
+            available
+                .spawn((
+                    ScrollingList::grid(6, 10.),
+                    DeckContent::CollectionScrollingList,
                 ))
                 .with_children(|scrolling_list| {
-                    for card in available_cards {
-                        scrolling_list
-                            .spawn(Node {
-                                display: Display::Flex,
-                                justify_content: JustifyContent::Center,
-                                align_items: AlignItems::Center,
-                                ..default()
-                            })
-                            .with_child(Card::small(asset_loader.get(&card.get_key()).clone()));
-                    }
+                    spawn_card_list(scrolling_list, available_cards, asset_loader);
                 });
         });
+}
+
+fn spawn_card_list(
+    parent: &mut ChildBuilder,
+    cards: Vec<CardBasic>,
+    asset_loader: &Res<AssetLoader>,
+) {
+    for card in cards {
+        parent
+            .spawn(Node {
+                display: Display::Flex,
+                justify_content: JustifyContent::Center,
+                align_items: AlignItems::Center,
+                ..default()
+            })
+            .with_child((Card::small(asset_loader.get(&card.get_key()).clone()),));
+    }
+}
+
+fn get_aspect_name_and_color(aspect: Option<Aspect>) -> (String, Color) {
+    if let Some(aspect) = aspect {
+        (
+            aspect.to_str().to_string(),
+            aspect.get_color().unwrap_or(Color::WHITE),
+        )
+    } else {
+        ("No Aspect".to_string(), Color::WHITE)
+    }
 }

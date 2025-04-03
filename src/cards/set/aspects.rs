@@ -6,7 +6,7 @@ use bevy::{
 use super::{super::data::aspect, set_trait::SetTrait};
 use crate::component::card::CardBasic;
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 pub enum Aspect {
     Basic,
     Justice,
