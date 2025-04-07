@@ -3,6 +3,7 @@ use bevy::prelude::*;
 use bevy_pkv::PkvStore;
 
 use super::Deck;
+use crate::resource::AspectCardDatas;
 
 pub struct DecksStorageUtil<'a> {
     identity: IdentitySet,
@@ -26,8 +27,17 @@ impl<'a> DecksStorageUtil<'a> {
         }
     }
 
-    pub fn save_deck(&mut self, deck: Deck) {
-        // TODO: Check if this deck valid.
+    pub fn save_deck(
+        &mut self,
+        deck: Deck,
+        aspect_cards_data: Res<AspectCardDatas>,
+    ) -> Result<(), String> {
+        let aspect_cards = aspect_cards_data.get_batch_info_by_id(&deck.get_card_ids());
+        let mut validator = self.identity.get_deck_validator();
+        if let Err(message) = validator.validate(&aspect_cards) {
+            return Err(message);
+        }
+
         let mut decks = self.get_decks();
         if let Some(index) = decks
             .iter()
@@ -41,7 +51,8 @@ impl<'a> DecksStorageUtil<'a> {
         }
         self.pkv
             .set(self.identity.get_key(), &decks)
-            .expect("Failed to add deck.");
+            .map_err(|e| format!("Failed to add deck: {}", e))?;
+        Ok(())
     }
 
     pub fn remove_deck(&mut self, id: &str) {

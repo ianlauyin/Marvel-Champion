@@ -46,7 +46,7 @@ fn on_content_added(
             spawn_info(
                 parent,
                 deck_info.identity_cards,
-                deck_info.current_aspect,
+                deck_info.current_aspects,
                 deck_info.card_count,
                 &asset_loader,
             );
@@ -58,7 +58,7 @@ fn on_content_added(
 #[require(RelativeCursorPosition)]
 pub enum DeckContent {
     DeckScrollingList,
-    CurrentAspect,
+    CurrentAspects,
     CardCount,
     CollectionScrollingList,
 }
@@ -71,12 +71,7 @@ pub enum CardFrom {
 
 fn on_deck_info_changed(
     mut commands: Commands,
-    mut content_q: Query<(
-        Entity,
-        &DeckContent,
-        Option<&mut Text>,
-        Option<&mut TextColor>,
-    )>,
+    mut content_q: Query<(Entity, &DeckContent, Option<&mut Text>)>,
     res: Res<DeckBuildingResource>,
     aspect_card_datas: Res<AspectCardDatas>,
     asset_loader: Res<AssetLoader>,
@@ -84,13 +79,24 @@ fn on_deck_info_changed(
     if res.is_changed() {
         if res.get_deck().is_some() {
             let deck_info = DeckInfo::new(res, aspect_card_datas);
-            for (entity, content, text_op, text_color_op) in content_q.iter_mut() {
+            for (entity, content, text_op) in content_q.iter_mut() {
                 match content {
-                    DeckContent::CurrentAspect => {
-                        let (new_text, new_color) =
-                            get_aspect_name_and_color(&deck_info.current_aspect);
-                        text_op.unwrap().0 = new_text;
-                        text_color_op.unwrap().0 = new_color;
+                    DeckContent::CurrentAspects => {
+                        let current_aspects = deck_info.current_aspects.clone();
+                        commands.entity(entity).despawn_descendants().with_children(
+                            |aspects_container| {
+                                if current_aspects.is_empty() {
+                                    aspects_container.spawn(Text::new("No Aspect"));
+                                } else {
+                                    for aspect in current_aspects {
+                                        aspects_container.spawn((
+                                            Text::new(aspect.to_str()),
+                                            TextColor(aspect.get_color().unwrap_or(Color::WHITE)),
+                                        ));
+                                    }
+                                }
+                            },
+                        );
                     }
                     DeckContent::CardCount => {
                         text_op.unwrap().0 = deck_info.card_count.to_string();
@@ -160,7 +166,7 @@ fn spawn_deck(
 fn spawn_info(
     parent: &mut ChildBuilder,
     identity_cards: Vec<CardBasic<'static>>,
-    current_aspect: Option<Aspect>,
+    current_aspects: Vec<Aspect>,
     selectable_card_count: usize,
     asset_loader: &Res<AssetLoader>,
 ) {
@@ -231,12 +237,27 @@ fn spawn_info(
                     })
                     .with_children(|aspect_info| {
                         aspect_info.spawn(Text::new("Current Aspect:"));
-                        let (aspect_name, color) = get_aspect_name_and_color(&current_aspect);
-                        aspect_info.spawn((
-                            Text::new(aspect_name),
-                            TextColor(color),
-                            DeckContent::CurrentAspect,
-                        ));
+                        aspect_info
+                            .spawn((
+                                DeckContent::CurrentAspects,
+                                Node {
+                                    display: Display::Flex,
+                                    flex_direction: FlexDirection::Column,
+                                    ..default()
+                                },
+                            ))
+                            .with_children(|aspects_container| {
+                                if current_aspects.is_empty() {
+                                    aspects_container.spawn(Text::new("No Aspect"));
+                                } else {
+                                    for aspect in current_aspects {
+                                        aspects_container.spawn((
+                                            Text::new(aspect.to_str()),
+                                            TextColor(aspect.get_color().unwrap_or(Color::WHITE)),
+                                        ));
+                                    }
+                                }
+                            });
                     });
 
                 info_content
@@ -320,21 +341,10 @@ fn spawn_card_list(
     }
 }
 
-fn get_aspect_name_and_color(aspect: &Option<Aspect>) -> (String, Color) {
-    if let Some(aspect) = aspect {
-        (
-            aspect.to_str().to_string(),
-            aspect.get_color().unwrap_or(Color::WHITE),
-        )
-    } else {
-        ("No Aspect".to_string(), Color::WHITE)
-    }
-}
-
 struct DeckInfo {
     identity_cards: Vec<CardBasic<'static>>,
     deck_cards: Vec<CardBasic<'static>>,
-    current_aspect: Option<Aspect>,
+    current_aspects: Vec<Aspect>,
     card_count: usize,
     avaiable_cards: Vec<CardBasic<'static>>,
 }
@@ -344,12 +354,12 @@ impl DeckInfo {
         let (identity_cards, player_cards) = DeckUtil::get_cards_pair(res.get_identity().unwrap());
         let aspect_card_ids = res.get_deck().unwrap().get_card_ids();
         let aspect_cards = aspect_card_datas.get_batch_info_by_id(&aspect_card_ids);
-        let current_aspect = DeckUtil::get_current_aspect(&aspect_cards);
+        let current_aspects = DeckUtil::get_current_aspects(&aspect_cards);
         let deck_card_counts = aspect_cards.len() + 15;
-        let avaiable_cards = DeckUtil::get_available_cards(&aspect_card_ids, &current_aspect);
+        let avaiable_cards = DeckUtil::get_available_cards(&aspect_card_ids, &current_aspects);
         Self {
             identity_cards,
-            current_aspect,
+            current_aspects,
             card_count: deck_card_counts,
             avaiable_cards,
             deck_cards: player_cards

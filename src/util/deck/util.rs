@@ -1,4 +1,4 @@
-use bevy::utils::HashMap;
+use bevy::utils::{HashMap, HashSet};
 
 use crate::{
     cards::{Aspect, IdentitySet, SetTrait},
@@ -27,20 +27,21 @@ impl DeckUtil {
         (identity_cards, other_cards)
     }
 
-    pub fn get_current_aspect(aspect_cards: &Vec<CardBasic<'static>>) -> Option<Aspect> {
+    pub fn get_current_aspects(aspect_cards: &Vec<CardBasic<'static>>) -> Vec<Aspect> {
+        let mut aspects = HashSet::new();
         for card in aspect_cards {
             if let Some(aspect) = card.belongs.get_aspect() {
                 if aspect != Aspect::Basic {
-                    return Some(aspect);
+                    aspects.insert(aspect);
                 }
             }
         }
-        None
+        aspects.into_iter().collect()
     }
 
     pub fn get_available_cards(
         deck_card_ids: &Vec<String>,
-        current_aspect: &Option<Aspect>,
+        current_aspect: &Vec<Aspect>,
     ) -> Vec<CardBasic<'static>> {
         let mut available_cards = vec![];
         let mut deck_card_map: HashMap<String, u8> = HashMap::new();
@@ -50,13 +51,17 @@ impl DeckUtil {
         }
 
         let aspect_cards: Vec<CardBasic<'static>> = {
-            if let Some(aspect) = current_aspect {
-                [aspect.get_card_infos(), Aspect::Basic.get_card_infos()].concat()
-            } else {
+            if current_aspect.is_empty() {
                 Aspect::get_all()
                     .iter()
                     .map(|aspect| aspect.get_card_infos())
                     .flatten()
+                    .collect()
+            } else {
+                current_aspect
+                    .iter()
+                    .flat_map(|aspect| aspect.get_card_infos())
+                    .chain(Aspect::Basic.get_card_infos())
                     .collect()
             }
         };

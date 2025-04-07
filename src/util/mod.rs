@@ -3,7 +3,7 @@ mod devtool;
 mod system_util;
 mod ui_util;
 
-pub use deck::{Deck, DeckUtil, DecksStorageUtil};
+pub use deck::{Deck, DeckUtil, DeckValidator, DecksStorageUtil};
 pub use system_util::SystemUtil;
 pub use ui_util::UiUtils;
 

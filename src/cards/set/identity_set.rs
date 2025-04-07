@@ -3,6 +3,7 @@ use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::cards::data::identity_set;
 use crate::component::card::CardBasic;
+use crate::util::DeckValidator;
 
 use super::set_trait::SetTrait;
 
@@ -82,6 +83,10 @@ impl IdentitySet {
             Self::CoreSheHulk => vec!["core_163", "core_164"],
             Self::CoreSpiderMan => vec!["core_168", "core_169"],
         }
+    }
+
+    pub fn get_deck_validator(&self) -> DeckValidator {
+        DeckValidator::default(self.clone())
     }
 }
 

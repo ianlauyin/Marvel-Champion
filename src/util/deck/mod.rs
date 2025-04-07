@@ -1,8 +1,10 @@
+mod deck_validator;
 mod decks_storage;
 mod util;
 
 use std::collections::HashMap;
 
+pub use deck_validator::DeckValidator;
 pub use decks_storage::DecksStorageUtil;
 pub use util::DeckUtil;
 

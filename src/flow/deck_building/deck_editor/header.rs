@@ -7,7 +7,8 @@ use crate::{
         deck_building::resource::{DeckBuildingResource, DeckBuildingState},
         state::AppState,
     },
-    node_ui::CustomButton,
+    node_ui::{CustomButton, Popup},
+    resource::AspectCardDatas,
     util::DecksStorageUtil,
 };
 
@@ -140,9 +141,11 @@ fn handle_text_input_escape(
 }
 
 fn handle_header_button_click(
+    mut commands: Commands,
     header_button_q: Query<(&Interaction, &HeaderButton)>,
     text_value_q: Query<&TextInputValue>,
     mut res: ResMut<DeckBuildingResource>,
+    aspect_card_datas: Res<AspectCardDatas>,
     pkv: ResMut<PkvStore>,
 ) {
     if res.get_state() != DeckBuildingState::DeckEditor {
@@ -158,7 +161,10 @@ fn handle_header_button_click(
                     if let Ok(text_value) = text_value_q.get_single() {
                         deck.set_name(&text_value.0);
                     }
-                    deck_storage_util.save_deck(deck);
+                    if let Err(message) = deck_storage_util.save_deck(deck, aspect_card_datas) {
+                        commands.spawn(Popup::new(message));
+                        return;
+                    }
                 }
                 HeaderButton::Back => {}
             }

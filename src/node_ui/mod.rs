@@ -6,6 +6,7 @@ mod custom_button;
 mod loading_screen;
 mod main_container;
 mod mouse_control_util;
+mod popup;
 mod scrolling_list;
 
 pub use card::{Card, CARD_SIZE_SMALL};
@@ -16,6 +17,7 @@ pub use custom_button::CustomButton;
 pub use loading_screen::LoadingScreen;
 pub use main_container::MainContainer;
 pub use mouse_control_util::{MouseControl, MouseControlEvent};
+pub use popup::Popup;
 pub use scrolling_list::ScrollingList;
 
 use bevy::prelude::{App, Plugin};
@@ -31,6 +33,7 @@ impl Plugin for NodeUiPlugin {
             custom_button::MenuButtonPlugin,
             scrolling_list::ScrollingListPlugin,
             card::CardPlugin,
+            popup::PopupPlugin,
             card_detail_button::CardDetailButtonPlugin,
             card_detail::CardDetailPlugin,
             mouse_control_util::MouseControlUtilPlugin,
