@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::{
     flow::state::AppState,
-    ui_component::{ContainerHeader, ContainerHeaderEvent, CustomButton, MainContainer},
+    node_ui::{ContainerHeader, ContainerHeaderEvent, CustomButton, MainContainer},
     util::SystemUtil,
 };
 

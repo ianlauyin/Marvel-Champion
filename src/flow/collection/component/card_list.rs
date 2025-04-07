@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use crate::{
     component::card::CardBasic,
     resource::AssetLoader,
-    ui_component::{
+    node_ui::{
         Card, CardDetailButton, ContainerHeader, ContainerHeaderEvent, MainContainer, ScrollingList,
     },
 };

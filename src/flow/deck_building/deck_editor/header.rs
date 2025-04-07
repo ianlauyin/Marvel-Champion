@@ -7,7 +7,7 @@ use crate::{
         deck_building::resource::{DeckBuildingResource, DeckBuildingState},
         state::AppState,
     },
-    ui_component::CustomButton,
+    node_ui::CustomButton,
     util::DecksStorageUtil,
 };
 

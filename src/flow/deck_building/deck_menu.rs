@@ -4,7 +4,7 @@ use bevy_pkv::PkvStore;
 use crate::{
     cards::IdentitySet,
     flow::state::AppState,
-    ui_component::{
+    node_ui::{
         ContainerHeader, ContainerHeaderEvent, CustomButton, MainContainer, ScrollingList,
     },
     util::{Deck, DecksStorageUtil, SystemUtil},

@@ -5,7 +5,7 @@ use crate::{
     component::card::CardBasic,
     flow::{deck_building::resource::DeckBuildingResource, state::AppState},
     resource::{AspectCardDatas, AssetLoader},
-    ui_component::{Card, CardDetailButton, ScrollingList},
+    node_ui::{Card, CardDetailButton, ScrollingList},
     util::{DeckUtil, MouseControl},
 };
 pub struct DeckEditorContentPlugin;

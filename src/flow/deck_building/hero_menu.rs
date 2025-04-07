@@ -4,7 +4,7 @@ use crate::{
     cards::{IdentitySet, SetTrait},
     flow::state::AppState,
     resource::AssetLoader,
-    ui_component::{
+    node_ui::{
         ContainerHeader, ContainerHeaderEvent, CustomButton, MainContainer, ScrollingList,
     },
     util::SystemUtil,

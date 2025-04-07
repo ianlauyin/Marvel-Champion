@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::ui_component::CustomButton;
+use crate::node_ui::CustomButton;
 
 #[derive(Event)]
 pub enum ContainerHeaderEvent {

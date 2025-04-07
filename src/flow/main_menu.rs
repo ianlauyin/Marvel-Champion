@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 
 use crate::{
-    ui_component::{CustomButton, MainContainer},
+    node_ui::{CustomButton, MainContainer},
     util::SystemUtil,
 };
 

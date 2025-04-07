@@ -7,8 +7,8 @@ mod cards;
 mod component;
 mod constant;
 mod flow;
+mod node_ui;
 mod resource;
-mod ui_component;
 mod util;
 
 fn main() {
@@ -25,7 +25,7 @@ fn main() {
         .add_plugins(EmbeddedAssetPlugin::default())
         .add_plugins((
             flow::FlowPlugin,
-            ui_component::UiComponentPlugin,
+            node_ui::NodeUiPlugin,
             resource::ResourcePlugin,
             util::UtilPlugin,
         ))

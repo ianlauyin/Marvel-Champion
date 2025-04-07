@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{flow::state::AppState, ui_component::MainContainer, util::SystemUtil};
+use crate::{flow::state::AppState, node_ui::MainContainer, util::SystemUtil};
 
 use super::{
     super::resource::{DeckBuildingResource, DeckBuildingState}, content::DeckEditorContent, header::DeckEditorHeader

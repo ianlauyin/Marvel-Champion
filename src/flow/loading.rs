@@ -2,7 +2,7 @@ use std::sync::LazyLock;
 
 use bevy::prelude::*;
 
-use crate::{cards::*, resource::AssetLoader, ui_component::LoadingScreen, util::SystemUtil};
+use crate::{cards::*, resource::AssetLoader, node_ui::LoadingScreen, util::SystemUtil};
 
 use super::state::AppState;
 

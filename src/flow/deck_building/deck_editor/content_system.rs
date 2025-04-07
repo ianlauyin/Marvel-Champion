@@ -4,7 +4,7 @@ use crate::{
     component::card::CardBasic,
     flow::{deck_building::resource::DeckBuildingResource, state::AppState},
     resource::AssetLoader,
-    ui_component::{Card, CardDetail, CARD_SIZE_SMALL},
+    node_ui::{Card, CardDetail, CARD_SIZE_SMALL},
     util::{MouseControl, MouseControlEvent, UiUtils},
 };
 
