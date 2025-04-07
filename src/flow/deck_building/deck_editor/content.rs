@@ -4,9 +4,9 @@ use crate::{
     cards::{Aspect, SetTrait},
     component::card::CardBasic,
     flow::{deck_building::resource::DeckBuildingResource, state::AppState},
+    node_ui::{Card, CardDetailButton, MouseControl, ScrollingList},
     resource::{AspectCardDatas, AssetLoader},
-    node_ui::{Card, CardDetailButton, ScrollingList},
-    util::{DeckUtil, MouseControl},
+    util::DeckUtil,
 };
 pub struct DeckEditorContentPlugin;
 
