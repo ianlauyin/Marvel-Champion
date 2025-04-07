@@ -38,23 +38,36 @@ impl DeckUtil {
         None
     }
 
-    pub fn get_available_cards(deck_card_ids: &Vec<String>) -> Vec<CardBasic<'static>> {
+    pub fn get_available_cards(
+        deck_card_ids: &Vec<String>,
+        current_aspect: &Option<Aspect>,
+    ) -> Vec<CardBasic<'static>> {
         let mut available_cards = vec![];
         let mut deck_card_map: HashMap<String, u8> = HashMap::new();
-        for deck_card in deck_card_ids {
-            let count = deck_card_map.entry(deck_card.clone()).or_insert(0);
+        for deck_card_id in deck_card_ids {
+            let count = deck_card_map.entry(deck_card_id.clone()).or_insert(0);
             *count += 1;
         }
 
-        for aspect in Aspect::get_all() {
-            for card in aspect.get_card_infos() {
-                if let Some(count) = deck_card_map.get(card.id) {
-                    if *count < card.card_amount_max {
-                        available_cards.push(card);
-                    }
-                } else {
+        let aspect_cards: Vec<CardBasic<'static>> = {
+            if let Some(aspect) = current_aspect {
+                [aspect.get_card_infos(), Aspect::Basic.get_card_infos()].concat()
+            } else {
+                Aspect::get_all()
+                    .iter()
+                    .map(|aspect| aspect.get_card_infos())
+                    .flatten()
+                    .collect()
+            }
+        };
+
+        for card in aspect_cards {
+            if let Some(count) = deck_card_map.get_mut(card.id) {
+                if *count < card.card_amount_max {
                     available_cards.push(card);
                 }
+            } else {
+                available_cards.push(card);
             }
         }
 

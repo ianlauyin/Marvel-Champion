@@ -46,6 +46,14 @@ impl DeckBuildingResource {
         self.deck = Some(deck);
     }
 
+    pub fn add_card(&mut self, card_id: &str) {
+        self.deck.as_mut().unwrap().push_card_id(card_id);
+    }
+
+    pub fn remove_card(&mut self, card_id: &str) {
+        self.deck.as_mut().unwrap().remove_card_id(card_id);
+    }
+
     pub fn clear_deck(&mut self) {
         self.deck = None;
     }

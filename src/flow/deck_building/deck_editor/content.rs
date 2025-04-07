@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, ui::RelativeCursorPosition};
 
 use crate::{
     cards::{Aspect, SetTrait},
@@ -55,22 +55,29 @@ fn on_content_added(
 }
 
 #[derive(Component)]
-enum DeckContent {
+#[require(RelativeCursorPosition)]
+pub enum DeckContent {
     DeckScrollingList,
     CurrentAspect,
     CardCount,
     CollectionScrollingList,
 }
 
+#[derive(Component, Clone, PartialEq)]
+pub enum CardFrom {
+    Deck,
+    Collection,
+}
+
 fn on_deck_info_changed(
     mut commands: Commands,
-    res: Res<DeckBuildingResource>,
     mut content_q: Query<(
         Entity,
         &DeckContent,
         Option<&mut Text>,
         Option<&mut TextColor>,
     )>,
+    res: Res<DeckBuildingResource>,
     aspect_card_datas: Res<AspectCardDatas>,
     asset_loader: Res<AssetLoader>,
 ) {
@@ -95,6 +102,7 @@ fn on_deck_info_changed(
                                     deck_scrolling_list,
                                     &deck_info.deck_cards,
                                     &asset_loader,
+                                    CardFrom::Deck,
                                 );
                             },
                         );
@@ -106,6 +114,7 @@ fn on_deck_info_changed(
                                     collection_scrolling_list,
                                     &deck_info.avaiable_cards,
                                     &asset_loader,
+                                    CardFrom::Collection,
                                 );
                             },
                         );
@@ -143,7 +152,7 @@ fn spawn_deck(
             current
                 .spawn((ScrollingList::grid(6, 10.), DeckContent::DeckScrollingList))
                 .with_children(|scrolling_list| {
-                    spawn_card_list(scrolling_list, &deck_cards, asset_loader);
+                    spawn_card_list(scrolling_list, &deck_cards, asset_loader, CardFrom::Deck);
                 });
         });
 }
@@ -278,7 +287,12 @@ fn spawn_collection(
                     DeckContent::CollectionScrollingList,
                 ))
                 .with_children(|scrolling_list| {
-                    spawn_card_list(scrolling_list, &available_cards, asset_loader);
+                    spawn_card_list(
+                        scrolling_list,
+                        &available_cards,
+                        asset_loader,
+                        CardFrom::Collection,
+                    );
                 });
         });
 }
@@ -287,6 +301,7 @@ fn spawn_card_list(
     parent: &mut ChildBuilder,
     cards: &Vec<CardBasic<'static>>,
     asset_loader: &Res<AssetLoader>,
+    card_from: CardFrom,
 ) {
     for card in cards {
         parent
@@ -300,6 +315,7 @@ fn spawn_card_list(
                 Card::small(asset_loader.get(&card.get_key()).clone()),
                 card.clone(),
                 MouseControl::default(),
+                card_from.clone(),
             ));
     }
 }
@@ -330,7 +346,7 @@ impl DeckInfo {
         let aspect_cards = aspect_card_datas.get_batch_info_by_id(&aspect_card_ids);
         let current_aspect = DeckUtil::get_current_aspect(&aspect_cards);
         let deck_card_counts = aspect_cards.len() + 15;
-        let avaiable_cards = DeckUtil::get_available_cards(&aspect_card_ids);
+        let avaiable_cards = DeckUtil::get_available_cards(&aspect_card_ids, &current_aspect);
         Self {
             identity_cards,
             current_aspect,

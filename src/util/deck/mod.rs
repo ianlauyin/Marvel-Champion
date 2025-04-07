@@ -6,7 +6,10 @@ use std::collections::HashMap;
 pub use decks_storage::DecksStorageUtil;
 pub use util::DeckUtil;
 
-use bevy::{log::warn, prelude::{App, Plugin}};
+use bevy::{
+    log::warn,
+    prelude::{App, Plugin},
+};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
