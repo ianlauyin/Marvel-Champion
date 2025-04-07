@@ -39,7 +39,7 @@ fn on_card_detail_added(
     commands
         .entity(trigger.entity())
         .insert((
-            UiUtils::get_largest_z_index(z_index_q),
+            UiUtils::get_largest_z_index(&z_index_q),
             Node {
                 width: Val::Px(600.),
                 height: Val::Px(600.),

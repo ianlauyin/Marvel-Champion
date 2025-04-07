@@ -9,7 +9,7 @@ pub struct Card {
     is_vertical: bool,
 }
 
-const CARD_SIZE_SMALL: Vec2 = Vec2::new(64., 89.);
+pub const CARD_SIZE_SMALL: Vec2 = Vec2::new(64., 89.);
 const CARD_SIZE_MEDIUM: Vec2 = Vec2::new(128., 178.);
 const CARD_SIZE_LARGE: Vec2 = Vec2::new(362., 503.);
 
@@ -46,17 +46,28 @@ impl Plugin for CardPlugin {
     }
 }
 
-fn on_card_added(trigger: Trigger<OnAdd, Card>, mut commands: Commands, card_q: Query<&Card>) {
-    let card = card_q.get(trigger.entity()).unwrap();
+fn on_card_added(
+    trigger: Trigger<OnAdd, Card>,
+    mut commands: Commands,
+    card_q: Query<(&Card, Option<&Node>)>,
+) {
+    let (card, node_op) = card_q.get(trigger.entity()).unwrap();
+    let mut node = Node {
+        align_self: AlignSelf::Center,
+        justify_self: JustifySelf::Center,
+        width: Val::Px(card.size.x),
+        height: Val::Px(card.size.y),
+        ..default()
+    };
+    if let Some(orginal_node) = node_op {
+        node = orginal_node.clone();
+        node.width = Val::Px(card.size.x);
+        node.height = Val::Px(card.size.y);
+    }
+
     commands.entity(trigger.entity()).insert((
         ImageNode::new(card.image.clone()),
-        Node {
-            align_self: AlignSelf::Center,
-            justify_self: JustifySelf::Center,
-            width: Val::Px(card.size.x),
-            height: Val::Px(card.size.y),
-            ..default()
-        },
+        node,
         Transform::from_rotation(Quat::from_axis_angle(
             Vec3::Z,
             if card.is_vertical {

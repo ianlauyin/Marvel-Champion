@@ -51,7 +51,7 @@ fn on_main_container_added(
         main_container.node.clone(),
         BorderRadius::all(Val::Px(10.)),
         BackgroundColor::from(Color::BLACK.with_alpha(0.9999)),
-        UiUtils::get_largest_z_index(z_index_q),
+        UiUtils::get_largest_z_index(&z_index_q),
         FocusPolicy::Block,
     ));
 }

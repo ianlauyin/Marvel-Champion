@@ -4,6 +4,7 @@ use bevy::{prelude::*, time::Stopwatch, window::PrimaryWindow};
 #[require(Interaction)]
 pub struct MouseControl {
     stop_watch: Stopwatch,
+    dragging: bool,
     position: Option<Vec2>,
 }
 
@@ -14,6 +15,7 @@ impl Default for MouseControl {
         stop_watch.pause();
         Self {
             stop_watch,
+            dragging: false,
             position: None,
         }
     }
@@ -22,10 +24,8 @@ impl Default for MouseControl {
 #[derive(Event)]
 pub enum MouseControlEvent {
     ShortClick(Entity),
-    Drag {
-        entity: Entity,
-        delta_position: Option<Vec2>,
-    },
+    StartDrag(Entity),
+    Drag(Option<Vec2>),
     Drop,
 }
 
@@ -68,11 +68,14 @@ fn handle_pressed(
     mouse_target: &mut MouseControl,
     cursor_position: Vec2,
 ) {
-    if mouse_target.stop_watch.elapsed_secs() >= TIME_BOUNDARY {
-        event_writer.send(MouseControlEvent::Drag {
-            entity,
-            delta_position: get_delta_position(cursor_position, mouse_target),
-        });
+    if mouse_target.dragging {
+        event_writer.send(MouseControlEvent::Drag(get_delta_position(
+            cursor_position,
+            mouse_target,
+        )));
+    } else if mouse_target.stop_watch.elapsed_secs() >= TIME_BOUNDARY {
+        mouse_target.dragging = true;
+        event_writer.send(MouseControlEvent::StartDrag(entity));
     } else if mouse_target.stop_watch.is_paused() {
         mouse_target.stop_watch.unpause();
     }
@@ -91,6 +94,7 @@ fn handle_released(
     }
     mouse_target.stop_watch.pause();
     mouse_target.stop_watch.reset();
+    mouse_target.dragging = false;
     mouse_target.position = None;
 }
 
@@ -98,6 +102,5 @@ fn get_delta_position(cursor_position: Vec2, mouse_target: &mut MouseControl) ->
     let Some(previous_position) = mouse_target.position else {
         return None;
     };
-
     Some(cursor_position - previous_position)
 }

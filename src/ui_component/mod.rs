@@ -1,21 +1,21 @@
 mod card;
 mod card_detail;
 mod card_detail_button;
+mod card_sprite;
 mod container_header;
 mod custom_button;
 mod loading_screen;
 mod main_container;
-mod node_moving;
 mod scrolling_list;
 
-pub use card::Card;
+pub use card::{Card, CARD_SIZE_SMALL};
 pub use card_detail::CardDetail;
 pub use card_detail_button::CardDetailButton;
+pub use card_sprite::CardSprite;
 pub use container_header::{ContainerHeader, ContainerHeaderEvent};
 pub use custom_button::CustomButton;
 pub use loading_screen::LoadingScreen;
 pub use main_container::MainContainer;
-pub use node_moving::{NodeMove, NodeMoveRemoveEvent};
 pub use scrolling_list::ScrollingList;
 
 use bevy::prelude::{App, Plugin};
@@ -28,7 +28,7 @@ impl Plugin for UiComponentPlugin {
             container_header::ContainerHeaderPlugin,
             main_container::MainContainerPlugin,
             loading_screen::LoadingScreenPlugin,
-            node_moving::NodeMovingPlugin,
+            card_sprite::CardSpritePlugin,
             custom_button::MenuButtonPlugin,
             scrolling_list::ScrollingListPlugin,
             card::CardPlugin,
