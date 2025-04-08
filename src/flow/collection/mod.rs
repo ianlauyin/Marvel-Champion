@@ -1,7 +1,7 @@
 mod component;
 mod menu;
 
-use bevy::prelude::*;
+use bevy::prelude::{App, Plugin};
 
 use super::state::AppState;
 

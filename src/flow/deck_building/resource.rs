@@ -8,24 +8,7 @@ pub struct DeckBuildingResource {
     deck: Option<Deck>,
 }
 
-#[derive(PartialEq)]
-pub enum DeckBuildingState {
-    HeroMenu,
-    DeckMenu,
-    DeckEditor,
-}
-
 impl DeckBuildingResource {
-    pub fn get_state(&self) -> DeckBuildingState {
-        if self.identity.is_none() {
-            DeckBuildingState::HeroMenu
-        } else if self.deck.is_none() {
-            DeckBuildingState::DeckMenu
-        } else {
-            DeckBuildingState::DeckEditor
-        }
-    }
-
     pub fn set_identity(&mut self, identity: IdentitySet) {
         self.identity = Some(identity);
     }

@@ -3,10 +3,7 @@ use bevy_pkv::PkvStore;
 use bevy_simple_text_input::{TextInput, TextInputInactive, TextInputSubmitEvent, TextInputValue};
 
 use crate::{
-    flow::{
-        deck_building::resource::{DeckBuildingResource, DeckBuildingState},
-        state::AppState,
-    },
+    flow::deck_building::{resource::DeckBuildingResource, state::DeckBuildingState},
     node_ui::{CustomButton, Popup},
     resource::AspectCardDatas,
     util::DecksStorageUtil,
@@ -24,7 +21,7 @@ impl Plugin for DeckEditorHeaderPlugin {
                 handle_text_input_finished,
                 handle_text_input_escape,
             )
-                .run_if(in_state(AppState::DeckBuilding)),
+                .run_if(in_state(DeckBuildingState::DeckEditor)),
         )
         .add_observer(on_header_added);
     }
@@ -147,10 +144,8 @@ fn handle_header_button_click(
     mut res: ResMut<DeckBuildingResource>,
     aspect_card_datas: Res<AspectCardDatas>,
     pkv: ResMut<PkvStore>,
+    mut next_state: ResMut<NextState<DeckBuildingState>>,
 ) {
-    if res.get_state() != DeckBuildingState::DeckEditor {
-        return;
-    }
     for (interaction, header_button) in header_button_q.iter() {
         if interaction == &Interaction::Pressed {
             let mut deck = res.get_deck().unwrap();
@@ -169,6 +164,7 @@ fn handle_header_button_click(
                 HeaderButton::Back => {}
             }
             res.clear_deck();
+            next_state.set(DeckBuildingState::DeckMenu);
             return;
         }
     }

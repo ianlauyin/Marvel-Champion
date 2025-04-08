@@ -8,6 +8,7 @@ pub struct PreGamePlugin;
 
 impl Plugin for PreGamePlugin {
     fn build(&self, app: &mut App) {
-        app.add_sub_state::<state::PreGameState>();
+        app.add_sub_state::<state::PreGameState>()
+            .add_plugins((deck_menu::DeckMenuPlugin, hero_menu::HeroMenuPlugin));
     }
 }

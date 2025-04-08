@@ -7,7 +7,7 @@ use crate::util::DeckValidator;
 
 use super::set_trait::SetTrait;
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 pub enum IdentitySet {
     CoreSpiderMan,
     CoreCaptainMarvel,

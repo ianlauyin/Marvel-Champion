@@ -3,7 +3,7 @@ use bevy::{prelude::*, ui::RelativeCursorPosition};
 use crate::{
     cards::{Aspect, SetTrait},
     component::card::CardBasic,
-    flow::{deck_building::resource::DeckBuildingResource, state::AppState},
+    flow::deck_building::{resource::DeckBuildingResource, state::DeckBuildingState},
     node_ui::{Card, CardDetailButton, MouseControl, ScrollingList},
     resource::{AspectCardDatas, AssetLoader},
     util::DeckUtil,
@@ -14,7 +14,7 @@ impl Plugin for DeckEditorContentPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             Update,
-            on_deck_info_changed.run_if(in_state(AppState::DeckBuilding)),
+            on_deck_info_changed.run_if(in_state(DeckBuildingState::DeckEditor)),
         )
         .add_observer(on_content_added);
     }

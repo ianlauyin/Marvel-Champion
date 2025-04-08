@@ -2,7 +2,7 @@ use bevy::{prelude::*, ui::RelativeCursorPosition};
 
 use crate::{
     component::card::CardBasic,
-    flow::{deck_building::resource::DeckBuildingResource, state::AppState},
+    flow::deck_building::{resource::DeckBuildingResource, state::DeckBuildingState},
     node_ui::{Card, CardDetail, MouseControl, MouseControlEvent, CARD_SIZE_SMALL},
     resource::AssetLoader,
     util::UiUtils,
@@ -16,7 +16,7 @@ impl Plugin for DeckEditorContentSystemPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             Update,
-            (handle_mouse_event).run_if(in_state(AppState::DeckBuilding)),
+            handle_mouse_event.run_if(in_state(DeckBuildingState::DeckEditor)),
         );
     }
 }

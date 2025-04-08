@@ -8,7 +8,7 @@ use crate::{
     util::SystemUtil,
 };
 
-use super::state::PreGameState;
+use super::{deck_menu::DeckMenu, state::PreGameState};
 
 const CURRENT_STATE: PreGameState = PreGameState::HeroMenu;
 
@@ -52,10 +52,11 @@ fn spawn_hero_menu(mut commands: Commands, asset_loader: Res<AssetLoader>) {
 }
 
 fn handle_hero_menu_button_click(
+    mut commands: Commands,
     hero_menu_button_q: Query<(&Interaction, &HeroMenuButton), Changed<Interaction>>,
 ) {
     SystemUtil::handle_button_click(hero_menu_button_q, |hero_menu_button| {
-        // TODO: Add Deck Selection
+        commands.spawn(DeckMenu(hero_menu_button.0.clone()));
     });
 }
 
