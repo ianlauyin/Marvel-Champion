@@ -1,4 +1,6 @@
-#[derive(Clone, Default, PartialEq, Eq, Hash)]
+use bevy::prelude::Component;
+
+#[derive(Component, Clone, Default, PartialEq, Eq, Hash)]
 pub enum PlayerTag {
     #[default]
     One,

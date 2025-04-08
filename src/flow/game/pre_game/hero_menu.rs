@@ -2,7 +2,10 @@ use bevy::prelude::*;
 
 use crate::{
     cards::{IdentitySet, SetTrait},
-    flow::state::AppState,
+    flow::{
+        game::{component::PlayerTag, resource::PlayersInfo},
+        state::AppState,
+    },
     node_ui::{ContainerHeader, ContainerHeaderEvent, CustomButton, MainContainer, ScrollingList},
     resource::AssetLoader,
     util::SystemUtil,
@@ -19,7 +22,11 @@ impl Plugin for HeroMenuPlugin {
         app.add_systems(OnEnter(CURRENT_STATE), spawn_hero_menu)
             .add_systems(
                 Update,
-                (handle_header_button_click, handle_hero_menu_button_click)
+                (
+                    handle_header_button_click,
+                    handle_hero_menu_button_click,
+                    handle_players_info_changed,
+                )
                     .run_if(in_state(CURRENT_STATE)),
             )
             .add_systems(OnExit(CURRENT_STATE), SystemUtil::cleanup_all::<HeroMenu>);
@@ -49,6 +56,36 @@ fn spawn_hero_menu(mut commands: Commands, asset_loader: Res<AssetLoader>) {
                     }
                 });
         });
+}
+
+fn handle_players_info_changed(
+    mut commands: Commands,
+    players_info: Res<PlayersInfo>,
+    hero_menu_button_q: Query<(Entity, &HeroMenuButton)>,
+    player_tag_q: Query<Entity, With<PlayerTag>>,
+) {
+    if players_info.is_changed() {
+        for previous_tag_entity in player_tag_q.iter() {
+            commands.entity(previous_tag_entity).despawn_recursive();
+        }
+        for (entity, hero_menu_button) in hero_menu_button_q.iter() {
+            if let Some((player_tag, _)) = players_info.get_by_identity(&hero_menu_button.0) {
+                commands.entity(entity).with_children(|parent| {
+                    parent
+                        .spawn((
+                            player_tag.clone(),
+                            Node {
+                                position_type: PositionType::Absolute,
+                                top: Val::Px(1.),
+                                right: Val::Px(1.),
+                                ..default()
+                            },
+                        ))
+                        .with_child(Text::new(player_tag.to_string()));
+                });
+            }
+        }
+    }
 }
 
 fn handle_hero_menu_button_click(
