@@ -110,6 +110,9 @@ fn handle_header_button_click(
                         next_state.set(AppState::MainMenu);
                     }
                 }
+                ContainerHeaderEvent::TrailingButtonPressed(header_entity) => {
+                    // TODO: Check if players and move to next state
+                }
             }
         }
     }

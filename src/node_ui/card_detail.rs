@@ -78,6 +78,7 @@ fn handle_header_button_click(
                         commands.entity(entity).despawn_recursive();
                     }
                 }
+                _ => {}
             }
         }
     }

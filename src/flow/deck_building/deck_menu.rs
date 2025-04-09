@@ -77,6 +77,7 @@ fn handle_header_button_click(
                         next_state.set(DeckBuildingState::HeroMenu);
                     }
                 }
+                _ => {}
             }
         }
     }

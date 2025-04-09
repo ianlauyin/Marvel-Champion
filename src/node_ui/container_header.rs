@@ -5,17 +5,20 @@ use crate::node_ui::CustomButton;
 #[derive(Event)]
 pub enum ContainerHeaderEvent {
     LeadingButtonPressed(Entity),
+    TrailingButtonPressed(Entity),
 }
 
 #[derive(Component)]
 pub struct ContainerHeader {
     leading_button: ContainerHeaderButton,
+    trailing_button: Option<ContainerHeaderButton>,
 }
 
 impl ContainerHeader {
     pub fn with_leading_button(text: &str) -> Self {
         Self {
             leading_button: ContainerHeaderButton::Leading(text.to_string()),
+            trailing_button: None,
         }
     }
 }
@@ -23,12 +26,13 @@ impl ContainerHeader {
 #[derive(Component, Clone)]
 pub enum ContainerHeaderButton {
     Leading(String),
+    Trailing(String),
 }
 
 impl ContainerHeaderButton {
     pub fn get_text(&self) -> &str {
         match self {
-            ContainerHeaderButton::Leading(text) => text,
+            ContainerHeaderButton::Leading(text) | ContainerHeaderButton::Trailing(text) => text,
         }
     }
 }
@@ -77,6 +81,9 @@ fn listen_container_header_pressed(
             let event = match button {
                 ContainerHeaderButton::Leading(_) => {
                     ContainerHeaderEvent::LeadingButtonPressed(parent.get())
+                }
+                ContainerHeaderButton::Trailing(_) => {
+                    ContainerHeaderEvent::TrailingButtonPressed(parent.get())
                 }
             };
             event_writer.send(event);

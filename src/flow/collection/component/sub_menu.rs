@@ -2,10 +2,8 @@ use bevy::prelude::*;
 
 use crate::{
     cards::*,
+    node_ui::{ContainerHeader, ContainerHeaderEvent, CustomButton, MainContainer, ScrollingList},
     resource::AssetLoader,
-    node_ui::{
-        ContainerHeader, ContainerHeaderEvent, CustomButton, MainContainer, ScrollingList,
-    },
     util::SystemUtil,
 };
 
@@ -89,6 +87,7 @@ fn handle_header_button_click(
                         commands.entity(entity).despawn_recursive();
                     }
                 }
+                _ => {}
             }
         }
     }

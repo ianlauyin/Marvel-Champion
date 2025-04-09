@@ -41,7 +41,7 @@ fn on_deck_menu_added(
         .entity(trigger.entity())
         .insert(MainContainer::new())
         .with_children(|container| {
-            container.spawn(ContainerHeader::with_leading_button("<"));
+            container.spawn(ContainerHeader::with_leading_button("X"));
             container
                 .spawn(ScrollingList::grid(3, 50.))
                 .with_children(|scrolling_list| {
@@ -89,6 +89,7 @@ fn handle_header_button_click(
                         commands.entity(entity).despawn_recursive();
                     }
                 }
+                _ => {}
             }
         }
     }
