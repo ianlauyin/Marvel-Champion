@@ -6,7 +6,9 @@ use crate::{
         game::{component::PlayerTag, resource::PlayersInfo},
         state::AppState,
     },
-    node_ui::{ContainerHeader, ContainerHeaderEvent, CustomButton, MainContainer, ScrollingList},
+    node_ui::{
+        ContainerHeader, ContainerHeaderEvent, CustomButton, MainContainer, Popup, ScrollingList,
+    },
     resource::AssetLoader,
     util::SystemUtil,
 };
@@ -43,7 +45,7 @@ fn spawn_hero_menu(mut commands: Commands, asset_loader: Res<AssetLoader>) {
     commands
         .spawn((MainContainer::new(), HeroMenu))
         .with_children(|container| {
-            container.spawn(ContainerHeader::with_leading_button("<"));
+            container.spawn(ContainerHeader::with_both_button("<", ">"));
             container
                 .spawn(ScrollingList::grid(3, 50.))
                 .with_children(|scrolling_list| {
@@ -99,19 +101,28 @@ fn handle_hero_menu_button_click(
 
 fn handle_header_button_click(
     mut event_reader: EventReader<ContainerHeaderEvent>,
+    mut commands: Commands,
     menu_q: Query<&Children, With<HeroMenu>>,
-    mut next_state: ResMut<NextState<AppState>>,
+    mut next_app_state: ResMut<NextState<AppState>>,
+    mut next_pre_game_state: ResMut<NextState<PreGameState>>,
+    players_info: Res<PlayersInfo>,
 ) {
     for event in event_reader.read() {
         for menu_children in menu_q.iter() {
             match event {
                 ContainerHeaderEvent::LeadingButtonPressed(header_entity) => {
                     if menu_children.contains(header_entity) {
-                        next_state.set(AppState::MainMenu);
+                        next_app_state.set(AppState::MainMenu);
                     }
                 }
                 ContainerHeaderEvent::TrailingButtonPressed(header_entity) => {
-                    // TODO: Check if players and move to next state
+                    if menu_children.contains(header_entity) {
+                        if players_info.have_players() {
+                            next_pre_game_state.set(PreGameState::EnemyMenu);
+                        } else {
+                            commands.spawn(Popup::new("You need to choose players".to_string()));
+                        }
+                    }
                 }
             }
         }

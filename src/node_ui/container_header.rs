@@ -21,6 +21,13 @@ impl ContainerHeader {
             trailing_button: None,
         }
     }
+
+    pub fn with_both_button(leading_text: &str, trailing_text: &str) -> Self {
+        Self {
+            leading_button: ContainerHeaderButton::Leading(leading_text.to_string()),
+            trailing_button: Some(ContainerHeaderButton::Trailing(trailing_text.to_string())),
+        }
+    }
 }
 
 #[derive(Component, Clone)]
@@ -69,6 +76,12 @@ fn on_container_header_added(
                 CustomButton::square(container_header.leading_button.get_text()),
                 container_header.leading_button.clone(),
             ));
+            if let Some(trailing_button) = container_header.trailing_button.clone() {
+                parent.spawn((
+                    CustomButton::square(trailing_button.get_text()),
+                    trailing_button,
+                ));
+            }
         });
 }
 

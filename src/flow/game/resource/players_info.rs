@@ -8,6 +8,10 @@ pub struct PlayersInfo {
 }
 
 impl PlayersInfo {
+    pub fn have_players(&self) -> bool {
+        self.infos.len() > 0
+    }
+
     pub fn save_player(&mut self, identity: &IdentitySet, deck_card_ids: Vec<String>) {
         if let Some((_, player_info)) = self.get_by_identity_mut(identity) {
             player_info.deck_card_ids = deck_card_ids;
