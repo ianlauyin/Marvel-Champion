@@ -43,7 +43,7 @@ struct HeroMenuButton(IdentitySet);
 
 fn spawn_hero_menu(mut commands: Commands, asset_loader: Res<AssetLoader>) {
     commands
-        .spawn((MainContainer::new(), HeroMenu))
+        .spawn((MainContainer::default(), HeroMenu))
         .with_children(|container| {
             container.spawn(ContainerHeader::with_both_button("<", ">"));
             container

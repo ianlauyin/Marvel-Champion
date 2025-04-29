@@ -34,8 +34,7 @@ const BUTTON_MAP: [(MainMenuButton, &str); 3] = [
 ];
 
 fn spawn_main_menu(mut commands: Commands) {
-    let mut main_container = MainContainer::new();
-    main_container.set_space_around();
+    let mut main_container = MainContainer::space_around();
     commands.spawn(main_container).with_children(|main_menu| {
         for (button_component, text) in BUTTON_MAP {
             main_menu.spawn((button_component, CustomButton::large(text)));

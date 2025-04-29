@@ -36,7 +36,7 @@ fn on_card_list_added(
     let card_list = card_list_q.get(trigger.target()).unwrap();
     commands
         .entity(trigger.target())
-        .insert(MainContainer::new())
+        .insert(MainContainer::default())
         .with_children(|container| {
             container.spawn(ContainerHeader::with_leading_button("X"));
             container

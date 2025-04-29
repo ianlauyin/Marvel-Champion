@@ -39,7 +39,7 @@ fn on_deck_menu_added(
     let deck_menu = deck_menu_q.get(trigger.target()).unwrap();
     commands
         .entity(trigger.target())
-        .insert(MainContainer::new())
+        .insert(MainContainer::default())
         .with_children(|container| {
             container.spawn(ContainerHeader::with_leading_button("X"));
             container

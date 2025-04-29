@@ -12,11 +12,11 @@ pub enum ScrollingList {
 impl ScrollingList {
     pub fn node(&self) -> Node {
         match self {
-            Self::Grid { column, spacing } => Self::grid(*column, *spacing),
+            Self::Grid { column, spacing } => Self::grid_node(*column, *spacing),
         }
     }
 
-    fn grid(column: u16, spacing: f32) -> Node {
+    fn grid_node(column: u16, spacing: f32) -> Node {
         Node {
             align_self: AlignSelf::Stretch,
             width: Val::Percent(100.),

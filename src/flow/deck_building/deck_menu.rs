@@ -32,7 +32,7 @@ struct DeckMenuButton(Deck);
 
 fn spawn_deck_menu(mut commands: Commands, res: Res<DeckBuildingResource>, pkv: ResMut<PkvStore>) {
     commands
-        .spawn((MainContainer::new(), DeckMenu))
+        .spawn((MainContainer::default(), DeckMenu))
         .with_children(|container| {
             container.spawn(ContainerHeader::with_leading_button("<"));
             container

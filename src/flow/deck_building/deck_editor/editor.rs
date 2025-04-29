@@ -22,7 +22,7 @@ struct DeckEditor;
 
 fn spawn_deck_editor(mut commands: Commands) {
     commands
-        .spawn((MainContainer::new(), DeckEditor))
+        .spawn((MainContainer::default(), DeckEditor))
         .with_children(|parent| {
             parent.spawn(DeckEditorHeader);
             parent.spawn(DeckEditorContent);

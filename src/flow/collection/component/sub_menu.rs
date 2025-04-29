@@ -54,7 +54,7 @@ fn on_sub_menu_added(
     let sub_menu = sub_menu_q.get(trigger.target()).unwrap();
     commands
         .entity(trigger.target())
-        .insert(MainContainer::new())
+        .insert(MainContainer::default())
         .with_children(|container| {
             container.spawn(ContainerHeader::with_leading_button("X"));
             container
