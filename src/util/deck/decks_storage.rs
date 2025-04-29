@@ -41,7 +41,7 @@ impl<'a> DecksStorageUtil<'a> {
         let mut decks = self.get_decks();
         if let Some(index) = decks
             .iter()
-            .position(|existing_deck| existing_deck.id == deck.id)
+            .position(|existing_deck| existing_deck.get_id() == deck.get_id())
         {
             // Existing Deck
             decks[index] = deck;
@@ -57,7 +57,7 @@ impl<'a> DecksStorageUtil<'a> {
 
     pub fn remove_deck(&mut self, id: &str) {
         let mut decks = self.get_decks();
-        let Some(index) = decks.iter().position(|deck| deck.id == id) else {
+        let Some(index) = decks.iter().position(|deck| deck.get_id() == id) else {
             warn!("Deck not found id: {}", id);
             return;
         };
