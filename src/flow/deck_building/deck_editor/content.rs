@@ -159,7 +159,13 @@ fn spawn_deck(
                 ))
                 .with_child(Text::new("Deck:"));
             current
-                .spawn((ScrollingList::grid(6, 10.), DeckContent::DeckScrollingList))
+                .spawn((
+                    ScrollingList::Grid {
+                        column: 6,
+                        spacing: 10.,
+                    },
+                    DeckContent::DeckScrollingList,
+                ))
                 .with_children(|scrolling_list| {
                     spawn_card_list(scrolling_list, &deck_cards, asset_loader, CardFrom::Deck);
                 });
@@ -309,7 +315,10 @@ fn spawn_collection(
                 .with_child(Text::new("Collection:"));
             available
                 .spawn((
-                    ScrollingList::grid(6, 10.),
+                    ScrollingList::Grid {
+                        column: 6,
+                        spacing: 10.,
+                    },
                     DeckContent::CollectionScrollingList,
                 ))
                 .with_children(|scrolling_list| {

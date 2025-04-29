@@ -5,22 +5,27 @@ use bevy::{
 };
 
 #[derive(Component)]
-pub struct ScrollingList;
+pub enum ScrollingList {
+    Grid { column: u16, spacing: f32 },
+}
 
 impl ScrollingList {
-    pub fn grid(column: u16, spacing: f32) -> impl Bundle {
-        (
-            Self,
-            Node {
-                align_self: AlignSelf::Stretch,
-                width: Val::Percent(100.),
-                overflow: Overflow::scroll_y(),
-                display: Display::Grid,
-                row_gap: Val::Px(spacing),
-                grid_template_columns: vec![RepeatedGridTrack::auto(column)],
-                ..default()
-            },
-        )
+    pub fn node(&self) -> Node {
+        match self {
+            Self::Grid { column, spacing } => Self::grid_node(*column, *spacing),
+        }
+    }
+
+    fn grid_node(column: u16, spacing: f32) -> Node {
+        Node {
+            align_self: AlignSelf::Stretch,
+            width: Val::Percent(100.),
+            overflow: Overflow::scroll_y(),
+            display: Display::Grid,
+            row_gap: Val::Px(spacing),
+            grid_template_columns: vec![RepeatedGridTrack::auto(column)],
+            ..default()
+        }
     }
 }
 
@@ -28,8 +33,21 @@ pub struct ScrollingListPlugin;
 
 impl Plugin for ScrollingListPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, (on_scrolling_list_children_changed, on_scroll));
+        app.add_observer(on_scrolling_list_added)
+            .add_systems(Update, (on_scrolling_list_children_changed, on_scroll));
     }
+}
+
+fn on_scrolling_list_added(
+    trigger: Trigger<OnAdd, ScrollingList>,
+    mut commands: Commands,
+    scrolling_list_q: Query<&ScrollingList>,
+) -> Result<(), BevyError> {
+    let scrolling_list = scrolling_list_q.get(trigger.target())?;
+    commands
+        .entity(trigger.target())
+        .insert(scrolling_list.node());
+    Ok(())
 }
 
 fn on_scrolling_list_children_changed(

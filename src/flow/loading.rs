@@ -49,7 +49,7 @@ impl Plugin for LoadingPlugin {
 }
 
 fn on_enter(mut commands: Commands) {
-    commands.spawn(LoadingScreen::new());
+    commands.spawn(LoadingScreen);
 }
 
 fn check_assets(

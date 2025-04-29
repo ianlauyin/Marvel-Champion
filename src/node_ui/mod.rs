@@ -28,6 +28,8 @@ impl Plugin for NodeUiPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((
             container_header::ContainerHeaderPlugin,
+            main_container::MainContainerPlugin,
+            loading_screen::LoadingScreenPlugin,
             custom_button::MenuButtonPlugin,
             scrolling_list::ScrollingListPlugin,
             card_node::CardNodePlugin,

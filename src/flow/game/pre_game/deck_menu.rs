@@ -35,16 +35,18 @@ fn on_deck_menu_added(
     deck_menu_q: Query<&DeckMenu>,
     players_info: Res<PlayersInfo>,
     pkv: ResMut<PkvStore>,
-    z_index_q: Query<&ZIndex>,
 ) {
     let deck_menu = deck_menu_q.get(trigger.target()).unwrap();
     commands
         .entity(trigger.target())
-        .insert(MainContainer::default(&z_index_q))
+        .insert(MainContainer::default())
         .with_children(|container| {
             container.spawn(ContainerHeader::with_leading_button("X"));
             container
-                .spawn(ScrollingList::grid(3, 50.))
+                .spawn(ScrollingList::Grid {
+                    column: 3,
+                    spacing: 50.,
+                })
                 .with_children(|scrolling_list| {
                     for deck in get_decks(&deck_menu.0, pkv) {
                         scrolling_list.spawn((

@@ -41,17 +41,16 @@ struct HeroMenu;
 #[derive(Component)]
 struct HeroMenuButton(IdentitySet);
 
-fn spawn_hero_menu(
-    mut commands: Commands,
-    asset_loader: Res<AssetLoader>,
-    z_index_q: Query<&ZIndex>,
-) {
+fn spawn_hero_menu(mut commands: Commands, asset_loader: Res<AssetLoader>) {
     commands
-        .spawn(MainContainer::default(&z_index_q))
+        .spawn((MainContainer::default(), HeroMenu))
         .with_children(|container| {
             container.spawn(ContainerHeader::with_both_button("<", ">"));
             container
-                .spawn(ScrollingList::grid(3, 50.))
+                .spawn(ScrollingList::Grid {
+                    column: 3,
+                    spacing: 50.,
+                })
                 .with_children(|scrolling_list| {
                     for identity in IdentitySet::get_all() {
                         let mut button = CustomButton::large(identity.to_str());
@@ -110,7 +109,6 @@ fn handle_header_button_click(
     mut next_app_state: ResMut<NextState<AppState>>,
     mut next_pre_game_state: ResMut<NextState<PreGameState>>,
     players_info: Res<PlayersInfo>,
-    z_index_q: Query<&ZIndex>,
 ) {
     for event in event_reader.read() {
         for menu_children in menu_q.iter() {
@@ -125,10 +123,7 @@ fn handle_header_button_click(
                         if players_info.have_players() {
                             next_pre_game_state.set(PreGameState::EnemyMenu);
                         } else {
-                            commands.spawn(Popup::new(
-                                "You need to choose players".to_string(),
-                                &z_index_q,
-                            ));
+                            commands.spawn(Popup::new("You need to choose players".to_string()));
                         }
                     }
                 }
