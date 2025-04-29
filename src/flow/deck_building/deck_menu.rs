@@ -30,16 +30,18 @@ struct DeckMenu;
 #[derive(Component)]
 struct DeckMenuButton(Deck);
 
-fn spawn_deck_menu(mut commands: Commands, res: Res<DeckBuildingResource>, pkv: ResMut<PkvStore>) {
+fn spawn_deck_menu(
+    mut commands: Commands,
+    res: Res<DeckBuildingResource>,
+    pkv: ResMut<PkvStore>,
+    z_index_q: Query<&ZIndex>,
+) {
     commands
-        .spawn((MainContainer::default(), DeckMenu))
+        .spawn((MainContainer::default(&z_index_q), DeckMenu))
         .with_children(|container| {
             container.spawn(ContainerHeader::with_leading_button("<"));
             container
-                .spawn(ScrollingList::Grid {
-                    column: 3,
-                    spacing: 50.,
-                })
+                .spawn(ScrollingList::grid(3, 50.))
                 .with_children(|scrolling_list| {
                     let Some(identity) = res.get_identity() else {
                         warn!("No identity found in deck building resource");

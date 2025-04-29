@@ -20,9 +20,9 @@ impl Plugin for DeckEditorPlugin {
 #[derive(Component)]
 struct DeckEditor;
 
-fn spawn_deck_editor(mut commands: Commands) {
+fn spawn_deck_editor(mut commands: Commands, z_index_q: Query<&ZIndex>) {
     commands
-        .spawn((MainContainer::default(), DeckEditor))
+        .spawn((MainContainer::default(&z_index_q), DeckEditor))
         .with_children(|parent| {
             parent.spawn(DeckEditorHeader);
             parent.spawn(DeckEditorContent);

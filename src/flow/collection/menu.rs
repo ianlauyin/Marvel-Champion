@@ -28,9 +28,9 @@ impl Plugin for CollectionMenuPlugin {
 #[derive(Component)]
 struct CollectionMenu;
 
-fn spawn_menu(mut commands: Commands) {
+fn spawn_menu(mut commands: Commands, z_index_q: Query<&ZIndex>) {
     commands
-        .spawn((MainContainer::default(), CollectionMenu))
+        .spawn((MainContainer::default(&z_index_q), CollectionMenu))
         .with_children(|parent| {
             parent.spawn(ContainerHeader::with_leading_button("<"));
             parent

@@ -50,18 +50,16 @@ fn on_sub_menu_added(
     mut commands: Commands,
     sub_menu_q: Query<&mut SubMenu>,
     asset_loader: Res<AssetLoader>,
+    z_index_q: Query<&ZIndex>,
 ) {
     let sub_menu = sub_menu_q.get(trigger.target()).unwrap();
     commands
         .entity(trigger.target())
-        .insert(MainContainer::default())
+        .insert(MainContainer::default(&z_index_q))
         .with_children(|container| {
             container.spawn(ContainerHeader::with_leading_button("X"));
             container
-                .spawn(ScrollingList::Grid {
-                    column: 3,
-                    spacing: 50.,
-                })
+                .spawn(ScrollingList::grid(3, 50.))
                 .with_children(|scrolling_list| {
                     for set in sub_menu.get_sets() {
                         let mut button = CustomButton::large(set.to_str());

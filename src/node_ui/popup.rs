@@ -8,47 +8,30 @@ pub struct PopupPlugin;
 
 impl Plugin for PopupPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, handle_popup_timer)
-            .add_observer(handle_popup_spawn);
+        app.add_systems(Update, handle_popup_timer);
     }
 }
 
 #[derive(Component)]
-pub struct Popup {
-    text: String,
-    timer: Timer,
-}
+pub struct Popup(Timer);
 
 impl Popup {
-    pub fn new(text: String) -> Self {
-        Self {
-            text,
-            timer: Timer::new(Duration::from_secs(2), TimerMode::Once),
-        }
+    pub fn new(text: String, z_index_q: &Query<&ZIndex>) -> impl Bundle {
+        (
+            Self(Timer::new(Duration::from_secs(2), TimerMode::Once)),
+            Node {
+                justify_self: JustifySelf::Center,
+                align_self: AlignSelf::End,
+                margin: UiRect::bottom(Val::Px(20.)),
+                padding: UiRect::all(Val::Px(20.)),
+                ..default()
+            },
+            UiUtils::get_largest_z_index(&z_index_q),
+            BorderRadius::all(Val::Px(10.)),
+            BackgroundColor::from(Color::srgba(0.843, 0.047, 0.047, 0.9)),
+            children![Text::new(text.clone())],
+        )
     }
-}
-
-fn handle_popup_spawn(
-    trigger: Trigger<OnAdd, Popup>,
-    mut commands: Commands,
-    popup_q: Query<&Popup>,
-    z_index_q: Query<&ZIndex>,
-) {
-    let z_index = UiUtils::get_largest_z_index(&z_index_q);
-    let popup = popup_q.get(trigger.target()).unwrap();
-    commands.entity(trigger.target()).insert((
-        Node {
-            justify_self: JustifySelf::Center,
-            align_self: AlignSelf::End,
-            margin: UiRect::bottom(Val::Px(20.)),
-            padding: UiRect::all(Val::Px(20.)),
-            ..default()
-        },
-        z_index,
-        BorderRadius::all(Val::Px(10.)),
-        BackgroundColor::from(Color::srgba(0.843, 0.047, 0.047, 0.9)),
-        children![Text::new(popup.text.clone())],
-    ));
 }
 
 fn handle_popup_timer(
@@ -58,8 +41,8 @@ fn handle_popup_timer(
     mut text_color_q: Query<&mut TextColor>,
 ) {
     for (mut popup, mut color, children, entity) in popup_q.iter_mut() {
-        popup.timer.tick(time.delta());
-        if popup.timer.finished() {
+        popup.0.tick(time.delta());
+        if popup.0.finished() {
             commands.entity(entity).despawn();
             continue;
         }

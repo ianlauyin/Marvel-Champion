@@ -32,18 +32,16 @@ fn on_card_list_added(
     mut commands: Commands,
     card_list_q: Query<&CollectionCardList>,
     asset_loader: Res<AssetLoader>,
+    z_index_q: Query<&ZIndex>,
 ) {
     let card_list = card_list_q.get(trigger.target()).unwrap();
     commands
         .entity(trigger.target())
-        .insert(MainContainer::default())
+        .insert(MainContainer::default(&z_index_q))
         .with_children(|container| {
             container.spawn(ContainerHeader::with_leading_button("X"));
             container
-                .spawn(ScrollingList::Grid {
-                    column: 8,
-                    spacing: 20.,
-                })
+                .spawn(ScrollingList::grid(8, 20.))
                 .with_children(|scrolling_list| {
                     for card in card_list.0.clone() {
                         scrolling_list

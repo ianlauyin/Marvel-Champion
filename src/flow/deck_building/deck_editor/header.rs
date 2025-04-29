@@ -145,6 +145,7 @@ fn handle_header_button_click(
     aspect_card_datas: Res<AspectCardDatas>,
     pkv: ResMut<PkvStore>,
     mut next_state: ResMut<NextState<DeckBuildingState>>,
+    z_index_q: Query<&ZIndex>,
 ) {
     for (interaction, header_button) in header_button_q.iter() {
         if interaction == &Interaction::Pressed {
@@ -157,7 +158,7 @@ fn handle_header_button_click(
                         deck.set_name(&text_value.0);
                     }
                     if let Err(message) = deck_storage_util.save_deck(deck, aspect_card_datas) {
-                        commands.spawn(Popup::new(message));
+                        commands.spawn(Popup::new(message, &z_index_q));
                         return;
                     }
                 }
