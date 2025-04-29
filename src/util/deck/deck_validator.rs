@@ -1,18 +1,16 @@
 use std::collections::HashMap;
 
-use crate::{cards::IdentitySet, component::Card};
+use crate::component::Card;
 
 use super::DeckUtil;
 
 pub struct DeckValidator {
-    identity: IdentitySet,
     validators: Vec<fn(&Vec<Card<'static>>) -> Result<(), String>>,
 }
 
 impl DeckValidator {
-    pub fn default(identity: IdentitySet) -> Self {
+    pub fn default() -> Self {
         Self {
-            identity,
             validators: vec![
                 aspects_rules_validator,
                 cards_amount_limit_validator,

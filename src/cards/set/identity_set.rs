@@ -85,7 +85,9 @@ impl IdentitySet {
     }
 
     pub fn get_deck_validator(&self) -> DeckValidator {
-        DeckValidator::default(self.clone())
+        match *self {
+            _ => DeckValidator::default(),
+        }
     }
 }
 
