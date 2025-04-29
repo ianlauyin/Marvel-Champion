@@ -60,6 +60,14 @@ impl CustomButton {
         }
     }
 
+    pub fn set_image(&mut self, image: Handle<Image>) {
+        self.image = Some(image);
+    }
+
+    pub fn set_color(&mut self, color: Color) {
+        self.color = color;
+    }
+
     fn bundle(&self) -> impl Bundle {
         let image_node = if let Some(image) = self.image.clone() {
             ImageNode::new(image).with_color(Color::srgb(0.365, 0.365, 0.365))
@@ -90,14 +98,6 @@ impl CustomButton {
             BackgroundColor::from(self.color),
             children![(Text::new(self.text.clone()), TextColor(self.text_color),)],
         )
-    }
-
-    pub fn set_image(&mut self, image: Handle<Image>) {
-        self.image = Some(image);
-    }
-
-    pub fn set_color(&mut self, color: Color) {
-        self.color = color;
     }
 }
 

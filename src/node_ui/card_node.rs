@@ -36,6 +36,35 @@ impl CardNode {
             is_vertical,
         }
     }
+
+    fn bundle(&self, original_node_op: Option<&Node>) -> impl Bundle {
+        (
+            ImageNode::new(self.image.clone()),
+            self.node(original_node_op),
+            Transform::from_rotation(Quat::from_axis_angle(
+                Vec3::Z,
+                if self.is_vertical {
+                    0.
+                } else {
+                    UiUtils::angle_to_radian(90.)
+                },
+            )),
+            BorderRadius::all(Val::Percent(5.)),
+        )
+    }
+
+    fn node(&self, original_node_op: Option<&Node>) -> Node {
+        let mut node = original_node_op
+            .unwrap_or(&Node {
+                align_self: AlignSelf::Center,
+                justify_self: JustifySelf::Center,
+                ..default()
+            })
+            .clone();
+        node.width = Val::Px(self.size.x);
+        node.height = Val::Px(self.size.y);
+        node
+    }
 }
 pub struct CardNodePlugin;
 
@@ -51,30 +80,7 @@ fn on_card_added(
     card_q: Query<(&CardNode, Option<&Node>)>,
 ) {
     let (card, node_op) = card_q.get(trigger.target()).unwrap();
-    let mut node = Node {
-        align_self: AlignSelf::Center,
-        justify_self: JustifySelf::Center,
-        width: Val::Px(card.size.x),
-        height: Val::Px(card.size.y),
-        ..default()
-    };
-    if let Some(orginal_node) = node_op {
-        node = orginal_node.clone();
-        node.width = Val::Px(card.size.x);
-        node.height = Val::Px(card.size.y);
-    }
-
-    commands.entity(trigger.target()).insert((
-        ImageNode::new(card.image.clone()),
-        node,
-        Transform::from_rotation(Quat::from_axis_angle(
-            Vec3::Z,
-            if card.is_vertical {
-                0.
-            } else {
-                UiUtils::angle_to_radian(90.)
-            },
-        )),
-        BorderRadius::all(Val::Percent(5.)),
-    ));
+    commands
+        .entity(trigger.target())
+        .insert(card.bundle(node_op));
 }

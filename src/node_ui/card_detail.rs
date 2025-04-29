@@ -26,20 +26,10 @@ impl CardDetail {
             is_vertical,
         }
     }
-}
 
-fn on_card_detail_added(
-    trigger: Trigger<OnAdd, CardDetail>,
-    card_detail_q: Query<&CardDetail>,
-    mut commands: Commands,
-    asset_loader: Res<AssetLoader>,
-    z_index_q: Query<&ZIndex>,
-) {
-    let card_detail = card_detail_q.get(trigger.target()).unwrap();
-    commands
-        .entity(trigger.target())
-        .insert((
-            UiUtils::get_largest_z_index(&z_index_q),
+    fn bundle(&self, asset_loader: &Res<AssetLoader>, z_index_q: &Query<&ZIndex>) -> impl Bundle {
+        (
+            UiUtils::get_largest_z_index(z_index_q),
             Node {
                 width: Val::Px(600.),
                 height: Val::Px(600.),
@@ -55,14 +45,25 @@ fn on_card_detail_added(
             BorderColor::from(Color::WHITE),
             BorderRadius::all(Val::Px(10.)),
             BackgroundColor::from(Color::BLACK.with_alpha(0.99)),
-        ))
-        .with_children(|container| {
-            container.spawn(ContainerHeader::with_leading_button("X"));
-            container.spawn(CardNode::large(
-                asset_loader.get(&card_detail.image_key).clone(),
-                card_detail.is_vertical,
-            ));
-        });
+            children![
+                ContainerHeader::with_leading_button("X"),
+                CardNode::large(asset_loader.get(&self.image_key).clone(), self.is_vertical)
+            ],
+        )
+    }
+}
+
+fn on_card_detail_added(
+    trigger: Trigger<OnAdd, CardDetail>,
+    card_detail_q: Query<&CardDetail>,
+    mut commands: Commands,
+    asset_loader: Res<AssetLoader>,
+    z_index_q: Query<&ZIndex>,
+) {
+    let card_detail = card_detail_q.get(trigger.target()).unwrap();
+    commands
+        .entity(trigger.target())
+        .insert(card_detail.bundle(&asset_loader, &z_index_q));
 }
 
 fn handle_header_button_click(
@@ -84,6 +85,7 @@ fn handle_header_button_click(
     }
 }
 
+// TODO: Refactor use Pointer<Drag> Event
 fn on_drag(
     mut cursor_ev: EventReader<CursorMoved>,
     mut card_detail_q: Query<(&Interaction, &mut Node), With<CardDetail>>,
