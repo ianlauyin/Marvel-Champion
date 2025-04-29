@@ -36,9 +36,9 @@ fn on_deck_menu_added(
     players_info: Res<PlayersInfo>,
     pkv: ResMut<PkvStore>,
 ) {
-    let deck_menu = deck_menu_q.get(trigger.entity()).unwrap();
+    let deck_menu = deck_menu_q.get(trigger.target()).unwrap();
     commands
-        .entity(trigger.entity())
+        .entity(trigger.target())
         .insert(MainContainer::new())
         .with_children(|container| {
             container.spawn(ContainerHeader::with_leading_button("X"));
@@ -66,13 +66,13 @@ fn handle_deck_menu_button_click(
     mut players_info: ResMut<PlayersInfo>,
 ) {
     SystemUtil::handle_button_click(deck_menu_button_q, |deck_menu_button| {
-        let (entity, deck_menu) = deck_menu_q.get_single().unwrap();
+        let (entity, deck_menu) = deck_menu_q.single().unwrap();
         if let Some(deck) = &deck_menu_button.0 {
             players_info.save_player(&deck_menu.0, deck.get_card_ids());
         } else {
             players_info.remove_player(&deck_menu.0);
         }
-        commands.entity(entity).despawn_recursive();
+        commands.entity(entity).despawn();
     });
 }
 
@@ -86,7 +86,7 @@ fn handle_header_button_click(
             match event {
                 ContainerHeaderEvent::LeadingButtonPressed(header_entity) => {
                     if menu_children.contains(header_entity) {
-                        commands.entity(entity).despawn_recursive();
+                        commands.entity(entity).despawn();
                     }
                 }
                 _ => {}

@@ -68,7 +68,7 @@ fn handle_players_info_changed(
 ) {
     if players_info.is_changed() {
         for previous_tag_entity in player_tag_q.iter() {
-            commands.entity(previous_tag_entity).despawn_recursive();
+            commands.entity(previous_tag_entity).despawn();
         }
         for (entity, hero_menu_button) in hero_menu_button_q.iter() {
             if let Some((player_tag, _)) = players_info.get_by_identity(&hero_menu_button.0) {

@@ -35,9 +35,9 @@ fn on_card_detail_added(
     asset_loader: Res<AssetLoader>,
     z_index_q: Query<&ZIndex>,
 ) {
-    let card_detail = card_detail_q.get(trigger.entity()).unwrap();
+    let card_detail = card_detail_q.get(trigger.target()).unwrap();
     commands
-        .entity(trigger.entity())
+        .entity(trigger.target())
         .insert((
             UiUtils::get_largest_z_index(&z_index_q),
             Node {
@@ -75,7 +75,7 @@ fn handle_header_button_click(
             match event {
                 ContainerHeaderEvent::LeadingButtonPressed(header_entity) => {
                     if card_detail_children.contains(header_entity) {
-                        commands.entity(entity).despawn_recursive();
+                        commands.entity(entity).despawn();
                     }
                 }
                 _ => {}

@@ -47,7 +47,7 @@ fn on_header_added(
 ) {
     let deck = res.get_deck().unwrap();
     commands
-        .entity(trigger.entity())
+        .entity(trigger.target())
         .insert(Node {
             width: Val::Percent(100.),
             padding: UiRect::all(Val::Px(10.)),
@@ -70,7 +70,7 @@ fn on_header_added(
         });
 }
 
-fn spawn_title(parent: &mut ChildBuilder, name: &str) {
+fn spawn_title(parent: &mut ChildSpawnerCommands, name: &str) {
     parent
         .spawn((
             Node {
@@ -101,7 +101,7 @@ fn handle_title_interaction(
     for (interaction, children) in text_input_container_q.iter() {
         if *interaction == Interaction::Pressed {
             for child in children.iter() {
-                if let Ok(mut inactive) = text_input_q.get_mut(*child) {
+                if let Ok(mut inactive) = text_input_q.get_mut(child) {
                     inactive.0 = false;
                 }
             }
@@ -116,7 +116,7 @@ fn handle_text_input_finished(
 ) {
     for event in events.read() {
         let name = event.value.clone();
-        if let Ok((mut inactive, mut value)) = text_input_q.get_single_mut() {
+        if let Ok((mut inactive, mut value)) = text_input_q.single_mut() {
             res.get_deck().unwrap().set_name(&name);
             value.0 = name.clone();
             inactive.0 = true;
@@ -130,7 +130,7 @@ fn handle_text_input_escape(
     res: ResMut<DeckBuildingResource>,
 ) {
     if keys.just_pressed(KeyCode::Escape) {
-        if let Ok((mut inactive, mut value)) = text_input_q.get_single_mut() {
+        if let Ok((mut inactive, mut value)) = text_input_q.single_mut() {
             value.0 = res.get_deck().unwrap().get_name().to_string();
             inactive.0 = true;
         };
@@ -153,7 +153,7 @@ fn handle_header_button_click(
             match header_button {
                 HeaderButton::Delete => deck_storage_util.remove_deck(deck.get_id()),
                 HeaderButton::Save => {
-                    if let Ok(text_value) = text_value_q.get_single() {
+                    if let Ok(text_value) = text_value_q.single() {
                         deck.set_name(&text_value.0);
                     }
                     if let Err(message) = deck_storage_util.save_deck(deck, aspect_card_datas) {

@@ -69,13 +69,13 @@ fn handle_pressed(
     cursor_position: Vec2,
 ) {
     if mouse_target.dragging {
-        event_writer.send(MouseControlEvent::Drag(get_delta_position(
+        event_writer.write(MouseControlEvent::Drag(get_delta_position(
             cursor_position,
             mouse_target,
         )));
     } else if mouse_target.stop_watch.elapsed_secs() >= TIME_BOUNDARY {
         mouse_target.dragging = true;
-        event_writer.send(MouseControlEvent::StartDrag(entity));
+        event_writer.write(MouseControlEvent::StartDrag(entity));
     } else if mouse_target.stop_watch.is_paused() {
         mouse_target.stop_watch.unpause();
     }
@@ -88,9 +88,9 @@ fn handle_released(
     mouse_target: &mut MouseControl,
 ) {
     if mouse_target.stop_watch.elapsed_secs() < TIME_BOUNDARY {
-        event_writer.send(MouseControlEvent::ShortClick(entity));
+        event_writer.write(MouseControlEvent::ShortClick(entity));
     } else {
-        event_writer.send(MouseControlEvent::Drop);
+        event_writer.write(MouseControlEvent::Drop);
     }
     mouse_target.stop_watch.pause();
     mouse_target.stop_watch.reset();

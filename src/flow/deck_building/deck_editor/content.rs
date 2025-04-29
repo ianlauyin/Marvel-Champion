@@ -31,7 +31,7 @@ fn on_content_added(
     asset_loader: Res<AssetLoader>,
 ) {
     commands
-        .entity(trigger.entity())
+        .entity(trigger.target())
         .insert(Node {
             display: Display::Flex,
             column_gap: Val::Px(5.),
@@ -83,8 +83,10 @@ fn on_deck_info_changed(
                 match content {
                     DeckContent::CurrentAspects => {
                         let current_aspects = deck_info.current_aspects.clone();
-                        commands.entity(entity).despawn_descendants().with_children(
-                            |aspects_container| {
+                        commands
+                            .entity(entity)
+                            .despawn_related::<Children>()
+                            .with_children(|aspects_container| {
                                 if current_aspects.is_empty() {
                                     aspects_container.spawn(Text::new("No Aspect"));
                                 } else {
@@ -95,35 +97,36 @@ fn on_deck_info_changed(
                                         ));
                                     }
                                 }
-                            },
-                        );
+                            });
                     }
                     DeckContent::CardCount => {
                         text_op.unwrap().0 = deck_info.card_count.to_string();
                     }
                     DeckContent::DeckScrollingList => {
-                        commands.entity(entity).despawn_descendants().with_children(
-                            |deck_scrolling_list| {
+                        commands
+                            .entity(entity)
+                            .despawn_related::<Children>()
+                            .with_children(|deck_scrolling_list| {
                                 spawn_card_list(
                                     deck_scrolling_list,
                                     &deck_info.deck_cards,
                                     &asset_loader,
                                     CardFrom::Deck,
                                 );
-                            },
-                        );
+                            });
                     }
                     DeckContent::CollectionScrollingList => {
-                        commands.entity(entity).despawn_descendants().with_children(
-                            |collection_scrolling_list| {
+                        commands
+                            .entity(entity)
+                            .despawn_related::<Children>()
+                            .with_children(|collection_scrolling_list| {
                                 spawn_card_list(
                                     collection_scrolling_list,
                                     &deck_info.avaiable_cards,
                                     &asset_loader,
                                     CardFrom::Collection,
                                 );
-                            },
-                        );
+                            });
                     }
                 }
             }
@@ -132,7 +135,7 @@ fn on_deck_info_changed(
 }
 
 fn spawn_deck(
-    parent: &mut ChildBuilder,
+    parent: &mut ChildSpawnerCommands,
     deck_cards: &Vec<Card<'static>>,
     asset_loader: &Res<AssetLoader>,
 ) {
@@ -164,7 +167,7 @@ fn spawn_deck(
 }
 
 fn spawn_info(
-    parent: &mut ChildBuilder,
+    parent: &mut ChildSpawnerCommands,
     identity_cards: Vec<Card<'static>>,
     current_aspects: Vec<Aspect>,
     selectable_card_count: usize,
@@ -280,7 +283,7 @@ fn spawn_info(
 }
 
 fn spawn_collection(
-    parent: &mut ChildBuilder,
+    parent: &mut ChildSpawnerCommands,
     available_cards: Vec<Card<'static>>,
     asset_loader: &Res<AssetLoader>,
 ) {
@@ -321,7 +324,7 @@ fn spawn_collection(
 }
 
 fn spawn_card_list(
-    parent: &mut ChildBuilder,
+    parent: &mut ChildSpawnerCommands,
     cards: &Vec<Card<'static>>,
     asset_loader: &Res<AssetLoader>,
     card_from: CardFrom,

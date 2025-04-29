@@ -2,6 +2,7 @@ use bevy::{prelude::*, ui::RelativeCursorPosition};
 
 use crate::{
     component::Card,
+    constant::CARD_SIZE_SMALL,
     flow::deck_building::{resource::DeckBuildingResource, state::DeckBuildingState},
     node_ui::{CardDetail, CardNode, MouseControl, MouseControlEvent},
     resource::AssetLoader,
@@ -59,7 +60,7 @@ fn handle_mouse_event(
             }
             MouseControlEvent::Drag(delta_position_op) => {
                 if let Some(delta_position) = delta_position_op {
-                    if let Ok((_, _, _, dragging_card_node)) = dragging_card_q.get_single_mut() {
+                    if let Ok((_, _, _, dragging_card_node)) = dragging_card_q.single_mut() {
                         handle_drag(dragging_card_node, &delta_position);
                     } else {
                         warn!("dragging_card_transform not found");
@@ -67,7 +68,7 @@ fn handle_mouse_event(
                 }
             }
             MouseControlEvent::Drop => {
-                if let Ok((entity, dragging_card, card_info, _)) = dragging_card_q.get_single() {
+                if let Ok((entity, dragging_card, card_info, _)) = dragging_card_q.single() {
                     handle_drop(
                         commands.reborrow(),
                         entity,
@@ -99,11 +100,14 @@ fn handle_start_drag(
     let image = asset_loader.get(&card_info.get_key());
     let transform = global_transform.translation();
     commands.spawn((
-        // Use Clone and spawn later with v0.16.0
         DraggingCard(card_from.clone()),
         card_info.clone(),
         CardNode::small(image.clone()),
-        Node { ..default() },
+        Node {
+            top: Val::Px(transform.y - CARD_SIZE_SMALL.y / 2.),
+            left: Val::Px(transform.x - CARD_SIZE_SMALL.x / 2.),
+            ..default()
+        },
         UiUtils::get_largest_z_index(z_index_q),
     ));
 }
@@ -138,5 +142,5 @@ fn handle_drop(
         }
     }
 
-    commands.entity(dragging_card_entity).despawn_recursive();
+    commands.entity(dragging_card_entity).despawn();
 }

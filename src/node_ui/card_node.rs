@@ -1,6 +1,9 @@
 use bevy::prelude::*;
 
-use crate::util::UiUtils;
+use crate::{
+    constant::{CARD_SIZE_LARGE, CARD_SIZE_MEDIUM, CARD_SIZE_SMALL},
+    util::UiUtils,
+};
 
 #[derive(Component)]
 pub struct CardNode {
@@ -8,10 +11,6 @@ pub struct CardNode {
     size: Vec2,
     is_vertical: bool,
 }
-
-const CARD_SIZE_SMALL: Vec2 = Vec2::new(64., 89.);
-const CARD_SIZE_MEDIUM: Vec2 = Vec2::new(128., 178.);
-const CARD_SIZE_LARGE: Vec2 = Vec2::new(362., 503.);
 
 impl CardNode {
     pub fn small(image: Handle<Image>) -> Self {
@@ -51,7 +50,7 @@ fn on_card_added(
     mut commands: Commands,
     card_q: Query<(&CardNode, Option<&Node>)>,
 ) {
-    let (card, node_op) = card_q.get(trigger.entity()).unwrap();
+    let (card, node_op) = card_q.get(trigger.target()).unwrap();
     let mut node = Node {
         align_self: AlignSelf::Center,
         justify_self: JustifySelf::Center,
@@ -65,7 +64,7 @@ fn on_card_added(
         node.height = Val::Px(card.size.y);
     }
 
-    commands.entity(trigger.entity()).insert((
+    commands.entity(trigger.target()).insert((
         ImageNode::new(card.image.clone()),
         node,
         Transform::from_rotation(Quat::from_axis_angle(

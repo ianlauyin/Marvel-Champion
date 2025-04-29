@@ -1,4 +1,4 @@
-use bevy::{ecs::system::Resource, log::warn, utils::HashMap};
+use bevy::{ecs::resource::Resource, log::warn, platform::collections::HashMap};
 
 use crate::{cards::Aspect, component::Card};
 

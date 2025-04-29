@@ -1,4 +1,4 @@
-use bevy::{ecs::system::Resource, utils::HashMap};
+use bevy::{ecs::resource::Resource, platform::collections::HashMap};
 
 use crate::{cards::IdentitySet, flow::game::component::PlayerTag};
 

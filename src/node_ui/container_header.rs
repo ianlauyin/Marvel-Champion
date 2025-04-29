@@ -59,9 +59,9 @@ fn on_container_header_added(
     mut commands: Commands,
     container_header_q: Query<&ContainerHeader>,
 ) {
-    let container_header = container_header_q.get(trigger.entity()).unwrap();
+    let container_header = container_header_q.get(trigger.target()).unwrap();
     commands
-        .entity(trigger.entity())
+        .entity(trigger.target())
         .insert(Node {
             width: Val::Percent(100.),
             padding: UiRect::all(Val::Px(10.)),
@@ -87,19 +87,19 @@ fn on_container_header_added(
 
 fn listen_container_header_pressed(
     mut event_writer: EventWriter<ContainerHeaderEvent>,
-    mut button_q: Query<(&Interaction, &ContainerHeaderButton, &Parent)>,
+    mut button_q: Query<(&Interaction, &ContainerHeaderButton, &ChildOf)>,
 ) {
-    for (interaction, button, parent) in button_q.iter_mut() {
+    for (interaction, button, child_of) in button_q.iter_mut() {
         if *interaction == Interaction::Pressed {
             let event = match button {
                 ContainerHeaderButton::Leading(_) => {
-                    ContainerHeaderEvent::LeadingButtonPressed(parent.get())
+                    ContainerHeaderEvent::LeadingButtonPressed(child_of.parent())
                 }
                 ContainerHeaderButton::Trailing(_) => {
-                    ContainerHeaderEvent::TrailingButtonPressed(parent.get())
+                    ContainerHeaderEvent::TrailingButtonPressed(child_of.parent())
                 }
             };
-            event_writer.send(event);
+            event_writer.write(event);
         }
     }
 }

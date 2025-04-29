@@ -81,9 +81,9 @@ fn handle_button_added(
     mut commands: Commands,
     custom_button_q: Query<&CustomButton>,
 ) {
-    let custom_button = custom_button_q.get(on_add.entity()).unwrap();
+    let custom_button = custom_button_q.get(on_add.target()).unwrap();
     commands
-        .entity(on_add.entity())
+        .entity(on_add.target())
         .insert((
             Button,
             custom_button.node.clone(),
@@ -139,7 +139,7 @@ fn handle_button_color(
     alpha: f32,
 ) {
     background_color.0.set_alpha(alpha);
-    for &child in children.iter() {
+    for child in children.iter() {
         let Ok(mut text_color) = text_color_q.get_mut(child) else {
             continue;
         };

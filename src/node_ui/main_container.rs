@@ -46,8 +46,8 @@ fn on_main_container_added(
     main_container_q: Query<&MainContainer>,
     z_index_q: Query<&ZIndex>,
 ) {
-    let main_container = main_container_q.get(trigger.entity()).unwrap();
-    commands.entity(trigger.entity()).insert((
+    let main_container = main_container_q.get(trigger.target()).unwrap();
+    commands.entity(trigger.target()).insert((
         main_container.node.clone(),
         BorderRadius::all(Val::Px(10.)),
         BackgroundColor::from(Color::BLACK.with_alpha(0.9999)),

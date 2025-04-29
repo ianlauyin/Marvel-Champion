@@ -1,6 +1,6 @@
 use bevy::{
     input::mouse::{MouseScrollUnit, MouseWheel},
-    picking::focus::HoverMap,
+    picking::hover::HoverMap,
     prelude::*,
 };
 
@@ -39,9 +39,9 @@ fn on_scrolling_list_added(
     mut commands: Commands,
     scrolling_list_q: Query<&ScrollingList>,
 ) {
-    let scrolling_list = scrolling_list_q.get(trigger.entity()).unwrap();
+    let scrolling_list = scrolling_list_q.get(trigger.target()).unwrap();
     commands
-        .entity(trigger.entity())
+        .entity(trigger.target())
         .insert(scrolling_list.node.clone());
 }
 
@@ -61,15 +61,15 @@ fn add_picking_behavior(
     children_q: &Query<&Children>,
 ) {
     for child in children.iter() {
-        let Some(mut entity_commands) = commands.get_entity(*child) else {
+        let Ok(mut entity_commands) = commands.get_entity(child) else {
             continue;
         };
-        entity_commands.insert(PickingBehavior {
+        entity_commands.insert(Pickable {
             is_hoverable: true,
             should_block_lower: false,
         });
 
-        if let Ok(grandchildren) = children_q.get(*child) {
+        if let Ok(grandchildren) = children_q.get(child) {
             add_picking_behavior(commands.reborrow(), grandchildren, children_q);
         }
     }

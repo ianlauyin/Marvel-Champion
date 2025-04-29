@@ -35,9 +35,9 @@ fn handle_popup_spawn(
     z_index_q: Query<&ZIndex>,
 ) {
     let z_index = UiUtils::get_largest_z_index(&z_index_q);
-    let popup = popup_q.get(trigger.entity()).unwrap();
+    let popup = popup_q.get(trigger.target()).unwrap();
     commands
-        .entity(trigger.entity())
+        .entity(trigger.target())
         .insert((
             Node {
                 justify_self: JustifySelf::Center,
@@ -62,7 +62,7 @@ fn handle_popup_timer(
     for (mut popup, mut color, children, entity) in popup_q.iter_mut() {
         popup.timer.tick(time.delta());
         if popup.timer.finished() {
-            commands.entity(entity).despawn_recursive();
+            commands.entity(entity).despawn();
             continue;
         }
         let new_alpha = color.0.alpha() - 0.01;

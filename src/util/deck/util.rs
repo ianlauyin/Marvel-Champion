@@ -1,4 +1,4 @@
-use bevy::utils::{HashMap, HashSet};
+use bevy::platform::collections::{HashMap, HashSet};
 
 use crate::{
     cards::{Aspect, IdentitySet, SetTrait},

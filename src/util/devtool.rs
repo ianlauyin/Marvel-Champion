@@ -14,12 +14,14 @@ pub struct DevtoolPlugin;
 impl Plugin for DevtoolPlugin {
     fn build(&self, app: &mut App) {
         #[cfg(debug_assertions)]
-        app.add_plugins(EguiPlugin)
-            .add_plugins(DefaultInspectorConfigPlugin)
-            .add_plugins(InspectSchedulePlugin)
-            .add_systems(Startup, spawn_devtool_window)
-            .add_observer(kill_app_when_primary_window_closed)
-            .add_systems(Inspect, inspector_ui);
+        app.add_plugins(EguiPlugin {
+            enable_multipass_for_primary_context: true,
+        })
+        .add_plugins(DefaultInspectorConfigPlugin)
+        .add_plugins(InspectSchedulePlugin)
+        .add_systems(Startup, spawn_devtool_window)
+        .add_observer(kill_app_when_primary_window_closed)
+        .add_systems(Inspect, inspector_ui);
     }
 }
 
@@ -43,14 +45,14 @@ fn kill_app_when_primary_window_closed(
     _: Trigger<OnRemove, PrimaryWindow>,
     mut exit: EventWriter<AppExit>,
 ) {
-    exit.send(AppExit::Success);
+    exit.write(AppExit::Success);
 }
 
 // Modified from bevy_inspector_egui::quick::WorldInspectorPlugin;
 fn inspector_ui(world: &mut World) {
     let Ok((egui_context, window)) = world
         .query_filtered::<(&mut EguiContext, &Window), With<DevtoolWindow>>()
-        .get_single(world)
+        .single(world)
     else {
         return;
     };

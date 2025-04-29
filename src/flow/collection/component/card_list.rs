@@ -33,9 +33,9 @@ fn on_card_list_added(
     card_list_q: Query<&CollectionCardList>,
     asset_loader: Res<AssetLoader>,
 ) {
-    let card_list = card_list_q.get(trigger.entity()).unwrap();
+    let card_list = card_list_q.get(trigger.target()).unwrap();
     commands
-        .entity(trigger.entity())
+        .entity(trigger.target())
         .insert(MainContainer::new())
         .with_children(|container| {
             container.spawn(ContainerHeader::with_leading_button("X"));
@@ -70,7 +70,7 @@ fn handle_header_button_click(
             match event {
                 ContainerHeaderEvent::LeadingButtonPressed(header_entity) => {
                     if card_list_children.contains(header_entity) {
-                        commands.entity(entity).despawn_recursive();
+                        commands.entity(entity).despawn();
                     }
                 }
                 _ => {}

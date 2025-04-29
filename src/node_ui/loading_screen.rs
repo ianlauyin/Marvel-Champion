@@ -15,7 +15,7 @@ impl Plugin for LoadingScreenPlugin {
 
 fn on_loading_screen_added(trigger: Trigger<OnAdd, LoadingScreen>, mut commands: Commands) {
     commands
-        .entity(trigger.entity())
+        .entity(trigger.target())
         .insert((
             Node {
                 width: Val::Px(WINDOW_RESOLUTION.x),
