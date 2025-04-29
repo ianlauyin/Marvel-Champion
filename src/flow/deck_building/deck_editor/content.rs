@@ -356,18 +356,18 @@ struct DeckInfo {
 
 impl DeckInfo {
     pub fn new(res: Res<DeckBuildingResource>, aspect_card_datas: Res<AspectCardDatas>) -> Self {
-        let (identity_cards, player_cards) = DeckUtil::get_cards_pair(res.get_identity().unwrap());
+        let identity = res.get_identity().unwrap();
         let aspect_card_ids = res.get_deck().unwrap().get_card_ids();
         let aspect_cards = aspect_card_datas.get_batch_card_by_id(&aspect_card_ids);
         let current_aspects = DeckUtil::get_current_aspects(&aspect_cards);
-        let deck_card_counts = aspect_cards.len() + 15;
         let avaiable_cards = DeckUtil::get_available_cards(&aspect_card_ids, &current_aspects);
         Self {
-            identity_cards,
+            identity_cards: identity.get_identity_cards(),
             current_aspects,
-            card_count: deck_card_counts,
+            card_count: aspect_cards.len() + 15,
             avaiable_cards,
-            deck_cards: player_cards
+            deck_cards: identity
+                .get_deck_cards()
                 .iter()
                 .chain(aspect_cards.iter())
                 .cloned()

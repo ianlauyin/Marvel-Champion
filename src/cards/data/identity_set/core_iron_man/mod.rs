@@ -15,14 +15,15 @@ mod war_machine;
 
 use crate::component::Card;
 
-pub fn get_cards<'a>() -> Vec<Card<'a>> {
+pub fn get_identity_cards<'a>() -> Vec<Card<'a>> {
+    vec![alter_ego::get_card(), hero::get_card()]
+}
+
+pub fn get_deck_cards<'a>() -> Vec<Card<'a>> {
     vec![
-        alter_ego::get_card(),
         arc_reactor::get_card(),
-        hero::get_card(),
         mark_v_armor::get_card(),
         mark_v_helmet::get_card(),
-        obligation::get_card(),
         pepper_potts::get_card(),
         powered_gauntlets::get_card(),
         repulsor_blast::get_card(),
@@ -30,6 +31,15 @@ pub fn get_cards<'a>() -> Vec<Card<'a>> {
         stark_tower::get_card(),
         supersonic_punch::get_card(),
         war_machine::get_card(),
+    ]
+}
+
+pub fn get_obligation_card<'a>() -> Card<'a> {
+    obligation::get_card()
+}
+
+pub fn get_out_of_play_cards<'a>() -> Vec<Card<'a>> {
+    vec![
         nemesis_set::electric_whip_attack::get_card(),
         nemesis_set::electromagnetic_backlash::get_card(),
         nemesis_set::imminent_overload::get_card(),

@@ -17,13 +17,14 @@ mod wakanda_forever_d;
 
 use crate::component::Card;
 
-pub fn get_cards<'a>() -> Vec<Card<'a>> {
+pub fn get_identity_cards<'a>() -> Vec<Card<'a>> {
+    vec![alter_ego::get_card(), hero::get_card()]
+}
+
+pub fn get_deck_cards<'a>() -> Vec<Card<'a>> {
     vec![
-        alter_ego::get_card(),
         ancestral_knowledge::get_card(),
         energy_daggers::get_card(),
-        hero::get_card(),
-        obligation::get_card(),
         panther_claws::get_card(),
         shuri::get_card(),
         tactical_genius::get_card(),
@@ -34,6 +35,15 @@ pub fn get_cards<'a>() -> Vec<Card<'a>> {
         wakanda_forever_b::get_card(),
         wakanda_forever_c::get_card(),
         wakanda_forever_d::get_card(),
+    ]
+}
+
+pub fn get_obligation_card<'a>() -> Card<'a> {
+    obligation::get_card()
+}
+
+pub fn get_out_of_play_cards<'a>() -> Vec<Card<'a>> {
+    vec![
         nemesis_set::heart_shaped_herb::get_card(),
         nemesis_set::killmonger::get_card(),
         nemesis_set::ritual_combat::get_card(),
