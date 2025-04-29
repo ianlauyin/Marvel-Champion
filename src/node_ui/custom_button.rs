@@ -17,45 +17,61 @@ pub struct CustomButton {
     text_color: Color,
     color: Color,
     with_border: bool,
-    image: ImageNode,
-    node: Node,
+    image: Option<Handle<Image>>,
+    size: (Val, Val),
 }
 
-impl CustomButton {
-    pub fn large(text: &str) -> Self {
-        let mut base = Self::base();
-        base.text = text.to_string();
-        base.node.width = Val::Px(300.);
-        base.node.height = Val::Px(100.);
-        base
-    }
-
-    pub fn medium(text: &str) -> Self {
-        let mut base = Self::base();
-        base.text = text.to_string();
-        base.node.width = Val::Px(150.);
-        base.node.height = Val::Px(50.);
-        base
-    }
-
-    pub fn square(text: &str) -> Self {
-        let mut base = Self::base();
-        base.text = text.to_string();
-        base.node.width = Val::Px(50.);
-        base.node.height = Val::Px(50.);
-        base.with_border = false;
-        base.color = Color::srgb(0.173, 0.173, 0.173);
-        base
-    }
-
-    fn base() -> Self {
+impl Default for CustomButton {
+    fn default() -> Self {
         Self {
             text: "".to_string(),
             text_color: Color::WHITE,
             color: Color::srgb(0.576, 0.576, 0.576),
             with_border: true,
-            image: ImageNode::default(),
-            node: Node {
+            image: None,
+            size: (Val::Px(300.), Val::Px(100.)),
+        }
+    }
+}
+
+impl CustomButton {
+    pub fn large(text: &str) -> Self {
+        Self {
+            text: text.to_string(),
+            ..default()
+        }
+    }
+
+    pub fn medium(text: &str) -> Self {
+        Self {
+            text: text.to_string(),
+            size: (Val::Px(150.), Val::Px(50.)),
+            ..default()
+        }
+    }
+
+    pub fn square(text: &str) -> Self {
+        Self {
+            text: text.to_string(),
+            size: (Val::Px(50.), Val::Px(50.)),
+            with_border: false,
+            color: Color::srgb(0.173, 0.173, 0.173),
+            ..default()
+        }
+    }
+
+    fn bundle(&self) -> impl Bundle {
+        let image_node = if let Some(image) = self.image.clone() {
+            ImageNode::new(image).with_color(Color::srgb(0.365, 0.365, 0.365))
+        } else {
+            ImageNode::default()
+        };
+
+        (
+            Button,
+            Node {
+                width: self.size.0,
+                height: self.size.1,
                 border: UiRect::all(Val::Px(2.)),
                 display: Display::Flex,
                 justify_content: JustifyContent::Center,
@@ -64,11 +80,20 @@ impl CustomButton {
                 align_self: AlignSelf::Center,
                 ..default()
             },
-        }
+            image_node,
+            BorderColor(if self.with_border {
+                Color::srgb(0.725, 0.725, 0.725)
+            } else {
+                Color::NONE
+            }),
+            BorderRadius::all(Val::Px(10.)),
+            BackgroundColor::from(self.color),
+            children![(Text::new(self.text.clone()), TextColor(self.text_color),)],
+        )
     }
 
     pub fn set_image(&mut self, image: Handle<Image>) {
-        self.image = ImageNode::new(image).with_color(Color::srgb(0.365, 0.365, 0.365));
+        self.image = Some(image);
     }
 
     pub fn set_color(&mut self, color: Color) {
@@ -84,22 +109,7 @@ fn handle_button_added(
     let custom_button = custom_button_q.get(on_add.target()).unwrap();
     commands
         .entity(on_add.target())
-        .insert((
-            Button,
-            custom_button.node.clone(),
-            custom_button.image.clone(),
-            BorderColor(if custom_button.with_border {
-                Color::srgb(0.725, 0.725, 0.725)
-            } else {
-                Color::NONE
-            }),
-            BorderRadius::all(Val::Px(10.)),
-            BackgroundColor::from(custom_button.color),
-        ))
-        .with_child((
-            Text::new(custom_button.text.clone()),
-            TextColor(custom_button.text_color),
-        ));
+        .insert(custom_button.bundle());
 }
 
 fn handle_button_ui(
