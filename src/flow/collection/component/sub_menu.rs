@@ -58,7 +58,10 @@ fn on_sub_menu_added(
         .with_children(|container| {
             container.spawn(ContainerHeader::with_leading_button("X"));
             container
-                .spawn(ScrollingList::grid(3, 50.))
+                .spawn(ScrollingList::Grid {
+                    column: 3,
+                    spacing: 50.,
+                })
                 .with_children(|scrolling_list| {
                     for set in sub_menu.get_sets() {
                         let mut button = CustomButton::large(set.to_str());

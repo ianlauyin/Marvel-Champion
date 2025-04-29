@@ -38,7 +38,10 @@ fn spawn_hero_menu(mut commands: Commands, asset_loader: Res<AssetLoader>) {
         .with_children(|container| {
             container.spawn(ContainerHeader::with_leading_button("<"));
             container
-                .spawn(ScrollingList::grid(3, 50.))
+                .spawn(ScrollingList::Grid {
+                    column: 3,
+                    spacing: 50.,
+                })
                 .with_children(|scrolling_list| {
                     for identity in IdentitySet::get_all() {
                         let mut button = CustomButton::large(identity.to_str());

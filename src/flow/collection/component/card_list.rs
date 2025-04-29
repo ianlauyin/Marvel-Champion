@@ -40,7 +40,10 @@ fn on_card_list_added(
         .with_children(|container| {
             container.spawn(ContainerHeader::with_leading_button("X"));
             container
-                .spawn(ScrollingList::grid(8, 20.))
+                .spawn(ScrollingList::Grid {
+                    column: 8,
+                    spacing: 20.,
+                })
                 .with_children(|scrolling_list| {
                     for card in card_list.0.clone() {
                         scrolling_list

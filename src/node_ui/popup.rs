@@ -36,21 +36,19 @@ fn handle_popup_spawn(
 ) {
     let z_index = UiUtils::get_largest_z_index(&z_index_q);
     let popup = popup_q.get(trigger.target()).unwrap();
-    commands
-        .entity(trigger.target())
-        .insert((
-            Node {
-                justify_self: JustifySelf::Center,
-                align_self: AlignSelf::End,
-                margin: UiRect::bottom(Val::Px(20.)),
-                padding: UiRect::all(Val::Px(20.)),
-                ..default()
-            },
-            z_index,
-            BorderRadius::all(Val::Px(10.)),
-            BackgroundColor::from(Color::srgba(0.843, 0.047, 0.047, 0.9)),
-        ))
-        .with_child(Text::new(popup.text.clone()));
+    commands.entity(trigger.target()).insert((
+        Node {
+            justify_self: JustifySelf::Center,
+            align_self: AlignSelf::End,
+            margin: UiRect::bottom(Val::Px(20.)),
+            padding: UiRect::all(Val::Px(20.)),
+            ..default()
+        },
+        z_index,
+        BorderRadius::all(Val::Px(10.)),
+        BackgroundColor::from(Color::srgba(0.843, 0.047, 0.047, 0.9)),
+        children![Text::new(popup.text.clone())],
+    ));
 }
 
 fn handle_popup_timer(

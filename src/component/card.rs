@@ -3,6 +3,7 @@ use bevy::prelude::Component;
 use crate::cards::Belongs;
 
 #[derive(Component, Clone, Default)]
+#[component(immutable)]
 pub struct Card<'a> {
     pub id: &'a str,
     pub name: &'a str,

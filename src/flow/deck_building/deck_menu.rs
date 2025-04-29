@@ -36,7 +36,10 @@ fn spawn_deck_menu(mut commands: Commands, res: Res<DeckBuildingResource>, pkv: 
         .with_children(|container| {
             container.spawn(ContainerHeader::with_leading_button("<"));
             container
-                .spawn(ScrollingList::grid(3, 50.))
+                .spawn(ScrollingList::Grid {
+                    column: 3,
+                    spacing: 50.,
+                })
                 .with_children(|scrolling_list| {
                     let Some(identity) = res.get_identity() else {
                         warn!("No identity found in deck building resource");
