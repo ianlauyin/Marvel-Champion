@@ -1,30 +1,23 @@
-use bevy::{
-    ecs::{
-        entity::Entity,
-        system::{Commands, Resource},
-    },
-    log::warn,
-    utils::HashMap,
-};
+use bevy::{ecs::system::Resource, log::warn, utils::HashMap};
 
-use crate::{cards::Aspect, component::card::CardBasic};
+use crate::{cards::Aspect, component::Card};
 
 #[derive(Resource)]
-pub struct AspectCardDatas(HashMap<String, (CardBasic<'static>, fn(Commands) -> Entity)>);
+pub struct AspectCardDatas(HashMap<String, Card<'static>>);
 
 impl AspectCardDatas {
     pub fn new() -> Self {
         let mut map = HashMap::new();
         for card in Aspect::get_all_cards() {
-            map.insert(card.0.id.to_string(), card);
+            map.insert(card.id.to_string(), card);
         }
         Self(map)
     }
 
-    pub fn get_batch_info_by_id(&self, ids: &Vec<String>) -> Vec<CardBasic<'static>> {
+    pub fn get_batch_card_by_id(&self, ids: &Vec<String>) -> Vec<Card<'static>> {
         let mut infos = vec![];
         for id in ids {
-            if let Some(info) = self.get_info_by_id(id) {
+            if let Some(info) = self.get_card_by_id(id) {
                 infos.push(info.clone());
             } else {
                 warn!("card not found: {}", id);
@@ -33,7 +26,7 @@ impl AspectCardDatas {
         infos
     }
 
-    fn get_info_by_id(&self, id: &str) -> Option<&CardBasic<'static>> {
-        self.0.get(id).map(|(card, _)| card)
+    fn get_card_by_id(&self, id: &str) -> Option<&Card<'static>> {
+        self.0.get(id)
     }
 }

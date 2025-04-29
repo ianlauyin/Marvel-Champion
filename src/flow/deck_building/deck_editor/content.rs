@@ -2,9 +2,9 @@ use bevy::{prelude::*, ui::RelativeCursorPosition};
 
 use crate::{
     cards::{Aspect, SetTrait},
-    component::card::CardBasic,
+    component::Card,
     flow::deck_building::{resource::DeckBuildingResource, state::DeckBuildingState},
-    node_ui::{Card, CardDetailButton, MouseControl, ScrollingList},
+    node_ui::{CardDetailButton, CardNode, MouseControl, ScrollingList},
     resource::{AspectCardDatas, AssetLoader},
     util::DeckUtil,
 };
@@ -133,7 +133,7 @@ fn on_deck_info_changed(
 
 fn spawn_deck(
     parent: &mut ChildBuilder,
-    deck_cards: &Vec<CardBasic<'static>>,
+    deck_cards: &Vec<Card<'static>>,
     asset_loader: &Res<AssetLoader>,
 ) {
     parent
@@ -165,7 +165,7 @@ fn spawn_deck(
 
 fn spawn_info(
     parent: &mut ChildBuilder,
-    identity_cards: Vec<CardBasic<'static>>,
+    identity_cards: Vec<Card<'static>>,
     current_aspects: Vec<Aspect>,
     selectable_card_count: usize,
     asset_loader: &Res<AssetLoader>,
@@ -221,7 +221,9 @@ fn spawn_info(
                                             ..default()
                                         })
                                         .with_child((
-                                            Card::small(asset_loader.get(&card.get_key()).clone()),
+                                            CardNode::small(
+                                                asset_loader.get(&card.get_key()).clone(),
+                                            ),
                                             CardDetailButton,
                                             card.clone(),
                                         ));
@@ -279,7 +281,7 @@ fn spawn_info(
 
 fn spawn_collection(
     parent: &mut ChildBuilder,
-    available_cards: Vec<CardBasic<'static>>,
+    available_cards: Vec<Card<'static>>,
     asset_loader: &Res<AssetLoader>,
 ) {
     parent
@@ -320,7 +322,7 @@ fn spawn_collection(
 
 fn spawn_card_list(
     parent: &mut ChildBuilder,
-    cards: &Vec<CardBasic<'static>>,
+    cards: &Vec<Card<'static>>,
     asset_loader: &Res<AssetLoader>,
     card_from: CardFrom,
 ) {
@@ -333,7 +335,7 @@ fn spawn_card_list(
                 ..default()
             })
             .with_child((
-                Card::small(asset_loader.get(&card.get_key()).clone()),
+                CardNode::small(asset_loader.get(&card.get_key()).clone()),
                 card.clone(),
                 MouseControl::default(),
                 card_from.clone(),
@@ -342,18 +344,18 @@ fn spawn_card_list(
 }
 
 struct DeckInfo {
-    identity_cards: Vec<CardBasic<'static>>,
-    deck_cards: Vec<CardBasic<'static>>,
+    identity_cards: Vec<Card<'static>>,
+    deck_cards: Vec<Card<'static>>,
     current_aspects: Vec<Aspect>,
     card_count: usize,
-    avaiable_cards: Vec<CardBasic<'static>>,
+    avaiable_cards: Vec<Card<'static>>,
 }
 
 impl DeckInfo {
     pub fn new(res: Res<DeckBuildingResource>, aspect_card_datas: Res<AspectCardDatas>) -> Self {
         let (identity_cards, player_cards) = DeckUtil::get_cards_pair(res.get_identity().unwrap());
         let aspect_card_ids = res.get_deck().unwrap().get_card_ids();
-        let aspect_cards = aspect_card_datas.get_batch_info_by_id(&aspect_card_ids);
+        let aspect_cards = aspect_card_datas.get_batch_card_by_id(&aspect_card_ids);
         let current_aspects = DeckUtil::get_current_aspects(&aspect_cards);
         let deck_card_counts = aspect_cards.len() + 15;
         let avaiable_cards = DeckUtil::get_available_cards(&aspect_card_ids, &current_aspects);

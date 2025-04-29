@@ -3,17 +3,17 @@ use bevy::prelude::*;
 use crate::util::UiUtils;
 
 #[derive(Component)]
-pub struct Card {
+pub struct CardNode {
     image: Handle<Image>,
     size: Vec2,
     is_vertical: bool,
 }
 
-pub const CARD_SIZE_SMALL: Vec2 = Vec2::new(64., 89.);
+const CARD_SIZE_SMALL: Vec2 = Vec2::new(64., 89.);
 const CARD_SIZE_MEDIUM: Vec2 = Vec2::new(128., 178.);
 const CARD_SIZE_LARGE: Vec2 = Vec2::new(362., 503.);
 
-impl Card {
+impl CardNode {
     pub fn small(image: Handle<Image>) -> Self {
         Self {
             image,
@@ -38,18 +38,18 @@ impl Card {
         }
     }
 }
-pub struct CardPlugin;
+pub struct CardNodePlugin;
 
-impl Plugin for CardPlugin {
+impl Plugin for CardNodePlugin {
     fn build(&self, app: &mut App) {
         app.add_observer(on_card_added);
     }
 }
 
 fn on_card_added(
-    trigger: Trigger<OnAdd, Card>,
+    trigger: Trigger<OnAdd, CardNode>,
     mut commands: Commands,
-    card_q: Query<(&Card, Option<&Node>)>,
+    card_q: Query<(&CardNode, Option<&Node>)>,
 ) {
     let (card, node_op) = card_q.get(trigger.entity()).unwrap();
     let mut node = Node {

@@ -1,16 +1,12 @@
-use bevy::{
-    color::Color,
-    ecs::{entity::Entity, system::Commands},
-};
+use bevy::color::Color;
 
-use crate::component::card::CardBasic;
+use crate::component::Card;
 
 pub trait SetTrait: Sync + Send {
     fn get_boxed_all() -> Vec<Box<dyn SetTrait>>
     where
         Self: Sized;
-    fn get_card_infos(&self) -> Vec<CardBasic<'static>>;
-    fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)>;
+    fn get_cards<'a>(&self) -> Vec<Card<'a>>;
     fn to_str(&self) -> &str;
     fn get_key(&self) -> &str;
     fn get_thumbnail_key(&self) -> Option<String>;

@@ -2,20 +2,18 @@ use bevy::utils::{HashMap, HashSet};
 
 use crate::{
     cards::{Aspect, IdentitySet, SetTrait},
-    component::card::CardBasic,
+    component::Card,
 };
 
 pub struct DeckUtil;
 
 impl DeckUtil {
-    pub fn get_cards_pair(
-        identity_set: IdentitySet,
-    ) -> (Vec<CardBasic<'static>>, Vec<CardBasic<'static>>) {
+    pub fn get_cards_pair(identity_set: IdentitySet) -> (Vec<Card<'static>>, Vec<Card<'static>>) {
         let mut identity_cards = vec![];
         let mut other_cards = vec![];
         let identity_card_ids = identity_set.get_identity_card_ids();
         let non_player_card_ids = identity_set.get_non_player_cards_ids();
-        for card in identity_set.get_card_infos().iter() {
+        for card in identity_set.get_cards().iter() {
             if identity_card_ids.contains(&card.id) {
                 identity_cards.push(card.clone());
             } else if !non_player_card_ids.contains(&card.id) {
@@ -27,7 +25,7 @@ impl DeckUtil {
         (identity_cards, other_cards)
     }
 
-    pub fn get_current_aspects(aspect_cards: &Vec<CardBasic<'static>>) -> Vec<Aspect> {
+    pub fn get_current_aspects(aspect_cards: &Vec<Card<'static>>) -> Vec<Aspect> {
         let mut aspects = HashSet::new();
         for card in aspect_cards {
             if let Some(aspect) = card.belongs.get_aspect() {
@@ -42,7 +40,7 @@ impl DeckUtil {
     pub fn get_available_cards(
         deck_card_ids: &Vec<String>,
         current_aspect: &Vec<Aspect>,
-    ) -> Vec<CardBasic<'static>> {
+    ) -> Vec<Card<'static>> {
         let mut available_cards = vec![];
         let mut deck_card_map: HashMap<String, u8> = HashMap::new();
         for deck_card_id in deck_card_ids {
@@ -50,18 +48,18 @@ impl DeckUtil {
             *count += 1;
         }
 
-        let aspect_cards: Vec<CardBasic<'static>> = {
+        let aspect_cards: Vec<Card<'static>> = {
             if current_aspect.is_empty() {
                 Aspect::get_all()
                     .iter()
-                    .map(|aspect| aspect.get_card_infos())
+                    .map(|aspect| aspect.get_cards())
                     .flatten()
                     .collect()
             } else {
                 current_aspect
                     .iter()
-                    .flat_map(|aspect| aspect.get_card_infos())
-                    .chain(Aspect::Basic.get_card_infos())
+                    .flat_map(|aspect| aspect.get_cards())
+                    .chain(Aspect::Basic.get_cards())
                     .collect()
             }
         };

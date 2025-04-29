@@ -15,31 +15,9 @@ mod stampede;
 mod the_break_in_1a;
 mod the_break_in_1b;
 
-use crate::component::card::CardBasic;
-use bevy::ecs::{entity::Entity, system::Commands};
+use crate::component::Card;
 
-pub fn get_infos() -> Vec<CardBasic<'static>> {
-    vec![
-        armored_rhino_suit::get_info(),
-        breakin_and_takin::get_info(),
-        charge::get_info(),
-        crowd_control::get_info(),
-        enhanced_ivory_horn::get_info(),
-        hard_to_keep_down::get_info(),
-        hydra_mercenary::get_info(),
-        im_tough::get_info(),
-        rhino_i::get_info(),
-        rhino_ii::get_info(),
-        rhino_iii::get_info(),
-        sandman::get_info(),
-        shocker::get_info(),
-        stampede::get_info(),
-        the_break_in_1a::get_info(),
-        the_break_in_1b::get_info(),
-    ]
-}
-
-pub fn get_cards() -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
+pub fn get_cards<'a>() -> Vec<Card<'a>> {
     vec![
         armored_rhino_suit::get_card(),
         breakin_and_takin::get_card(),

@@ -7,23 +7,9 @@ mod jessica_jones;
 mod surveillance_team;
 mod the_power_of_justice;
 
-use crate::component::card::CardBasic;
-use bevy::ecs::{entity::Entity, system::Commands};
+use crate::component::Card;
 
-pub fn get_infos() -> Vec<CardBasic<'static>> {
-    vec![
-        daredevil::get_info(),
-        for_justice::get_info(),
-        great_responsibility::get_info(),
-        heroic_intuition::get_info(),
-        interrogation_room::get_info(),
-        jessica_jones::get_info(),
-        surveillance_team::get_info(),
-        the_power_of_justice::get_info(),
-    ]
-}
-
-pub fn get_cards() -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
+pub fn get_cards<'a>() -> Vec<Card<'a>> {
     vec![
         daredevil::get_card(),
         for_justice::get_card(),

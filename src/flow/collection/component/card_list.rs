@@ -1,18 +1,19 @@
 use bevy::prelude::*;
 
 use crate::{
-    component::card::CardBasic,
+    component::Card,
     node_ui::{
-        Card, CardDetailButton, ContainerHeader, ContainerHeaderEvent, MainContainer, ScrollingList,
+        CardDetailButton, CardNode, ContainerHeader, ContainerHeaderEvent, MainContainer,
+        ScrollingList,
     },
     resource::AssetLoader,
 };
 
 #[derive(Component)]
-pub struct CollectionCardList(Vec<CardBasic<'static>>);
+pub struct CollectionCardList(Vec<Card<'static>>);
 
 impl CollectionCardList {
-    pub fn new(cards: Vec<CardBasic<'static>>) -> Self {
+    pub fn new(cards: Vec<Card<'static>>) -> Self {
         Self(cards)
     }
 }
@@ -50,7 +51,7 @@ fn on_card_list_added(
                                 ..default()
                             })
                             .with_child((
-                                Card::medium(asset_loader.get(&card.get_key()).clone()),
+                                CardNode::medium(asset_loader.get(&card.get_key()).clone()),
                                 CardDetailButton,
                                 card.clone(),
                             ));

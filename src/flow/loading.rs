@@ -2,7 +2,7 @@ use std::sync::LazyLock;
 
 use bevy::prelude::*;
 
-use crate::{cards::*, resource::AssetLoader, node_ui::LoadingScreen, util::SystemUtil};
+use crate::{cards::*, node_ui::LoadingScreen, resource::AssetLoader, util::SystemUtil};
 
 use super::state::AppState;
 
@@ -27,8 +27,8 @@ const ASSETS_PATHS: LazyLock<Vec<String>> = LazyLock::new(|| {
         if let Some(thumbnail_path) = set.get_thumbnail_key() {
             paths.push(thumbnail_path);
         }
-        for card in set.get_card_infos() {
-            paths.push(card.get_key());
+        for card in set.get_cards() {
+            paths.push(card.get_key().to_string());
         }
     }
 

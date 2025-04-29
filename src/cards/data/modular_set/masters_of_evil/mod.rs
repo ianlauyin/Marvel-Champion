@@ -5,21 +5,9 @@ mod the_master_of_evil;
 mod tiger_shark;
 mod whirlwind;
 
-use crate::component::card::CardBasic;
-use bevy::ecs::{entity::Entity, system::Commands};
+use crate::component::Card;
 
-pub fn get_infos() -> Vec<CardBasic<'static>> {
-    vec![
-        master_of_mayhem::get_info(),
-        melter::get_info(),
-        radioactive_man::get_info(),
-        the_master_of_evil::get_info(),
-        tiger_shark::get_info(),
-        whirlwind::get_info(),
-    ]
-}
-
-pub fn get_cards() -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
+pub fn get_cards<'a>() -> Vec<Card<'a>> {
     vec![
         master_of_mayhem::get_card(),
         melter::get_card(),

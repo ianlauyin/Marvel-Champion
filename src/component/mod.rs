@@ -1,3 +1,3 @@
-mod shared;
+mod card;
 
-pub mod card;
+pub use card::Card;

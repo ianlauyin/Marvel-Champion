@@ -8,24 +8,9 @@ mod the_power_of_leadership;
 mod the_triskelion;
 mod vision;
 
-use crate::component::card::CardBasic;
-use bevy::ecs::{entity::Entity, system::Commands};
+use crate::component::Card;
 
-pub fn get_infos() -> Vec<CardBasic<'static>> {
-    vec![
-        get_ready::get_info(),
-        hawkeye::get_info(),
-        inspired::get_info(),
-        lead_from_the_front::get_info(),
-        make_the_call::get_info(),
-        maria_hill::get_info(),
-        the_power_of_leadership::get_info(),
-        the_triskelion::get_info(),
-        vision::get_info(),
-    ]
-}
-
-pub fn get_cards() -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
+pub fn get_cards<'a>() -> Vec<Card<'a>> {
     vec![
         get_ready::get_card(),
         hawkeye::get_card(),

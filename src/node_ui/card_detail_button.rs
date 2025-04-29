@@ -1,11 +1,11 @@
 use bevy::prelude::*;
 
-use crate::component::card::CardBasic;
+use crate::component::Card;
 
 use super::CardDetail;
 
 #[derive(Component)]
-#[require(Interaction, CardBasic)]
+#[require(Interaction, Card)]
 pub struct CardDetailButton;
 
 pub struct CardDetailButtonPlugin;
@@ -18,7 +18,7 @@ impl Plugin for CardDetailButtonPlugin {
 
 fn listen_card_detail_button_click(
     card_detail_button_q: Query<
-        (&CardBasic<'static>, &Interaction),
+        (&Card<'static>, &Interaction),
         (With<CardDetailButton>, Changed<Interaction>),
     >,
     mut commands: Commands,

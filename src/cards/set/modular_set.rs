@@ -1,8 +1,7 @@
 use bevy::color::Color;
-use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::cards::data::modular_set;
-use crate::component::card::CardBasic;
+use crate::component::Card;
 
 use super::set_trait::SetTrait;
 
@@ -55,17 +54,7 @@ impl SetTrait for ModularSet {
         }
     }
 
-    fn get_card_infos(&self) -> Vec<CardBasic<'static>> {
-        match *self {
-            Self::BombScare => modular_set::bomb_scare::get_infos(),
-            Self::MastersOfEvil => modular_set::masters_of_evil::get_infos(),
-            Self::UnderAttack => modular_set::under_attack::get_infos(),
-            Self::LegionsOfHydra => modular_set::legions_of_hydra::get_infos(),
-            Self::TheDoomsdayChair => modular_set::the_doomsday_chair::get_infos(),
-        }
-    }
-
-    fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
+    fn get_cards<'a>(&self) -> Vec<Card<'a>> {
         match *self {
             Self::BombScare => modular_set::bomb_scare::get_cards(),
             Self::MastersOfEvil => modular_set::masters_of_evil::get_cards(),

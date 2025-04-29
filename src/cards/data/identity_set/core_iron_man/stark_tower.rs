@@ -1,30 +1,11 @@
-use crate::{cards::*, component::card::*};
-use bevy::ecs::{entity::Entity, system::Commands};
+use crate::{cards::*, component::Card};
 
-pub fn get_info() -> CardBasic<'static> {
-    CardBasic {
+pub fn get_card<'a>() -> Card<'a> {
+    Card {
         id: "core_034",
         name: "Stark Tower",
-        sub_name: None,
-        unique: true,
         card_amount_max: 1,
         belongs: Belong::IdentitySet(IdentitySet::CoreIronMan).into(),
         is_vertical: true,
     }
-}
-
-pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
-    (get_info(), spawn_bundle)
-}
-
-fn spawn_bundle(mut commands: Commands) -> Entity {
-    commands
-        .spawn((
-            get_info(),
-            PlayerCardType::Support,
-            CardCost::constant(2),
-            CardResources::mental(),
-            CardTraits::single(CardTrait::Location),
-        ))
-        .id()
 }

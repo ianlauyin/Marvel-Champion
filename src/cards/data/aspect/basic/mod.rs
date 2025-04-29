@@ -10,26 +10,9 @@ mod nick_fury;
 mod strength;
 mod tenacity;
 
-use crate::component::card::CardBasic;
-use bevy::ecs::{entity::Entity, system::Commands};
+use crate::component::Card;
 
-pub fn get_infos() -> Vec<CardBasic<'static>> {
-    vec![
-        avengers_mansion::get_info(),
-        emergency::get_info(),
-        energy::get_info(),
-        first_aid::get_info(),
-        genius::get_info(),
-        haymaker::get_info(),
-        helicarrier::get_info(),
-        mockingbird::get_info(),
-        nick_fury::get_info(),
-        strength::get_info(),
-        tenacity::get_info(),
-    ]
-}
-
-pub fn get_cards() -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
+pub fn get_cards<'a>() -> Vec<Card<'a>> {
     vec![
         avengers_mansion::get_card(),
         emergency::get_card(),

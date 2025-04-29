@@ -1,6 +1,6 @@
 use bevy::ecs::component::Component;
 
-use crate::{cards::SetTrait, component::card::CardBasic};
+use crate::{cards::SetTrait, component::Card};
 
 #[derive(Component)]
 pub struct SubMenuButton(Box<dyn SetTrait>);
@@ -10,7 +10,7 @@ impl SubMenuButton {
         Self(set)
     }
 
-    pub fn get_cards_info(&self) -> Vec<CardBasic<'static>> {
-        self.0.get_card_infos()
+    pub fn get_cards(&self) -> Vec<Card<'static>> {
+        self.0.get_cards()
     }
 }

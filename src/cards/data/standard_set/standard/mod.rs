@@ -4,20 +4,9 @@ mod caught_off_guard;
 mod gang_up;
 mod shadow_of_the_past;
 
-use crate::component::card::CardBasic;
-use bevy::ecs::{entity::Entity, system::Commands};
+use crate::component::Card;
 
-pub fn get_infos() -> Vec<CardBasic<'static>> {
-    vec![
-        advance::get_info(),
-        assault::get_info(),
-        caught_off_guard::get_info(),
-        gang_up::get_info(),
-        shadow_of_the_past::get_info(),
-    ]
-}
-
-pub fn get_cards() -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
+pub fn get_cards<'a>() -> Vec<Card<'a>> {
     vec![
         advance::get_card(),
         assault::get_card(),

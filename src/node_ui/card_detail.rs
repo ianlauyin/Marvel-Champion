@@ -2,7 +2,7 @@ use bevy::{prelude::*, ui::FocusPolicy};
 
 use crate::{constant::WINDOW_RESOLUTION, resource::AssetLoader, util::UiUtils};
 
-use super::{Card, ContainerHeader, ContainerHeaderEvent};
+use super::{CardNode, ContainerHeader, ContainerHeaderEvent};
 pub struct CardDetailPlugin;
 
 impl Plugin for CardDetailPlugin {
@@ -58,7 +58,7 @@ fn on_card_detail_added(
         ))
         .with_children(|container| {
             container.spawn(ContainerHeader::with_leading_button("X"));
-            container.spawn(Card::large(
+            container.spawn(CardNode::large(
                 asset_loader.get(&card_detail.image_key).clone(),
                 card_detail.is_vertical,
             ));

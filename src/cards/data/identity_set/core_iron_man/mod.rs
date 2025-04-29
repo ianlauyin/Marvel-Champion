@@ -13,32 +13,9 @@ mod stark_tower;
 mod supersonic_punch;
 mod war_machine;
 
-use crate::component::card::CardBasic;
-use bevy::ecs::{entity::Entity, system::Commands};
+use crate::component::Card;
 
-pub fn get_infos() -> Vec<CardBasic<'static>> {
-    vec![
-        alter_ego::get_info(),
-        arc_reactor::get_info(),
-        hero::get_info(),
-        mark_v_armor::get_info(),
-        mark_v_helmet::get_info(),
-        obligation::get_info(),
-        pepper_potts::get_info(),
-        powered_gauntlets::get_info(),
-        repulsor_blast::get_info(),
-        rocket_boots::get_info(),
-        stark_tower::get_info(),
-        supersonic_punch::get_info(),
-        war_machine::get_info(),
-        nemesis_set::electric_whip_attack::get_info(),
-        nemesis_set::electromagnetic_backlash::get_info(),
-        nemesis_set::imminent_overload::get_info(),
-        nemesis_set::whiplash::get_info(),
-    ]
-}
-
-pub fn get_cards() -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
+pub fn get_cards<'a>() -> Vec<Card<'a>> {
     vec![
         alter_ego::get_card(),
         arc_reactor::get_card(),

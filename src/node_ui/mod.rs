@@ -1,6 +1,6 @@
-mod card;
 mod card_detail;
 mod card_detail_button;
+mod card_node;
 mod container_header;
 mod custom_button;
 mod loading_screen;
@@ -9,9 +9,9 @@ mod mouse_control_util;
 mod popup;
 mod scrolling_list;
 
-pub use card::{Card, CARD_SIZE_SMALL};
 pub use card_detail::CardDetail;
 pub use card_detail_button::CardDetailButton;
+pub use card_node::CardNode;
 pub use container_header::{ContainerHeader, ContainerHeaderEvent};
 pub use custom_button::CustomButton;
 pub use loading_screen::LoadingScreen;
@@ -32,7 +32,7 @@ impl Plugin for NodeUiPlugin {
             loading_screen::LoadingScreenPlugin,
             custom_button::MenuButtonPlugin,
             scrolling_list::ScrollingListPlugin,
-            card::CardPlugin,
+            card_node::CardNodePlugin,
             popup::PopupPlugin,
             card_detail_button::CardDetailButtonPlugin,
             card_detail::CardDetailPlugin,

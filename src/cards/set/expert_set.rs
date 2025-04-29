@@ -1,8 +1,7 @@
 use bevy::color::Color;
-use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::cards::data::expert_set;
-use crate::component::card::CardBasic;
+use crate::component::Card;
 
 use super::set_trait::SetTrait;
 
@@ -37,13 +36,7 @@ impl SetTrait for ExpertSet {
         }
     }
 
-    fn get_card_infos(&self) -> Vec<CardBasic<'static>> {
-        match *self {
-            Self::Expert => expert_set::expert::get_infos(),
-        }
-    }
-
-    fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
+    fn get_cards<'a>(&self) -> Vec<Card<'a>> {
         match *self {
             Self::Expert => expert_set::expert::get_cards(),
         }

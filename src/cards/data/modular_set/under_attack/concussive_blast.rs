@@ -1,29 +1,11 @@
-use bevy::ecs::{entity::Entity, system::Commands};
+use crate::{cards::*, component::Card};
 
-use crate::{cards::*, component::card::*};
-
-pub fn get_info() -> CardBasic<'static> {
-    CardBasic {
+pub fn get_card<'a>() -> Card<'a> {
+    Card {
         id: "core_154",
         name: "Concussive Blast",
-        sub_name: None,
-        unique: false,
         card_amount_max: 2,
         belongs: Belong::ModularSet(ModularSet::UnderAttack).into(),
         is_vertical: true,
     }
-}
-
-pub fn get_card() -> (CardBasic<'static>, fn(Commands) -> Entity) {
-    (get_info(), spawn_bundle)
-}
-
-fn spawn_bundle(mut commands: Commands) -> Entity {
-    commands
-        .spawn((
-            get_info(),
-            EncounterCardType::Treachery,
-            CardBoost::amount(0),
-        ))
-        .id()
 }

@@ -7,23 +7,9 @@ mod luke_cage;
 mod med_team;
 mod the_power_of_protection;
 
-use crate::component::card::CardBasic;
-use bevy::ecs::{entity::Entity, system::Commands};
+use crate::component::Card;
 
-pub fn get_infos() -> Vec<CardBasic<'static>> {
-    vec![
-        armored_vest::get_info(),
-        black_widow::get_info(),
-        counter_punch::get_info(),
-        get_behind_me::get_info(),
-        indomitable::get_info(),
-        luke_cage::get_info(),
-        med_team::get_info(),
-        the_power_of_protection::get_info(),
-    ]
-}
-
-pub fn get_cards() -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
+pub fn get_cards<'a>() -> Vec<Card<'a>> {
     vec![
         armored_vest::get_card(),
         black_widow::get_card(),

@@ -1,8 +1,7 @@
 use bevy::color::Color;
-use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::cards::data::scenario;
-use crate::component::card::CardBasic;
+use crate::component::Card;
 
 use super::set_trait::SetTrait;
 
@@ -43,15 +42,7 @@ impl SetTrait for Scenario {
         }
     }
 
-    fn get_card_infos(&self) -> Vec<CardBasic<'static>> {
-        match *self {
-            Self::CoreRhino => scenario::core_rhino::get_infos(),
-            Self::CoreKlaw => scenario::core_klaw::get_infos(),
-            Self::CoreUltron => scenario::core_ultron::get_infos(),
-        }
-    }
-
-    fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
+    fn get_cards<'a>(&self) -> Vec<Card<'a>> {
         match *self {
             Self::CoreRhino => scenario::core_rhino::get_cards(),
             Self::CoreKlaw => scenario::core_klaw::get_cards(),

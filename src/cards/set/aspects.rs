@@ -1,10 +1,7 @@
-use bevy::{
-    color::Color,
-    ecs::{entity::Entity, system::Commands},
-};
+use bevy::color::Color;
 
 use super::{super::data::aspect, set_trait::SetTrait};
-use crate::component::card::CardBasic;
+use crate::component::Card;
 
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub enum Aspect {
@@ -28,7 +25,7 @@ impl Aspect {
         ]
     }
 
-    pub fn get_all_cards() -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
+    pub fn get_all_cards<'a>() -> Vec<Card<'a>> {
         let mut cards = Vec::new();
         for aspect in Self::get_all() {
             for card in aspect.get_cards() {
@@ -69,18 +66,7 @@ impl SetTrait for Aspect {
         }
     }
 
-    fn get_card_infos(&self) -> Vec<CardBasic<'static>> {
-        match self {
-            Self::Aggression => aspect::aggression::get_infos(),
-            Self::Basic => aspect::basic::get_infos(),
-            Self::Justice => aspect::justice::get_infos(),
-            Self::Leadership => aspect::leadership::get_infos(),
-            Self::Protection => aspect::protection::get_infos(),
-            Self::Pool => aspect::pool::get_infos(),
-        }
-    }
-
-    fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
+    fn get_cards<'a>(&self) -> Vec<Card<'a>> {
         match self {
             Self::Aggression => aspect::aggression::get_cards(),
             Self::Basic => aspect::basic::get_cards(),

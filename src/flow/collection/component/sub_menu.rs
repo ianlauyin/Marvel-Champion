@@ -98,7 +98,7 @@ fn handle_sub_menu_button_click(
     sub_menu_button_q: Query<(&Interaction, &SubMenuButton), Changed<Interaction>>,
 ) {
     SystemUtil::handle_button_click(sub_menu_button_q, |sub_menu_button| {
-        commands.spawn(CollectionCardList::new(sub_menu_button.get_cards_info()));
+        commands.spawn(CollectionCardList::new(sub_menu_button.get_cards()));
         return;
     });
 }

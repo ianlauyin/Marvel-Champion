@@ -1,9 +1,9 @@
 use bevy::{prelude::*, ui::RelativeCursorPosition};
 
 use crate::{
-    component::card::CardBasic,
+    component::Card,
     flow::deck_building::{resource::DeckBuildingResource, state::DeckBuildingState},
-    node_ui::{Card, CardDetail, MouseControl, MouseControlEvent, CARD_SIZE_SMALL},
+    node_ui::{CardDetail, CardNode, MouseControl, MouseControlEvent},
     resource::AssetLoader,
     util::UiUtils,
 };
@@ -24,9 +24,9 @@ impl Plugin for DeckEditorContentSystemPlugin {
 fn handle_mouse_event(
     mut click_ev: EventReader<MouseControlEvent>,
     mut commands: Commands,
-    card_info_q: Query<(&CardBasic<'static>, &GlobalTransform, &CardFrom), With<MouseControl>>,
+    card_info_q: Query<(&Card<'static>, &GlobalTransform, &CardFrom), With<MouseControl>>,
     mut dragging_card_q: Query<
-        (Entity, &DraggingCard, &CardBasic<'static>, &mut Node),
+        (Entity, &DraggingCard, &Card<'static>, &mut Node),
         Without<MouseControl>,
     >,
     deck_component_q: Query<(&RelativeCursorPosition, &DeckContent)>,
@@ -85,12 +85,12 @@ fn handle_mouse_event(
 }
 
 #[derive(Component)]
-#[require(CardBasic)]
+#[require(Card)]
 struct DraggingCard(CardFrom);
 
 fn handle_start_drag(
     mut commands: Commands,
-    card_info: &CardBasic<'static>,
+    card_info: &Card<'static>,
     global_transform: &GlobalTransform,
     card_from: &CardFrom,
     asset_loader: &Res<AssetLoader>,
@@ -99,14 +99,11 @@ fn handle_start_drag(
     let image = asset_loader.get(&card_info.get_key());
     let transform = global_transform.translation();
     commands.spawn((
+        // Use Clone and spawn later with v0.16.0
         DraggingCard(card_from.clone()),
         card_info.clone(),
-        Card::small(image.clone()),
-        Node {
-            top: Val::Px(transform.y - CARD_SIZE_SMALL.y / 2.),
-            left: Val::Px(transform.x - CARD_SIZE_SMALL.x / 2.),
-            ..default()
-        },
+        CardNode::small(image.clone()),
+        Node { ..default() },
         UiUtils::get_largest_z_index(z_index_q),
     ));
 }
@@ -122,7 +119,7 @@ fn handle_drop(
     mut commands: Commands,
     dragging_card_entity: Entity,
     dragging_card: &DraggingCard,
-    card_info: &CardBasic<'static>,
+    card_info: &Card<'static>,
     deck_component_q: &Query<(&RelativeCursorPosition, &DeckContent)>,
     res: &mut ResMut<DeckBuildingResource>,
 ) {

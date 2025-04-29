@@ -32,7 +32,7 @@ impl<'a> DecksStorageUtil<'a> {
         deck: Deck,
         aspect_cards_data: Res<AspectCardDatas>,
     ) -> Result<(), String> {
-        let aspect_cards = aspect_cards_data.get_batch_info_by_id(&deck.get_card_ids());
+        let aspect_cards = aspect_cards_data.get_batch_card_by_id(&deck.get_card_ids());
         let mut validator = self.identity.get_deck_validator();
         if let Err(message) = validator.validate(&aspect_cards) {
             return Err(message);

@@ -7,23 +7,9 @@ mod the_power_of_aggression;
 mod tigra;
 mod uppercut;
 
-use crate::component::card::CardBasic;
-use bevy::ecs::{entity::Entity, system::Commands};
+use crate::component::Card;
 
-pub fn get_infos() -> Vec<CardBasic<'static>> {
-    vec![
-        chase_them_down::get_info(),
-        combat_training::get_info(),
-        hulk::get_info(),
-        relentless_assault::get_info(),
-        tac_team::get_info(),
-        the_power_of_aggression::get_info(),
-        tigra::get_info(),
-        uppercut::get_info(),
-    ]
-}
-
-pub fn get_cards() -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
+pub fn get_cards<'a>() -> Vec<Card<'a>> {
     vec![
         chase_them_down::get_card(),
         combat_training::get_card(),

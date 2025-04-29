@@ -1,8 +1,7 @@
 use bevy::color::Color;
-use bevy::ecs::{entity::Entity, system::Commands};
 
 use crate::cards::data::identity_set;
-use crate::component::card::CardBasic;
+use crate::component::Card;
 use crate::util::DeckValidator;
 
 use super::set_trait::SetTrait;
@@ -118,17 +117,7 @@ impl SetTrait for IdentitySet {
         }
     }
 
-    fn get_card_infos(&self) -> Vec<CardBasic<'static>> {
-        match *self {
-            Self::CoreSpiderMan => identity_set::core_spider_man::get_infos(),
-            Self::CoreCaptainMarvel => identity_set::core_captain_marvel::get_infos(),
-            Self::CoreSheHulk => identity_set::core_she_hulk::get_infos(),
-            Self::CoreIronMan => identity_set::core_iron_man::get_infos(),
-            Self::CoreBlackPanther => identity_set::core_black_panther::get_infos(),
-        }
-    }
-
-    fn get_cards(&self) -> Vec<(CardBasic<'static>, fn(Commands) -> Entity)> {
+    fn get_cards<'a>(&self) -> Vec<Card<'a>> {
         match *self {
             Self::CoreSpiderMan => identity_set::core_spider_man::get_cards(),
             Self::CoreCaptainMarvel => identity_set::core_captain_marvel::get_cards(),
