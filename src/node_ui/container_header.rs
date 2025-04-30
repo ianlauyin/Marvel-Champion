@@ -40,19 +40,19 @@ impl ContainerHeader {
                 align_self: AlignSelf::FlexStart,
                 ..default()
             },
-            children!(
+            children![(
                 CustomButton::square(self.leading_button.get_text()),
-                self.leading_button.clone(),
-            ),
+                self.leading_button.clone()
+            ),],
         )
     }
 
     fn trailing_button_bundle(&self) -> Option<impl Bundle> {
         if let Some(trailing_button) = &self.trailing_button {
-            Some(children!(
+            Some(children![(
                 CustomButton::square(trailing_button.get_text()),
                 trailing_button.clone(),
-            ))
+            )])
         } else {
             None
         }
