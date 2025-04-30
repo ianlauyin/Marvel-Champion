@@ -34,7 +34,8 @@ pub struct ScrollingListPlugin;
 impl Plugin for ScrollingListPlugin {
     fn build(&self, app: &mut App) {
         app.add_observer(on_added)
-            .add_systems(Update, (listen_children_changed, on_scroll));
+            .add_systems(Update, on_scroll)
+            .add_systems(PostUpdate, listen_children_changed);
     }
 }
 
