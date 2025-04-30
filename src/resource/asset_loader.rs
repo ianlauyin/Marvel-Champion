@@ -28,7 +28,9 @@ impl AssetLoader {
     }
 
     fn init(&mut self, key: String, asset_server: &Res<AssetServer>) {
-        let handle = asset_server.load(format!("embedded://{key}.png",));
-        self.0.insert(key, handle.clone());
+        self.0.insert(
+            key.clone(),
+            asset_server.load(format!("embedded://{key}.png")),
+        );
     }
 }
