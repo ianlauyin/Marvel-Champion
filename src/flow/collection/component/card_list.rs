@@ -65,11 +65,11 @@ fn on_added(
                 align_items: AlignItems::Center,
                 ..default()
             },
-            children![
+            children![(
                 CardNode::medium(asset_loader.get(&card.get_key()).clone()),
                 CardDetailButton,
-                card.clone(),
-            ],
+                card.clone()
+            ),],
             ChildOf(content_container),
         ));
     }
