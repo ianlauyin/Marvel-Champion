@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{ecs::spawn::SpawnIter, prelude::*};
 
 use crate::{
     flow::state::AppState,
@@ -15,8 +15,7 @@ impl Plugin for CollectionMenuPlugin {
         app.add_systems(OnEnter(CURRENT_STATE), spawn_menu)
             .add_systems(
                 Update,
-                (handle_header_button_click, handle_menu_button_click)
-                    .run_if(in_state(CURRENT_STATE)),
+                handle_header_button_click.run_if(in_state(CURRENT_STATE)),
             )
             .add_systems(
                 OnExit(CURRENT_STATE),
@@ -29,12 +28,13 @@ impl Plugin for CollectionMenuPlugin {
 struct CollectionMenu;
 
 fn spawn_menu(mut commands: Commands) {
-    commands
-        .spawn((MainContainer::default(), CollectionMenu))
-        .with_children(|parent| {
-            parent.spawn(ContainerHeader::with_leading_button("<"));
-            parent
-                .spawn(Node {
+    commands.spawn((
+        MainContainer::default(),
+        CollectionMenu,
+        children![
+            ContainerHeader::with_leading_button("<"),
+            (
+                Node {
                     margin: UiRect::all(Val::Px(100.)),
                     flex_grow: 1.,
                     display: Display::Grid,
@@ -42,13 +42,15 @@ fn spawn_menu(mut commands: Commands) {
                     row_gap: Val::Px(50.),
                     grid_template_columns: vec![RepeatedGridTrack::auto(3)],
                     ..default()
-                })
-                .with_children(|content| {
-                    for button in CollectionMenuButton::get_all() {
-                        content.spawn((CustomButton::large(button.get_text()), button));
-                    }
-                });
-        });
+                },
+                Children::spawn(SpawnIter(
+                    CollectionMenuButton::get_all()
+                        .into_iter()
+                        .map(|button| { (CustomButton::large(button.get_text()), button) })
+                )),
+            )
+        ],
+    ));
 }
 
 fn handle_header_button_click(
@@ -58,23 +60,11 @@ fn handle_header_button_click(
 ) {
     for event in event_reader.read() {
         for headers in menu_q.iter() {
-            match event {
-                ContainerHeaderEvent::LeadingButtonPressed(header_entity) => {
-                    if headers.contains(header_entity) {
-                        next_state.set(AppState::MainMenu);
-                    }
+            if let ContainerHeaderEvent::LeadingButtonPressed(header_entity) = event {
+                if headers.contains(header_entity) {
+                    next_state.set(AppState::MainMenu);
                 }
-                _ => {}
             }
         }
     }
-}
-
-fn handle_menu_button_click(
-    button_q: Query<(&Interaction, &CollectionMenuButton), Changed<Interaction>>,
-    mut commands: Commands,
-) {
-    SystemUtil::handle_component_click(button_q, |button| {
-        commands.spawn(button.get_sub_menu());
-    });
 }

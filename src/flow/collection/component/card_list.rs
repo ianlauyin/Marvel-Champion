@@ -9,6 +9,8 @@ use crate::{
     resource::AssetLoader,
 };
 
+use super::super::CURRENT_STATE;
+
 #[derive(Component)]
 pub struct CollectionCardList(Vec<Card<'static>>);
 
@@ -22,8 +24,11 @@ pub struct CardListPlugin;
 
 impl Plugin for CardListPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, listen_header_interaction)
-            .add_observer(on_added);
+        app.add_systems(
+            Update,
+            handle_header_interaction.run_if(in_state(CURRENT_STATE)),
+        )
+        .add_observer(on_added);
     }
 }
 
@@ -71,7 +76,7 @@ fn on_added(
     Ok(())
 }
 
-fn listen_header_interaction(
+fn handle_header_interaction(
     mut event_reader: EventReader<ContainerHeaderEvent>,
     mut commands: Commands,
     menu_q: Query<(Entity, &Children), With<CollectionCardList>>,

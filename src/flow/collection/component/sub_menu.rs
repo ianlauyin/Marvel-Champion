@@ -4,11 +4,10 @@ use crate::{
     cards::*,
     node_ui::{ContainerHeader, ContainerHeaderEvent, CustomButton, MainContainer, ScrollingList},
     resource::AssetLoader,
-    util::SystemUtil,
 };
 
 use super::super::CURRENT_STATE;
-use super::{card_list::CollectionCardList, SubMenuButton};
+use super::SubMenuButton;
 
 #[derive(Component)]
 pub enum SubMenu {
@@ -37,71 +36,63 @@ pub struct SubMenuPlugin;
 
 impl Plugin for SubMenuPlugin {
     fn build(&self, app: &mut App) {
-        app.add_observer(on_sub_menu_added).add_systems(
+        app.add_systems(
             Update,
-            (handle_sub_menu_button_click, handle_header_button_click)
-                .run_if(in_state(CURRENT_STATE)),
-        );
+            handle_header_interaction.run_if(in_state(CURRENT_STATE)),
+        )
+        .add_observer(on_added);
     }
 }
 
-fn on_sub_menu_added(
+fn on_added(
     trigger: Trigger<OnAdd, SubMenu>,
     mut commands: Commands,
     sub_menu_q: Query<&mut SubMenu>,
     asset_loader: Res<AssetLoader>,
 ) {
-    let sub_menu = sub_menu_q.get(trigger.target()).unwrap();
-    commands
+    let main_container = commands
         .entity(trigger.target())
-        .insert(MainContainer::default())
-        .with_children(|container| {
-            container.spawn(ContainerHeader::with_leading_button("X"));
-            container
-                .spawn(ScrollingList::Grid {
-                    column: 3,
-                    spacing: 50.,
-                })
-                .with_children(|scrolling_list| {
-                    for set in sub_menu.get_sets() {
-                        let mut button = CustomButton::large(set.to_str());
-                        if let Some(color) = set.get_color() {
-                            button.set_color(color);
-                        }
-                        if let Some(key) = set.get_thumbnail_key() {
-                            button.set_image(asset_loader.get(&key).clone());
-                        }
-                        scrolling_list.spawn((SubMenuButton::new(set), button));
-                    }
-                });
-        });
+        .insert((
+            MainContainer::default(),
+            children![ContainerHeader::with_leading_button("X")],
+        ))
+        .id();
+
+    let content_container = commands
+        .spawn((
+            ScrollingList::Grid {
+                column: 3,
+                spacing: 50.,
+            },
+            ChildOf(main_container),
+        ))
+        .id();
+
+    let sub_menu = sub_menu_q.get(trigger.target()).unwrap();
+    for set in sub_menu.get_sets() {
+        let mut button = CustomButton::large(set.to_str());
+        if let Some(color) = set.get_color() {
+            button.set_color(color);
+        }
+        if let Some(key) = set.get_thumbnail_key() {
+            button.set_image(asset_loader.get(&key).clone());
+        }
+        commands.spawn((SubMenuButton::new(set), button, ChildOf(content_container)));
+    }
 }
 
-fn handle_header_button_click(
+fn handle_header_interaction(
     mut event_reader: EventReader<ContainerHeaderEvent>,
     mut commands: Commands,
     menu_q: Query<(Entity, &Children), With<SubMenu>>,
 ) {
     for event in event_reader.read() {
         for (entity, menu_children) in menu_q.iter() {
-            match event {
-                ContainerHeaderEvent::LeadingButtonPressed(header_entity) => {
-                    if menu_children.contains(header_entity) {
-                        commands.entity(entity).despawn();
-                    }
+            if let ContainerHeaderEvent::LeadingButtonPressed(header_entity) = event {
+                if menu_children.contains(header_entity) {
+                    commands.entity(entity).despawn();
                 }
-                _ => {}
             }
         }
     }
-}
-
-fn handle_sub_menu_button_click(
-    mut commands: Commands,
-    sub_menu_button_q: Query<(&Interaction, &SubMenuButton), Changed<Interaction>>,
-) {
-    SystemUtil::handle_component_click(sub_menu_button_q, |sub_menu_button| {
-        commands.spawn(CollectionCardList::new(sub_menu_button.get_cards()));
-        return;
-    });
 }

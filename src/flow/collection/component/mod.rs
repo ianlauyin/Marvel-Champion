@@ -12,6 +12,11 @@ pub struct CollectionComponentsPlugin;
 
 impl Plugin for CollectionComponentsPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((sub_menu::SubMenuPlugin, card_list::CardListPlugin));
+        app.add_plugins((
+            sub_menu::SubMenuPlugin,
+            card_list::CardListPlugin,
+            sub_menu_button::SubMenuButtonPlugin,
+            menu_button::CollectionMenuButtonPlugin,
+        ));
     }
 }

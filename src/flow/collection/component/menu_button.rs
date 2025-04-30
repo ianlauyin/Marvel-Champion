@@ -1,5 +1,8 @@
-use bevy::prelude::Component;
+use bevy::prelude::*;
 
+use crate::util::SystemUtil;
+
+use super::super::CURRENT_STATE;
 use super::SubMenu;
 
 #[derive(Component)]
@@ -45,4 +48,21 @@ impl CollectionMenuButton {
             Self::ExpertSet => SubMenu::ExpertSet,
         }
     }
+}
+
+pub struct CollectionMenuButtonPlugin;
+
+impl Plugin for CollectionMenuButtonPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(Update, handle_button_click.run_if(in_state(CURRENT_STATE)));
+    }
+}
+
+fn handle_button_click(
+    button_q: Query<(&Interaction, &CollectionMenuButton), Changed<Interaction>>,
+    mut commands: Commands,
+) {
+    SystemUtil::handle_component_click(button_q, |button| {
+        commands.spawn(button.get_sub_menu());
+    });
 }
