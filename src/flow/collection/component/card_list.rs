@@ -22,48 +22,56 @@ pub struct CardListPlugin;
 
 impl Plugin for CardListPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, handle_header_button_click)
-            .add_observer(on_card_list_added);
+        app.add_systems(Update, listen_header_interaction)
+            .add_observer(on_added);
     }
 }
 
-fn on_card_list_added(
+fn on_added(
     trigger: Trigger<OnAdd, CollectionCardList>,
     mut commands: Commands,
     card_list_q: Query<&CollectionCardList>,
     asset_loader: Res<AssetLoader>,
-) {
-    let card_list = card_list_q.get(trigger.target()).unwrap();
-    commands
+) -> Result<(), BevyError> {
+    let main_container = commands
         .entity(trigger.target())
-        .insert(MainContainer::default())
-        .with_children(|container| {
-            container.spawn(ContainerHeader::with_leading_button("X"));
-            container
-                .spawn(ScrollingList::Grid {
-                    column: 8,
-                    spacing: 20.,
-                })
-                .with_children(|scrolling_list| {
-                    for card in card_list.0.clone() {
-                        scrolling_list
-                            .spawn(Node {
-                                display: Display::Flex,
-                                justify_content: JustifyContent::Center,
-                                align_items: AlignItems::Center,
-                                ..default()
-                            })
-                            .with_child((
-                                CardNode::medium(asset_loader.get(&card.get_key()).clone()),
-                                CardDetailButton,
-                                card.clone(),
-                            ));
-                    }
-                });
-        });
+        .insert((
+            MainContainer::default(),
+            children![ContainerHeader::with_leading_button("X")],
+        ))
+        .id();
+
+    let content_container = commands
+        .spawn((
+            ScrollingList::Grid {
+                column: 8,
+                spacing: 20.,
+            },
+            ChildOf(main_container),
+        ))
+        .id();
+
+    let card_list = card_list_q.get(trigger.target())?;
+    for card in card_list.0.clone() {
+        commands.spawn((
+            Node {
+                display: Display::Flex,
+                justify_content: JustifyContent::Center,
+                align_items: AlignItems::Center,
+                ..default()
+            },
+            children![
+                CardNode::medium(asset_loader.get(&card.get_key()).clone()),
+                CardDetailButton,
+                card.clone(),
+            ],
+            ChildOf(content_container),
+        ));
+    }
+    Ok(())
 }
 
-fn handle_header_button_click(
+fn listen_header_interaction(
     mut event_reader: EventReader<ContainerHeaderEvent>,
     mut commands: Commands,
     menu_q: Query<(Entity, &Children), With<CollectionCardList>>,
