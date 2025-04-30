@@ -78,13 +78,10 @@ fn listen_header_interaction(
 ) {
     for event in event_reader.read() {
         for (entity, card_list_children) in menu_q.iter() {
-            match event {
-                ContainerHeaderEvent::LeadingButtonPressed(header_entity) => {
-                    if card_list_children.contains(header_entity) {
-                        commands.entity(entity).despawn();
-                    }
+            if let ContainerHeaderEvent::LeadingButtonPressed(header_entity) = event {
+                if card_list_children.contains(header_entity) {
+                    commands.entity(entity).despawn();
                 }
-                _ => {}
             }
         }
     }
