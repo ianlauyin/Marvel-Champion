@@ -30,7 +30,7 @@ impl Plugin for NodeUiPlugin {
             container_header::ContainerHeaderPlugin,
             main_container::MainContainerPlugin,
             loading_screen::LoadingScreenPlugin,
-            custom_button::MenuButtonPlugin,
+            custom_button::CustomButtonPlugin,
             scrolling_list::ScrollingListPlugin,
             card_node::CardNodePlugin,
             popup::PopupPlugin,

@@ -3,14 +3,6 @@ use bevy::{prelude::*, ui::FocusPolicy};
 use crate::{constant::WINDOW_RESOLUTION, resource::AssetLoader, util::UiUtils};
 
 use super::{CardNode, ContainerHeader, ContainerHeaderEvent};
-pub struct CardDetailPlugin;
-
-impl Plugin for CardDetailPlugin {
-    fn build(&self, app: &mut App) {
-        app.add_systems(Update, (handle_header_button_click, on_drag))
-            .add_observer(on_card_detail_added);
-    }
-}
 
 #[derive(Component)]
 #[require(Interaction)]
@@ -53,33 +45,40 @@ impl CardDetail {
     }
 }
 
-fn on_card_detail_added(
+pub struct CardDetailPlugin;
+
+impl Plugin for CardDetailPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(Update, (listen_interaction, on_drag))
+            .add_observer(on_added);
+    }
+}
+
+fn on_added(
     trigger: Trigger<OnAdd, CardDetail>,
     card_detail_q: Query<&CardDetail>,
     mut commands: Commands,
     asset_loader: Res<AssetLoader>,
     z_index_q: Query<&ZIndex>,
-) {
-    let card_detail = card_detail_q.get(trigger.target()).unwrap();
+) -> Result<(), BevyError> {
+    let card_detail = card_detail_q.get(trigger.target())?;
     commands
         .entity(trigger.target())
         .insert(card_detail.bundle(&asset_loader, &z_index_q));
+    Ok(())
 }
 
-fn handle_header_button_click(
+fn listen_interaction(
     mut event_reader: EventReader<ContainerHeaderEvent>,
     mut commands: Commands,
     card_detail_q: Query<(Entity, &Children), With<CardDetail>>,
 ) {
     for event in event_reader.read() {
         for (entity, card_detail_children) in card_detail_q.iter() {
-            match event {
-                ContainerHeaderEvent::LeadingButtonPressed(header_entity) => {
-                    if card_detail_children.contains(header_entity) {
-                        commands.entity(entity).despawn();
-                    }
+            if let ContainerHeaderEvent::LeadingButtonPressed(header_entity) = event {
+                if card_detail_children.contains(header_entity) {
+                    commands.entity(entity).despawn();
                 }
-                _ => {}
             }
         }
     }

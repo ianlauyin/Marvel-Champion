@@ -2,15 +2,6 @@ use bevy::prelude::*;
 use bevy::window::{PrimaryWindow, SystemCursorIcon};
 use bevy::winit::cursor::CursorIcon;
 
-pub struct MenuButtonPlugin;
-
-impl Plugin for MenuButtonPlugin {
-    fn build(&self, app: &mut App) {
-        app.add_observer(handle_button_added)
-            .add_systems(Update, handle_button_ui);
-    }
-}
-
 #[derive(Component)]
 pub struct CustomButton {
     text: String,
@@ -101,18 +92,28 @@ impl CustomButton {
     }
 }
 
-fn handle_button_added(
+pub struct CustomButtonPlugin;
+
+impl Plugin for CustomButtonPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_observer(on_added)
+            .add_systems(Update, listen_interaction);
+    }
+}
+
+fn on_added(
     on_add: Trigger<OnAdd, CustomButton>,
     mut commands: Commands,
     custom_button_q: Query<&CustomButton>,
-) {
-    let custom_button = custom_button_q.get(on_add.target()).unwrap();
+) -> Result<(), BevyError> {
+    let custom_button = custom_button_q.get(on_add.target())?;
     commands
         .entity(on_add.target())
         .insert(custom_button.bundle());
+    Ok(())
 }
 
-fn handle_button_ui(
+fn listen_interaction(
     mut commands: Commands,
     mut button_q: Query<(&mut BackgroundColor, &Interaction, &Children), With<CustomButton>>,
     mut text_color_q: Query<&mut TextColor>,
@@ -121,25 +122,25 @@ fn handle_button_ui(
     if button_q.is_empty() {
         return;
     }
-    let mut cursor_icon = CursorIcon::default();
 
+    let mut is_hovered = false;
     for (background_color, interaction, children) in button_q.iter_mut() {
-        match interaction {
-            Interaction::Pressed => {
-                handle_button_color(background_color, children, &mut text_color_q, 0.7);
-                break;
-            }
+        let alpha = match interaction {
+            Interaction::Pressed => 0.7,
+            Interaction::None => 1.,
             Interaction::Hovered => {
-                handle_button_color(background_color, children, &mut text_color_q, 0.5);
-                cursor_icon = CursorIcon::System(SystemCursorIcon::Pointer);
+                is_hovered = true;
+                0.5
             }
-            Interaction::None => {
-                handle_button_color(background_color, children, &mut text_color_q, 1.);
-            }
-        }
+        };
+        handle_button_color(background_color, children, &mut text_color_q, alpha);
     }
 
-    commands.entity(window.into_inner()).insert(cursor_icon);
+    commands.entity(window.into_inner()).insert(if is_hovered {
+        CursorIcon::System(SystemCursorIcon::Pointer)
+    } else {
+        CursorIcon::default()
+    });
 }
 
 fn handle_button_color(

@@ -97,7 +97,7 @@ fn handle_hero_menu_button_click(
     mut commands: Commands,
     hero_menu_button_q: Query<(&Interaction, &HeroMenuButton), Changed<Interaction>>,
 ) {
-    SystemUtil::handle_button_click(hero_menu_button_q, |hero_menu_button| {
+    SystemUtil::handle_component_click(hero_menu_button_q, |hero_menu_button| {
         commands.spawn(DeckMenu(hero_menu_button.0.clone()));
     });
 }

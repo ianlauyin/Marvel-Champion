@@ -59,7 +59,7 @@ fn handle_deck_menu_button_click(
     mut res: ResMut<DeckBuildingResource>,
     mut next_state: ResMut<NextState<DeckBuildingState>>,
 ) {
-    SystemUtil::handle_button_click(deck_menu_button_q, |deck_menu_button| {
+    SystemUtil::handle_component_click(deck_menu_button_q, |deck_menu_button| {
         res.set_deck(deck_menu_button.0.clone());
         next_state.set(DeckBuildingState::DeckEditor);
     });

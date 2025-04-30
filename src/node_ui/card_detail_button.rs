@@ -12,26 +12,20 @@ pub struct CardDetailButtonPlugin;
 
 impl Plugin for CardDetailButtonPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, listen_card_detail_button_click);
+        app.add_systems(Update, listen_interaction);
     }
 }
 
-fn listen_card_detail_button_click(
+fn listen_interaction(
     card_detail_button_q: Query<
-        (&Card<'static>, &Interaction),
+        (&Interaction, &Card<'static>),
         (With<CardDetailButton>, Changed<Interaction>),
     >,
     mut commands: Commands,
 ) {
-    for (card_basic, interaction) in card_detail_button_q.iter() {
-        match interaction {
-            Interaction::Pressed => {
-                commands.spawn(CardDetail::new(
-                    card_basic.get_key(),
-                    card_basic.is_vertical,
-                ));
-            }
-            _ => {}
+    for (interaction, card) in card_detail_button_q.iter() {
+        if let Interaction::Pressed = interaction {
+            commands.spawn(CardDetail::new(card.get_key(), card.is_vertical));
         }
     }
 }

@@ -28,6 +28,35 @@ impl ContainerHeader {
             trailing_button: Some(ContainerHeaderButton::Trailing(trailing_text.to_string())),
         }
     }
+
+    fn header_bundle(&self) -> impl Bundle {
+        (
+            Node {
+                width: Val::Percent(100.),
+                padding: UiRect::all(Val::Px(10.)),
+                display: Display::Flex,
+                align_items: AlignItems::Center,
+                justify_content: JustifyContent::SpaceBetween,
+                align_self: AlignSelf::FlexStart,
+                ..default()
+            },
+            children!(
+                CustomButton::square(self.leading_button.get_text()),
+                self.leading_button.clone(),
+            ),
+        )
+    }
+
+    fn trailing_button_bundle(&self) -> Option<impl Bundle> {
+        if let Some(trailing_button) = &self.trailing_button {
+            Some(children!(
+                CustomButton::square(trailing_button.get_text()),
+                trailing_button.clone(),
+            ))
+        } else {
+            None
+        }
+    }
 }
 
 #[derive(Component, Clone)]
@@ -49,43 +78,28 @@ pub struct ContainerHeaderPlugin;
 impl Plugin for ContainerHeaderPlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<ContainerHeaderEvent>()
-            .add_observer(on_container_header_added)
-            .add_systems(Update, listen_container_header_pressed);
+            .add_observer(on_added)
+            .add_systems(Update, listen_interaction);
     }
 }
 
-fn on_container_header_added(
+fn on_added(
     trigger: Trigger<OnAdd, ContainerHeader>,
     mut commands: Commands,
     container_header_q: Query<&ContainerHeader>,
-) {
-    let container_header = container_header_q.get(trigger.target()).unwrap();
-    commands
+) -> Result<(), BevyError> {
+    let container_header = container_header_q.get(trigger.target())?;
+    let header_entity = commands
         .entity(trigger.target())
-        .insert(Node {
-            width: Val::Percent(100.),
-            padding: UiRect::all(Val::Px(10.)),
-            display: Display::Flex,
-            align_items: AlignItems::Center,
-            justify_content: JustifyContent::SpaceBetween,
-            align_self: AlignSelf::FlexStart,
-            ..default()
-        })
-        .with_children(|parent| {
-            parent.spawn((
-                CustomButton::square(container_header.leading_button.get_text()),
-                container_header.leading_button.clone(),
-            ));
-            if let Some(trailing_button) = container_header.trailing_button.clone() {
-                parent.spawn((
-                    CustomButton::square(trailing_button.get_text()),
-                    trailing_button,
-                ));
-            }
-        });
+        .insert(container_header.header_bundle())
+        .id();
+    if let Some(trailing_bundle) = container_header.trailing_button_bundle() {
+        commands.spawn((trailing_bundle, ChildOf(header_entity)));
+    }
+    Ok(())
 }
 
-fn listen_container_header_pressed(
+fn listen_interaction(
     mut event_writer: EventWriter<ContainerHeaderEvent>,
     mut button_q: Query<(&Interaction, &ContainerHeaderButton, &ChildOf)>,
 ) {

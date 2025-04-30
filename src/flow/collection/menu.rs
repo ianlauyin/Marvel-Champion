@@ -74,7 +74,7 @@ fn handle_menu_button_click(
     button_q: Query<(&Interaction, &CollectionMenuButton), Changed<Interaction>>,
     mut commands: Commands,
 ) {
-    SystemUtil::handle_button_click(button_q, |button| {
+    SystemUtil::handle_component_click(button_q, |button| {
         commands.spawn(button.get_sub_menu());
     });
 }

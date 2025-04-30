@@ -9,13 +9,13 @@ impl SystemUtil {
         }
     }
 
-    pub fn handle_button_click<T: Component>(
-        button_q: Query<(&Interaction, &T), Changed<Interaction>>,
+    pub fn handle_component_click<T: Component>(
+        component_q: Query<(&Interaction, &T), Changed<Interaction>>,
         mut func: impl FnMut(&T),
     ) {
-        for (interaction, button) in button_q.iter() {
+        for (interaction, component) in component_q.iter() {
             if let Interaction::Pressed = interaction {
-                func(button);
+                func(component);
             }
         }
     }

@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{ecs::spawn::SpawnIter, prelude::*};
 
 use crate::{
     node_ui::{CustomButton, MainContainer},
@@ -34,20 +34,21 @@ const BUTTON_MAP: [(MainMenuButton, &str); 3] = [
 ];
 
 fn spawn_main_menu(mut commands: Commands) {
-    commands
-        .spawn(MainContainer::space_around())
-        .with_children(|main_menu| {
-            for (button_component, text) in BUTTON_MAP {
-                main_menu.spawn((button_component, CustomButton::large(text)));
-            }
-        });
+    commands.spawn((
+        MainContainer::space_around(),
+        Children::spawn(SpawnIter(
+            BUTTON_MAP
+                .into_iter()
+                .map(|(component, text)| (component, CustomButton::large(text))),
+        )),
+    ));
 }
 
 fn handle_button_reaction(
     mut next_state: ResMut<NextState<AppState>>,
     main_menu_button_q: Query<(&Interaction, &MainMenuButton), Changed<Interaction>>,
 ) {
-    SystemUtil::handle_button_click(main_menu_button_q, |main_menu_button| {
+    SystemUtil::handle_component_click(main_menu_button_q, |main_menu_button| {
         next_state.set(main_menu_button.0.clone());
     });
 }

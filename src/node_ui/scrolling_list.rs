@@ -33,12 +33,12 @@ pub struct ScrollingListPlugin;
 
 impl Plugin for ScrollingListPlugin {
     fn build(&self, app: &mut App) {
-        app.add_observer(on_scrolling_list_added)
-            .add_systems(Update, (on_scrolling_list_children_changed, on_scroll));
+        app.add_observer(on_added)
+            .add_systems(Update, (listen_children_changed, on_scroll));
     }
 }
 
-fn on_scrolling_list_added(
+fn on_added(
     trigger: Trigger<OnAdd, ScrollingList>,
     mut commands: Commands,
     scrolling_list_q: Query<&ScrollingList>,
@@ -50,7 +50,7 @@ fn on_scrolling_list_added(
     Ok(())
 }
 
-fn on_scrolling_list_children_changed(
+fn listen_children_changed(
     mut commands: Commands,
     scrolling_list_children_q: Query<&Children, (With<ScrollingList>, Changed<Children>)>,
     children_q: Query<&Children>,
@@ -66,10 +66,7 @@ fn add_picking_behavior(
     children_q: &Query<&Children>,
 ) {
     for child in children.iter() {
-        let Ok(mut entity_commands) = commands.get_entity(child) else {
-            continue;
-        };
-        entity_commands.insert(Pickable {
+        commands.entity(child).insert(Pickable {
             is_hoverable: true,
             should_block_lower: false,
         });

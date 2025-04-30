@@ -59,7 +59,7 @@ fn handle_hero_menu_button_click(
     mut selected_identity: ResMut<DeckBuildingResource>,
     mut next_state: ResMut<NextState<DeckBuildingState>>,
 ) {
-    SystemUtil::handle_button_click(hero_menu_button_q, |hero_menu_button| {
+    SystemUtil::handle_component_click(hero_menu_button_q, |hero_menu_button| {
         selected_identity.set_identity(hero_menu_button.0.clone());
         next_state.set(DeckBuildingState::DeckMenu);
     });

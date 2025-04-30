@@ -70,17 +70,18 @@ pub struct CardNodePlugin;
 
 impl Plugin for CardNodePlugin {
     fn build(&self, app: &mut App) {
-        app.add_observer(on_card_added);
+        app.add_observer(on_added);
     }
 }
 
-fn on_card_added(
+fn on_added(
     trigger: Trigger<OnAdd, CardNode>,
     mut commands: Commands,
     card_q: Query<(&CardNode, Option<&Node>)>,
-) {
-    let (card, node_op) = card_q.get(trigger.target()).unwrap();
+) -> Result<(), BevyError> {
+    let (card, node_op) = card_q.get(trigger.target())?;
     commands
         .entity(trigger.target())
         .insert(card.bundle(node_op));
+    Ok(())
 }
