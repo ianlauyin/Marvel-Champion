@@ -1,10 +1,12 @@
 use bevy::prelude::*;
 
 use crate::{
-    flow::deck_building::state::DeckBuildingState, node_ui::MainContainer, util::SystemUtil,
+    flow::deck_building::state::DeckBuildingState,
+    node_ui::{CustomButton, MainContainer},
+    util::SystemUtil,
 };
 
-use super::{content::DeckEditorContent, header::DeckEditorHeader};
+use super::{content::DeckEditorContent, header_button::HeaderButton, title::Title};
 
 const CURRENT_STATE: DeckBuildingState = DeckBuildingState::DeckEditor;
 
@@ -21,10 +23,32 @@ impl Plugin for DeckEditorPlugin {
 struct DeckEditor;
 
 fn spawn_deck_editor(mut commands: Commands) {
-    commands
-        .spawn((MainContainer::default(), DeckEditor))
-        .with_children(|parent| {
-            parent.spawn(DeckEditorHeader);
-            parent.spawn(DeckEditorContent);
-        });
+    let main_container = commands.spawn((MainContainer::default(), DeckEditor)).id();
+
+    let header = commands
+        .spawn((
+            ChildOf(main_container),
+            Node {
+                width: Val::Percent(100.),
+                padding: UiRect::all(Val::Px(10.)),
+                column_gap: Val::Px(5.),
+                display: Display::Flex,
+                align_items: AlignItems::Center,
+                justify_content: JustifyContent::SpaceBetween,
+                align_self: AlignSelf::FlexStart,
+                ..default()
+            },
+            children![(CustomButton::square("<"), HeaderButton::Back), Title],
+        ))
+        .id();
+
+    let mut save_button = CustomButton::medium("Save");
+    save_button.set_color(Color::srgb(0.251, 0.855, 0.251));
+    commands.spawn((save_button, HeaderButton::Save, ChildOf(header)));
+
+    let mut delete_button = CustomButton::medium("Delete");
+    delete_button.set_color(Color::srgb(0.855, 0.251, 0.251));
+    commands.spawn((delete_button, HeaderButton::Delete, ChildOf(header)));
+
+    commands.spawn((DeckEditorContent, ChildOf(main_container)));
 }
