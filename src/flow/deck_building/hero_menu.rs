@@ -33,25 +33,35 @@ struct HeroMenu;
 struct HeroMenuButton(IdentitySet);
 
 fn spawn_hero_menu(mut commands: Commands, asset_loader: Res<AssetLoader>) {
-    commands
-        .spawn((MainContainer::default(), HeroMenu))
-        .with_children(|container| {
-            container.spawn(ContainerHeader::with_leading_button("<"));
-            container
-                .spawn(ScrollingList::Grid {
-                    column: 3,
-                    spacing: 50.,
-                })
-                .with_children(|scrolling_list| {
-                    for identity in IdentitySet::get_all() {
-                        let mut button = CustomButton::large(identity.to_str());
-                        if let Some(key) = identity.get_thumbnail_key() {
-                            button.set_image(asset_loader.get(&key).clone());
-                        }
-                        scrolling_list.spawn((HeroMenuButton(identity.clone()), button));
-                    }
-                });
-        });
+    let hero_menu = commands
+        .spawn((
+            MainContainer::default(),
+            HeroMenu,
+            children![ContainerHeader::with_leading_button("<")],
+        ))
+        .id();
+
+    let content_container = commands
+        .spawn((
+            ScrollingList::Grid {
+                column: 3,
+                spacing: 50.,
+            },
+            ChildOf(hero_menu),
+        ))
+        .id();
+
+    for identity in IdentitySet::get_all() {
+        let mut button = CustomButton::large(identity.to_str());
+        if let Some(key) = identity.get_thumbnail_key() {
+            button.set_image(asset_loader.get(&key).clone());
+        }
+        commands.spawn((
+            HeroMenuButton(identity.clone()),
+            button,
+            ChildOf(content_container),
+        ));
+    }
 }
 
 fn handle_hero_menu_button_click(
@@ -72,13 +82,10 @@ fn handle_header_button_click(
 ) {
     for event in event_reader.read() {
         for menu_children in menu_q.iter() {
-            match event {
-                ContainerHeaderEvent::LeadingButtonPressed(header_entity) => {
-                    if menu_children.contains(header_entity) {
-                        next_state.set(AppState::MainMenu);
-                    }
+            if let ContainerHeaderEvent::LeadingButtonPressed(header_entity) = event {
+                if menu_children.contains(header_entity) {
+                    next_state.set(AppState::MainMenu);
                 }
-                _ => {}
             }
         }
     }
