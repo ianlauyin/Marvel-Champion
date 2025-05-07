@@ -37,39 +37,52 @@ impl IdentitySet {
     }
 
     pub fn get_deck_cards<'a>(&self) -> Vec<Card<'a>> {
-        match *self {
+        let original_cards = match *self {
             Self::CoreSpiderMan => identity_set::core_spider_man::get_deck_cards(),
             Self::CoreCaptainMarvel => identity_set::core_captain_marvel::get_deck_cards(),
             Self::CoreSheHulk => identity_set::core_she_hulk::get_deck_cards(),
             Self::CoreIronMan => identity_set::core_iron_man::get_deck_cards(),
             Self::CoreBlackPanther => identity_set::core_black_panther::get_deck_cards(),
-        }
+        };
+        self.multiply_cards(&original_cards)
     }
 
-    pub fn get_obligation_card<'a>(&self) -> Card<'a> {
-        match *self {
+    pub fn get_obligation_card<'a>(&self) -> Vec<Card<'a>> {
+        let original_card = match *self {
             Self::CoreSpiderMan => identity_set::core_spider_man::get_obligation_card(),
             Self::CoreCaptainMarvel => identity_set::core_captain_marvel::get_obligation_card(),
             Self::CoreSheHulk => identity_set::core_she_hulk::get_obligation_card(),
             Self::CoreIronMan => identity_set::core_iron_man::get_obligation_card(),
             Self::CoreBlackPanther => identity_set::core_black_panther::get_obligation_card(),
-        }
+        };
+        self.multiply_cards(&vec![original_card])
     }
 
     pub fn get_out_of_play_cards<'a>(&self) -> Vec<Card<'a>> {
-        match *self {
+        let original_cards = match *self {
             Self::CoreSpiderMan => identity_set::core_spider_man::get_out_of_play_cards(),
             Self::CoreCaptainMarvel => identity_set::core_captain_marvel::get_out_of_play_cards(),
             Self::CoreSheHulk => identity_set::core_she_hulk::get_out_of_play_cards(),
             Self::CoreIronMan => identity_set::core_iron_man::get_out_of_play_cards(),
             Self::CoreBlackPanther => identity_set::core_black_panther::get_out_of_play_cards(),
-        }
+        };
+        self.multiply_cards(&original_cards)
     }
 
     pub fn get_deck_validator(&self) -> DeckValidator {
         match *self {
             _ => DeckValidator::default(),
         }
+    }
+
+    fn multiply_cards<'a>(&self, cards: &Vec<Card<'a>>) -> Vec<Card<'a>> {
+        let mut multiplied_cards = vec![];
+        for card in cards {
+            for _ in 0..card.card_amount_max {
+                multiplied_cards.push(card.clone());
+            }
+        }
+        multiplied_cards
     }
 }
 
@@ -106,7 +119,7 @@ impl SetTrait for IdentitySet {
             .into_iter()
             .chain(self.get_deck_cards())
             .chain(self.get_out_of_play_cards())
-            .chain(vec![self.get_obligation_card()])
+            .chain(self.get_obligation_card())
             .collect()
     }
 
