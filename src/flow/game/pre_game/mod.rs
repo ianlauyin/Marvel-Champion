@@ -1,4 +1,5 @@
 mod deck_menu;
+mod enemy_menu;
 mod hero_menu;
 mod state;
 
@@ -8,7 +9,10 @@ pub struct PreGamePlugin;
 
 impl Plugin for PreGamePlugin {
     fn build(&self, app: &mut App) {
-        app.add_sub_state::<state::PreGameState>()
-            .add_plugins((deck_menu::DeckMenuPlugin, hero_menu::HeroMenuPlugin));
+        app.add_sub_state::<state::PreGameState>().add_plugins((
+            deck_menu::DeckMenuPlugin,
+            hero_menu::HeroMenuPlugin,
+            enemy_menu::EnemyMenuPlugin,
+        ));
     }
 }

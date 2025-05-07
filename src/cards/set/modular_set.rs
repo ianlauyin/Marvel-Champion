@@ -5,7 +5,7 @@ use crate::component::Card;
 
 use super::set_trait::SetTrait;
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq, Eq)]
 pub enum ModularSet {
     BombScare,
     MastersOfEvil,
