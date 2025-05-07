@@ -49,10 +49,10 @@ impl ContainerHeader {
 
     fn trailing_button_bundle(&self) -> Option<impl Bundle> {
         if let Some(trailing_button) = &self.trailing_button {
-            Some(children![(
+            Some((
                 CustomButton::square(trailing_button.get_text()),
                 trailing_button.clone(),
-            )])
+            ))
         } else {
             None
         }
