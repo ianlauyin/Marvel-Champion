@@ -1,8 +1,7 @@
-mod card_list_container;
-mod dragging_card;
+mod content;
+mod content_system;
 mod editor;
 mod header_button;
-mod infomation;
 mod title;
 
 use bevy::app::{App, Plugin};
@@ -15,9 +14,8 @@ impl Plugin for DeckEditorPlugin {
             header_button::HeaderButtonPlugin,
             editor::DeckEditorPlugin,
             title::DeckEditorTitlePlugin,
-            dragging_card::DeckEditorDraggingCardPlugin,
-            card_list_container::DeckEditorCardListContainerPlugin,
-            infomation::DeckEditorInfomationPlugin,
+            content::DeckEditorContentPlugin,
+            content_system::DeckEditorContentSystemPlugin,
         ));
     }
 }

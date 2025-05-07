@@ -6,10 +6,7 @@ use crate::{
     util::SystemUtil,
 };
 
-use super::{
-    card_list_container::CardListContainer, header_button::HeaderButton, infomation::Infomation,
-    title::Title,
-};
+use super::{content::DeckEditorContent, header_button::HeaderButton, title::Title};
 
 const CURRENT_STATE: DeckBuildingState = DeckBuildingState::DeckEditor;
 
@@ -53,20 +50,5 @@ fn spawn_deck_editor(mut commands: Commands) {
     delete_button.set_color(Color::srgb(0.855, 0.251, 0.251));
     commands.spawn((delete_button, HeaderButton::Delete, ChildOf(header)));
 
-    commands.spawn((
-        ChildOf(main_container),
-        Node {
-            display: Display::Flex,
-            column_gap: Val::Px(5.),
-            width: Val::Percent(100.),
-            padding: UiRect::all(Val::Px(10.)),
-            overflow: Overflow::scroll_y(),
-            ..default()
-        },
-        children![
-            CardListContainer::Deck,
-            Infomation,
-            CardListContainer::Collection
-        ],
-    ));
+    commands.spawn((DeckEditorContent, ChildOf(main_container)));
 }

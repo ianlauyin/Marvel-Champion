@@ -3,33 +3,27 @@ use bevy::{prelude::*, ui::RelativeCursorPosition};
 use crate::{
     cards::{Aspect, SetTrait},
     component::Card,
-    constant::CARD_SIZE_SMALL,
     flow::deck_building::{resource::DeckBuildingResource, state::DeckBuildingState},
-    node_ui::{
-        CardDetail, CardDetailButton, CardNode, MouseControl, MouseControlEvent, ScrollingList,
-    },
+    node_ui::{CardDetailButton, CardNode, MouseControl, ScrollingList},
     resource::{AspectCardDatas, AssetLoader},
     util::DeckUtil,
 };
-
-use super::dragging_card::DraggingCard;
 pub struct DeckEditorContentPlugin;
 
 impl Plugin for DeckEditorContentPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             Update,
-            (on_deck_info_changed, handle_mouse_event)
-                .run_if(in_state(DeckBuildingState::DeckEditor)),
+            on_deck_info_changed.run_if(in_state(DeckBuildingState::DeckEditor)),
         )
-        .add_observer(on_added);
+        .add_observer(on_content_added);
     }
 }
 
 #[derive(Component)]
 pub struct DeckEditorContent;
 
-fn on_added(
+fn on_content_added(
     trigger: Trigger<OnAdd, DeckEditorContent>,
     mut commands: Commands,
     res: Res<DeckBuildingResource>,
@@ -47,6 +41,8 @@ fn on_added(
             ..default()
         })
         .with_children(|parent| {
+            let deck_info = DeckInfo::new(res, aspect_card_datas);
+            spawn_deck(parent, &deck_info.deck_cards, &asset_loader);
             spawn_info(
                 parent,
                 deck_info.identity_cards,
@@ -54,6 +50,7 @@ fn on_added(
                 deck_info.card_count,
                 &asset_loader,
             );
+            spawn_collection(parent, deck_info.avaiable_cards, &asset_loader);
         });
 }
 
@@ -64,6 +61,12 @@ pub enum DeckContent {
     CurrentAspects,
     CardCount,
     CollectionScrollingList,
+}
+
+#[derive(Component, Clone, PartialEq)]
+pub enum CardFrom {
+    Deck,
+    Collection,
 }
 
 fn on_deck_info_changed(
@@ -327,4 +330,57 @@ fn spawn_collection(
                     );
                 });
         });
+}
+
+fn spawn_card_list(
+    parent: &mut ChildSpawnerCommands,
+    cards: &Vec<Card<'static>>,
+    asset_loader: &Res<AssetLoader>,
+    card_from: CardFrom,
+) {
+    for card in cards {
+        parent
+            .spawn(Node {
+                display: Display::Flex,
+                justify_content: JustifyContent::Center,
+                align_items: AlignItems::Center,
+                ..default()
+            })
+            .with_child((
+                CardNode::small(asset_loader.get(&card.get_key()).clone()),
+                card.clone(),
+                MouseControl::default(),
+                card_from.clone(),
+            ));
+    }
+}
+
+struct DeckInfo {
+    identity_cards: Vec<Card<'static>>,
+    deck_cards: Vec<Card<'static>>,
+    current_aspects: Vec<Aspect>,
+    card_count: usize,
+    avaiable_cards: Vec<Card<'static>>,
+}
+
+impl DeckInfo {
+    pub fn new(res: Res<DeckBuildingResource>, aspect_card_datas: Res<AspectCardDatas>) -> Self {
+        let identity = res.get_identity().unwrap();
+        let aspect_card_ids = res.get_deck().unwrap().get_card_ids();
+        let aspect_cards = aspect_card_datas.get_batch_card_by_id(&aspect_card_ids);
+        let current_aspects = DeckUtil::get_current_aspects(&aspect_cards);
+        let avaiable_cards = DeckUtil::get_available_cards(&aspect_card_ids, &current_aspects);
+        Self {
+            identity_cards: identity.get_identity_cards(),
+            current_aspects,
+            card_count: aspect_cards.len() + 15,
+            avaiable_cards,
+            deck_cards: identity
+                .get_deck_cards()
+                .iter()
+                .chain(aspect_cards.iter())
+                .cloned()
+                .collect(),
+        }
+    }
 }
