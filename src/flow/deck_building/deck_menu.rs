@@ -31,40 +31,27 @@ struct DeckMenu;
 struct DeckMenuButton(Deck);
 
 fn spawn_deck_menu(mut commands: Commands, res: Res<DeckBuildingResource>, pkv: ResMut<PkvStore>) {
-    let deck_menu = commands
-        .spawn((
-            MainContainer::default(),
-            DeckMenu,
-            children![ContainerHeader::with_leading_button("<")],
-        ))
-        .id();
-
-    let content_container = commands
-        .spawn((
-            ScrollingList::Grid {
-                column: 3,
-                spacing: 50.,
-            },
-            ChildOf(deck_menu),
-        ))
-        .id();
-
-    let Some(identity) = res.get_identity() else {
-        warn!("No identity found in deck building resource");
-        return;
-    };
-    for deck in DecksStorageUtil::init(&identity, pkv).get_decks() {
-        commands.spawn((
-            CustomButton::large(deck.get_name()),
-            DeckMenuButton(deck),
-            ChildOf(content_container),
-        ));
-    }
-    commands.spawn((
-        CustomButton::large("+"),
-        DeckMenuButton(Deck::new()),
-        ChildOf(content_container),
-    ));
+    commands
+        .spawn((MainContainer::default(), DeckMenu))
+        .with_children(|container| {
+            container.spawn(ContainerHeader::with_leading_button("<"));
+            container
+                .spawn(ScrollingList::Grid {
+                    column: 3,
+                    spacing: 50.,
+                })
+                .with_children(|scrolling_list| {
+                    let Some(identity) = res.get_identity() else {
+                        warn!("No identity found in deck building resource");
+                        return;
+                    };
+                    for deck in DecksStorageUtil::init(&identity, pkv).get_decks() {
+                        scrolling_list
+                            .spawn((CustomButton::large(deck.get_name()), DeckMenuButton(deck)));
+                    }
+                    scrolling_list.spawn((CustomButton::large("+"), DeckMenuButton(Deck::new())));
+                });
+        });
 }
 
 fn handle_deck_menu_button_click(
@@ -86,11 +73,14 @@ fn handle_header_button_click(
 ) {
     for event in event_reader.read() {
         for menu_children in menu_q.iter() {
-            if let ContainerHeaderEvent::LeadingButtonPressed(header_entity) = event {
-                if menu_children.contains(header_entity) {
-                    res.clear_identity();
-                    next_state.set(DeckBuildingState::HeroMenu);
+            match event {
+                ContainerHeaderEvent::LeadingButtonPressed(header_entity) => {
+                    if menu_children.contains(header_entity) {
+                        res.clear_identity();
+                        next_state.set(DeckBuildingState::HeroMenu);
+                    }
                 }
+                _ => {}
             }
         }
     }
