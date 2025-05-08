@@ -57,7 +57,7 @@ fn on_added(
         .id();
 
     let card_list = card_list_q.get(trigger.target())?;
-    for card in card_list.0.clone() {
+    for card in card_list.0.iter() {
         commands.spawn((
             Node {
                 display: Display::Flex,

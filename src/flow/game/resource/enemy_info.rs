@@ -10,16 +10,16 @@ pub struct EnemyInfo {
 }
 
 impl EnemyInfo {
-    pub fn select_scenario(&mut self, scenario: &Scenario) {
-        self.scenario = Some(scenario.clone());
+    pub fn select_scenario(&mut self, scenario: Scenario) {
+        self.scenario = Some(scenario);
     }
 
-    pub fn select_modular_set(&mut self, modular_set: &ModularSet) {
-        self.modular_sets.push(modular_set.clone());
+    pub fn select_modular_set(&mut self, modular_set: ModularSet) {
+        self.modular_sets.push(modular_set);
     }
 
-    pub fn remove_modular_set(&mut self, modular_set: &ModularSet) {
-        if let Some(index) = self.modular_sets.iter().position(|set| set == modular_set) {
+    pub fn remove_modular_set(&mut self, modular_set: ModularSet) {
+        if let Some(index) = self.modular_sets.iter().position(|set| *set == modular_set) {
             self.modular_sets.remove(index);
         }
     }

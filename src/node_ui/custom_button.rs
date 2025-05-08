@@ -87,7 +87,7 @@ impl CustomButton {
             }),
             BorderRadius::all(Val::Px(10.)),
             BackgroundColor::from(self.color),
-            children![(Text::new(self.text.clone()), TextColor(self.text_color),)],
+            children![(Text::new(&self.text), TextColor(self.text_color),)],
         )
     }
 }

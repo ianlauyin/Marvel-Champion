@@ -17,8 +17,8 @@ impl DeckBuildingResource {
         self.identity = None;
     }
 
-    pub fn get_identity(&self) -> Option<IdentitySet> {
-        self.identity.clone()
+    pub fn get_identity(&self) -> Option<&IdentitySet> {
+        self.identity.as_ref()
     }
 
     pub fn get_deck(&self) -> Option<Deck> {

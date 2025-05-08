@@ -30,7 +30,7 @@ impl Popup {
             UiUtils::get_largest_z_index(&z_index_q),
             BorderRadius::all(Val::Px(10.)),
             BackgroundColor::from(Color::srgba(0.843, 0.047, 0.047, 0.9)),
-            children![Text::new(self.text.clone())],
+            children![Text::new(&self.text)],
         )
     }
 }

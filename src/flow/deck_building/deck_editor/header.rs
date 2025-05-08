@@ -118,7 +118,7 @@ fn handle_text_input_finished(
         let name = event.value.clone();
         if let Ok((mut inactive, mut value)) = text_input_q.single_mut() {
             res.get_deck().unwrap().set_name(&name);
-            value.0 = name.clone();
+            value.0 = name;
             inactive.0 = true;
         };
     }
